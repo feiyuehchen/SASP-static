@@ -1,9 +1,28 @@
 /* ============================================================
    DSP Quest — 8-bit NES-style stylesheet
    NES palette reference: https://www.nesdev.org/wiki/PPU_palettes
+
+   Typography strategy
+   -------------------
+   Body prose uses Noto Sans TC (antialiased, high legibility).
+   UI chrome (HUD, buttons, small labels, headings) uses pixel fonts:
+   Press Start 2P for English, Cubic 11 for Traditional Chinese.
+   The 8-bit vibe comes from the chrome; paragraphs stay readable.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+/* Cubic 11 — open-source Traditional Chinese pixel font by ACh-K (SIL OFL).
+   Served from jsdelivr (follows the repo's default branch). */
+@font-face {
+  font-family: 'Cubic 11';
+  src: url('https://cdn.jsdelivr.net/gh/ACh-K/Cubic-11/fonts/web/Cubic_11.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/ACh-K/Cubic-11/fonts/web/Cubic_11.woff')  format('woff'),
+       url('https://cdn.jsdelivr.net/gh/ACh-K/Cubic-11/fonts/ttf/Cubic_11.ttf')   format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* NES-ish palette */
@@ -24,11 +43,16 @@
   --pixel: 4px;
   --radius: 0;
 
-  --font-pixel-en: 'Press Start 2P', monospace;
-  --font-pixel-cjk: 'Cubic 11', 'Fusion Pixel 12px Proportional',
-                    'Zpix', 'BIOS', 'PMingLiU', 'Microsoft JhengHei',
-                    'Press Start 2P', monospace;
-  --font-body: var(--font-pixel-cjk);
+  /* Pixel fonts — HUD, headings, buttons, small labels. */
+  --font-pixel-en:  'Press Start 2P', 'Cubic 11', 'Noto Sans TC', monospace;
+  --font-pixel-cjk: 'Cubic 11', 'Noto Sans TC', 'PingFang TC',
+                    'Microsoft JhengHei', 'PMingLiU', 'Press Start 2P', monospace;
+
+  /* Readable body font — antialiased CJK for long-form prose. */
+  --font-body-cjk:  'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei',
+                    'Heiti TC', sans-serif;
+
+  --font-body: var(--font-body-cjk);
 }
 
 * { box-sizing: border-box; }
@@ -39,15 +63,34 @@ html, body {
   background: var(--nes-black);
   color: var(--nes-white);
   font-family: var(--font-body);
-  font-size: 14px;
-  line-height: 1.8;
-  image-rendering: pixelated;
-  -webkit-font-smoothing: none;
+  font-size: 16px;
+  line-height: 1.85;
+  letter-spacing: 0.2px;
+  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Elements that use pixel fonts opt in to pixel-perfect rendering. */
+.pixel,
+.status-bar,
+.status-bar button,
+.nes-btn,
+h1, h2, h3, h4,
+code, kbd, .mono,
+.formula .label,
+.controls label, .controls .val,
+.viz-card > h3,
+.nes-box[data-label]::before,
+.world-num, .level-card .count, .press-start, .warp-pipe,
+.toc-list li .num,
+.page-title, .page-title small,
+#term-tooltip .tt-en, #term-tooltip .tt-label {
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
   font-smooth: never;
 }
 
-/* Scanline overlay for CRT feel (toggleable via body.no-crt) */
+/* Scanline overlay — kept subtle so prose stays legible. */
 body::before {
   content: "";
   position: fixed;
@@ -55,10 +98,10 @@ body::before {
   pointer-events: none;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0) 0,
-    rgba(0, 0, 0, 0) 2px,
-    rgba(0, 0, 0, 0.18) 3px,
-    rgba(0, 0, 0, 0) 4px
+    rgba(0, 0, 0, 0)   0,
+    rgba(0, 0, 0, 0)   2px,
+    rgba(0, 0, 0, 0.08) 3px,
+    rgba(0, 0, 0, 0)   4px
   );
   z-index: 9999;
   mix-blend-mode: multiply;
@@ -84,17 +127,18 @@ body {
 h1, h2, h3, h4 {
   font-family: var(--font-pixel-en);
   color: var(--nes-yellow);
-  margin: 1.5em 0 0.8em;
+  margin: 1.4em 0 0.7em;
   letter-spacing: 1px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
-h1 { font-size: 22px; color: var(--nes-cream); }
-h2 { font-size: 16px; color: var(--nes-lime); border-bottom: 2px dashed var(--nes-gray); padding-bottom: 8px; }
-h3 { font-size: 13px; color: var(--nes-sky); }
-h4 { font-size: 11px; color: var(--nes-pink); }
+h1 { font-size: 24px; color: var(--nes-cream); }
+h2 { font-size: 18px; color: var(--nes-lime); border-bottom: 2px dashed var(--nes-gray); padding-bottom: 8px; }
+h3 { font-size: 15px; color: var(--nes-sky); }
+h4 { font-size: 12px; color: var(--nes-pink); }
 
-p, li { font-size: 14px; }
-code, kbd, .mono { font-family: var(--font-pixel-en); font-size: 11px; color: var(--nes-lime); }
+p, li { font-size: 16px; line-height: 1.9; }
+[lang="zh"] p, [lang="zh"] li { letter-spacing: 0.4px; }
+code, kbd, .mono { font-family: var(--font-pixel-en); font-size: 12px; color: var(--nes-lime); }
 
 a {
   color: var(--nes-sky);
@@ -120,8 +164,8 @@ hr {
   box-shadow:
     inset 0 0 0 var(--pixel) var(--nes-black),
     var(--pixel) var(--pixel) 0 0 var(--nes-black);
-  padding: 16px 20px;
-  margin: 16px 0;
+  padding: 18px 22px;
+  margin: 18px 0;
 }
 
 .nes-box--blue    { border-color: var(--nes-sky);    }
@@ -135,11 +179,11 @@ hr {
   content: attr(data-label);
   display: inline-block;
   font-family: var(--font-pixel-en);
-  font-size: 10px;
+  font-size: 11px;
   background: var(--nes-yellow);
   color: var(--nes-black);
-  padding: 4px 10px;
-  margin: -24px 0 10px -28px;
+  padding: 5px 11px;
+  margin: -26px 0 12px -30px;
   box-shadow: var(--pixel) var(--pixel) 0 var(--nes-black);
   letter-spacing: 1px;
 }
@@ -149,8 +193,8 @@ hr {
 .nes-btn {
   display: inline-block;
   font-family: var(--font-pixel-en);
-  font-size: 11px;
-  padding: 10px 16px;
+  font-size: 12px;
+  padding: 11px 18px;
   background: var(--nes-white);
   color: var(--nes-black);
   border: none;
@@ -177,22 +221,28 @@ hr {
   z-index: 100;
   background: var(--nes-black);
   border-bottom: var(--pixel) solid var(--nes-white);
-  padding: 8px 20px;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-family: var(--font-pixel-en);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 1px;
   gap: 12px;
   flex-wrap: wrap;
 }
-.status-bar .hud { display: flex; gap: 20px; align-items: center; color: var(--nes-cream); }
+.status-bar .hud { display: flex; gap: 22px; align-items: center; color: var(--nes-cream); }
 .status-bar .hud span b { color: var(--nes-yellow); }
+.status-bar .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.status-bar .brand svg { width: 20px; height: 20px; image-rendering: pixelated; }
 .status-bar .lang-switch button {
   font-family: var(--font-pixel-en);
-  font-size: 9px;
-  padding: 4px 8px;
+  font-size: 11px;
+  padding: 6px 10px;
   background: var(--nes-dark);
   color: var(--nes-white);
   border: 2px solid var(--nes-white);
@@ -207,28 +257,30 @@ hr {
 
 .page {
   max-width: 1200px;
-  margin: 20px auto 80px;
-  padding: 0 16px;
+  margin: 22px auto 80px;
+  padding: 0 18px;
 }
 
 .page-title {
   font-family: var(--font-pixel-en);
-  font-size: 18px;
+  font-size: 20px;
   color: var(--nes-yellow);
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  line-height: 1.6;
 }
 .page-title small {
   display: block;
   color: var(--nes-sky);
-  font-size: 10px;
-  margin-top: 8px;
+  font-size: 12px;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
 }
 
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 22px;
 }
 @media (max-width: 900px) {
   .two-col { grid-template-columns: 1fr; }
@@ -240,7 +292,8 @@ hr {
   border-bottom: 2px dashed var(--nes-yellow);
   cursor: help;
   position: relative;
-  color: inherit;
+  color: var(--nes-cream);
+  font-weight: 500;
   padding: 0 2px;
 }
 .term:hover,
@@ -254,13 +307,13 @@ hr {
   position: absolute;
   z-index: 10000;
   pointer-events: none;
-  max-width: 360px;
+  max-width: 380px;
   background: var(--nes-dark);
   border: 3px solid var(--nes-yellow);
   box-shadow: 4px 4px 0 var(--nes-black);
-  padding: 10px 12px;
-  font-size: 12px;
-  line-height: 1.6;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.75;
   color: var(--nes-white);
   opacity: 0;
   transition: opacity 0.1s;
@@ -268,24 +321,24 @@ hr {
 #term-tooltip.visible { opacity: 1; }
 #term-tooltip .tt-en {
   font-family: var(--font-pixel-en);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--nes-lime);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   letter-spacing: 1px;
 }
 #term-tooltip .tt-label {
   font-family: var(--font-pixel-en);
-  font-size: 8px;
+  font-size: 9px;
   color: var(--nes-pink);
   letter-spacing: 1px;
   display: inline-block;
-  margin-right: 4px;
+  margin-right: 6px;
+  vertical-align: 1px;
 }
 #term-tooltip .tt-line {
-  margin: 4px 0;
-  padding-left: 2px;
+  margin: 6px 0;
+  padding-left: 10px;
   border-left: 2px solid var(--nes-gray);
-  padding-left: 8px;
 }
 
 /* ----------------------- Formula box ----------------------- */
@@ -294,17 +347,17 @@ hr {
   background: var(--nes-black);
   border: 3px solid var(--nes-purple);
   box-shadow: var(--pixel) var(--pixel) 0 var(--nes-black);
-  padding: 14px 16px;
-  margin: 16px 0;
+  padding: 16px 18px;
+  margin: 18px 0;
   text-align: center;
   overflow-x: auto;
 }
 .formula .label {
   font-family: var(--font-pixel-en);
-  font-size: 9px;
+  font-size: 10px;
   color: var(--nes-pink);
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   letter-spacing: 1px;
 }
 
@@ -314,12 +367,12 @@ hr {
   background: var(--nes-dark);
   border: 3px solid var(--nes-sky);
   box-shadow: var(--pixel) var(--pixel) 0 var(--nes-black);
-  padding: 12px;
-  margin: 16px 0;
+  padding: 14px;
+  margin: 18px 0;
 }
-.viz-card h3 {
+.viz-card > h3 {
   margin-top: 0;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--nes-sky);
 }
 .viz-card canvas {
@@ -334,22 +387,22 @@ hr {
 .controls {
   display: grid;
   grid-template-columns: auto 1fr auto;
-  gap: 8px 12px;
+  gap: 10px 14px;
   align-items: center;
-  margin-top: 10px;
-  font-size: 11px;
+  margin-top: 12px;
+  font-size: 13px;
 }
 .controls label {
   font-family: var(--font-pixel-en);
-  font-size: 9px;
+  font-size: 11px;
   color: var(--nes-cream);
   letter-spacing: 1px;
 }
 .controls .val {
   font-family: var(--font-pixel-en);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--nes-lime);
-  min-width: 60px;
+  min-width: 70px;
   text-align: right;
 }
 
@@ -383,11 +436,11 @@ input[type=range]::-moz-range-thumb {
 /* Pixel select */
 select {
   font-family: var(--font-pixel-en);
-  font-size: 10px;
+  font-size: 12px;
   background: var(--nes-white);
   color: var(--nes-black);
   border: 2px solid var(--nes-black);
-  padding: 4px 8px;
+  padding: 6px 10px;
 }
 
 /* ----------------------- Language visibility ----------------------- */
@@ -395,8 +448,7 @@ select {
 body.lang-en [lang="zh"] { display: none !important; }
 body.lang-zh [lang="en"] { display: none !important; }
 
-/* but inline tooltip data attrs should still work; tooltip pulls from data-*
-   so hiding display:none on [lang] doesn't affect term tooltip content */
+/* Tooltip pulls from data-* attrs, so display:none on [lang] doesn't harm it. */
 
 /* ----------------------- Pager ----------------------- */
 
@@ -404,17 +456,17 @@ body.lang-zh [lang="en"] { display: none !important; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 42px;
   gap: 12px;
   flex-wrap: wrap;
 }
 .pager a.nes-btn { text-decoration: none; border-bottom: none; }
 .pager .warp-pipe {
   font-family: var(--font-pixel-en);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--nes-green);
   text-align: center;
-  padding: 4px 8px;
+  padding: 6px 10px;
   background: var(--nes-black);
   border: 2px dashed var(--nes-green);
 }
@@ -425,25 +477,26 @@ body.lang-zh [lang="en"] { display: none !important; }
   background: var(--nes-dark);
   border: 3px solid var(--nes-red);
   box-shadow: var(--pixel) var(--pixel) 0 var(--nes-black);
-  padding: 16px;
-  margin: 24px 0;
+  padding: 18px;
+  margin: 26px 0;
 }
 .quiz h3 {
   color: var(--nes-red);
-  font-size: 11px;
+  font-size: 13px;
   margin-top: 0;
 }
 .quiz .choices {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin: 12px 0;
+  gap: 8px;
+  margin: 14px 0;
 }
 .quiz .choices button {
   text-align: left;
   font-family: var(--font-body);
-  font-size: 13px;
-  padding: 8px 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 10px 14px;
   background: var(--nes-black);
   color: var(--nes-white);
   border: 2px solid var(--nes-white);
@@ -452,22 +505,28 @@ body.lang-zh [lang="en"] { display: none !important; }
 .quiz .choices button:hover { background: var(--nes-blue); }
 .quiz .choices button.correct { background: var(--nes-green); color: var(--nes-white); }
 .quiz .choices button.wrong   { background: var(--nes-red);   color: var(--nes-white); }
-.quiz .feedback { font-size: 12px; margin-top: 8px; color: var(--nes-cream); min-height: 40px; }
+.quiz .feedback {
+  font-size: 14px;
+  line-height: 1.85;
+  margin-top: 12px;
+  color: var(--nes-cream);
+  min-height: 46px;
+}
 
 /* ----------------------- World map ----------------------- */
 
 .world-map {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 24px;
-  margin: 30px 0;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 26px;
+  margin: 32px 0;
 }
 
 .level-card {
   background: var(--nes-dark);
   border: 4px solid var(--nes-yellow);
   box-shadow: 6px 6px 0 var(--nes-black);
-  padding: 16px;
+  padding: 18px;
   text-decoration: none;
   color: inherit;
   border-bottom: 4px solid var(--nes-yellow);
@@ -477,16 +536,22 @@ body.lang-zh [lang="en"] { display: none !important; }
 .level-card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--nes-black); }
 .level-card .world-num {
   font-family: var(--font-pixel-en);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--nes-pink);
   letter-spacing: 2px;
 }
 .level-card h3 {
-  font-size: 13px;
-  margin: 8px 0;
+  font-size: 15px;
+  margin: 10px 0;
   color: var(--nes-yellow);
+  line-height: 1.5;
 }
-.level-card p { font-size: 12px; color: var(--nes-cream); margin: 0; }
+.level-card p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--nes-cream);
+  margin: 0;
+}
 .level-card .count {
   position: absolute;
   top: -10px;
@@ -494,8 +559,8 @@ body.lang-zh [lang="en"] { display: none !important; }
   background: var(--nes-red);
   color: var(--nes-white);
   font-family: var(--font-pixel-en);
-  font-size: 9px;
-  padding: 4px 8px;
+  font-size: 11px;
+  padding: 5px 9px;
   border: 2px solid var(--nes-white);
   box-shadow: 2px 2px 0 var(--nes-black);
 }
@@ -503,7 +568,7 @@ body.lang-zh [lang="en"] { display: none !important; }
 /* ----------------------- Utility ----------------------- */
 .center { text-align: center; }
 .mt-0 { margin-top: 0; }
-.dim { color: var(--nes-gray); }
+.dim { color: var(--nes-gray); font-size: 13px; }
 .blink {
   animation: blink 1s steps(2, start) infinite;
 }
@@ -514,12 +579,12 @@ body.lang-zh [lang="en"] { display: none !important; }
   text-align: center;
   font-family: var(--font-pixel-en);
   color: var(--nes-yellow);
-  font-size: 14px;
-  margin: 40px 0;
+  font-size: 16px;
+  margin: 44px 0;
   letter-spacing: 2px;
 }
 
-/* Table of section list on each chapter page */
+/* Chapter ToC list */
 .toc-list {
   list-style: none;
   padding: 0;
@@ -527,18 +592,22 @@ body.lang-zh [lang="en"] { display: none !important; }
 }
 .toc-list li {
   border-bottom: 2px dashed var(--nes-gray);
-  padding: 8px 0;
+  padding: 11px 0;
+  font-size: 15px;
 }
 .toc-list li a {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   border-bottom: none;
   color: var(--nes-white);
 }
 .toc-list li a:hover { color: var(--nes-yellow); }
 .toc-list li .num {
   font-family: var(--font-pixel-en);
-  font-size: 9px;
+  font-size: 11px;
   color: var(--nes-pink);
-  margin-right: 8px;
+  margin-right: 12px;
+  display: inline-block;
+  min-width: 52px;
 }
