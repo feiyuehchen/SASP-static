@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>World 3 — Fourier Transforms &amp; Theorems · DSP Quest</title>
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="../index.html" style="color:var(--nes-sky); border-bottom:none;">◀ MAP</a></span>
+    <span>WORLD <b>3</b></span>
+    <span lang="en">FOURIER TRANSFORMS</span>
+    <span lang="zh">傅立葉轉換</span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">World 3 — Fourier Transforms &amp; Theorems</span>
+    <span lang="zh">第 3 世界 — 傅立葉轉換與定理</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Fourier_Transforms_Theorems.html" target="_blank">SASP Ch. 3</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="BRIEFING">
+    <p lang="en">
+      The Fourier transform is the magic mirror of signal processing:
+      time on one side, frequency on the other. This world covers the
+      discrete-time flavor (DTFT), its theorems, zero-padding tricks,
+      and how to interpolate between spectral samples.
+    </p>
+    <p lang="zh">
+      傅立葉轉換是訊號處理的魔鏡：一邊是時間，一邊是頻率。
+      本世界涵蓋<span class="term"
+        data-en="Discrete-Time Fourier Transform (DTFT)"
+        data-en-def="Fourier transform of a discrete-time signal; maps a sequence to a 2π-periodic continuous frequency function."
+        data-zh-def="離散時間訊號的傅立葉轉換；把數列對映到一個以 2π 為週期的連續頻率函數。">離散時間傅立葉轉換</span>（DTFT）、
+      各種<span class="term"
+        data-en="Fourier theorem"
+        data-en-def="A property that maps a time-domain operation (shift, scaling, convolution, etc.) to a simple frequency-domain operation."
+        data-zh-def="把時域操作（位移、縮放、卷積等）對應成頻域中簡單操作的性質。">傅立葉定理</span>、
+      <span class="term"
+        data-en="Zero padding"
+        data-en-def="Appending zeros to a signal before a DFT to interpolate the frequency axis."
+        data-zh-def="在做 DFT 前在訊號後面補零，使頻率軸上取得更密的樣點。">補零</span>的技巧，
+      以及如何在頻譜樣本之間做<span class="term"
+        data-en="Spectral interpolation"
+        data-en-def="Reconstructing values of the DTFT between DFT bin locations."
+        data-zh-def="在 DFT bin 之間重建 DTFT 的值。">頻譜內插</span>。
+    </p>
+  </div>
+
+  <h2 lang="en">Stages</h2>
+  <h2 lang="zh">關卡列表</h2>
+
+  <ul class="toc-list">
+    <li><a href="3.1-dtft.html"><span><span class="num">3.1</span><span lang="en">Discrete-Time Fourier Transform</span><span lang="zh">離散時間傅立葉轉換</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.2-ft-and-inverse.html"><span><span class="num">3.2</span><span lang="en">Fourier Transform &amp; Inverse · Existence</span><span lang="zh">傅立葉轉換與反轉換 · 存在性</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.3-linearity.html"><span><span class="num">3.3</span><span lang="en">Linearity of the DTFT</span><span lang="zh">DTFT 的線性</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.4-time-reversal.html"><span><span class="num">3.4</span><span lang="en">Time Reversal</span><span lang="zh">時間反轉</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.5-symmetry.html"><span><span class="num">3.5</span><span lang="en">Symmetry for Real Signals</span><span lang="zh">實訊號的對稱性</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.5.1-dtft-real.html"><span><span class="num">3.5.1</span><span lang="en">DTFT of Real Signals</span><span lang="zh">實訊號的 DTFT</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.5.2-real-even-odd.html"><span><span class="num">3.5.2</span><span lang="en">Real Even / Odd Signals</span><span lang="zh">實偶 / 實奇訊號</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.6-shift.html"><span><span class="num">3.6</span><span lang="en">Shift Theorem</span><span lang="zh">位移定理</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.7-convolution.html"><span><span class="num">3.7</span><span lang="en">Convolution Theorem</span><span lang="zh">卷積定理</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.8-correlation.html"><span><span class="num">3.8</span><span lang="en">Correlation Theorem</span><span lang="zh">相關定理</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.9-autocorrelation.html"><span><span class="num">3.9</span><span lang="en">Autocorrelation</span><span lang="zh">自相關</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.10-power.html"><span><span class="num">3.10</span><span lang="en">Power Theorem (Parseval)</span><span lang="zh">功率定理 (Parseval)</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.11-stretch.html"><span><span class="num">3.11</span><span lang="en">Stretch Operator</span><span lang="zh">拉伸算子</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.12-repeat.html"><span><span class="num">3.12</span><span lang="en">Repeat (Scaling) Operator</span><span lang="zh">重複 (縮放) 算子</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.13-stretch-repeat.html"><span><span class="num">3.13</span><span lang="en">Stretch / Repeat Theorem</span><span lang="zh">拉伸/重複定理</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.14-downsampling-aliasing.html"><span><span class="num">3.14</span><span lang="en">Downsampling &amp; Aliasing</span><span lang="zh">降取樣與混疊</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.14.1-aliasing-proof.html"><span><span class="num">3.14.1</span><span lang="en">Proof of the Aliasing Theorem</span><span lang="zh">混疊定理的證明</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.15-diff-dual.html"><span><span class="num">3.15</span><span lang="en">Differentiation Theorem Dual</span><span lang="zh">微分定理對偶</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.16-ct-theorems.html"><span><span class="num">3.16</span><span lang="en">Continuous-Time Fourier Theorems</span><span lang="zh">連續時間傅立葉定理</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.16.1-scaling.html"><span><span class="num">3.16.1</span><span lang="en">Scaling Theorem (CT)</span><span lang="zh">縮放定理 (CT)</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.16.2-rolloff.html"><span><span class="num">3.16.2</span><span lang="en">Spectral Roll-Off</span><span lang="zh">頻譜滾降</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17-spectral-interpolation.html"><span><span class="num">3.17</span><span lang="en">Spectral Interpolation</span><span lang="zh">頻譜內插</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17.1-ideal-interp.html"><span><span class="num">3.17.1</span><span lang="en">Ideal Spectral Interpolation</span><span lang="zh">理想頻譜內插</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17.2-interp-dft.html"><span><span class="num">3.17.2</span><span lang="en">Interpolating a DFT</span><span lang="zh">DFT 的內插</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17.3-zero-pad.html"><span><span class="num">3.17.3</span><span lang="en">Zero Padding in the Time Domain</span><span lang="zh">時域補零</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17.3.1-practical-zp.html"><span><span class="num">3.17.3.1</span><span lang="en">Practical Zero Padding</span><span lang="zh">實務補零</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17.3.2-zp-pow2.html"><span><span class="num">3.17.3.2</span><span lang="en">Zero-Pad to Next Power of 2</span><span lang="zh">補零至下個 2 的冪</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17.3.3-zp-display.html"><span><span class="num">3.17.3.3</span><span lang="en">ZP for Spectral Displays</span><span lang="zh">補零以改善頻譜顯示</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17.3.4-zp-peaks.html"><span><span class="num">3.17.3.4</span><span lang="en">ZP for Spectral Peaks</span><span lang="zh">補零以內插頻峰</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17.4-zero-phase-zp.html"><span><span class="num">3.17.4</span><span lang="en">Zero-Phase Zero Padding</span><span lang="zh">零相位補零</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17.4.1-fftshift.html"><span><span class="num">3.17.4.1</span><span lang="en">Matlab/Octave fftshift</span><span lang="zh">Matlab/Octave fftshift</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.17.4.2-zphase-idx.html"><span><span class="num">3.17.4.2</span><span lang="en">Index Ranges for Zero-Phase ZP</span><span lang="zh">零相位補零的索引範圍</span></span><span class="dim">▶</span></a></li>
+    <li><a href="3.18-summary.html"><span><span class="num">3.18</span><span lang="en">Summary</span><span lang="zh">本章總結</span></span><span class="dim">▶</span></a></li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="../ch02-introduction/index.html">◀ World 2</a>
+    <a class="nes-btn nes-btn--primary" href="3.1-dtft.html">START ▶</a>
+    <a class="nes-btn" href="../ch04-windows/index.html">World 4 ▶</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+</body>
+</html>

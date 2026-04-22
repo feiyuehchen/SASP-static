@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DSP Quest — Spectral Audio Signal Processing, 8-bit edition</title>
+<link rel="stylesheet" href="assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span>DSP-QUEST</span>
+    <span>COINS <b id="coins">0</b></span>
+    <span>WORLD <b>1-0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">DSP QUEST</span>
+    <span lang="zh">數位訊號處理大冒險</span>
+    <small>
+      <span lang="en">Spectral Audio Signal Processing · 8-bit edition</span>
+      <span lang="zh">頻譜音訊訊號處理 · 8位元復刻版</span>
+    </small>
+  </h1>
+
+  <div class="nes-box nes-box--yellow" data-label="MISSION">
+    <p lang="en">
+      This is a page-by-page, interactive 8-bit recreation of Julius O. Smith III's
+      <em>Spectral Audio Signal Processing</em> (SASP) book. Every chapter, every
+      section, every concept. Click a world below to start. <span class="blink">▶</span>
+    </p>
+    <p lang="zh">
+      這是一套把 Julius O. Smith III 教授的 <em>頻譜音訊訊號處理</em>（SASP）教科書，
+      逐節改成 8 位元互動教學的練功場。每一章、每一節、每一個觀念，一頁都不漏。
+      點下面的關卡開始冒險吧！<span class="blink">▶</span>
+    </p>
+    <p>
+      <small class="dim">
+        <span lang="en">Source book: <a href="https://ccrma.stanford.edu/~jos/sasp/" target="_blank" rel="noreferrer">ccrma.stanford.edu/~jos/sasp</a> — this site is an original educational companion, not a reproduction.</span>
+        <span lang="zh">原書：<a href="https://ccrma.stanford.edu/~jos/sasp/" target="_blank" rel="noreferrer">ccrma.stanford.edu/~jos/sasp</a> — 本站是原創的輔助教材，非書本之重製。</span>
+      </small>
+    </p>
+  </div>
+
+  <h2 lang="en">World Select</h2>
+  <h2 lang="zh">世界選擇</h2>
+
+  <div class="world-map">
+
+    <a class="level-card" href="ch02-introduction/index.html">
+      <div class="world-num">WORLD 2</div>
+      <span class="count">6</span>
+      <h3 lang="en">Intro &amp; Overview</h3>
+      <h3 lang="zh">導論與總覽</h3>
+      <p lang="en">The map of the whole journey: STFT, modification, resynthesis, filter banks.</p>
+      <p lang="zh">旅程地圖：STFT、修改、再合成、濾波器組。</p>
+    </a>
+
+    <a class="level-card" href="ch03-fourier-transforms/index.html">
+      <div class="world-num">WORLD 3</div>
+      <span class="count">30</span>
+      <h3 lang="en">Fourier Transforms</h3>
+      <h3 lang="zh">傅立葉轉換與定理</h3>
+      <p lang="en">DTFT, Fourier theorems, zero-padding, spectral interpolation.</p>
+      <p lang="zh">DTFT、傅立葉定理、補零、頻譜內插。</p>
+    </a>
+
+    <a class="level-card" href="ch04-windows/index.html">
+      <div class="world-num">WORLD 4</div>
+      <span class="count">50</span>
+      <h3 lang="en">Spectrum-Analysis Windows</h3>
+      <h3 lang="zh">頻譜分析視窗</h3>
+      <p lang="en">Rect, Hann, Hamming, Blackman, Kaiser, Chebyshev, Gaussian &amp; LP-optimized windows.</p>
+      <p lang="zh">矩形、Hann、Hamming、Blackman、Kaiser、Chebyshev、Gaussian 與 LP 最佳化視窗。</p>
+    </a>
+
+    <a class="level-card" href="ch05-fir-design/index.html">
+      <div class="world-num">WORLD 5</div>
+      <span class="count">30</span>
+      <h3 lang="en">FIR Filter Design</h3>
+      <h3 lang="zh">FIR 濾波器設計</h3>
+      <p lang="en">Ideal LP, least-squares, frequency-sampling, window method, Chebyshev, Hilbert.</p>
+      <p lang="zh">理想低通、最小平方法、頻率取樣、視窗法、Chebyshev、Hilbert 轉換器。</p>
+    </a>
+
+    <a class="level-card" href="ch06-sinusoids/index.html">
+      <div class="world-num">WORLD 6</div>
+      <span class="count">25</span>
+      <h3 lang="en">Sinusoid Spectrum Analysis</h3>
+      <h3 lang="zh">正弦訊號頻譜分析</h3>
+      <p lang="en">Windowed sinusoids, peak interpolation, ML estimation.</p>
+      <p lang="zh">視窗化正弦波、波峰內插、最大似然估計。</p>
+    </a>
+
+    <a class="level-card" href="ch07-noise/index.html">
+      <div class="world-num">WORLD 7</div>
+      <span class="count">20</span>
+      <h3 lang="en">Noise Spectrum Analysis</h3>
+      <h3 lang="zh">雜訊頻譜分析</h3>
+      <p lang="en">White noise, autocorrelation, periodogram, Welch's method, pink noise.</p>
+      <p lang="zh">白雜訊、自相關、週期圖、Welch 法、粉紅雜訊。</p>
+    </a>
+
+    <a class="level-card" href="ch08-time-frequency/index.html">
+      <div class="world-num">WORLD 8</div>
+      <span class="count">15</span>
+      <h3 lang="en">Time-Frequency Displays</h3>
+      <h3 lang="zh">時頻顯示</h3>
+      <p lang="en">STFT, spectrograms, auditory filter banks, loudness spectrogram.</p>
+      <p lang="zh">STFT、聲譜圖、聽覺濾波器組、響度聲譜圖。</p>
+    </a>
+
+    <a class="level-card" href="ch09-ola-stft/index.html">
+      <div class="world-num">WORLD 9</div>
+      <span class="count">25</span>
+      <h3 lang="en">Overlap-Add STFT</h3>
+      <h3 lang="zh">重疊相加 STFT</h3>
+      <p lang="en">Cyclic/acyclic FFT convolution, OLA, WOLA, OLS, time-varying modifications.</p>
+      <p lang="zh">循環/非循環 FFT 卷積、OLA、WOLA、OLS、時變修改。</p>
+    </a>
+
+    <a class="level-card" href="ch10-filter-bank-stft/index.html">
+      <div class="world-num">WORLD 10</div>
+      <span class="count">30</span>
+      <h3 lang="en">Filter Bank View of the STFT</h3>
+      <h3 lang="zh">STFT 的濾波器組觀點</h3>
+      <p lang="en">DFT filter bank, Nyquist windows, Portnoff, downsampled STFTs.</p>
+      <p lang="zh">DFT 濾波器組、Nyquist 視窗、Portnoff、下取樣 STFT。</p>
+    </a>
+
+    <a class="level-card" href="ch11-stft-apps/index.html">
+      <div class="world-num">WORLD 11</div>
+      <span class="count">40</span>
+      <h3 lang="en">STFT Applications</h3>
+      <h3 lang="zh">STFT 應用</h3>
+      <p lang="en">F0 estimation, cross-synthesis, spectral envelopes, SMS, time scale, chirplets.</p>
+      <p lang="zh">基頻估計、交叉合成、頻譜包絡、SMS、時間尺度變化、chirplet。</p>
+    </a>
+
+    <a class="level-card" href="ch12-multirate/index.html">
+      <div class="world-num">WORLD 12</div>
+      <span class="count">50</span>
+      <h3 lang="en">Multirate Filter Banks</h3>
+      <h3 lang="zh">多取樣率濾波器組</h3>
+      <p lang="en">Up/down-sampling, polyphase, QMF, CQF, PR filter banks, wavelets, MPEG.</p>
+      <p lang="zh">升/降取樣、多相位、QMF、CQF、PR 濾波器組、小波、MPEG。</p>
+    </a>
+
+    <a class="level-card" href="appendix/index.html">
+      <div class="world-num">BONUS</div>
+      <span class="count">80</span>
+      <h3 lang="en">Appendices</h3>
+      <h3 lang="zh">附錄關卡</h3>
+      <p lang="en">Continuous Fourier theorems, statistics, Gaussian properties, Bark warping, Matlab, history, PARSHL.</p>
+      <p lang="zh">連續傅立葉定理、統計、高斯性質、Bark 變換、Matlab、歷史、PARSHL 程式。</p>
+    </a>
+
+  </div>
+
+  <p class="press-start blink">▶ PRESS START ◀</p>
+
+  <div class="nes-box nes-box--blue" data-label="HOW-TO">
+    <ul>
+      <li lang="en">Each page has an interactive canvas — drag sliders, press buttons, hear the result.</li>
+      <li lang="en">Any <span class="term" data-en="Technical term" data-en-def="A word that has a specific mathematical or engineering meaning in DSP." data-zh-def="在 DSP 中有特定數學或工程意義的詞彙。">technical term</span> shown with a dashed underline has a hover tooltip that gives the English term, plus a short explanation in both languages.</li>
+      <li lang="en">The "EN / 繁中" buttons (top right) switch languages. Your position, coins, and language choice are saved to localStorage.</li>
+      <li lang="en">Every page links back to the corresponding SASP section at ccrma.stanford.edu so you can compare with the original.</li>
+    </ul>
+    <ul>
+      <li lang="zh">每一頁都有一個互動 canvas — 拖拉滑桿、按鈕、立刻聽到結果。</li>
+      <li lang="zh">凡是有虛線下底線的<span class="term" data-en="Technical term" data-en-def="A word that has a specific mathematical or engineering meaning in DSP." data-zh-def="在 DSP 中有特定數學或工程意義的詞彙。">專有名詞</span>，滑鼠移上去會顯示英文原名與中英雙語解釋。</li>
+      <li lang="zh">右上角的「EN / 繁中」可切換語言。關卡進度、金幣、語言設定都會存進瀏覽器本機。</li>
+      <li lang="zh">每一頁底部都有連到 ccrma.stanford.edu 上原書對應節次的連結，方便對照原文。</li>
+    </ul>
+  </div>
+
+</div>
+
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/terms.js"></script>
+<script>
+  // restore coin count
+  document.getElementById('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+</script>
+</body>
+</html>

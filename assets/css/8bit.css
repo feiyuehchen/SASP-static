@@ -1,0 +1,544 @@
+/* ============================================================
+   DSP Quest — 8-bit NES-style stylesheet
+   NES palette reference: https://www.nesdev.org/wiki/PPU_palettes
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  /* NES-ish palette */
+  --nes-black:   #0D0B1F;
+  --nes-dark:    #1A1C2C;
+  --nes-blue:    #0058F8;
+  --nes-sky:     #3CBCFC;
+  --nes-red:     #F83800;
+  --nes-pink:    #F878F8;
+  --nes-green:   #00B800;
+  --nes-lime:    #ACFC3C;
+  --nes-yellow:  #F8B800;
+  --nes-cream:   #FCE098;
+  --nes-white:   #FCFCFC;
+  --nes-gray:    #7C7C7C;
+  --nes-purple:  #6844FC;
+
+  --pixel: 4px;
+  --radius: 0;
+
+  --font-pixel-en: 'Press Start 2P', monospace;
+  --font-pixel-cjk: 'Cubic 11', 'Fusion Pixel 12px Proportional',
+                    'Zpix', 'BIOS', 'PMingLiU', 'Microsoft JhengHei',
+                    'Press Start 2P', monospace;
+  --font-body: var(--font-pixel-cjk);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--nes-black);
+  color: var(--nes-white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.8;
+  image-rendering: pixelated;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: never;
+}
+
+/* Scanline overlay for CRT feel (toggleable via body.no-crt) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.18) 3px,
+    rgba(0, 0, 0, 0) 4px
+  );
+  z-index: 9999;
+  mix-blend-mode: multiply;
+}
+body.no-crt::before { display: none; }
+
+/* Starry night sky background (very cheap, no images) */
+body {
+  background-image:
+    radial-gradient(2px 2px at 20% 10%,  var(--nes-white) 50%, transparent 51%),
+    radial-gradient(2px 2px at 80% 30%,  var(--nes-cream) 50%, transparent 51%),
+    radial-gradient(2px 2px at 40% 70%,  var(--nes-sky)   50%, transparent 51%),
+    radial-gradient(2px 2px at 60% 90%,  var(--nes-white) 50%, transparent 51%),
+    radial-gradient(2px 2px at 15% 55%,  var(--nes-lime)  50%, transparent 51%),
+    linear-gradient(180deg, #0A0820 0%, #1A1C2C 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+}
+
+/* ----------------------- Typography ----------------------- */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-pixel-en);
+  color: var(--nes-yellow);
+  margin: 1.5em 0 0.8em;
+  letter-spacing: 1px;
+  line-height: 1.5;
+}
+h1 { font-size: 22px; color: var(--nes-cream); }
+h2 { font-size: 16px; color: var(--nes-lime); border-bottom: 2px dashed var(--nes-gray); padding-bottom: 8px; }
+h3 { font-size: 13px; color: var(--nes-sky); }
+h4 { font-size: 11px; color: var(--nes-pink); }
+
+p, li { font-size: 14px; }
+code, kbd, .mono { font-family: var(--font-pixel-en); font-size: 11px; color: var(--nes-lime); }
+
+a {
+  color: var(--nes-sky);
+  text-decoration: none;
+  border-bottom: 2px solid var(--nes-sky);
+}
+a:hover { color: var(--nes-yellow); border-bottom-color: var(--nes-yellow); }
+
+hr {
+  border: none;
+  height: 4px;
+  background-image:
+    linear-gradient(90deg, var(--nes-yellow) 0 8px, transparent 8px 16px);
+  background-size: 16px 4px;
+  margin: 24px 0;
+}
+
+/* ----------------------- Pixel box utility ----------------------- */
+
+.nes-box {
+  background: var(--nes-dark);
+  border: var(--pixel) solid var(--nes-white);
+  box-shadow:
+    inset 0 0 0 var(--pixel) var(--nes-black),
+    var(--pixel) var(--pixel) 0 0 var(--nes-black);
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+
+.nes-box--blue    { border-color: var(--nes-sky);    }
+.nes-box--green   { border-color: var(--nes-lime);   }
+.nes-box--red     { border-color: var(--nes-red);    }
+.nes-box--yellow  { border-color: var(--nes-yellow); }
+.nes-box--purple  { border-color: var(--nes-purple); }
+
+/* Dialog-box style with "label" tab on the top left */
+.nes-box[data-label]::before {
+  content: attr(data-label);
+  display: inline-block;
+  font-family: var(--font-pixel-en);
+  font-size: 10px;
+  background: var(--nes-yellow);
+  color: var(--nes-black);
+  padding: 4px 10px;
+  margin: -24px 0 10px -28px;
+  box-shadow: var(--pixel) var(--pixel) 0 var(--nes-black);
+  letter-spacing: 1px;
+}
+
+/* ----------------------- Buttons ----------------------- */
+
+.nes-btn {
+  display: inline-block;
+  font-family: var(--font-pixel-en);
+  font-size: 11px;
+  padding: 10px 16px;
+  background: var(--nes-white);
+  color: var(--nes-black);
+  border: none;
+  border-bottom: var(--pixel) solid var(--nes-gray);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--nes-black);
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 0.05s;
+}
+.nes-btn:hover  { background: var(--nes-cream); }
+.nes-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--nes-black); }
+.nes-btn--primary { background: var(--nes-red);    color: var(--nes-white); }
+.nes-btn--primary:hover { background: #FF6048; }
+.nes-btn--blue    { background: var(--nes-blue);   color: var(--nes-white); }
+.nes-btn--green   { background: var(--nes-green);  color: var(--nes-white); }
+.nes-btn--yellow  { background: var(--nes-yellow); color: var(--nes-black); }
+
+/* ----------------------- Top status bar ----------------------- */
+
+.status-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--nes-black);
+  border-bottom: var(--pixel) solid var(--nes-white);
+  padding: 8px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-pixel-en);
+  font-size: 10px;
+  letter-spacing: 1px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.status-bar .hud { display: flex; gap: 20px; align-items: center; color: var(--nes-cream); }
+.status-bar .hud span b { color: var(--nes-yellow); }
+.status-bar .lang-switch button {
+  font-family: var(--font-pixel-en);
+  font-size: 9px;
+  padding: 4px 8px;
+  background: var(--nes-dark);
+  color: var(--nes-white);
+  border: 2px solid var(--nes-white);
+  cursor: pointer;
+}
+.status-bar .lang-switch button.active {
+  background: var(--nes-yellow);
+  color: var(--nes-black);
+}
+
+/* ----------------------- Page layout ----------------------- */
+
+.page {
+  max-width: 1200px;
+  margin: 20px auto 80px;
+  padding: 0 16px;
+}
+
+.page-title {
+  font-family: var(--font-pixel-en);
+  font-size: 18px;
+  color: var(--nes-yellow);
+  text-align: center;
+  margin-bottom: 8px;
+}
+.page-title small {
+  display: block;
+  color: var(--nes-sky);
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 900px) {
+  .two-col { grid-template-columns: 1fr; }
+}
+
+/* ----------------------- Terms tooltip ----------------------- */
+
+.term {
+  border-bottom: 2px dashed var(--nes-yellow);
+  cursor: help;
+  position: relative;
+  color: inherit;
+  padding: 0 2px;
+}
+.term:hover,
+.term:focus {
+  background: var(--nes-yellow);
+  color: var(--nes-black);
+  outline: none;
+}
+
+#term-tooltip {
+  position: absolute;
+  z-index: 10000;
+  pointer-events: none;
+  max-width: 360px;
+  background: var(--nes-dark);
+  border: 3px solid var(--nes-yellow);
+  box-shadow: 4px 4px 0 var(--nes-black);
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--nes-white);
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+#term-tooltip.visible { opacity: 1; }
+#term-tooltip .tt-en {
+  font-family: var(--font-pixel-en);
+  font-size: 11px;
+  color: var(--nes-lime);
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+#term-tooltip .tt-label {
+  font-family: var(--font-pixel-en);
+  font-size: 8px;
+  color: var(--nes-pink);
+  letter-spacing: 1px;
+  display: inline-block;
+  margin-right: 4px;
+}
+#term-tooltip .tt-line {
+  margin: 4px 0;
+  padding-left: 2px;
+  border-left: 2px solid var(--nes-gray);
+  padding-left: 8px;
+}
+
+/* ----------------------- Formula box ----------------------- */
+
+.formula {
+  background: var(--nes-black);
+  border: 3px solid var(--nes-purple);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--nes-black);
+  padding: 14px 16px;
+  margin: 16px 0;
+  text-align: center;
+  overflow-x: auto;
+}
+.formula .label {
+  font-family: var(--font-pixel-en);
+  font-size: 9px;
+  color: var(--nes-pink);
+  display: block;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+/* ----------------------- Canvas + controls ----------------------- */
+
+.viz-card {
+  background: var(--nes-dark);
+  border: 3px solid var(--nes-sky);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--nes-black);
+  padding: 12px;
+  margin: 16px 0;
+}
+.viz-card h3 {
+  margin-top: 0;
+  font-size: 11px;
+  color: var(--nes-sky);
+}
+.viz-card canvas {
+  width: 100%;
+  height: auto;
+  background: var(--nes-black);
+  border: 2px solid var(--nes-white);
+  image-rendering: pixelated;
+  display: block;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px 12px;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 11px;
+}
+.controls label {
+  font-family: var(--font-pixel-en);
+  font-size: 9px;
+  color: var(--nes-cream);
+  letter-spacing: 1px;
+}
+.controls .val {
+  font-family: var(--font-pixel-en);
+  font-size: 10px;
+  color: var(--nes-lime);
+  min-width: 60px;
+  text-align: right;
+}
+
+/* Pixel slider */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 12px;
+  background: var(--nes-gray);
+  border: 2px solid var(--nes-white);
+  outline: none;
+  padding: 0;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 20px;
+  background: var(--nes-red);
+  border: 2px solid var(--nes-white);
+  cursor: pointer;
+}
+input[type=range]::-moz-range-thumb {
+  width: 16px;
+  height: 20px;
+  background: var(--nes-red);
+  border: 2px solid var(--nes-white);
+  cursor: pointer;
+  border-radius: 0;
+}
+
+/* Pixel select */
+select {
+  font-family: var(--font-pixel-en);
+  font-size: 10px;
+  background: var(--nes-white);
+  color: var(--nes-black);
+  border: 2px solid var(--nes-black);
+  padding: 4px 8px;
+}
+
+/* ----------------------- Language visibility ----------------------- */
+
+body.lang-en [lang="zh"] { display: none !important; }
+body.lang-zh [lang="en"] { display: none !important; }
+
+/* but inline tooltip data attrs should still work; tooltip pulls from data-*
+   so hiding display:none on [lang] doesn't affect term tooltip content */
+
+/* ----------------------- Pager ----------------------- */
+
+.pager {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.pager a.nes-btn { text-decoration: none; border-bottom: none; }
+.pager .warp-pipe {
+  font-family: var(--font-pixel-en);
+  font-size: 10px;
+  color: var(--nes-green);
+  text-align: center;
+  padding: 4px 8px;
+  background: var(--nes-black);
+  border: 2px dashed var(--nes-green);
+}
+
+/* ----------------------- Quiz ----------------------- */
+
+.quiz {
+  background: var(--nes-dark);
+  border: 3px solid var(--nes-red);
+  box-shadow: var(--pixel) var(--pixel) 0 var(--nes-black);
+  padding: 16px;
+  margin: 24px 0;
+}
+.quiz h3 {
+  color: var(--nes-red);
+  font-size: 11px;
+  margin-top: 0;
+}
+.quiz .choices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 12px 0;
+}
+.quiz .choices button {
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 13px;
+  padding: 8px 12px;
+  background: var(--nes-black);
+  color: var(--nes-white);
+  border: 2px solid var(--nes-white);
+  cursor: pointer;
+}
+.quiz .choices button:hover { background: var(--nes-blue); }
+.quiz .choices button.correct { background: var(--nes-green); color: var(--nes-white); }
+.quiz .choices button.wrong   { background: var(--nes-red);   color: var(--nes-white); }
+.quiz .feedback { font-size: 12px; margin-top: 8px; color: var(--nes-cream); min-height: 40px; }
+
+/* ----------------------- World map ----------------------- */
+
+.world-map {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+  margin: 30px 0;
+}
+
+.level-card {
+  background: var(--nes-dark);
+  border: 4px solid var(--nes-yellow);
+  box-shadow: 6px 6px 0 var(--nes-black);
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 4px solid var(--nes-yellow);
+  position: relative;
+  transition: transform 0.08s;
+}
+.level-card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--nes-black); }
+.level-card .world-num {
+  font-family: var(--font-pixel-en);
+  font-size: 10px;
+  color: var(--nes-pink);
+  letter-spacing: 2px;
+}
+.level-card h3 {
+  font-size: 13px;
+  margin: 8px 0;
+  color: var(--nes-yellow);
+}
+.level-card p { font-size: 12px; color: var(--nes-cream); margin: 0; }
+.level-card .count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--nes-red);
+  color: var(--nes-white);
+  font-family: var(--font-pixel-en);
+  font-size: 9px;
+  padding: 4px 8px;
+  border: 2px solid var(--nes-white);
+  box-shadow: 2px 2px 0 var(--nes-black);
+}
+
+/* ----------------------- Utility ----------------------- */
+.center { text-align: center; }
+.mt-0 { margin-top: 0; }
+.dim { color: var(--nes-gray); }
+.blink {
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink { to { visibility: hidden; } }
+
+/* Press-start prompt */
+.press-start {
+  text-align: center;
+  font-family: var(--font-pixel-en);
+  color: var(--nes-yellow);
+  font-size: 14px;
+  margin: 40px 0;
+  letter-spacing: 2px;
+}
+
+/* Table of section list on each chapter page */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.toc-list li {
+  border-bottom: 2px dashed var(--nes-gray);
+  padding: 8px 0;
+}
+.toc-list li a {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: none;
+  color: var(--nes-white);
+}
+.toc-list li a:hover { color: var(--nes-yellow); }
+.toc-list li .num {
+  font-family: var(--font-pixel-en);
+  font-size: 9px;
+  color: var(--nes-pink);
+  margin-right: 8px;
+}

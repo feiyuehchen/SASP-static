@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.1 DTFT · DSP Quest</title>
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html" style="color:var(--nes-sky); border-bottom:none;">◀ W3</a></span>
+    <span>STAGE <b>3-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 3-1 · Discrete-Time Fourier Transform</span>
+    <span lang="zh">關卡 3-1 · 離散時間傅立葉轉換</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Discrete_Time_Fourier_Transform.html" target="_blank">SASP §3.1 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+
+    <!-- LEFT: exposition -->
+    <section>
+
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">Turn a sampled sound into a picture of its frequency content — a 2π-periodic continuous function on the unit circle.</p>
+        <p lang="zh">把一段取樣好的聲音，轉成它的頻率內容圖 — 一個以 2π 為週期、畫在單位圓上的連續函數。</p>
+      </div>
+
+      <h2 lang="en">What is the DTFT?</h2>
+      <h2 lang="zh">DTFT 是什麼？</h2>
+
+      <p lang="en">
+        Take a discrete-time signal $x[n]$ — say, samples coming out of a sound card at rate $f_s$. The
+        <b>discrete-time Fourier transform</b> asks: "If I tried to build $x[n]$ out of complex sinusoids
+        $e^{j\omega n}$, how much of each frequency would I need?" The answer is a function of $\omega$:
+      </p>
+      <p lang="zh">
+        想像有一段離散訊號 $x[n]$，例如音效卡以取樣率 $f_s$ 送出的樣本。
+        <span class="term"
+          data-en="Discrete-Time Fourier Transform (DTFT)"
+          data-en-def="A sum that maps a sequence x[n] to a continuous 2π-periodic function X(ω) on the unit circle."
+          data-zh-def="把一個數列 x[n] 對映到單位圓上、以 2π 為週期的連續函數 X(ω) 的求和式。">DTFT</span>
+        問的是：「如果我想用一堆
+        <span class="term"
+          data-en="Complex sinusoid"
+          data-en-def="The function e^{jωn} = cos(ωn) + j·sin(ωn); the eigenfunction of linear time-invariant systems."
+          data-zh-def="函數 e^{jωn} = cos(ωn) + j·sin(ωn)；是所有線性非時變系統的特徵函數。">複數正弦</span>
+        $e^{j\omega n}$ 把 $x[n]$ 拼出來，每個頻率要放多少？」答案是一個 $\omega$ 的函數：
+      </p>
+
+      <div class="formula">
+        <span class="label">DTFT</span>
+        <div>$$X(\omega)\;=\;\sum_{n=-\infty}^{\infty} x[n]\,e^{-j\omega n}$$</div>
+      </div>
+
+      <p lang="en">
+        The magnitude $|X(\omega)|$ tells you how strong frequency $\omega$ is; the phase $\angle X(\omega)$
+        tells you where it starts. Because $e^{-j\omega n}$ is already 2π-periodic in $\omega$, the DTFT
+        repeats every $2\pi$ — analysing any interval of length $2\pi$ (commonly $(-\pi,\pi]$) is enough.
+      </p>
+      <p lang="zh">
+        <span class="term"
+          data-en="Magnitude spectrum"
+          data-en-def="|X(ω)| — tells you how much of frequency ω is present."
+          data-zh-def="|X(ω)| — 代表頻率 ω 有多強。">振幅頻譜</span>
+        $|X(\omega)|$ 告訴你頻率 $\omega$ 有多強；
+        <span class="term"
+          data-en="Phase spectrum"
+          data-en-def="∠X(ω) — tells you the phase offset of frequency ω."
+          data-zh-def="∠X(ω) — 代表頻率 ω 的相位偏移。">相位頻譜</span>
+        $\angle X(\omega)$ 告訴你它從哪裡開始。因為 $e^{-j\omega n}$ 對 $\omega$ 本身就是
+        <span class="term"
+          data-en="Periodic with period 2π"
+          data-en-def="A function f such that f(ω+2π)=f(ω)."
+          data-zh-def="滿足 f(ω+2π)=f(ω) 的函數。">2π-週期</span>，
+        所以 DTFT 每 $2\pi$ 就重複一次；只要看任何一段長度 $2\pi$ 的區間（常取 $(-\pi,\pi]$）就夠了。
+      </p>
+
+      <h2 lang="en">Why this particular sum?</h2>
+      <h2 lang="zh">為什麼是這個求和式？</h2>
+
+      <p lang="en">
+        Think of $e^{-j\omega n}$ as a probe. As $n$ varies, it spirals around the unit circle at
+        frequency $\omega$. Multiplying $x[n]$ by this probe and summing acts like a
+        <em>lock-in detector</em>: it only gives a large answer when $x[n]$ actually contains a sinusoid
+        tuned to the probe. For all other frequencies, the products average to near zero.
+      </p>
+      <p lang="zh">
+        把 $e^{-j\omega n}$ 想成一支「頻率探針」：隨著 $n$ 變化，它會沿單位圓以頻率 $\omega$ 繞圈。
+        將 $x[n]$ 與探針相乘再相加，就像一台<b>鎖相偵測器</b>：只有當 $x[n]$ 真的含有對準探針頻率的正弦波時，
+        和才會很大；其它頻率相乘後會互相抵消、接近零。
+      </p>
+
+      <h2 lang="en">Physical frequency vs. radian frequency</h2>
+      <h2 lang="zh">物理頻率 vs. 弧度頻率</h2>
+
+      <p lang="en">
+        The variable $\omega$ is a <b>normalized</b> radian frequency (radians per sample).
+        To convert to Hz at sampling rate $f_s$:
+      </p>
+      <p lang="zh">
+        變數 $\omega$ 是
+        <span class="term"
+          data-en="Normalized radian frequency"
+          data-en-def="Frequency in radians per sample; ω = 2π f / fs. Periodic on (-π, π]."
+          data-zh-def="以「每個樣本多少弧度」為單位的頻率；ω = 2π f / fs，在 (-π, π] 上有週期性。">正規化弧度頻率</span>
+        （每個樣本幾弧度）。在取樣率 $f_s$ 下換成 Hz：
+      </p>
+      <div class="formula">
+        <div>$$\omega = 2\pi\,\frac{f}{f_s}\qquad f\in(-f_s/2,\,f_s/2]$$</div>
+      </div>
+
+      <h2 lang="en">Inverse DTFT</h2>
+      <h2 lang="zh">逆 DTFT</h2>
+      <p lang="en">Given $X(\omega)$, rebuild the sequence with an integral over one period:</p>
+      <p lang="zh">給定 $X(\omega)$，用一個週期的積分重建序列：</p>
+      <div class="formula">
+        <span class="label">IDTFT</span>
+        <div>$$x[n]\;=\;\frac{1}{2\pi}\int_{-\pi}^{\pi} X(\omega)\,e^{j\omega n}\,d\omega$$</div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Eigenfunction property.</b> Any LTI system $H$ passes $e^{j\omega n}$ through with the same frequency but possibly different amplitude/phase: $H\{e^{j\omega n}\}=H(e^{j\omega})\,e^{j\omega n}$. That is why sinusoids are the natural basis for signal analysis.</p>
+        <p lang="zh"><b>特徵函數性質。</b>任何
+          <span class="term"
+            data-en="LTI (Linear Time-Invariant) system"
+            data-en-def="A system that obeys linearity and whose response to a shifted input is the same shifted output."
+            data-zh-def="滿足線性、且對平移輸入產生同樣平移輸出的系統。">LTI 系統</span>
+          $H$ 作用在 $e^{j\omega n}$ 上，出來的還是同一個頻率的複正弦，只是振幅/相位可能變：
+          $H\{e^{j\omega n}\}=H(e^{j\omega})\,e^{j\omega n}$。這就是為什麼正弦是訊號分析最自然的基底。</p>
+      </div>
+
+    </section>
+
+    <!-- RIGHT: interactive -->
+    <section>
+
+      <div class="viz-card">
+        <h3 lang="en">Lab 1 · Build a signal, see its DTFT</h3>
+        <h3 lang="zh">實驗 1 · 組一個訊號，看它的 DTFT</h3>
+
+        <canvas id="timeCanvas" style="height:160px;"></canvas>
+        <canvas id="freqCanvas" style="height:200px; margin-top:8px;"></canvas>
+
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="8" max="128" step="1" value="32" />
+          <span class="val" id="nVal">32</span>
+
+          <label>f1 (Hz)</label>
+          <input type="range" id="f1Slider" min="0" max="4000" step="10" value="440" />
+          <span class="val" id="f1Val">440</span>
+
+          <label>A1</label>
+          <input type="range" id="a1Slider" min="0" max="1" step="0.01" value="1" />
+          <span class="val" id="a1Val">1.00</span>
+
+          <label>f2 (Hz)</label>
+          <input type="range" id="f2Slider" min="0" max="4000" step="10" value="880" />
+          <span class="val" id="f2Val">880</span>
+
+          <label>A2</label>
+          <input type="range" id="a2Slider" min="0" max="1" step="0.01" value="0" />
+          <span class="val" id="a2Val">0.00</span>
+
+          <label>fs</label>
+          <input type="range" id="fsSlider" min="4000" max="16000" step="1000" value="8000" />
+          <span class="val" id="fsVal">8000</span>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="nes-btn nes-btn--blue"   id="playBtn" lang="en">▶ PLAY</button>
+          <button class="nes-btn nes-btn--blue"   id="playBtn2" lang="zh">▶ 播放</button>
+          <button class="nes-btn nes-btn--yellow" id="impulseBtn" lang="en">IMPULSE</button>
+          <button class="nes-btn nes-btn--yellow" id="impulseBtn2" lang="zh">脈衝</button>
+          <button class="nes-btn nes-btn--green"  id="noiseBtn" lang="en">NOISE</button>
+          <button class="nes-btn nes-btn--green"  id="noiseBtn2" lang="zh">雜訊</button>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--blue" data-label="READ-OUT">
+        <p lang="en">
+          Top: $x[n]$ (discrete stem plot). Bottom: $|X(\omega)|$ — the DTFT evaluated at 512 frequencies on $(-\pi,\pi]$.
+          Watch how a pure sinusoid at frequency $f$ produces peaks at $\pm f$, and how zero-amplitude parts of the
+          signal don't contribute to the spectrum.
+        </p>
+        <p lang="zh">
+          上圖：$x[n]$（離散
+          <span class="term"
+            data-en="Stem plot"
+            data-en-def="A discrete plot where each sample is shown as a vertical stick with a marker at its value."
+            data-zh-def="每個樣本用一支帶圓點的直線表示的離散圖形。">stem 圖</span>）。
+          下圖：$|X(\omega)|$ — 在 $(-\pi,\pi]$ 上取 512 個頻率算出來的 DTFT。
+          注意純正弦波會在 $\pm f$ 產生尖峰；訊號中振幅為 0 的成份對頻譜沒有貢獻。
+        </p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You double the length $N$ of a sinusoid (keep frequency and amplitude). Which statement about $|X(\omega)|$ is correct?</p>
+        <p lang="zh"><b>問：</b>把正弦波的長度 $N$ 放為原來 2 倍（頻率、振幅不變），$|X(\omega)|$ 會怎麼變？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">The peak shifts to a different frequency.</button>
+          <button data-correct="0" lang="zh">波峰會跑到不同的頻率。</button>
+          <button data-correct="1" lang="en">The peak gets taller and narrower.</button>
+          <button data-correct="1" lang="zh">波峰會更高、更窄。</button>
+          <button data-correct="0" lang="en">The peak gets shorter but stays the same width.</button>
+          <button data-correct="0" lang="zh">波峰會變矮，但寬度不變。</button>
+          <button data-correct="0" lang="en">Nothing changes.</button>
+          <button data-correct="0" lang="zh">什麼都不會變。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="index.html">◀ CHAPTER</a>
+    <a class="warp-pipe">3-1</a>
+    <a class="nes-btn nes-btn--primary" href="3.2-ft-and-inverse.html">NEXT ▶ 3.2</a>
+  </div>
+
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = {
+    N: 32, f1: 440, a1: 1, f2: 880, a2: 0, fs: 8000,
+    mode: 'sinusoid'   // 'sinusoid' | 'impulse' | 'noise'
+  };
+
+  function makeSignal() {
+    const { N, f1, a1, f2, a2, fs, mode } = state;
+    if (mode === 'impulse') return DSP.impulse(N, Math.floor(N / 2));
+    if (mode === 'noise')   return DSP.whiteNoise(N, 0.5);
+    const x = new Float32Array(N);
+    for (let n = 0; n < N; n++) {
+      x[n] = a1 * Math.cos(2 * Math.PI * f1 * n / fs)
+           + a2 * Math.cos(2 * Math.PI * f2 * n / fs);
+    }
+    return x;
+  }
+
+  function redraw() {
+    const x = makeSignal();
+    Viz.stem($('timeCanvas'), x, {
+      yMin: -2, yMax: 2,
+      xLabel: 'n  (sample index)', yLabel: 'x[n]',
+      title: 'TIME DOMAIN',
+    });
+
+    // Evaluate DTFT on 512 points in (-pi, pi].
+    const K = 512;
+    const omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(x, omegas);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+
+    // x-axis ticks in multiples of pi
+    const xTicks = [
+      { v: -Math.PI,     label: '-π' },
+      { v: -Math.PI / 2, label: '-π/2' },
+      { v: 0,            label: '0' },
+      { v: Math.PI / 2,  label: 'π/2' },
+      { v: Math.PI,      label: 'π' },
+    ];
+    Viz.line($('freqCanvas'), mag, {
+      xValues: Array.from(omegas), xMin: -Math.PI, xMax: Math.PI,
+      yMin: 0,
+      xLabel: 'ω  (rad/sample)', yLabel: '|X(ω)|',
+      title: 'FREQUENCY DOMAIN — DTFT MAGNITUDE',
+      xTicks,
+    });
+  }
+
+  // ---- control wiring ----
+  function bindRange(id, valId, onChange) {
+    const s = $(id), v = $(valId);
+    s.addEventListener('input', () => {
+      const num = parseFloat(s.value);
+      v.textContent = (Math.abs(num) < 1 && num !== 0) ? num.toFixed(2) : num;
+      onChange(num);
+      state.mode = 'sinusoid';
+      redraw();
+    });
+  }
+  bindRange('nSlider',  'nVal',  v => state.N  = v|0);
+  bindRange('f1Slider', 'f1Val', v => state.f1 = v);
+  bindRange('a1Slider', 'a1Val', v => state.a1 = v);
+  bindRange('f2Slider', 'f2Val', v => state.f2 = v);
+  bindRange('a2Slider', 'a2Val', v => state.a2 = v);
+  bindRange('fsSlider', 'fsVal', v => state.fs = v);
+
+  const playFn = () => {
+    // Make a longer buffer (0.5 s) of the same sinusoid for a clean tone
+    const fs = state.fs;
+    const dur = 0.5;
+    const L = Math.floor(fs * dur);
+    const x = new Float32Array(L);
+    for (let n = 0; n < L; n++) {
+      let env = 1;
+      const ramp = Math.floor(0.01 * fs);
+      if (n < ramp) env = n / ramp;
+      else if (n > L - ramp) env = (L - n) / ramp;
+      x[n] = 0.3 * env * (
+        state.a1 * Math.cos(2 * Math.PI * state.f1 * n / fs) +
+        state.a2 * Math.cos(2 * Math.PI * state.f2 * n / fs)
+      );
+    }
+    AudioKit.playBuffer(x, fs, 1);
+  };
+  $('playBtn').addEventListener('click', playFn);
+  $('playBtn2').addEventListener('click', playFn);
+
+  const setMode = m => () => {
+    state.mode = m;
+    redraw();
+    // also play the "signal": impulse -> click, noise -> static
+    if (m === 'impulse') {
+      const x = DSP.impulse(Math.floor(state.fs * 0.5), 1000);
+      AudioKit.playBuffer(x, state.fs, 1);
+    } else if (m === 'noise') {
+      const x = DSP.whiteNoise(Math.floor(state.fs * 0.5), 0.2);
+      AudioKit.playBuffer(x, state.fs, 1);
+    }
+  };
+  $('impulseBtn').addEventListener('click', setMode('impulse'));
+  $('impulseBtn2').addEventListener('click', setMode('impulse'));
+  $('noiseBtn').addEventListener('click', setMode('noise'));
+  $('noiseBtn2').addEventListener('click', setMode('noise'));
+
+  // quiz
+  $('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const correct = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      const fb = $('qFeedback');
+      if (correct) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! Longer windows look at more cycles, so the DTFT peak is sharper (narrower) and the magnitude grows like N.</span><span lang="zh">🪙 金幣 +1！更長的視窗看更多週期，所以 DTFT 的波峰變更尖（更窄），而振幅隨 N 線性成長。</span>';
+        const coins = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', coins);
+        $('coins').textContent = coins;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ Try again — think about what happens to energy and resolution.</span><span lang="zh">✗ 再想想 — 能量與解析度會怎麼變？</span>';
+      }
+      I18N.apply(I18N.get()); // refresh lang
+    });
+  });
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+})();
+</script>
+</body>
+</html>
