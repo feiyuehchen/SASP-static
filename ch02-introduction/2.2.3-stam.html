@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2.2.3 Short-Time Analysis, Modification, Resynthesis · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W2</a></span>
+    <span>STAGE <b>2-2-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 2-2-3 · Short-Time Analysis, Modification, Resynthesis</span>
+    <span lang="zh">關卡 2-2-3 · 短時分析、修改、再合成</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Short_Time_Analysis_Modification.html" target="_blank">SASP §2.2.3 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="IDEA">
+        <p lang="en">The STFT is a round trip. Go to the frequency domain, change something on the way, come back. The changes can be time-varying.</p>
+        <p lang="zh">STFT 是一趟來回路程。去頻域一趟，路上改一點東西，再回來。改的東西可以隨時間變。</p>
+      </div>
+
+      <h2 lang="en">The AMR pipeline</h2>
+      <h2 lang="zh">「分析-修改-再合成」管線</h2>
+
+      <p lang="en">
+        The bookkeeping looks like:
+      </p>
+      <p lang="zh">流程的記帳法長這樣：</p>
+
+      <div class="formula">
+        <span class="label">AMR PIPELINE</span>
+        <div>$$x[n]\xrightarrow[\text{window+FFT}]{\text{analysis}}X_m(\omega)\xrightarrow[\text{multiply,filter,...}]{\text{modify}}\tilde X_m(\omega)\xrightarrow[\text{IFFT+OLA}]{\text{resynth}}\tilde x[n]$$</div>
+      </div>
+
+      <p lang="en">
+        Choose a <span class="term" data-en="Analysis window"
+          data-en-def="The window used when computing each STFT frame; shapes leakage and side-lobe behavior."
+          data-zh-def="計算每個 STFT frame 時使用的視窗；決定洩漏與旁瓣表現。">analysis window</span> and
+        a hop so the overlap-add path is lossless (the COLA condition).
+        Then each frame's spectrum can be shaped — filtered, pitch-shifted,
+        noise-reduced, cross-synthesised — before it is inverse-FFT'd and
+        stitched back together.
+      </p>
+      <p lang="zh">
+        先選一組<span class="term" data-en="Analysis window"
+          data-en-def="The window used when computing each STFT frame; shapes leakage and side-lobe behavior."
+          data-zh-def="計算每個 STFT frame 時使用的視窗；決定洩漏與旁瓣表現。">分析視窗</span>與跳距，
+        讓重疊相加路徑是無損的（
+        <span class="term" data-en="COLA (Constant Overlap-Add)"
+          data-en-def="A windowing / hop combination whose overlap-added squared (or summed) window is a constant — enables perfect reconstruction."
+          data-zh-def="視窗與跳距的組合，使重疊相加後的（平方或）總和為定值，能完美重建。">COLA 條件</span>）。
+        然後就能在每個 frame 的頻譜上動手腳 — 濾波、變調、去噪、交叉合成 —
+        再反 FFT、拼接回時域。
+      </p>
+
+      <div class="nes-box nes-box--yellow" data-label="PITFALL">
+        <p lang="en">Beware the <span class="term" data-en="Phasing artifacts"
+          data-en-def="Audible beating/swirling when independent frame modifications misalign phases between frames."
+          data-zh-def="不同 frame 獨立修改後相位對不上，聽到類似「相位跳動」的振盪聲。">phasing artifact</span>: if you modify each frame's phase independently, consecutive frames can disagree, giving a shimmery / metallic sound. Good systems enforce phase continuity across frames.</p>
+        <p lang="zh">小心<span class="term" data-en="Phasing artifacts"
+          data-en-def="Audible beating/swirling when independent frame modifications misalign phases between frames."
+          data-zh-def="不同 frame 獨立修改後相位對不上，聽到類似「相位跳動」的振盪聲。">相位跳動</span>：
+          如果每個 frame 的相位獨立處理，前後 frame 對不上，會聽到金屬質感的晃動。好的系統會跨 frame 約束相位連續。</p>
+      </div>
+
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · A single-band frequency-domain gain</h3>
+        <h3 lang="zh">實驗 · 頻域單一頻帶增益（放大/壓掉某一段頻率）</h3>
+        <canvas id="beforeCanvas" style="height:120px;"></canvas>
+        <canvas id="afterCanvas"  style="height:120px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>CUT f (Hz)</label>
+          <input type="range" id="cutSlider" min="100" max="3500" step="50" value="1000"/>
+          <span class="val" id="cutVal">1000</span>
+
+          <label>BW (Hz)</label>
+          <input type="range" id="bwSlider" min="50" max="1000" step="50" value="300"/>
+          <span class="val" id="bwVal">300</span>
+
+          <label>GAIN</label>
+          <input type="range" id="gSlider" min="0" max="4" step="0.1" value="0"/>
+          <span class="val" id="gVal">0.0×</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="nes-btn nes-btn--blue"   id="playIn"   lang="en">▶ PLAY ORIG</button>
+          <button class="nes-btn nes-btn--blue"   id="playIn2"  lang="zh">▶ 原始</button>
+          <button class="nes-btn nes-btn--green"  id="playOut"  lang="en">▶ PLAY EDITED</button>
+          <button class="nes-btn nes-btn--green"  id="playOut2" lang="zh">▶ 處理後</button>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Set the gain slider to 0 in a narrow band around 800 Hz. What should you hear?</p>
+        <p lang="zh"><b>問：</b>把增益滑桿設成 0、頻帶中心設在 800 Hz、BW 很窄，應該聽到什麼？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">Complete silence.</button>
+          <button data-correct="0" lang="zh">完全靜音。</button>
+          <button data-correct="1" lang="en">The signal with the 800 Hz content carved out (a "notch").</button>
+          <button data-correct="1" lang="zh">訊號中 800 Hz 附近被挖掉（一個 notch）。</button>
+          <button data-correct="0" lang="en">Only the 800 Hz content, nothing else.</button>
+          <button data-correct="0" lang="zh">只有 800 Hz 的內容，其它都沒了。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="2.2.2-stft-tf.html">◀ 2.2.2</a>
+    <a class="warp-pipe">2-2-3</a>
+    <a class="nes-btn nes-btn--primary" href="2.2.4-apps.html">NEXT ▶ 2.2.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const fs = 8000, dur = 1.0;
+  const N = Math.floor(fs * dur);
+
+  /** A cheap test signal: three sinusoids at 300, 900, 1500 Hz. */
+  function mkSignal() {
+    const x = new Float32Array(N);
+    for (let n = 0; n < N; n++) {
+      const t = n / fs;
+      x[n] = 0.3 * (Math.sin(2*Math.PI*300*t) + 0.9*Math.sin(2*Math.PI*900*t) + 0.7*Math.sin(2*Math.PI*1500*t));
+    }
+    return x;
+  }
+
+  const state = { cut: 1000, bw: 300, g: 0.0 };
+
+  function process(x) {
+    // DFT (real), multiply by a smooth band gain, IDFT
+    const L = DSP.nextPow2(x.length);
+    const re = new Float32Array(L), im = new Float32Array(L);
+    re.set(x);
+    DSP.fft(re, im);
+    for (let k = 0; k < L; k++) {
+      const f = (k <= L/2) ? k * fs / L : (k - L) * fs / L;
+      const af = Math.abs(f);
+      const d = (af - state.cut) / (state.bw / 2);
+      const inBand = Math.exp(-d*d);   // soft band (gauss)
+      const gain = (1 - inBand) + state.g * inBand;
+      re[k] *= gain; im[k] *= gain;
+    }
+    DSP.ifft(re, im);
+    return re.slice(0, x.length);
+  }
+
+  function drawBoth() {
+    const x = mkSignal();
+    const y = process(x);
+    const K = 512;
+    const om = DSP.linspace(-Math.PI, Math.PI, K);
+    const db = (arr) => {
+      const { re, im } = DSP.dtft(arr.slice(0, 1024), om);
+      const mag = new Float32Array(K);
+      for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+      return DSP.toDb(mag, -60);
+    };
+    const xTicks = [{ v:-Math.PI,label:'-π'},{ v:0,label:'0'},{ v:Math.PI,label:'π'}];
+    Viz.line($('beforeCanvas'), db(x), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-60, xLabel:'ω', yLabel:'dB', title:'BEFORE', xTicks });
+    Viz.line($('afterCanvas'),  db(y), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-60, xLabel:'ω', yLabel:'dB', title:'AFTER', xTicks, color: '#00B800' });
+
+    window._orig = x; window._edit = y;
+  }
+
+  const bind = (id, vid, fn, fmt=v=>v) => {
+    const s = $(id), v = $(vid);
+    s.addEventListener('input', () => { const num = parseFloat(s.value); v.textContent = fmt(num); fn(num); drawBoth(); });
+  };
+  bind('cutSlider', 'cutVal', v => state.cut = v);
+  bind('bwSlider',  'bwVal',  v => state.bw = v);
+  bind('gSlider',   'gVal',   v => state.g = v, v => v.toFixed(1) + '×');
+
+  const playO = () => AudioKit.playBuffer(window._orig, fs, 1);
+  const playE = () => AudioKit.playBuffer(window._edit, fs, 1);
+  $('playIn').addEventListener('click', playO);
+  $('playIn2').addEventListener('click', playO);
+  $('playOut').addEventListener('click', playE);
+  $('playOut2').addEventListener('click', playE);
+
+  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ok = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('qFeedback');
+      if (ok) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! A zero-gain narrow band IS a notch filter — everything outside the band passes untouched.</span><span lang="zh">🪙 金幣 +1！窄頻帶增益為 0 就是一個 notch filter — 頻帶外通通照常通過。</span>';
+        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', n);
+        $('coins').textContent = n;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ Remember the gain only multiplies one band; everywhere else the spectrum is unchanged.</span><span lang="zh">✗ 增益只乘在那個頻帶上；其它地方頻譜沒變。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+  drawBoth();
+})();
+</script>
+</body>
+</html>

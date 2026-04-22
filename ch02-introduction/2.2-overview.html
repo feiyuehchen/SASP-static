@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2.2 Overview · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W2</a></span>
+    <span>STAGE <b>2-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 2-2 · Overview</span>
+    <span lang="zh">關卡 2-2 · 總覽</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Overview.html" target="_blank">SASP §2.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="WHY THIS PAGE">
+    <p lang="en">This is the "table of contents you can read." Six quick briefings, one per upcoming topic, so you know what each deep dive buys you before you take it.</p>
+    <p lang="zh">這是一頁「可以讀的目錄」— 六段短簡報，每一段對應一個後面要深入的主題，讓你還沒下海前就先知道每段下海能換到什麼。</p>
+  </div>
+
+  <h2 lang="en">The six previews</h2>
+  <h2 lang="zh">六段預告</h2>
+
+  <ul class="toc-list">
+    <li><a href="2.2.1-elementary-spec.html"><span><span class="num">2.2.1</span><span lang="en">Elementary Spectrum Analysis — the first Fourier toolbox.</span><span lang="zh">基本頻譜分析 — 第一個傅立葉工具箱。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="2.2.2-stft-tf.html"><span><span class="num">2.2.2</span><span lang="en">STFT &amp; Time-Frequency Displays — hear frequency change over time.</span><span lang="zh">STFT 與時頻顯示 — 聽見頻率隨時間變化。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="2.2.3-stam.html"><span><span class="num">2.2.3</span><span lang="en">Short-Time Analysis, Modification, Resynthesis — edit sound in the frequency domain.</span><span lang="zh">短時分析、修改、再合成 — 在頻域編輯聲音。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="2.2.4-apps.html"><span><span class="num">2.2.4</span><span lang="en">STFT Applications — pitch, envelopes, time-scale, sines+noise.</span><span lang="zh">STFT 應用 — 基頻、包絡、時間縮放、正弦+雜訊。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="2.2.5-multirate.html"><span><span class="num">2.2.5</span><span lang="en">Multirate Polyphase &amp; Wavelet Filter Banks — beyond equal-width bands.</span><span lang="zh">多取樣率多相位與小波濾波器組 — 跳脫等寬頻帶的限制。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="2.2.6-appendices.html"><span><span class="num">2.2.6</span><span lang="en">Appendices — notation, continuous FT, statistics, Gaussians, Bark, Matlab, history, PARSHL.</span><span lang="zh">附錄 — 符號、連續 FT、統計、高斯、Bark、Matlab、歷史、PARSHL。</span></span><span class="dim">▶</span></a></li>
+  </ul>
+
+  <div class="nes-box nes-box--blue" data-label="TIP">
+    <p lang="en">If you are in a hurry, read just these six pages plus World 3 (Fourier). That gives you roughly a survey-course amount of knowledge — enough to recognize the territory and ask informed questions later.</p>
+    <p lang="zh">如果你趕時間，只讀這六頁 + 第 3 世界（傅立葉）。這大概等於一個概論級的知識量 — 足夠你認得地圖，之後再深入哪一塊都有方向。</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> Which two sections, if both removed, would leave a big gap right in the middle of the learning path?</p>
+    <p lang="zh"><b>問：</b>如果拿掉下列哪兩節，學習路徑正中間會出現一個大洞？</p>
+    <div class="choices">
+      <button data-correct="0" lang="en">2.2.5 (Multirate) and 2.2.6 (Appendices)</button>
+      <button data-correct="0" lang="zh">2.2.5（多取樣率）和 2.2.6（附錄）</button>
+      <button data-correct="1" lang="en">2.2.2 (STFT) and 2.2.3 (Analysis-Mod-Resynth)</button>
+      <button data-correct="1" lang="zh">2.2.2（STFT）和 2.2.3（分析-修改-再合成）</button>
+      <button data-correct="0" lang="en">2.2.1 (Elementary) and 2.2.4 (Applications)</button>
+      <button data-correct="0" lang="zh">2.2.1（基本）和 2.2.4（應用）</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="2.1-organization.html">◀ 2.1</a>
+    <a class="warp-pipe">2-2</a>
+    <a class="nes-btn nes-btn--primary" href="2.2.1-elementary-spec.html">NEXT ▶ 2.2.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const coinsEl = document.getElementById('coins');
+  coinsEl.textContent = localStorage.getItem('dsp.coins') || '0';
+  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const correct = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      const fb = document.getElementById('qFeedback');
+      if (correct) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! The STFT and using it to analyze-modify-resynthesize sit at the heart of everything that follows — applications, multirate, wavelets all build on them.</span><span lang="zh">🪙 金幣 +1！STFT 與「用它做分析-修改-再合成」正是整本書後半段的核心 — 應用、多取樣率、小波都建立在它上面。</span>';
+        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', n);
+        coinsEl.textContent = n;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ Those are endpoints; the missing middle is where STFT lives.</span><span lang="zh">✗ 那些是兩端；中間的核心是 STFT 所在。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+})();
+</script>
+</body>
+</html>

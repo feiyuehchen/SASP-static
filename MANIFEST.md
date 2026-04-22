@@ -24,20 +24,20 @@ data-en-def …>` for hover tooltips.
 
 ## World 2 · Introduction and Overview  (ch02-introduction/)
 
-- [ ] 2.1  Organization                                    — `ch02-introduction/2.1-organization.html`
-- [ ] 2.2  Overview                                        — `ch02-introduction/2.2-overview.html`
-- [ ] 2.2.1 Elementary Spectrum Analysis                   — `ch02-introduction/2.2.1-elementary-spec.html`
-- [ ] 2.2.2 STFT & Time-Frequency Displays                 — `ch02-introduction/2.2.2-stft-tf.html`
-- [ ] 2.2.3 Short-Time Analysis · Modification · Resynth.  — `ch02-introduction/2.2.3-stam.html`
-- [ ] 2.2.4 STFT Applications                              — `ch02-introduction/2.2.4-apps.html`
-- [ ] 2.2.5 Multirate Polyphase & Wavelet Filter Banks     — `ch02-introduction/2.2.5-multirate.html`
-- [ ] 2.2.6 Appendices                                     — `ch02-introduction/2.2.6-appendices.html`
+- [~] 2.1  Organization                                    — `ch02-introduction/2.1-organization.html`
+- [~] 2.2  Overview                                        — `ch02-introduction/2.2-overview.html`
+- [~] 2.2.1 Elementary Spectrum Analysis                   — `ch02-introduction/2.2.1-elementary-spec.html`
+- [~] 2.2.2 STFT & Time-Frequency Displays                 — `ch02-introduction/2.2.2-stft-tf.html`
+- [~] 2.2.3 Short-Time Analysis · Modification · Resynth.  — `ch02-introduction/2.2.3-stam.html`
+- [~] 2.2.4 STFT Applications                              — `ch02-introduction/2.2.4-apps.html`
+- [~] 2.2.5 Multirate Polyphase & Wavelet Filter Banks     — `ch02-introduction/2.2.5-multirate.html`
+- [~] 2.2.6 Appendices                                     — `ch02-introduction/2.2.6-appendices.html`
 
 ## World 3 · Fourier Transforms and Theorems  (ch03-fourier-transforms/)
 
 - [~] 3.1   Discrete Time Fourier Transform                — `ch03-fourier-transforms/3.1-dtft.html`
-- [ ] 3.2   Fourier Transform (FT) and Inverse · Existence — `ch03-fourier-transforms/3.2-ft-and-inverse.html`
-- [ ] 3.3   Linearity of the DTFT                          — `ch03-fourier-transforms/3.3-linearity.html`
+- [~] 3.2   Fourier Transform (FT) and Inverse · Existence — `ch03-fourier-transforms/3.2-ft-and-inverse.html`
+- [~] 3.3   Linearity of the DTFT                          — `ch03-fourier-transforms/3.3-linearity.html`
 - [ ] 3.4   Time Reversal                                  — `ch03-fourier-transforms/3.4-time-reversal.html`
 - [ ] 3.5   Symmetry of the DTFT for Real Signals          — `ch03-fourier-transforms/3.5-symmetry.html`
 - [ ] 3.5.1 DTFT of Real Signals                           — `ch03-fourier-transforms/3.5.1-dtft-real.html`
@@ -676,4 +676,4 @@ data-en-def …>` for hover tooltips.
 4. Every page gets a prev / next pager linking to its neighbors in the above order.
 5. No copyrighted prose from Smith's book. All explanations must be original.
 
-Current completed count: **1** / ≈ 530  (stage 3-1 is the golden template).
+Current completed count: **11** / ≈ 530. Latest batch: full World 2 (8 pages) + 3.2, 3.3.

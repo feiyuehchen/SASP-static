@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2.1 Organization · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W2</a></span>
+    <span>STAGE <b>2-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 2-1 · Organization of the Book</span>
+    <span lang="zh">關卡 2-1 · 本書的組織</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Organization.html" target="_blank">SASP §2.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Know the shape of the mountain before you start climbing — four big camps plus a supply tent of appendices.</p>
+    <p lang="zh">開始爬山前，先看一眼整座山的輪廓 — 四個主要營地加上一頂補給帳篷（附錄）。</p>
+  </div>
+
+  <h2 lang="en">The four camps</h2>
+  <h2 lang="zh">四個主要營地</h2>
+
+  <p lang="en">
+    SASP is arranged like a climb up the same mountain in four stages, each one
+    building on the previous:
+  </p>
+  <p lang="zh">
+    SASP 的排法就像分四階段攻頂同一座山，每一階都踩在前一階的肩膀上：
+  </p>
+
+  <ol>
+    <li lang="en"><b>Spectrum analysis of short signals.</b> Start with the
+      Fourier transform itself, windows, FIR design, and how windowed
+      sinusoids and noise look in the frequency domain. Worlds 3–7.</li>
+    <li lang="zh"><b>短訊號的頻譜分析。</b>從傅立葉轉換、
+      <span class="term"
+        data-en="Window (function)"
+        data-en-def="A short sequence used to isolate a segment of a longer signal; shape determines spectral leakage."
+        data-zh-def="一段短的係數序列，用來把長訊號切出一小段；其形狀決定頻譜洩漏。">視窗函數</span>、
+      FIR 濾波器設計，到加窗正弦波與雜訊在頻域長什麼樣。第 3–7 世界。</li>
+
+    <li lang="en"><b>Time-frequency representations.</b> Sliding the spectrum
+      analysis along time — the STFT — and turning it into a picture
+      (spectrogram) you can read. World 8.</li>
+    <li lang="zh"><b>時頻表示。</b>把頻譜分析沿著時間滑動 — 也就是
+      <span class="term"
+        data-en="Short-Time Fourier Transform (STFT)"
+        data-en-def="A time-localized Fourier transform; produces a 2-D (time, frequency) representation."
+        data-zh-def="在時間上局部化的傅立葉轉換，產生 (時間, 頻率) 的二維表示。">STFT</span> —
+      再把結果畫成可以一眼看懂的
+      <span class="term"
+        data-en="Spectrogram"
+        data-en-def="A 2-D image of |STFT| showing how a signal's frequency content changes over time."
+        data-zh-def="|STFT| 的二維圖像，展示訊號頻譜隨時間如何變化。">聲譜圖</span>。第 8 世界。</li>
+
+    <li lang="en"><b>STFT as a processing tool.</b> Two equally-valid ways to
+      read the STFT — as overlap-add of FFT frames, or as a bank of
+      bandpass filters — plus convolution via FFT, modifications, and
+      applications like pitch tracking and cross-synthesis. Worlds 9–11.</li>
+    <li lang="zh"><b>用 STFT 做訊號處理。</b>用兩種等價的方式看 STFT —
+      當作一連串 FFT 的
+      <span class="term"
+        data-en="Overlap-Add (OLA)"
+        data-en-def="A method that reconstructs a signal by summing overlapping windowed FFT frames."
+        data-zh-def="把多個重疊的加窗 FFT 片段相加以重建訊號的方法。">重疊相加</span>
+      (OLA)，或當作一組
+      <span class="term"
+        data-en="Bandpass filter bank"
+        data-en-def="A bank of filters whose passbands tile the frequency axis, each extracting one band of the signal."
+        data-zh-def="若干個濾波器，通帶沿頻率軸排開，各取出訊號的一個頻帶。">帶通濾波器組</span> —
+      加上 FFT 卷積、頻域修改、以及基頻追蹤、交叉合成之類的應用。第 9–11 世界。</li>
+
+    <li lang="en"><b>Multirate and wavelets.</b> Generalise everything: what
+      if the frequency bands don't have to be equally-spaced? Polyphase,
+      QMF/CQF, perfect reconstruction, wavelets, MPEG. World 12.</li>
+    <li lang="zh"><b>多取樣率與小波。</b>把之前的概念推廣：頻帶如果不一定要等寬呢？
+      <span class="term"
+        data-en="Polyphase decomposition"
+        data-en-def="Splitting a filter into subfilters that operate on interleaved sample subsets, saving computation."
+        data-zh-def="把濾波器拆成若干個子濾波器，各自處理交錯取樣子集的分解法，可省計算量。">多相位分解</span>、
+      QMF/CQF、
+      <span class="term"
+        data-en="Perfect Reconstruction (PR)"
+        data-en-def="A filter bank property where analyzing and then synthesizing returns the original signal exactly."
+        data-zh-def="濾波器組的一種性質：分析後再合成能完全還原原訊號。">完美重建</span>、
+      小波、MPEG。第 12 世界。</li>
+  </ol>
+
+  <h2 lang="en">The supply tent</h2>
+  <h2 lang="zh">補給帳篷</h2>
+
+  <p lang="en">
+    Finally, a pile of appendices covers the reusable machinery: notation,
+    continuous-time Fourier theorems, statistics, Gaussian function
+    properties, Bark frequency warping, Matlab listings, a history of
+    spectral audio modeling, and the classic PARSHL sinusoidal-modeling
+    program.
+  </p>
+  <p lang="zh">
+    最後有一疊附錄，裝滿到處都會用到的工具：符號約定、
+    連續時間傅立葉定理、
+    <span class="term"
+      data-en="Statistical signal processing"
+      data-en-def="Signal analysis using probabilistic models — mean, variance, autocorrelation, spectral density, etc."
+      data-zh-def="用機率模型分析訊號 — 平均值、變異數、自相關、功率頻譜密度等。">統計訊號處理</span>、
+    高斯函數性質、
+    <span class="term"
+      data-en="Bark frequency scale"
+      data-en-def="A psychoacoustic frequency scale that matches human critical bands (1–24 barks)."
+      data-zh-def="符合人耳臨界頻帶的心理聲學頻率尺度（1–24 bark）。">Bark 頻率尺度</span>
+    的變換、Matlab 範例、頻譜音訊建模的歷史、以及經典的
+    <span class="term"
+      data-en="PARSHL"
+      data-en-def="A classic sinusoidal analysis/synthesis program by Smith & Serra — partial tracking via STFT peak detection."
+      data-zh-def="Smith 與 Serra 的經典正弦建模程式，透過 STFT 波峰追蹤做 partial tracking。">PARSHL</span>
+    正弦建模程式。
+  </p>
+
+  <div class="nes-box nes-box--purple" data-label="HOW TO PLAY">
+    <p lang="en">
+      The worlds on the map follow the book's order, but you can jump around
+      freely. Concepts that depend on earlier ones will flag their
+      prerequisites at the top. The tooltip-underlined terms are your
+      glossary — hover to recall any definition, in either language.
+    </p>
+    <p lang="zh">
+      地圖上的世界依原書順序，但你可以隨意跳關。依賴前面觀念的頁面，最上面會標明前置技能。
+      劃虛線底線的術語就是你的字典 — 滑鼠移上去隨時查中英定義。
+    </p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> Which chapter sequence is closest to the book's real arc?</p>
+    <p lang="zh"><b>問：</b>下面哪個順序最接近原書的學習弧線？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Fourier → Windows → FIR → Sinusoids → Noise → STFT → Filter Banks → Multirate</button>
+      <button data-correct="1" lang="zh">傅立葉 → 視窗 → FIR → 正弦 → 雜訊 → STFT → 濾波器組 → 多取樣率</button>
+      <button data-correct="0" lang="en">MPEG → Wavelets → Multirate → STFT → Fourier</button>
+      <button data-correct="0" lang="zh">MPEG → 小波 → 多取樣率 → STFT → 傅立葉</button>
+      <button data-correct="0" lang="en">PARSHL → Hammond organ → Bark scale → DTFT</button>
+      <button data-correct="0" lang="zh">PARSHL → 哈蒙風琴 → Bark 尺度 → DTFT</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="index.html">◀ W2</a>
+    <a class="warp-pipe">2-1</a>
+    <a class="nes-btn nes-btn--primary" href="2.2-overview.html">NEXT ▶ 2.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const coinsEl = document.getElementById('coins');
+  coinsEl.textContent = localStorage.getItem('dsp.coins') || '0';
+  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const correct = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      const fb = document.getElementById('qFeedback');
+      if (correct) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! The book climbs from the building blocks (Fourier + windows) up through sinusoid/noise analysis, then STFT and its generalizations.</span><span lang="zh">🪙 金幣 +1！原書是從基本零件（傅立葉、視窗）一路爬，經過正弦/雜訊分析，到 STFT 及其推廣。</span>';
+        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', n);
+        coinsEl.textContent = n;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ That would be climbing the mountain from the summit down. Try again.</span><span lang="zh">✗ 那是從山頂往下爬。再試一次。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+})();
+</script>
+</body>
+</html>

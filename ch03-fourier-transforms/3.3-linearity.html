@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.3 Linearity of the DTFT · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-3 · Linearity of the DTFT</span>
+    <span lang="zh">關卡 3-3 · DTFT 的線性</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Linearity_DTFT.html" target="_blank">SASP §3.3 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">Show that the DTFT respects scaling and addition: build the spectrum of a mixed sound from the spectra of its parts.</p>
+        <p lang="zh">證明 DTFT 對縮放與加法都是「老實人」：混合聲音的頻譜，等於每段頻譜各自加總。</p>
+      </div>
+
+      <h2 lang="en">The statement</h2>
+      <h2 lang="zh">定理本身</h2>
+
+      <div class="formula">
+        <span class="label">LINEARITY</span>
+        <div>$$\text{DTFT}\{\alpha x[n]+\beta y[n]\}\;=\;\alpha\,X(\omega)+\beta\,Y(\omega)$$</div>
+      </div>
+
+      <p lang="en">
+        It is a one-line consequence of the sum being a linear operator.
+        $\sum_n (\alpha x_n + \beta y_n) e^{-j\omega n} = \alpha \sum_n x_n
+        e^{-j\omega n} + \beta \sum_n y_n e^{-j\omega n}$. Done.
+      </p>
+      <p lang="zh">
+        因為求和本身就是線性算子：
+        $\sum_n(\alpha x_n+\beta y_n)e^{-j\omega n}
+        =\alpha\sum_n x_n e^{-j\omega n}+\beta\sum_n y_n e^{-j\omega n}$。
+        證完。
+      </p>
+
+      <h2 lang="en">Why we care</h2>
+      <h2 lang="zh">為什麼這條定理重要</h2>
+
+      <p lang="en">
+        Almost everything that follows leans on linearity:
+      </p>
+      <p lang="zh">後面幾乎所有東西都靠這條：</p>
+
+      <ul>
+        <li lang="en">Decompose a signal into <span class="term"
+            data-en="Sinusoidal partial"
+            data-en-def="An individual sinusoidal component of a sound, often a harmonic of the F0."
+            data-zh-def="聲音中一個正弦分量，通常是基頻的某個諧波。">partials</span>;
+            DTFT each one separately, then sum.</li>
+        <li lang="zh">把訊號拆成<span class="term"
+            data-en="Sinusoidal partial"
+            data-en-def="An individual sinusoidal component of a sound, often a harmonic of the F0."
+            data-zh-def="聲音中一個正弦分量，通常是基頻的某個諧波。">partials</span>，
+          各自取 DTFT 再相加。</li>
+
+        <li lang="en">Multiply each spectrum by a different filter response
+          and recombine in the time domain — overlap-add is exactly this.</li>
+        <li lang="zh">不同頻譜各自乘上不同濾波器響應，再回到時域相加 — 重疊相加（OLA）就是這件事。</li>
+
+        <li lang="en">Cross-synthesis, additive synthesis, sines+noise+transients —
+          all assume the spectrum of a sum is the sum of spectra.</li>
+        <li lang="zh">交叉合成、加法合成、sines+noise+transients — 全都建立在「和的頻譜 = 頻譜之和」上。</li>
+      </ul>
+
+      <div class="nes-box nes-box--yellow" data-label="WATCH OUT">
+        <p lang="en"><em>Magnitude</em> is NOT linear in general:
+        $|X+Y|\le|X|+|Y|$ (triangle inequality), with equality only when
+        $X$ and $Y$ point in the same complex direction. Adding signals
+        of equal amplitude but opposite phase can leave perfect silence —
+        that is destructive interference, perfectly explained by linearity
+        of the complex spectra.</p>
+        <p lang="zh">注意：<em>振幅</em>本身不線性 — $|X+Y|\le|X|+|Y|$（三角不等式），
+          等號只在 $X$、$Y$ 複數方向相同時成立。等振幅但反相位的訊號相加可以是完全靜音 —
+          這個破壞性干涉，正好可以由「複頻譜的線性」完美解釋。</p>
+      </div>
+
+    </section>
+
+    <section>
+
+      <div class="viz-card">
+        <h3 lang="en">Lab · α·x + β·y, in time and frequency</h3>
+        <h3 lang="zh">實驗 · α·x + β·y 在時域與頻域</h3>
+        <canvas id="timeCanvas" style="height:140px;"></canvas>
+        <canvas id="freqCanvas" style="height:200px; margin-top:8px;"></canvas>
+        <div class="controls">
+          <label>α</label>
+          <input type="range" id="aSlider" min="-1" max="1" step="0.05" value="0.7"/>
+          <span class="val" id="aVal">0.70</span>
+
+          <label>β</label>
+          <input type="range" id="bSlider" min="-1" max="1" step="0.05" value="0.7"/>
+          <span class="val" id="bVal">0.70</span>
+
+          <label>fx (Hz)</label>
+          <input type="range" id="fxSlider" min="50" max="3000" step="10" value="500"/>
+          <span class="val" id="fxVal">500</span>
+
+          <label>fy (Hz)</label>
+          <input type="range" id="fySlider" min="50" max="3000" step="10" value="1100"/>
+          <span class="val" id="fyVal">1100</span>
+
+          <label>θy (°)</label>
+          <input type="range" id="phSlider" min="0" max="360" step="5" value="0"/>
+          <span class="val" id="phVal">0</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="nes-btn nes-btn--blue"  id="playBtn"  lang="en">▶ PLAY</button>
+          <button class="nes-btn nes-btn--blue"  id="playBtn2" lang="zh">▶ 播放</button>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--blue" data-label="READ-OUT">
+        <p lang="en">The orange curve is $|\alpha X(\omega)+\beta Y(\omega)|$ computed straight from the mixed time signal. The dashed yellow line is $|\alpha X(\omega)|+|\beta Y(\omega)|$ computed from the parts separately, then added in the spectrum. They agree everywhere — that is linearity.</p>
+        <p lang="zh">橙色曲線是直接對混合訊號取 DTFT 後的 $|\alpha X(\omega)+\beta Y(\omega)|$。
+          黃色虛線是分別算 $|\alpha X|$ 與 $|\beta Y|$ 後在頻域相加。兩者重合 — 這就是線性。
+          試著把 θy 拉到 180° 並讓兩個頻率相同：可以看見破壞性干涉。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Set fx = fy and θy = 180°, with α = β. What is the spectrum?</p>
+        <p lang="zh"><b>問：</b>令 fx = fy 且 θy = 180°，α = β。混合訊號的頻譜會是？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">Twice the spectrum of x.</button>
+          <button data-correct="0" lang="zh">x 的頻譜的兩倍。</button>
+          <button data-correct="1" lang="en">Zero everywhere.</button>
+          <button data-correct="1" lang="zh">處處為零。</button>
+          <button data-correct="0" lang="en">Same shape but rotated.</button>
+          <button data-correct="0" lang="zh">同樣形狀但旋轉。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.2-ft-and-inverse.html">◀ 3.2</a>
+    <a class="warp-pipe">3-3</a>
+    <a class="nes-btn nes-btn--primary" href="3.4-time-reversal.html">NEXT ▶ 3.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const fs = 8000, N = 256;
+  const state = { a:0.7, b:0.7, fx:500, fy:1100, ph:0 };
+
+  function makeXY() {
+    const x = new Float32Array(N), y = new Float32Array(N);
+    const phRad = state.ph * Math.PI / 180;
+    for (let n = 0; n < N; n++) {
+      x[n] = Math.cos(2 * Math.PI * state.fx * n / fs);
+      y[n] = Math.cos(2 * Math.PI * state.fy * n / fs + phRad);
+    }
+    return { x, y };
+  }
+
+  function dtftMag(arr, omegas) {
+    const { re, im } = DSP.dtft(arr, omegas);
+    const mag = new Float32Array(omegas.length);
+    for (let i = 0; i < omegas.length; i++) mag[i] = Math.hypot(re[i], im[i]);
+    return mag;
+  }
+
+  function redraw() {
+    const { x, y } = makeXY();
+    const z = new Float32Array(N);
+    for (let n = 0; n < N; n++) z[n] = state.a * x[n] + state.b * y[n];
+    Viz.stem($('timeCanvas'), z.slice(0, 64), { yMin:-2, yMax:2, xLabel:'n', yLabel:'α·x+β·y', title: 'TIME (first 64 samples)' });
+
+    const K = 600;
+    const om = DSP.linspace(-Math.PI, Math.PI, K);
+    const Mz = dtftMag(z, om);
+    const Mxy = (() => {
+      const Mx = dtftMag(x, om), My = dtftMag(y, om);
+      const out = new Float32Array(K);
+      for (let i = 0; i < K; i++) out[i] = Math.abs(state.a) * Mx[i] + Math.abs(state.b) * My[i];
+      return out;
+    })();
+
+    Viz.multiLine($('freqCanvas'), [
+      { y: Array.from(Mz),  color: '#F83800', label: '|αX+βY|', lineWidth: 3 },
+      { y: Array.from(Mxy), color: '#F8B800', label: '|αX|+|βY|', lineWidth: 1 },
+    ], {
+      xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI,
+      yMin:0,
+      xLabel:'ω  (rad/sample)', yLabel:'|·|',
+      title: 'FREQUENCY DOMAIN',
+      xTicks: [{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}],
+    });
+
+    window._mix = z;
+  }
+
+  const bind = (id, vid, fn, fmt = v=>v) => {
+    const s = $(id), v = $(vid);
+    s.addEventListener('input', () => { const num = parseFloat(s.value); v.textContent = fmt(num); fn(num); redraw(); });
+  };
+  bind('aSlider',  'aVal',  v => state.a  = v, v => v.toFixed(2));
+  bind('bSlider',  'bVal',  v => state.b  = v, v => v.toFixed(2));
+  bind('fxSlider', 'fxVal', v => state.fx = v);
+  bind('fySlider', 'fyVal', v => state.fy = v);
+  bind('phSlider', 'phVal', v => state.ph = v);
+
+  const playFn = () => {
+    const dur = 0.5, L = Math.floor(fs * dur);
+    const out = new Float32Array(L);
+    const phRad = state.ph * Math.PI / 180;
+    const ramp = Math.floor(0.01 * fs);
+    for (let n = 0; n < L; n++) {
+      let env = 1;
+      if (n < ramp) env = n / ramp;
+      else if (n > L - ramp) env = (L - n) / ramp;
+      out[n] = 0.3 * env * (
+        state.a * Math.cos(2 * Math.PI * state.fx * n / fs) +
+        state.b * Math.cos(2 * Math.PI * state.fy * n / fs + phRad)
+      );
+    }
+    AudioKit.playBuffer(out, fs, 1);
+  };
+  $('playBtn').addEventListener('click', playFn);
+  $('playBtn2').addEventListener('click', playFn);
+
+  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ok = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('qFeedback');
+      if (ok) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! Equal amplitude + 180° out of phase + same frequency = total cancellation. The spectrum is the spectrum of zero.</span><span lang="zh">🪙 金幣 +1！等振幅、相位差 180°、同頻率 = 完全抵消。混合訊號就是零，頻譜也是零。</span>';
+        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', n);
+        $('coins').textContent = n;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ Try the slider settings — they cancel completely in time, so the FT is zero.</span><span lang="zh">✗ 試試上面的滑桿設定 — 時域完全抵消，FT 也是零。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+  redraw();
+})();
+</script>
+</body>
+</html>

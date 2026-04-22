@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.2 FT and Inverse · Existence · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-2 · Fourier Transform &amp; Inverse · Existence</span>
+    <span lang="zh">關卡 3-2 · 傅立葉轉換與反轉換 · 存在性</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Fourier_Transform_FT_Inverse.html" target="_blank">SASP §3.2 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">A round trip — analyse with the FT, rebuild with the inverse FT, and ask when the trip is even legal.</p>
+        <p lang="zh">一趟來回 — 用 FT 分析、用反 FT 重建，再問問這條路本來就走得通嗎？</p>
+      </div>
+
+      <h2 lang="en">Forward and inverse</h2>
+      <h2 lang="zh">正轉換與反轉換</h2>
+
+      <p lang="en">Discrete time, continuous frequency:</p>
+      <p lang="zh">離散時間、連續頻率：</p>
+
+      <div class="formula">
+        <span class="label">DTFT &amp; INVERSE</span>
+        <div>$$X(\omega)\;=\;\sum_{n=-\infty}^{\infty}x[n]\,e^{-j\omega n}$$</div>
+        <div>$$x[n]\;=\;\frac{1}{2\pi}\int_{-\pi}^{\pi}X(\omega)\,e^{j\omega n}\,d\omega$$</div>
+      </div>
+
+      <p lang="en">Continuous time, continuous frequency (for reference):</p>
+      <p lang="zh">連續時間、連續頻率（對照用）：</p>
+
+      <div class="formula">
+        <span class="label">CONTINUOUS-TIME FT &amp; INVERSE</span>
+        <div>$$X(j\Omega)=\int_{-\infty}^{\infty}x(t)\,e^{-j\Omega t}\,dt,\qquad x(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty}X(j\Omega)\,e^{j\Omega t}\,d\Omega$$</div>
+      </div>
+
+      <h2 lang="en">When does the sum even converge?</h2>
+      <h2 lang="zh">什麼時候這個求和才會收斂？</h2>
+
+      <p lang="en">
+        Three increasingly forgiving categories. From strongest to weakest:
+      </p>
+      <p lang="zh">三種由嚴格到寬鬆的存在條件，由強到弱：</p>
+
+      <ol>
+        <li lang="en"><b><span class="term" data-en="Absolutely summable"
+            data-en-def="A sequence x[n] satisfies Σ |x[n]| < ∞."
+            data-zh-def="序列 x[n] 滿足 Σ |x[n]| < ∞。">Absolute summability</span> :</b>
+          $\sum |x[n]|<\infty$. The sum converges uniformly and $X(\omega)$
+          is continuous. Most well-behaved signals (decaying transients,
+          impulses, finite-length sequences) live here.</li>
+        <li lang="zh"><b><span class="term" data-en="Absolutely summable"
+            data-en-def="A sequence x[n] satisfies Σ |x[n]| < ∞."
+            data-zh-def="序列 x[n] 滿足 Σ |x[n]| < ∞。">絕對可和</span>：</b>
+          $\sum|x[n]|<\infty$。求和均勻收斂，$X(\omega)$ 連續。
+          大多數行為良好的訊號（衰減瞬態、脈衝、有限長序列）都在這層。</li>
+
+        <li lang="en"><b><span class="term" data-en="Square summable"
+            data-en-def="A sequence with finite energy: Σ |x[n]|² < ∞."
+            data-zh-def="能量有限的序列：Σ |x[n]|² < ∞。">Square summability</span> :</b>
+          $\sum|x[n]|^2<\infty$. The sum converges in the
+          mean-square sense; $X(\omega)$ might have isolated jumps.</li>
+        <li lang="zh"><b><span class="term" data-en="Square summable"
+            data-en-def="A sequence with finite energy: Σ |x[n]|² < ∞."
+            data-zh-def="能量有限的序列：Σ |x[n]|² < ∞。">平方可和</span>：</b>
+          $\sum|x[n]|^2<\infty$。和以均方意義收斂；$X(\omega)$ 允許有零星跳動。</li>
+
+        <li lang="en"><b>Generalised functions :</b> Even sequences that
+          are not summable in the usual sense (constants, pure sinusoids,
+          steps) get a Fourier transform — but it lives in the
+          distribution sense, with Dirac deltas. This unifies "ideal"
+          frequency-domain shapes with reality.</li>
+        <li lang="zh"><b>廣義函數：</b>連一般意義下不可和的序列（常數、純正弦波、單位步階）
+          也能有傅立葉轉換 — 只是要用<span class="term" data-en="Distribution (generalized function)"
+            data-en-def="A linear functional on a test-function space; allows objects like the Dirac delta."
+            data-zh-def="作用在測試函數空間上的線性泛函；可定義 Dirac delta 等物件。">分布</span>意義，
+          表示式中會出現 Dirac delta。
+          這讓「理想頻譜」與真實訊號在同一套理論下共存。</li>
+      </ol>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en">For practical work the rule of thumb is: <em>finite-length signals always have a DTFT</em>. We almost never run into convergence trouble because we are always windowing the data first.</p>
+        <p lang="zh">實務上的口訣：<em>有限長序列一定有 DTFT</em>。
+          因為我們在分析前一定先加窗，幾乎不會撞上收斂問題。</p>
+      </div>
+
+    </section>
+
+    <section>
+
+      <div class="viz-card">
+        <h3 lang="en">Lab · Round-trip via partial inverse</h3>
+        <h3 lang="zh">實驗 · 用部分反轉換做來回</h3>
+        <canvas id="origCanvas" style="height:130px;"></canvas>
+        <canvas id="reconCanvas" style="height:130px; margin-top:6px;"></canvas>
+        <canvas id="errCanvas"   style="height:90px;  margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>SIGNAL</label>
+          <select id="sigSel">
+            <option value="impulse">Impulse</option>
+            <option value="step">Step (length 16)</option>
+            <option value="sine" selected>Sinusoid</option>
+            <option value="exp">Decaying exp</option>
+          </select>
+          <span class="val" id="sigName">SINE</span>
+
+          <label>K (modes)</label>
+          <input type="range" id="kSlider" min="1" max="64" step="1" value="20"/>
+          <span class="val" id="kVal">20</span>
+
+          <label>N</label>
+          <input type="range" id="nSlider" min="16" max="128" step="8" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--blue" data-label="HOW IT WORKS">
+        <p lang="en">We compute $X(\omega)$ on a fine grid, then approximate the inverse integral with the lowest-magnitude $K$ frequencies trimmed off (i.e. keep the loudest $K$ DFT bins). Watch the reconstruction snap to the original as $K$ grows.</p>
+        <p lang="zh">先在密集格點上算 $X(\omega)$，再用「只保留最大的 $K$ 個 DFT bin」近似反積分。把 $K$ 拉大，看重建波形如何貼回原訊號。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Pick "Step" and slowly increase $K$. Even at large $K$ a tiny overshoot remains near the jump. What is it called?</p>
+        <p lang="zh"><b>問：</b>選「Step」訊號，把 $K$ 慢慢拉大。就算 $K$ 很大，跳變處旁邊都還剩一點點過衝。這現象叫什麼？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">Aliasing.</button>
+          <button data-correct="0" lang="zh">混疊。</button>
+          <button data-correct="1" lang="en">Gibbs phenomenon.</button>
+          <button data-correct="1" lang="zh">Gibbs 現象。</button>
+          <button data-correct="0" lang="en">Quantisation noise.</button>
+          <button data-correct="0" lang="zh">量化雜訊。</button>
+          <button data-correct="0" lang="en">Spectral leakage.</button>
+          <button data-correct="0" lang="zh">頻譜洩漏。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.1-dtft.html">◀ 3.1</a>
+    <a class="warp-pipe">3-2</a>
+    <a class="nes-btn nes-btn--primary" href="3.3-linearity.html">NEXT ▶ 3.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { sig: 'sine', K: 20, N: 64 };
+
+  function makeSig() {
+    const N = state.N;
+    if (state.sig === 'impulse') return DSP.impulse(N, N >> 1);
+    if (state.sig === 'step')    {
+      const x = new Float32Array(N);
+      const lo = (N >> 1) - 8, hi = (N >> 1) + 8;
+      for (let n = lo; n < hi; n++) if (n >= 0 && n < N) x[n] = 1;
+      return x;
+    }
+    if (state.sig === 'sine') {
+      const x = new Float32Array(N);
+      for (let n = 0; n < N; n++) x[n] = Math.cos(2 * Math.PI * 4 * n / N);
+      return x;
+    }
+    // decaying exp
+    const x = new Float32Array(N);
+    for (let n = 0; n < N; n++) x[n] = Math.pow(0.93, Math.abs(n - N/2)) * Math.cos(2 * Math.PI * 5 * n / N);
+    return x;
+  }
+
+  /** Reconstruct using top-K-magnitude DFT bins. */
+  function partialInverse(x, K) {
+    const N = x.length;
+    const re = new Float32Array(N), im = new Float32Array(N);
+    re.set(x);
+    DSP.fft(re, im);
+    // pick top K bins by magnitude (treat conjugate-symmetric pairs as one event)
+    const mags = new Float32Array(N);
+    for (let k = 0; k < N; k++) mags[k] = Math.hypot(re[k], im[k]);
+    const idx = Array.from({length:N}, (_,k)=>k).sort((a,b)=>mags[b]-mags[a]);
+    const keep = new Set(idx.slice(0, K));
+    // also keep their conjugates so reconstruction stays real
+    idx.slice(0, K).forEach(k => keep.add((N - k) % N));
+    for (let k = 0; k < N; k++) if (!keep.has(k)) { re[k] = 0; im[k] = 0; }
+    DSP.ifft(re, im);
+    return re;
+  }
+
+  function redraw() {
+    const x = makeSig();
+    const xr = partialInverse(x, state.K);
+    const err = new Float32Array(x.length);
+    let pe = 0;
+    for (let i = 0; i < x.length; i++) { err[i] = x[i] - xr[i]; pe += err[i]*err[i]; }
+    Viz.stem($('origCanvas'),  x,  { yMin:-1.5, yMax:1.5, xLabel:'n', yLabel:'x[n]', title: 'ORIGINAL' });
+    Viz.stem($('reconCanvas'), xr, { yMin:-1.5, yMax:1.5, xLabel:'n', yLabel:'x̃[n]', title: 'RECONSTRUCTED (TOP-K BINS)' });
+    Viz.stem($('errCanvas'),   err,{ yMin:-0.6, yMax:0.6, xLabel:'n', yLabel:'err',  title: 'ERROR (x − x̃),  ‖e‖² = ' + pe.toFixed(3) });
+  }
+
+  const bind = (id, vid, fn) => {
+    const s = $(id), v = $(vid);
+    s.addEventListener('input', () => { const num = parseFloat(s.value); v.textContent = num; fn(num); redraw(); });
+  };
+  bind('kSlider', 'kVal', v => state.K = v|0);
+  bind('nSlider', 'nVal', v => state.N = v|0);
+  $('sigSel').addEventListener('change', () => {
+    state.sig = $('sigSel').value;
+    $('sigName').textContent = $('sigSel').value.toUpperCase();
+    redraw();
+  });
+
+  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ok = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('qFeedback');
+      if (ok) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! Truncating a Fourier series of a discontinuity gives ~9% overshoot that does NOT vanish as K grows. Smooth windows reduce it.</span><span lang="zh">🪙 金幣 +1！截斷不連續訊號的傅立葉級數會產生約 9% 的過衝，K 再大都不會消失。加平滑視窗可降低。</span>';
+        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', n);
+        $('coins').textContent = n;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ Aliasing comes from sampling, not truncation.</span><span lang="zh">✗ 混疊是取樣造成的，不是截斷。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+  redraw();
+})();
+</script>
+</body>
+</html>

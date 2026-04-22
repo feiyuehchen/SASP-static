@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2.2.5 Multirate &amp; Wavelet Filter Banks · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W2</a></span>
+    <span>STAGE <b>2-2-5</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 2-2-5 · Multirate Polyphase &amp; Wavelet Filter Banks</span>
+    <span lang="zh">關卡 2-2-5 · 多取樣率多相位與小波濾波器組</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Multirate_Polyphase_Wavelet.html" target="_blank">SASP §2.2.5 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="PREVIEW">
+    <p lang="en">The STFT slices frequency into equal bands. That is not always what your ear — or MPEG — wants.</p>
+    <p lang="zh">STFT 把頻率切成等寬頻帶。但你的耳朵 — 還有 MPEG — 不一定想要這樣切。</p>
+  </div>
+
+  <h2 lang="en">Why escape uniform bands?</h2>
+  <h2 lang="zh">為什麼要跳出等寬？</h2>
+
+  <p lang="en">Human hearing has <span class="term" data-en="Critical bands"
+    data-en-def="Frequency bands of roughly constant Q within which the ear lumps energy for loudness perception."
+    data-zh-def="聽覺上近似等 Q 值的頻帶，耳朵在其中把能量加總以感知響度。">critical bands</span> that
+    are narrow at low frequency and wide at high frequency. Audio coders
+    like MP3 and AAC match their analysis to that. Wavelets take it
+    further: analyse each octave with a filter of its own bandwidth.</p>
+  <p lang="zh">人耳有<span class="term" data-en="Critical bands"
+    data-en-def="Frequency bands of roughly constant Q within which the ear lumps energy for loudness perception."
+    data-zh-def="聽覺上近似等 Q 值的頻帶，耳朵在其中把能量加總以感知響度。">臨界頻帶</span> —
+    低頻窄、高頻寬。MP3、AAC 等音訊編碼器都讓分析方式貼合這個聽感。
+    <span class="term" data-en="Wavelet"
+    data-en-def="A scaled / shifted family of prototype functions used to analyze signals; naturally gives octave-spaced bands."
+    data-zh-def="由原型函數經縮放與平移得到的一族基底，天生給出八度等比間隔的頻帶。">小波</span>
+    再進一步：每個八度用自己頻寬的濾波器去分析。</p>
+
+  <h2 lang="en">The building blocks</h2>
+  <h2 lang="zh">組成零件</h2>
+
+  <ul>
+    <li lang="en"><span class="term" data-en="Upsampling"
+        data-en-def="Inserting L−1 zeros between samples to increase sampling rate by factor L."
+        data-zh-def="在樣本間插入 L−1 個 0，把取樣率放大 L 倍。">Upsampling</span> /
+      <span class="term" data-en="Downsampling"
+        data-en-def="Keeping every Mth sample, dropping the rest; lowers sampling rate by factor M."
+        data-zh-def="每 M 個樣本留一個、其餘丟掉；把取樣率降 M 倍。">downsampling</span>
+      — change the sample rate.</li>
+    <li lang="zh">升/降取樣 — 改變取樣率。</li>
+
+    <li lang="en"><span class="term" data-en="Polyphase decomposition"
+        data-en-def="Splitting an FIR filter into sub-filters each operating on a sample phase; avoids redundant multiplies after decimation."
+        data-zh-def="把 FIR 濾波器拆成各自處理一個取樣相位的子濾波器；降取樣後可省下大量乘法。">Polyphase decomposition</span>
+      — cuts the computation after decimation or before interpolation to
+      only the terms that actually contribute.</li>
+    <li lang="zh">多相位分解 — 在降取樣後（或升取樣前）只算真正會貢獻輸出的乘加，省掉一堆冗餘。</li>
+
+    <li lang="en"><span class="term" data-en="Quadrature Mirror Filter (QMF)"
+        data-en-def="A two-channel filter bank with mirror-symmetric response; the historical start of PR filter banks."
+        data-zh-def="兩通道、頻率響應互為鏡像的濾波器組；完美重建濾波器組的歷史起點。">QMF</span> /
+      <span class="term" data-en="Conjugate Quadrature Filter (CQF)"
+        data-en-def="An orthogonal two-channel filter bank that delivers exact perfect reconstruction."
+        data-zh-def="一種正交兩通道濾波器組，可達到完美重建。">CQF</span> banks —
+      two-channel filter banks with perfect reconstruction.</li>
+    <li lang="zh">QMF / CQF 濾波器組 — 完美重建的兩通道濾波器組。</li>
+
+    <li lang="en"><span class="term" data-en="Paraunitary filter bank"
+        data-en-def="A multi-channel filter bank with an orthogonal polyphase matrix; preserves energy and reconstructs perfectly."
+        data-zh-def="多相位矩陣為正交的多通道濾波器組；保能量、完美重建。">Paraunitary</span>
+      multi-channel filter banks — the modern foundation.</li>
+    <li lang="zh">Paraunitary 多通道濾波器組 — 現代理論基礎。</li>
+
+    <li lang="en">Wavelet filter banks — dyadic trees built from PR pairs, giving log-frequency resolution.</li>
+    <li lang="zh">小波濾波器組 — 用完美重建對堆成的二進樹，給出對數頻率解析度。</li>
+
+    <li lang="en">MPEG-style cosine-modulated filter banks — pseudo-QMF and PR cosine banks, used in real codecs.</li>
+    <li lang="zh">MPEG 餘弦調變濾波器組 — Pseudo-QMF 與 PR 餘弦濾波器組，實際編碼器在用的那種。</li>
+  </ul>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> Why do audio codecs often prefer cosine-modulated filter banks over a straight DFT filter bank?</p>
+    <p lang="zh"><b>問：</b>為什麼實際音訊編碼器常用餘弦調變濾波器組，而不是單純 DFT 濾波器組？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Real-valued sub-band signals → half the arithmetic and storage.</button>
+      <button data-correct="1" lang="zh">子頻帶訊號是實數 → 運算與儲存都只要一半。</button>
+      <button data-correct="0" lang="en">They always give finer frequency resolution than the DFT.</button>
+      <button data-correct="0" lang="zh">頻率解析度一定比 DFT 細。</button>
+      <button data-correct="0" lang="en">They do not need windows.</button>
+      <button data-correct="0" lang="zh">它們不需要視窗。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="2.2.4-apps.html">◀ 2.2.4</a>
+    <a class="warp-pipe">2-2-5</a>
+    <a class="nes-btn nes-btn--primary" href="2.2.6-appendices.html">NEXT ▶ 2.2.6</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  document.getElementById('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ok = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('qFeedback');
+      if (ok) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! Cosine modulation gives a real-valued critically-sampled decomposition — exactly the efficiency a codec needs.</span><span lang="zh">🪙 金幣 +1！餘弦調變產生實數、臨界取樣的分解，正好是編碼器要的效率。</span>';
+        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', n);
+        document.getElementById('coins').textContent = n;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ Both use windows; DFT is often finer. The real win is the halving.</span><span lang="zh">✗ 兩者都要用視窗；DFT 解析度甚至常比較細。真正的勝點是運算減半。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+})();
+</script>
+</body>
+</html>

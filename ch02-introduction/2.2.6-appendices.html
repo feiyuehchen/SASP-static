@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2.2.6 Appendices · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W2</a></span>
+    <span>STAGE <b>2-2-6</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 2-2-6 · Appendices Map</span>
+    <span lang="zh">關卡 2-2-6 · 附錄地圖</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Appendices.html" target="_blank">SASP §2.2.6 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="WHY">
+    <p lang="en">The appendices are the cookbook you keep reaching back to. Knowing they exist — and where — is half the battle.</p>
+    <p lang="zh">附錄是你會不斷翻回來的食譜。先知道有哪些、放在哪 — 戰鬥就贏了一半。</p>
+  </div>
+
+  <ul class="toc-list">
+    <li><a href="../appendix/notation/index.html"><span><span class="num">A</span><span lang="en">Notation — frequency/time conventions, signal names, FT symbols.</span><span lang="zh">符號 — 頻率/時間慣例、訊號記號、FT 符號。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="../appendix/ct-fourier/index.html"><span><span class="num">B</span><span lang="en">Continuous Fourier theorems + sampling + uncertainty.</span><span lang="zh">連續傅立葉定理 + 取樣 + 不確定性。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="../appendix/stats/index.html"><span><span class="num">C</span><span lang="en">Statistical signal processing: stochastic processes, correlation, PSD.</span><span lang="zh">統計訊號處理：隨機過程、相關、功率譜。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="../appendix/gaussian/index.html"><span><span class="num">D</span><span lang="en">Gaussian function properties — the Swiss army knife.</span><span lang="zh">高斯函數性質 — 瑞士刀級的萬用工具。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="../appendix/warping/index.html"><span><span class="num">E</span><span lang="en">Bilinear audio frequency warping + Bark / ERB scales.</span><span lang="zh">雙線性音訊頻率變換 + Bark / ERB 尺度。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="../appendix/matlab/index.html"><span><span class="num">F</span><span lang="en">Matlab / Octave listings — runnable sanity checks.</span><span lang="zh">Matlab / Octave 範例 — 可以直接跑的驗算。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="../appendix/history/index.html"><span><span class="num">G</span><span lang="en">Spectral audio modeling history — Bernoulli → MPEG.</span><span lang="zh">頻譜音訊建模歷史 — Bernoulli 到 MPEG。</span></span><span class="dim">▶</span></a></li>
+    <li><a href="../appendix/parshl/index.html"><span><span class="num">H</span><span lang="en">The PARSHL program — the grand-daddy of sinusoidal analysis.</span><span lang="zh">PARSHL 程式 — 正弦建模的老祖宗。</span></span><span class="dim">▶</span></a></li>
+  </ul>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> You want to know why the Gaussian window has the minimum time-bandwidth product. Which appendix first?</p>
+    <p lang="zh"><b>問：</b>想知道為什麼高斯視窗有最小時頻積，要先翻哪個附錄？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">D · Gaussian function properties.</button>
+      <button data-correct="1" lang="zh">D · 高斯函數性質。</button>
+      <button data-correct="0" lang="en">H · PARSHL.</button>
+      <button data-correct="0" lang="zh">H · PARSHL。</button>
+      <button data-correct="0" lang="en">F · Matlab listings.</button>
+      <button data-correct="0" lang="zh">F · Matlab 範例。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="2.2.5-multirate.html">◀ 2.2.5</a>
+    <a class="warp-pipe">2-2-6</a>
+    <a class="nes-btn nes-btn--primary" href="../ch03-fourier-transforms/index.html">WORLD 3 ▶</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  document.getElementById('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ok = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('qFeedback');
+      if (ok) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! Appendix D is the whole story of the Gaussian — also where the uncertainty relation proof lives (together with Appendix B).</span><span lang="zh">🪙 金幣 +1！附錄 D 是高斯的完整故事；不確定性原理的證明也在這裡（配合附錄 B）。</span>';
+        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', n);
+        document.getElementById('coins').textContent = n;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ Think "what is this function really" — that is Appendix D.</span><span lang="zh">✗ 想「這個函數本身是什麼」— 去附錄 D。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+})();
+</script>
+</body>
+</html>

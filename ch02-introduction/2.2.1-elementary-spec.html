@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2.2.1 Elementary Spectrum Analysis · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W2</a></span>
+    <span>STAGE <b>2-2-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 2-2-1 · Elementary Spectrum Analysis</span>
+    <span lang="zh">關卡 2-2-1 · 基本頻譜分析</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Elementary_Spectrum_Analysis.html" target="_blank">SASP §2.2.1 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">See why the three stops of the first leg — Fourier theorems, windows, FIR filter design — are each necessary before we can do anything interesting.</p>
+        <p lang="zh">先看清楚第一段路的三個停靠點 — 傅立葉定理、視窗、FIR 濾波器設計 — 為什麼缺一不可。</p>
+      </div>
+
+      <h2 lang="en">The baseline toolkit</h2>
+      <h2 lang="zh">基本工具箱</h2>
+
+      <p lang="en">
+        Any real sound is infinite in principle. To analyse it digitally we
+        always do the same three things:
+      </p>
+      <p lang="zh">任何真實聲音原則上都是無限長。要用數位方式分析它，我們永遠都在做同樣的三件事：</p>
+
+      <ol>
+        <li lang="en"><b>Cut out a finite chunk.</b> Multiply by a
+          <span class="term" data-en="Window function"
+            data-en-def="A sequence that smoothly tapers to zero at both ends, used to extract a finite segment of a signal."
+            data-zh-def="兩端平滑收斂到 0 的序列，用來從訊號中取出一段有限長度。">視窗函數</span>.
+          The window's shape controls how much
+          <span class="term" data-en="Spectral leakage"
+            data-en-def="Energy from a true frequency smeared into nearby bins because of windowing."
+            data-zh-def="視窗化造成真實頻率的能量散到鄰近 bin 的現象。">spectral leakage</span>
+          we suffer.</li>
+        <li lang="zh"><b>切出一段有限長度。</b>乘上一個<span class="term" data-en="Window function"
+            data-en-def="A sequence that smoothly tapers to zero at both ends, used to extract a finite segment of a signal."
+            data-zh-def="兩端平滑收斂到 0 的序列，用來從訊號中取出一段有限長度。">視窗函數</span>。
+          視窗形狀決定<span class="term" data-en="Spectral leakage"
+            data-en-def="Energy from a true frequency smeared into nearby bins because of windowing."
+            data-zh-def="視窗化造成真實頻率的能量散到鄰近 bin 的現象。">頻譜洩漏</span>有多嚴重。</li>
+
+        <li lang="en"><b>Take a transform.</b> DFT (sampled DTFT) turns
+          samples into frequency-domain numbers. Fourier theorems
+          (linearity, shift, convolution, Parseval, …) tell us how
+          time-domain operations show up on the other side.</li>
+        <li lang="zh"><b>做一次轉換。</b><span class="term" data-en="Discrete Fourier Transform (DFT)"
+            data-en-def="The finite-length version of the DTFT, sampled on a uniform frequency grid; computed efficiently by the FFT."
+            data-zh-def="有限長度版的 DTFT，在均勻頻率格點上取樣；FFT 是其快速計算法。">DFT</span>
+          （採樣版的 DTFT）把樣本變成頻域數字。
+          傅立葉定理（線性、位移、卷積、Parseval…）告訴我們時域操作對應到頻域變成什麼。</li>
+
+        <li lang="en"><b>Apply a filter.</b> If we want to reshape or
+          isolate some band, we need to design an FIR whose
+          <span class="term" data-en="Impulse response"
+            data-en-def="A filter's output when the input is a unit impulse; fully characterizes an LTI system."
+            data-zh-def="系統對單位脈衝的輸出；能完全描述一個 LTI 系統。">impulse response</span>
+          produces the desired frequency response.</li>
+        <li lang="zh"><b>套一個濾波器。</b>如果要重塑或只留下某個頻帶，
+          就要設計 FIR，讓它的<span class="term" data-en="Impulse response"
+            data-en-def="A filter's output when the input is a unit impulse; fully characterizes an LTI system."
+            data-zh-def="系統對單位脈衝的輸出；能完全描述一個 LTI 系統。">脈衝響應</span>對應到我們要的頻率響應。</li>
+      </ol>
+
+      <div class="formula">
+        <span class="label">DFT (length N)</span>
+        <div>$$X[k]=\sum_{n=0}^{N-1} x[n]\,e^{-j 2\pi k n /N},\qquad k=0,1,\dots,N-1$$</div>
+      </div>
+
+      <p lang="en">The demo on the right shows the DFT of a short windowed sinusoid. Try switching windows to feel what "leakage" looks like.</p>
+      <p lang="zh">右邊的示範畫的是一段短的加窗正弦波的 DFT。切換不同視窗，就能直接感受「洩漏」的樣子。</p>
+
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Windowed sinusoid → DFT</h3>
+        <h3 lang="zh">實驗 · 加窗正弦波 → DFT</h3>
+        <canvas id="tCanvas" style="height:140px;"></canvas>
+        <canvas id="fCanvas" style="height:180px; margin-top:8px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="16" max="256" step="8" value="64"/>
+          <span class="val" id="nVal">64</span>
+
+          <label>f (Hz)</label>
+          <input type="range" id="fSlider" min="50" max="3000" step="10" value="500"/>
+          <span class="val" id="fVal">500</span>
+
+          <label>fs (Hz)</label>
+          <input type="range" id="fsSlider" min="4000" max="16000" step="1000" value="8000"/>
+          <span class="val" id="fsVal">8000</span>
+
+          <label>WIN</label>
+          <select id="winSel">
+            <option value="rect">Rectangular</option>
+            <option value="hann" selected>Hann</option>
+            <option value="hamming">Hamming</option>
+            <option value="blackman">Blackman</option>
+          </select>
+          <span class="val" id="winName">HANN</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Keep f, N and fs fixed. Switching from the rectangular to the Blackman window does WHAT to the main peak?</p>
+        <p lang="zh"><b>問：</b>f、N 與 fs 都不變，把視窗從矩形換成 Blackman 之後，主波峰會怎麼變？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">Peak becomes sharper (narrower); sidelobes rise.</button>
+          <button data-correct="0" lang="zh">主峰變更尖（更窄）；旁瓣變高。</button>
+          <button data-correct="1" lang="en">Peak widens; sidelobes drop.</button>
+          <button data-correct="1" lang="zh">主峰變寬；旁瓣下降。</button>
+          <button data-correct="0" lang="en">Nothing changes.</button>
+          <button data-correct="0" lang="zh">什麼都不會變。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="2.2-overview.html">◀ 2.2</a>
+    <a class="warp-pipe">2-2-1</a>
+    <a class="nes-btn nes-btn--primary" href="2.2.2-stft-tf.html">NEXT ▶ 2.2.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 64, f: 500, fs: 8000, win: 'hann' };
+
+  function redraw() {
+    const { N, f, fs, win } = state;
+    const x = DSP.realSine(N, f, fs);
+    const w = DSP.WINDOWS[win](N);
+    const xw = DSP.applyWindow(x, w);
+    Viz.stem($('tCanvas'), xw, { yMin: -1.2, yMax: 1.2, xLabel: 'n', yLabel: 'x[n]·w[n]', title: 'WINDOWED TIME SIGNAL' });
+
+    const K = 512;
+    const omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(xw, omegas);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    // Convert mag → dB so sidelobes are visible.
+    const db = DSP.toDb(mag, -80);
+
+    const xTicks = [
+      { v: -Math.PI, label: '-π' }, { v: 0, label: '0' }, { v: Math.PI, label: 'π' },
+    ];
+    Viz.line($('fCanvas'), db, {
+      xValues: Array.from(omegas), xMin: -Math.PI, xMax: Math.PI,
+      yMin: -80, yMax: Math.max(20, Math.max(...db) + 3),
+      xLabel: 'ω  (rad/sample)', yLabel: '20 log₁₀ |X(ω)|',
+      title: 'DFT MAGNITUDE (dB)',
+      xTicks,
+    });
+  }
+
+  const bind = (id, vid, fn, fmt = v => v) => {
+    const s = $(id), v = $(vid);
+    s.addEventListener('input', () => { const num = parseFloat(s.value); v.textContent = fmt(num); fn(num); redraw(); });
+  };
+  bind('nSlider',  'nVal',  v => state.N  = v|0);
+  bind('fSlider',  'fVal',  v => state.f  = v);
+  bind('fsSlider', 'fsVal', v => state.fs = v);
+  $('winSel').addEventListener('change', () => {
+    state.win = $('winSel').value;
+    $('winName').textContent = state.win.toUpperCase();
+    redraw();
+  });
+
+  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ok = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('qFeedback');
+      if (ok) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! Blackman tapers more aggressively → wider main lobe but much lower sidelobes. Classic trade-off.</span><span lang="zh">🪙 金幣 +1！Blackman 兩端收得更猛 → 主瓣較寬，但旁瓣壓得很低。這是經典的取捨。</span>';
+        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', n);
+        $('coins').textContent = n;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ Switch windows on the chart and watch — the shape swap trades resolution for leakage suppression.</span><span lang="zh">✗ 在圖上切換視窗觀察 — 換形狀的本質是用解析度換旁瓣壓制。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+  redraw();
+})();
+</script>
+</body>
+</html>

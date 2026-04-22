@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2.2.4 STFT Applications · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W2</a></span>
+    <span>STAGE <b>2-2-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 2-2-4 · STFT Applications</span>
+    <span lang="zh">關卡 2-2-4 · STFT 應用</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/STFT_Applications.html" target="_blank">SASP §2.2.4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="PREVIEW">
+    <p lang="en">
+      Six big use-cases. Each gets its own deep dive in World 11; this page
+      is the trailer.
+    </p>
+    <p lang="zh">六個主要用途。每一個在第 11 世界都有深入關卡；這頁只是預告片。</p>
+  </div>
+
+  <ul>
+    <li lang="en"><b>F0 (pitch) estimation.</b> Find the harmonic stack in the
+      STFT and back out the fundamental frequency. Needed for auto-tune,
+      karaoke scoring, music transcription.</li>
+    <li lang="zh"><b><span class="term" data-en="Fundamental frequency (F0)"
+        data-en-def="The lowest frequency of a periodic signal; auditory pitch."
+        data-zh-def="週期訊號的最低頻率；我們聽到的音高。">基頻</span>估計。</b>
+      從 STFT 抓諧波堆疊、推回基頻。自動調音、卡拉 OK 打分、音樂轉譜都要用。</li>
+
+    <li lang="en"><b>Cross-synthesis.</b> Take the spectral envelope of one
+      sound and the excitation of another, multiply frame by frame. That is
+      how "talking guitar" effects and the classic vocoder work.</li>
+    <li lang="zh"><b><span class="term" data-en="Cross-synthesis"
+        data-en-def="Multiplying the spectral envelope of one signal by the fine spectrum of another."
+        data-zh-def="把一段聲音的頻譜包絡，乘上另一段的精細頻譜。">交叉合成</span>。</b>
+      把某段聲音的頻譜包絡，跟另一段的激發訊號逐 frame 相乘。
+      就是「會說話的吉他」與經典 vocoder 的原理。</li>
+
+    <li lang="en"><b>Spectral envelope extraction.</b> Cepstral smoothing
+      or linear prediction both strip the fine structure off a spectrum to
+      leave a smooth vocal-tract-like curve.</li>
+    <li lang="zh"><b><span class="term" data-en="Spectral envelope"
+        data-en-def="The smooth shape of a spectrum, after the fine (harmonic) structure is removed."
+        data-zh-def="把頻譜細節（諧波）拿掉後留下的平滑形狀。">頻譜包絡</span>萃取。</b>
+      用<span class="term" data-en="Cepstral smoothing"
+        data-en-def="Smoothing a log-magnitude spectrum by low-pass filtering in the cepstral (IFFT of log|X|) domain."
+        data-zh-def="在 cepstrum（取 log|X| 之反 FFT）域低通濾波以平滑對數頻譜。">倒頻譜平滑</span>或
+      <span class="term" data-en="Linear prediction (LP)"
+        data-en-def="Modeling a sample as a linear combination of previous samples; spectrum of the LP filter = envelope."
+        data-zh-def="把樣本表示成前面樣本的線性組合；所得 LP 濾波器之頻譜 = 包絡。">線性預測</span>
+      把頻譜細節拔掉，剩下一條像聲道形狀的平滑曲線。</li>
+
+    <li lang="en"><b>Sines + Noise + Transients (SMS).</b> Model sounds as
+      a sum of tracked sinusoidal partials plus a residual noise plus sharp
+      transients. Super flexible for time-scaling, pitch-shifting and
+      creative sound design.</li>
+    <li lang="zh"><b><span class="term" data-en="Spectral Modeling Synthesis (SMS)"
+        data-en-def="A sound model that decomposes audio into deterministic sinusoids, stochastic noise, and transients."
+        data-zh-def="把聲音拆成確定性的正弦分量、隨機雜訊與瞬態的聲音模型。">頻譜建模合成</span>（SMS）。</b>
+      把聲音拆成被追蹤的正弦 partials、殘餘雜訊、以及尖銳瞬態。
+      要做時間伸縮、變調、創意音效都超有彈性。</li>
+
+    <li lang="en"><b>Time-scale modification.</b> Speed up or slow down a
+      sound without changing its pitch — by manipulating the STFT frame
+      timing before resynthesis.</li>
+    <li lang="zh"><b><span class="term" data-en="Time-scale modification (TSM)"
+        data-en-def="Changing a signal's duration without changing its pitch, usually via STFT frame re-timing."
+        data-zh-def="不改變音高，只改變訊號長度；常透過調整 STFT frame 時序達成。">時間尺度變化</span>（TSM）。</b>
+      把聲音變快或變慢，但音高不變 — 做法是在再合成前重新安排 STFT frame 的時序。</li>
+
+    <li lang="en"><b>Chirplets &amp; FFT filter banks.</b> Specialised
+      analyses for signals whose frequency content sweeps (chirps) or
+      needs octave-spaced decomposition.</li>
+    <li lang="zh"><b>Chirplet 與 FFT 濾波器組。</b>針對頻率會掃動的訊號、
+      或需要八度間隔分解的分析工具。</li>
+  </ul>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> A podcast producer wants to slow a narrator down by 25% without making her sound like a giant. Which tool is best?</p>
+    <p lang="zh"><b>問：</b>一個 podcast 製作想把旁白放慢 25%，但不想讓她聽起來像巨人。用哪種工具最合適？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Time-scale modification (TSM).</button>
+      <button data-correct="1" lang="zh">時間尺度變化（TSM）。</button>
+      <button data-correct="0" lang="en">Just resample the audio at 0.75× rate.</button>
+      <button data-correct="0" lang="zh">把音訊以 0.75× 重新取樣。</button>
+      <button data-correct="0" lang="en">Cross-synthesise with white noise.</button>
+      <button data-correct="0" lang="zh">跟白雜訊做交叉合成。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="2.2.3-stam.html">◀ 2.2.3</a>
+    <a class="warp-pipe">2-2-4</a>
+    <a class="nes-btn nes-btn--primary" href="2.2.5-multirate.html">NEXT ▶ 2.2.5</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  document.getElementById('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ok = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('qFeedback');
+      if (ok) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! Plain resampling would lower the pitch (giant voice). TSM keeps pitch constant.</span><span lang="zh">🪙 金幣 +1！單純重新取樣會把音高降低（巨人聲）。TSM 保持音高不變。</span>';
+        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', n);
+        document.getElementById('coins').textContent = n;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ Think: which tool decouples time from pitch?</span><span lang="zh">✗ 想想：哪一個工具把時間和音高解耦？</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2.2.2 STFT & Time-Frequency Displays · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W2</a></span>
+    <span>STAGE <b>2-2-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 2-2-2 · STFT &amp; Time-Frequency Displays</span>
+    <span lang="zh">關卡 2-2-2 · STFT 與時頻顯示</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Short_Time_Fourier_Transform.html" target="_blank">SASP §2.2.2 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="IDEA">
+        <p lang="en">A single spectrum hides when things happen; a spectrogram shows frequency as a function of time.</p>
+        <p lang="zh">只看一次頻譜會把「什麼時候發生」藏起來；聲譜圖把頻率畫成時間的函數，一眼就看到。</p>
+      </div>
+
+      <h2 lang="en">From spectrum to spectrogram</h2>
+      <h2 lang="zh">從頻譜到聲譜圖</h2>
+
+      <p lang="en">
+        A plain DTFT smashes the whole signal's time information into one
+        curve. That is great if the signal is stationary, but terrible for
+        music, speech or anything that changes pitch. The fix: slide a
+        window along time, take a DFT at each position, and stack the
+        magnitudes into a picture. That picture is a
+        <span class="term" data-en="Spectrogram"
+          data-en-def="A 2-D image of |STFT|; horizontal axis is time, vertical axis is frequency, colour is magnitude (usually in dB)."
+          data-zh-def="|STFT| 的 2D 圖像；橫軸時間、縱軸頻率、顏色代表強度（通常取 dB）。">聲譜圖</span>.
+      </p>
+      <p lang="zh">
+        單純的 DTFT 會把整段訊號的時間資訊壓成一條曲線。對穩態訊號很 OK，
+        但對音樂、語音、任何會變調的聲音就完全失真。解法：把視窗沿著時間滑動，
+        每個位置各取一次 DFT，把振幅疊成一張圖。這張圖就是<span class="term" data-en="Spectrogram"
+          data-en-def="A 2-D image of |STFT|; horizontal axis is time, vertical axis is frequency, colour is magnitude (usually in dB)."
+          data-zh-def="|STFT| 的 2D 圖像；橫軸時間、縱軸頻率、顏色代表強度（通常取 dB）。">聲譜圖</span>。
+      </p>
+
+      <div class="formula">
+        <span class="label">STFT</span>
+        <div>$$X_m(\omega)\;=\;\sum_{n=-\infty}^{\infty} x[n]\,w[n-mR]\,e^{-j\omega n}$$</div>
+      </div>
+
+      <p lang="en">$m$ indexes time frames, $R$ is the
+        <span class="term" data-en="Hop size"
+          data-en-def="Number of samples the analysis window advances between STFT frames."
+          data-zh-def="STFT 相鄰兩個 frame 之間，視窗移動的樣本數。">hop size</span>,
+        $w$ is the window. Small $R$ = lots of frames (smooth in time, expensive).
+        Small window = good time resolution, bad frequency resolution.
+        Large window = the opposite. This trade-off has a name:
+        <span class="term" data-en="Uncertainty principle (time-frequency)"
+          data-en-def="A signal and its spectrum cannot both be sharply localized; localization in one dimension costs in the other."
+          data-zh-def="訊號與其頻譜無法同時高度集中；一邊越尖，另一邊一定越散。">時頻不確定性</span>.</p>
+
+      <p lang="zh">$m$ 是 frame 索引；$R$ 是<span class="term" data-en="Hop size"
+          data-en-def="Number of samples the analysis window advances between STFT frames."
+          data-zh-def="STFT 相鄰兩個 frame 之間，視窗移動的樣本數。">跳距</span>；
+        $w$ 是視窗。$R$ 小 = frame 多（時間上很細但貴）；
+        視窗窄 = 時間解析度好、頻率解析度差；
+        視窗寬 = 相反。這個取捨有個正式的名字：<span class="term" data-en="Uncertainty principle (time-frequency)"
+          data-en-def="A signal and its spectrum cannot both be sharply localized; localization in one dimension costs in the other."
+          data-zh-def="訊號與其頻譜無法同時高度集中；一邊越尖，另一邊一定越散。">時頻不確定性原理</span>。</p>
+
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Chirp spectrogram</h3>
+        <h3 lang="zh">實驗 · 線性掃頻的聲譜圖</h3>
+        <canvas id="specCanvas" style="height:280px;"></canvas>
+        <div class="controls">
+          <label>WIN LEN</label>
+          <input type="range" id="winSlider" min="64" max="1024" step="64" value="256"/>
+          <span class="val" id="winVal">256</span>
+
+          <label>HOP R</label>
+          <input type="range" id="hopSlider" min="16" max="512" step="16" value="64"/>
+          <span class="val" id="hopVal">64</span>
+
+          <label>f0→f1</label>
+          <input type="range" id="chirpSlider" min="100" max="3000" step="50" value="2000"/>
+          <span class="val" id="chirpVal">2000</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <button class="nes-btn nes-btn--blue"  id="playBtn" lang="en">▶ PLAY</button>
+          <button class="nes-btn nes-btn--blue"  id="playBtn2" lang="zh">▶ 播放</button>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--blue" data-label="READ-OUT">
+        <p lang="en">A linear chirp sweeps from $f_0=200\text{Hz}$ up to $f_1$. The diagonal streak on the spectrogram IS the chirp. Shrink the window: streak becomes sharper in time, fuzzier in frequency. Enlarge it: the opposite.</p>
+        <p lang="zh">一段<span class="term" data-en="Linear chirp"
+          data-en-def="A sinusoid whose instantaneous frequency increases linearly in time."
+          data-zh-def="瞬時頻率隨時間線性增加的正弦波。">線性掃頻</span>從 $f_0=200\text{Hz}$ 升到 $f_1$。
+          聲譜圖上那條斜線就是它。視窗變窄 → 斜線時間變尖、頻率變糊；變寬 → 相反。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> A percussionist hits a snare (short, broadband). Which window-length setting best resolves WHEN the hit happened?</p>
+        <p lang="zh"><b>問：</b>打擊手敲了一下小鼓（非常短、寬頻）。哪種視窗長度能最準確標出「什麼時候敲」？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Short window (e.g. 64 samples)</button>
+          <button data-correct="1" lang="zh">短視窗（例如 64 樣本）</button>
+          <button data-correct="0" lang="en">Long window (e.g. 4096 samples)</button>
+          <button data-correct="0" lang="zh">長視窗（例如 4096 樣本）</button>
+          <button data-correct="0" lang="en">Window length has no effect on timing.</button>
+          <button data-correct="0" lang="zh">視窗長度不影響時間定位。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="2.2.1-elementary-spec.html">◀ 2.2.1</a>
+    <a class="warp-pipe">2-2-2</a>
+    <a class="nes-btn nes-btn--primary" href="2.2.3-stam.html">NEXT ▶ 2.2.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { winLen: 256, hop: 64, f1: 2000, fs: 8000, dur: 1.5 };
+
+  function linChirp(N, fs, f0, f1) {
+    const y = new Float32Array(N);
+    for (let n = 0; n < N; n++) {
+      const t = n / fs;
+      const freq = f0 + (f1 - f0) * t / (N / fs);
+      y[n] = 0.7 * Math.cos(2 * Math.PI * (f0 * t + 0.5 * (f1 - f0) * t * t / (N / fs)));
+    }
+    return y;
+  }
+
+  /** Very basic spectrogram rendered onto a canvas. */
+  function drawSpectrogram(canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
+    canvas.width  = Math.floor(rect.width  * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    ctx.scale(dpr, dpr);
+
+    const W = rect.width, H = rect.height;
+    ctx.fillStyle = '#0D0B1F';
+    ctx.fillRect(0, 0, W, H);
+
+    const N = Math.floor(state.fs * state.dur);
+    const signal = linChirp(N, state.fs, 200, state.f1);
+    const winLen = state.winLen, hop = state.hop;
+    const win = DSP.WINDOWS.hann(winLen);
+    const frames = Math.max(1, Math.floor((N - winLen) / hop) + 1);
+    const fftLen = DSP.nextPow2(winLen);
+    const bins = fftLen / 2;
+    // Build a float grid of dB magnitudes
+    const grid = new Float32Array(frames * bins);
+    for (let m = 0; m < frames; m++) {
+      const seg = new Float32Array(fftLen);
+      for (let k = 0; k < winLen; k++) seg[k] = signal[m * hop + k] * win[k];
+      const re = new Float32Array(fftLen), im = new Float32Array(fftLen);
+      re.set(seg);
+      DSP.fft(re, im);
+      for (let k = 0; k < bins; k++) {
+        const mag = Math.hypot(re[k], im[k]);
+        const db = 20 * Math.log10(Math.max(mag, 1e-6));
+        grid[m * bins + k] = db;
+      }
+    }
+
+    // Find dB range for colour map
+    let lo = Infinity, hi = -Infinity;
+    for (let i = 0; i < grid.length; i++) { if (grid[i] < lo) lo = grid[i]; if (grid[i] > hi) hi = grid[i]; }
+    const range = Math.max(1, hi - lo);
+
+    // Draw onto canvas: x = time frame, y = freq bin (low at bottom)
+    const pad = { l: 40, r: 8, t: 6, b: 28 };
+    const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+    const colW = plotW / frames, rowH = plotH / bins;
+    // 8-bit-ish palette interpolation: dark navy -> purple -> red -> yellow -> white
+    function colour(t) {
+      const stops = [
+        [0.00, [13,11,31]],
+        [0.20, [32,22,80]],
+        [0.45, [176,40,90]],
+        [0.65, [248,56,0]],
+        [0.85, [248,184,0]],
+        [1.00, [252,252,252]],
+      ];
+      for (let i = 1; i < stops.length; i++) {
+        if (t <= stops[i][0]) {
+          const a = stops[i-1], b = stops[i];
+          const s = (t - a[0]) / (b[0] - a[0]);
+          return [
+            a[1][0] + (b[1][0] - a[1][0]) * s,
+            a[1][1] + (b[1][1] - a[1][1]) * s,
+            a[1][2] + (b[1][2] - a[1][2]) * s,
+          ];
+        }
+      }
+      return stops[stops.length - 1][1];
+    }
+
+    for (let m = 0; m < frames; m++) {
+      for (let k = 0; k < bins; k++) {
+        const t = (grid[m * bins + k] - lo) / range;
+        const [r,g,b] = colour(t);
+        ctx.fillStyle = `rgb(${r|0},${g|0},${b|0})`;
+        ctx.fillRect(pad.l + m * colW, pad.t + (bins - 1 - k) * rowH, Math.ceil(colW), Math.ceil(rowH));
+      }
+    }
+
+    // axes
+    ctx.strokeStyle = '#7C7C7C';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, H - pad.b);
+    ctx.lineTo(W - pad.r, H - pad.b); ctx.stroke();
+
+    ctx.fillStyle = '#FCFCFC';
+    ctx.font = '9px "Press Start 2P", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText('time →', pad.l + plotW / 2, H - pad.b + 8);
+    ctx.save();
+    ctx.translate(12, pad.t + plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('freq →', 0, 0);
+    ctx.restore();
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillText('SPECTROGRAM', pad.l + 4, 2);
+  }
+
+  function redraw() { drawSpectrogram($('specCanvas')); }
+
+  const bind = (id, vid, fn) => {
+    const s = $(id), v = $(vid);
+    s.addEventListener('input', () => { const num = parseFloat(s.value); v.textContent = num; fn(num); redraw(); });
+  };
+  bind('winSlider',   'winVal',   v => state.winLen = v|0);
+  bind('hopSlider',   'hopVal',   v => state.hop = v|0);
+  bind('chirpSlider', 'chirpVal', v => state.f1 = v);
+
+  const playFn = () => {
+    const N = Math.floor(state.fs * state.dur);
+    AudioKit.playBuffer(linChirp(N, state.fs, 200, state.f1), state.fs, 1);
+  };
+  $('playBtn').addEventListener('click', playFn);
+  $('playBtn2').addEventListener('click', playFn);
+
+  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ok = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('qFeedback');
+      if (ok) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! A broadband transient needs fine time resolution — short windows give that, at the cost of frequency accuracy (which does not matter here).</span><span lang="zh">🪙 金幣 +1！寬頻瞬態需要細的時間解析度 — 短視窗就給這個，代價是頻率解析度差（這種訊號不在乎）。</span>';
+        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', n);
+        $('coins').textContent = n;
+        AudioKit.coin();
+      } else {
+        fb.innerHTML = '<span lang="en">✗ A long window averages over milliseconds; the hit gets smeared in time.</span><span lang="zh">✗ 長視窗會把毫秒級瞬態抹糊。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+  redraw();
+})();
+</script>
+</body>
+</html>
