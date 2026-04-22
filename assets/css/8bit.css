@@ -43,16 +43,13 @@
   --pixel: 4px;
   --radius: 0;
 
-  /* Pixel fonts — HUD, headings, buttons, small labels. */
-  --font-pixel-en:  'Press Start 2P', 'Cubic 11', 'Noto Sans TC', monospace;
+  /* Pixel fonts. */
+  --font-pixel-en:  'Press Start 2P', 'Cubic 11', monospace;
   --font-pixel-cjk: 'Cubic 11', 'Noto Sans TC', 'PingFang TC',
                     'Microsoft JhengHei', 'PMingLiU', 'Press Start 2P', monospace;
 
-  /* Readable body font — antialiased CJK for long-form prose. */
-  --font-body-cjk:  'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei',
-                    'Heiti TC', sans-serif;
-
-  --font-body: var(--font-body-cjk);
+  /* Body prose uses Cubic 11 too — Noto Sans TC is just a coverage fallback. */
+  --font-body: var(--font-pixel-cjk);
 }
 
 * { box-sizing: border-box; }
@@ -63,28 +60,9 @@ html, body {
   background: var(--nes-black);
   color: var(--nes-white);
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.85;
-  letter-spacing: 0.2px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Elements that use pixel fonts opt in to pixel-perfect rendering. */
-.pixel,
-.status-bar,
-.status-bar button,
-.nes-btn,
-h1, h2, h3, h4,
-code, kbd, .mono,
-.formula .label,
-.controls label, .controls .val,
-.viz-card > h3,
-.nes-box[data-label]::before,
-.world-num, .level-card .count, .press-start, .warp-pipe,
-.toc-list li .num,
-.page-title, .page-title small,
-#term-tooltip .tt-en, #term-tooltip .tt-label {
+  /* Cubic 11 is native 11px; 22px is pixel-perfect 2× (no sub-pixel blur). */
+  font-size: 22px;
+  line-height: 1.5;
   -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: unset;
   font-smooth: never;
@@ -127,17 +105,19 @@ body {
 h1, h2, h3, h4 {
   font-family: var(--font-pixel-en);
   color: var(--nes-yellow);
-  margin: 1.4em 0 0.7em;
+  margin: 1.2em 0 0.6em;
   letter-spacing: 1px;
-  line-height: 1.55;
+  line-height: 1.5;
 }
-h1 { font-size: 24px; color: var(--nes-cream); }
+h1 { font-size: 22px; color: var(--nes-cream); }
 h2 { font-size: 18px; color: var(--nes-lime); border-bottom: 2px dashed var(--nes-gray); padding-bottom: 8px; }
-h3 { font-size: 15px; color: var(--nes-sky); }
+h3 { font-size: 14px; color: var(--nes-sky); }
 h4 { font-size: 12px; color: var(--nes-pink); }
 
-p, li { font-size: 16px; line-height: 1.9; }
-[lang="zh"] p, [lang="zh"] li { letter-spacing: 0.4px; }
+/* Body prose — keep at 22px Cubic 11 (2× native) so text is pixel-crisp. */
+p, li { font-size: 22px; line-height: 1.5; }
+/* English body text looks nicer a bit tighter. */
+[lang="en"] p, [lang="en"] li { font-size: 20px; letter-spacing: 0.3px; }
 code, kbd, .mono { font-family: var(--font-pixel-en); font-size: 12px; color: var(--nes-lime); }
 
 a {
@@ -307,13 +287,13 @@ hr {
   position: absolute;
   z-index: 10000;
   pointer-events: none;
-  max-width: 380px;
+  max-width: 420px;
   background: var(--nes-dark);
   border: 3px solid var(--nes-yellow);
   box-shadow: 4px 4px 0 var(--nes-black);
-  padding: 12px 14px;
-  font-size: 14px;
-  line-height: 1.75;
+  padding: 14px 16px;
+  font-size: 22px;
+  line-height: 1.5;
   color: var(--nes-white);
   opacity: 0;
   transition: opacity 0.1s;
@@ -494,9 +474,9 @@ body.lang-zh [lang="en"] { display: none !important; }
 .quiz .choices button {
   text-align: left;
   font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.6;
-  padding: 10px 14px;
+  font-size: 22px;
+  line-height: 1.5;
+  padding: 12px 16px;
   background: var(--nes-black);
   color: var(--nes-white);
   border: 2px solid var(--nes-white);
@@ -506,11 +486,11 @@ body.lang-zh [lang="en"] { display: none !important; }
 .quiz .choices button.correct { background: var(--nes-green); color: var(--nes-white); }
 .quiz .choices button.wrong   { background: var(--nes-red);   color: var(--nes-white); }
 .quiz .feedback {
-  font-size: 14px;
-  line-height: 1.85;
+  font-size: 22px;
+  line-height: 1.5;
   margin-top: 12px;
   color: var(--nes-cream);
-  min-height: 46px;
+  min-height: 50px;
 }
 
 /* ----------------------- World map ----------------------- */
@@ -541,17 +521,19 @@ body.lang-zh [lang="en"] { display: none !important; }
   letter-spacing: 2px;
 }
 .level-card h3 {
-  font-size: 15px;
+  font-size: 14px;
   margin: 10px 0;
   color: var(--nes-yellow);
   line-height: 1.5;
 }
 .level-card p {
-  font-size: 14px;
-  line-height: 1.75;
+  font-size: 22px;
+  line-height: 1.4;
   color: var(--nes-cream);
   margin: 0;
 }
+[lang="en"].level-card p,
+.level-card [lang="en"] { font-size: 18px; line-height: 1.5; }
 .level-card .count {
   position: absolute;
   top: -10px;
@@ -592,8 +574,9 @@ body.lang-zh [lang="en"] { display: none !important; }
 }
 .toc-list li {
   border-bottom: 2px dashed var(--nes-gray);
-  padding: 11px 0;
-  font-size: 15px;
+  padding: 12px 0;
+  font-size: 22px;
+  line-height: 1.4;
 }
 .toc-list li a {
   display: flex;
@@ -601,6 +584,7 @@ body.lang-zh [lang="en"] { display: none !important; }
   align-items: baseline;
   border-bottom: none;
   color: var(--nes-white);
+  gap: 12px;
 }
 .toc-list li a:hover { color: var(--nes-yellow); }
 .toc-list li .num {
@@ -609,5 +593,5 @@ body.lang-zh [lang="en"] { display: none !important; }
   color: var(--nes-pink);
   margin-right: 12px;
   display: inline-block;
-  min-width: 52px;
+  min-width: 60px;
 }
