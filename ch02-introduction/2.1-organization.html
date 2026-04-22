@@ -145,22 +145,6 @@
     </p>
   </div>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> Which chapter sequence is closest to the book's real arc?</p>
-    <p lang="zh"><b>問：</b>下面哪個順序最接近原書的學習弧線？</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">Fourier → Windows → FIR → Sinusoids → Noise → STFT → Filter Banks → Multirate</button>
-      <button data-correct="1" lang="zh">傅立葉 → 視窗 → FIR → 正弦 → 雜訊 → STFT → 濾波器組 → 多取樣率</button>
-      <button data-correct="0" lang="en">MPEG → Wavelets → Multirate → STFT → Fourier</button>
-      <button data-correct="0" lang="zh">MPEG → 小波 → 多取樣率 → STFT → 傅立葉</button>
-      <button data-correct="0" lang="en">PARSHL → Hammond organ → Bark scale → DTFT</button>
-      <button data-correct="0" lang="zh">PARSHL → 哈蒙風琴 → Bark 尺度 → DTFT</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
-  </div>
-
   <div class="pager">
     <a class="nes-btn" href="index.html">◀ W2</a>
     <a class="warp-pipe">2-1</a>
@@ -168,31 +152,8 @@
   </div>
 </div>
 
-<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>
-(() => {
-  const coinsEl = document.getElementById('coins');
-  coinsEl.textContent = localStorage.getItem('dsp.coins') || '0';
-  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const correct = btn.getAttribute('data-correct') === '1';
-      btn.classList.add(correct ? 'correct' : 'wrong');
-      const fb = document.getElementById('qFeedback');
-      if (correct) {
-        fb.innerHTML = '<span lang="en">🪙 +1 coin! The book climbs from the building blocks (Fourier + windows) up through sinusoid/noise analysis, then STFT and its generalizations.</span><span lang="zh">🪙 金幣 +1！原書是從基本零件（傅立葉、視窗）一路爬，經過正弦/雜訊分析，到 STFT 及其推廣。</span>';
-        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
-        localStorage.setItem('dsp.coins', n);
-        coinsEl.textContent = n;
-        AudioKit.coin();
-      } else {
-        fb.innerHTML = '<span lang="en">✗ That would be climbing the mountain from the summit down. Try again.</span><span lang="zh">✗ 那是從山頂往下爬。再試一次。</span>';
-      }
-      I18N.apply(I18N.get());
-    });
-  });
-})();
-</script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins') || '0';</script>
 </body>
 </html>

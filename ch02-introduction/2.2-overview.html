@@ -50,22 +50,6 @@
     <p lang="zh">如果你趕時間，只讀這六頁 + 第 3 世界（傅立葉）。這大概等於一個概論級的知識量 — 足夠你認得地圖，之後再深入哪一塊都有方向。</p>
   </div>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> Which two sections, if both removed, would leave a big gap right in the middle of the learning path?</p>
-    <p lang="zh"><b>問：</b>如果拿掉下列哪兩節，學習路徑正中間會出現一個大洞？</p>
-    <div class="choices">
-      <button data-correct="0" lang="en">2.2.5 (Multirate) and 2.2.6 (Appendices)</button>
-      <button data-correct="0" lang="zh">2.2.5（多取樣率）和 2.2.6（附錄）</button>
-      <button data-correct="1" lang="en">2.2.2 (STFT) and 2.2.3 (Analysis-Mod-Resynth)</button>
-      <button data-correct="1" lang="zh">2.2.2（STFT）和 2.2.3（分析-修改-再合成）</button>
-      <button data-correct="0" lang="en">2.2.1 (Elementary) and 2.2.4 (Applications)</button>
-      <button data-correct="0" lang="zh">2.2.1（基本）和 2.2.4（應用）</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
-  </div>
-
   <div class="pager">
     <a class="nes-btn" href="2.1-organization.html">◀ 2.1</a>
     <a class="warp-pipe">2-2</a>
@@ -73,31 +57,8 @@
   </div>
 </div>
 
-<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>
-(() => {
-  const coinsEl = document.getElementById('coins');
-  coinsEl.textContent = localStorage.getItem('dsp.coins') || '0';
-  document.getElementById('quiz').querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const correct = btn.getAttribute('data-correct') === '1';
-      btn.classList.add(correct ? 'correct' : 'wrong');
-      const fb = document.getElementById('qFeedback');
-      if (correct) {
-        fb.innerHTML = '<span lang="en">🪙 +1 coin! The STFT and using it to analyze-modify-resynthesize sit at the heart of everything that follows — applications, multirate, wavelets all build on them.</span><span lang="zh">🪙 金幣 +1！STFT 與「用它做分析-修改-再合成」正是整本書後半段的核心 — 應用、多取樣率、小波都建立在它上面。</span>';
-        const n = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
-        localStorage.setItem('dsp.coins', n);
-        coinsEl.textContent = n;
-        AudioKit.coin();
-      } else {
-        fb.innerHTML = '<span lang="en">✗ Those are endpoints; the missing middle is where STFT lives.</span><span lang="zh">✗ 那些是兩端；中間的核心是 STFT 所在。</span>';
-      }
-      I18N.apply(I18N.get());
-    });
-  });
-})();
-</script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins') || '0';</script>
 </body>
 </html>
