@@ -121,32 +121,32 @@
           <label>SIGNAL</label>
           <select id="sigSel">
             <option value="impulse">Impulse</option>
-            <option value="step">Step (length 16)</option>
-            <option value="sine" selected>Sinusoid</option>
-            <option value="exp">Decaying exp</option>
+            <option value="rect" selected>Rect pulse</option>
+            <option value="sine">Sinusoid</option>
+            <option value="exp">Decaying exp · cos</option>
           </select>
-          <span class="val" id="sigName">SINE</span>
+          <span class="val" id="sigName">RECT</span>
 
-          <label>K (modes)</label>
-          <input type="range" id="kSlider" min="1" max="64" step="1" value="20"/>
-          <span class="val" id="kVal">20</span>
+          <label>K_cut</label>
+          <input type="range" id="kSlider" min="0" max="32" step="1" value="6"/>
+          <span class="val" id="kVal">6</span>
 
           <label>N</label>
-          <input type="range" id="nSlider" min="16" max="128" step="8" value="64"/>
+          <input type="range" id="nSlider" min="32" max="128" step="8" value="64"/>
           <span class="val" id="nVal">64</span>
         </div>
       </div>
 
       <div class="nes-box nes-box--blue" data-label="HOW IT WORKS">
-        <p lang="en">We compute $X(\omega)$ on a fine grid, then approximate the inverse integral with the lowest-magnitude $K$ frequencies trimmed off (i.e. keep the loudest $K$ DFT bins). Watch the reconstruction snap to the original as $K$ grows.</p>
-        <p lang="zh">先在密集格點上算 $X(\omega)$，再用「只保留最大的 $K$ 個 DFT bin」近似反積分。把 $K$ 拉大，看重建波形如何貼回原訊號。</p>
+        <p lang="en">Take the FFT of $x[n]$, keep only the lowest-frequency bins $|k|\le K_{\text{cut}}$, zero the rest, then inverse FFT. This is the Fourier-series partial sum at cutoff $K_{\text{cut}}$. $K_{\text{cut}}=0$ keeps just DC (the mean). Cranking $K_{\text{cut}}$ up toward $N/2$ adds higher frequencies until the reconstruction converges to $x[n]$.</p>
+        <p lang="zh">對 $x[n]$ 做 FFT、只保留 $|k|\le K_{\text{cut}}$ 的低頻 bin、其餘歸零，再 IFFT。這等同於在頻率截止 $K_{\text{cut}}$ 處的 Fourier 級數部分和。$K_{\text{cut}}=0$ 只留 DC（平均值）；把 $K_{\text{cut}}$ 拉到 $N/2$，高頻逐漸加回，重建會收斂到 $x[n]$。</p>
       </div>
 
       <div class="quiz" id="quiz">
         <h3 lang="en">✦ Mini-Boss ✦</h3>
         <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-        <p lang="en"><b>Q.</b> Pick "Step" and slowly increase $K$. Even at large $K$ a tiny overshoot remains near the jump. What is it called?</p>
-        <p lang="zh"><b>問：</b>選「Step」訊號，把 $K$ 慢慢拉大。就算 $K$ 很大，跳變處旁邊都還剩一點點過衝。這現象叫什麼？</p>
+        <p lang="en"><b>Q.</b> Pick "Rect pulse" and slide $K_{\text{cut}}$ up. Even at large $K_{\text{cut}}$ a tiny overshoot remains right next to the jumps. What is it called?</p>
+        <p lang="zh"><b>問：</b>選「Rect pulse」，把 $K_{\text{cut}}$ 拉大。就算 $K_{\text{cut}}$ 很大，跳變處旁邊都還剩一點點過衝。這現象叫什麼？</p>
         <div class="choices">
           <button data-correct="0" lang="en">Aliasing.</button>
           <button data-correct="0" lang="zh">混疊。</button>
@@ -178,14 +178,15 @@
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  const state = { sig: 'sine', K: 20, N: 64 };
+  const state = { sig: 'rect', K: 6, N: 64 };
 
   function makeSig() {
     const N = state.N;
     if (state.sig === 'impulse') return DSP.impulse(N, N >> 1);
-    if (state.sig === 'step')    {
+    if (state.sig === 'rect') {
       const x = new Float32Array(N);
-      const lo = (N >> 1) - 8, hi = (N >> 1) + 8;
+      const half = Math.max(4, (N >> 3));
+      const lo = (N >> 1) - half, hi = (N >> 1) + half;
       for (let n = lo; n < hi; n++) if (n >= 0 && n < N) x[n] = 1;
       return x;
     }
@@ -194,26 +195,23 @@
       for (let n = 0; n < N; n++) x[n] = Math.cos(2 * Math.PI * 4 * n / N);
       return x;
     }
-    // decaying exp
+    // decaying exp * cos
     const x = new Float32Array(N);
     for (let n = 0; n < N; n++) x[n] = Math.pow(0.93, Math.abs(n - N/2)) * Math.cos(2 * Math.PI * 5 * n / N);
     return x;
   }
 
-  /** Reconstruct using top-K-magnitude DFT bins. */
-  function partialInverse(x, K) {
+  /** Fourier-series partial sum: keep bins with |freq index| <= Kcut, zero the rest. */
+  function partialInverse(x, Kcut) {
     const N = x.length;
     const re = new Float32Array(N), im = new Float32Array(N);
     re.set(x);
     DSP.fft(re, im);
-    // pick top K bins by magnitude (treat conjugate-symmetric pairs as one event)
-    const mags = new Float32Array(N);
-    for (let k = 0; k < N; k++) mags[k] = Math.hypot(re[k], im[k]);
-    const idx = Array.from({length:N}, (_,k)=>k).sort((a,b)=>mags[b]-mags[a]);
-    const keep = new Set(idx.slice(0, K));
-    // also keep their conjugates so reconstruction stays real
-    idx.slice(0, K).forEach(k => keep.add((N - k) % N));
-    for (let k = 0; k < N; k++) if (!keep.has(k)) { re[k] = 0; im[k] = 0; }
+    const cap = Math.min(Kcut | 0, N >> 1);
+    for (let k = 0; k < N; k++) {
+      const absK = Math.min(k, N - k);  // signed frequency index magnitude
+      if (absK > cap) { re[k] = 0; im[k] = 0; }
+    }
     DSP.ifft(re, im);
     return re;
   }
@@ -225,7 +223,7 @@
     let pe = 0;
     for (let i = 0; i < x.length; i++) { err[i] = x[i] - xr[i]; pe += err[i]*err[i]; }
     Viz.stem($('origCanvas'),  x,  { yMin:-1.5, yMax:1.5, xLabel:'n', yLabel:'x[n]', title: 'ORIGINAL' });
-    Viz.stem($('reconCanvas'), xr, { yMin:-1.5, yMax:1.5, xLabel:'n', yLabel:'x̃[n]', title: 'RECONSTRUCTED (TOP-K BINS)' });
+    Viz.stem($('reconCanvas'), xr, { yMin:-1.5, yMax:1.5, xLabel:'n', yLabel:'x̃[n]', title: 'RECONSTRUCTED (|k| ≤ K_cut)' });
     Viz.stem($('errCanvas'),   err,{ yMin:-0.6, yMax:0.6, xLabel:'n', yLabel:'err',  title: 'ERROR (x − x̃),  ‖e‖² = ' + pe.toFixed(3) });
   }
 
