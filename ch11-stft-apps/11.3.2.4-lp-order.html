@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>11.3.2.4 LP Order · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W11</a></span><span>STAGE <b>11-3-2-4</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 11-3-2-4 · LP Order Selection</span><span lang="zh">關卡 11-3-2-4 · LP 階數選擇</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Linear_Prediction_Order_Selection.html" target="_blank">SASP §11.3.2.4 ↗</a></small></h1>
+  <div class="nes-box" data-label="ONE POLE PAIR PER FORMANT">
+    <p lang="en">Rule of thumb for speech: $p=2+f_s/1000$ (e.g. $p=12$ at 10 kHz, $p=18$ at 16 kHz). Too low misses formants; too high starts fitting pitch harmonics.</p>
+    <p lang="zh">語音口訣：$p=2+f_s/1000$（10 kHz 用 $p=12$、16 kHz 用 $p=18$）。太低丟 formant；太高開始擬合基頻諧波。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="11.3.2.3-lp-comp.html">◀ 11.3.2.3</a><a class="warp-pipe">11-3-2-4</a><a class="nes-btn nes-btn--primary" href="11.3.2.5-lp-summary.html">NEXT ▶ 11.3.2.5</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

@@ -343,69 +343,69 @@ data-en-def …>` for hover tooltips.
 
 ## World 11 · Applications of the STFT  (ch11-stft-apps/)
 
-- [ ] 11.1  F0 Estimation from Spectral Peaks              — `ch11-stft-apps/11.1-f0-est.html`
-- [ ] 11.1.1 Useful Preprocessing                          — `ch11-stft-apps/11.1.1-preprocessing.html`
-- [ ] 11.1.2 Getting Closer to Maximum Likelihood          — `ch11-stft-apps/11.1.2-closer-ml.html`
-- [ ] 11.1.3 References on F0 Estimation                   — `ch11-stft-apps/11.1.3-f0-refs.html`
-- [ ] 11.2  Cross-Synthesis                                — `ch11-stft-apps/11.2-cross-synth.html`
-- [ ] 11.3  Spectral Envelope Extraction                   — `ch11-stft-apps/11.3-spec-envelope.html`
-- [ ] 11.3.1 Cepstral Windowing                            — `ch11-stft-apps/11.3.1-cepstral.html`
-- [ ] 11.3.2 Linear Prediction Spectral Envelope           — `ch11-stft-apps/11.3.2-lp-envelope.html`
-- [ ] 11.3.2.1 LP Is Peak Sensitive                        — `ch11-stft-apps/11.3.2.1-lp-peak.html`
-- [ ] 11.3.2.2 Linear Prediction Methods                   — `ch11-stft-apps/11.3.2.2-lp-methods.html`
-- [ ] 11.3.2.3 Computation of LP Coefficients              — `ch11-stft-apps/11.3.2.3-lp-comp.html`
-- [ ] 11.3.2.4 LP Order Selection                          — `ch11-stft-apps/11.3.2.4-lp-order.html`
-- [ ] 11.3.2.5 Summary of LP Spectral Envelopes            — `ch11-stft-apps/11.3.2.5-lp-summary.html`
-- [ ] 11.3.3 Spectral Envelope Examples                    — `ch11-stft-apps/11.3.3-env-examples.html`
-- [ ] 11.3.3.1 Signal Synthesis                            — `ch11-stft-apps/11.3.3.1-sig-synth.html`
-- [ ] 11.3.3.2 Envelope by Cepstral Windowing              — `ch11-stft-apps/11.3.3.2-env-cepstral.html`
-- [ ] 11.3.3.3 Envelope by Linear Prediction               — `ch11-stft-apps/11.3.3.3-env-lp.html`
-- [ ] 11.3.3.4 LP in Matlab and Octave                     — `ch11-stft-apps/11.3.3.4-lp-matlab.html`
-- [ ] 11.4  Spectral Modeling Synthesis                    — `ch11-stft-apps/11.4-sms.html`
-- [ ] 11.4.1 Additive Synthesis (Early)                    — `ch11-stft-apps/11.4.1-additive.html`
-- [ ] 11.4.2 Additive Synthesis Analysis                   — `ch11-stft-apps/11.4.2-additive-anal.html`
-- [ ] 11.4.2.1 Following Spectral Peaks                    — `ch11-stft-apps/11.4.2.1-peaks-follow.html`
-- [ ] 11.4.2.2 Sinusoidal Peak Finding                     — `ch11-stft-apps/11.4.2.2-peak-find.html`
-- [ ] 11.4.2.3 Tracking Peaks Across FFTs                  — `ch11-stft-apps/11.4.2.3-peak-tracking.html`
-- [ ] 11.4.3 Sines + Noise Modeling                        — `ch11-stft-apps/11.4.3-s-plus-n.html`
-- [ ] 11.4.3.1 Sines+Noise Analysis                        — `ch11-stft-apps/11.4.3.1-sn-anal.html`
-- [ ] 11.4.3.2 S+N Synthesis                               — `ch11-stft-apps/11.4.3.2-sn-synth.html`
-- [ ] 11.4.3.3 Sines+Noise Summary                         — `ch11-stft-apps/11.4.3.3-sn-summary.html`
-- [ ] 11.4.4 Sines + Noise + Transients                    — `ch11-stft-apps/11.4.4-snt.html`
-- [ ] 11.4.4.1 S+N+T Time-Frequency Maps                   — `ch11-stft-apps/11.4.4.1-snt-tf.html`
-- [ ] 11.4.4.2 S+N+T Noise Model                           — `ch11-stft-apps/11.4.4.2-snt-noise.html`
-- [ ] 11.4.5 S+N+T Sound Examples                          — `ch11-stft-apps/11.4.5-snt-sounds.html`
-- [ ] 11.5  Time Scale Modification                        — `ch11-stft-apps/11.5-tsm.html`
-- [ ] 11.5.1 TSM and S+N+T                                 — `ch11-stft-apps/11.5.1-tsm-snt.html`
-- [ ] 11.5.2 TSM by Resampling STFTs Across Time           — `ch11-stft-apps/11.5.2-tsm-resample.html`
-- [ ] 11.5.3 Phase Continuation                            — `ch11-stft-apps/11.5.3-phase-cont.html`
-- [ ] 11.5.4 TSM Examples                                  — `ch11-stft-apps/11.5.4-tsm-examples.html`
-- [ ] 11.5.4.1 Phase-Continued STFT TSM                    — `ch11-stft-apps/11.5.4.1-pc-stft.html`
-- [ ] 11.5.4.2 Relative-Phase-Preserving STFT TSM          — `ch11-stft-apps/11.5.4.2-rpp-stft.html`
-- [ ] 11.5.4.3 SOLA-FS TSM                                 — `ch11-stft-apps/11.5.4.3-sola-fs.html`
-- [ ] 11.5.5 Further Reading                               — `ch11-stft-apps/11.5.5-reading.html`
-- [ ] 11.6  Gaussian Windowed Chirps (Chirplets)           — `ch11-stft-apps/11.6-chirplets.html`
-- [ ] 11.6.1 Chirplet Fourier Transform                    — `ch11-stft-apps/11.6.1-chirplet-ft.html`
-- [ ] 11.6.2 Modulated Gaussian-Windowed Chirp             — `ch11-stft-apps/11.6.2-mod-gauss-chirp.html`
-- [ ] 11.6.3 Identifying Chirp Rate                        — `ch11-stft-apps/11.6.3-chirp-rate.html`
-- [ ] 11.6.3.1 Chirplet Frequency-Rate Estimation          — `ch11-stft-apps/11.6.3.1-fr-est.html`
-- [ ] 11.6.3.2 Simulation Results                          — `ch11-stft-apps/11.6.3.2-sim-results.html`
-- [ ] 11.7  FFT Filter Banks                               — `ch11-stft-apps/11.7-fft-fb.html`
-- [ ] 11.7.1 Audio Filter Banks                            — `ch11-stft-apps/11.7.1-audio-fb.html`
-- [ ] 11.7.2 Basic Idea                                    — `ch11-stft-apps/11.7.2-basic.html`
-- [ ] 11.7.3 Summing STFT Bins                             — `ch11-stft-apps/11.7.3-summing.html`
-- [ ] 11.7.4 Inverse Transforming STFT Bin Groups          — `ch11-stft-apps/11.7.4-ift-groups.html`
-- [ ] 11.7.5 Improving the Channel Filters                 — `ch11-stft-apps/11.7.5-improve.html`
-- [ ] 11.7.6 Fast Octave Filter Banks                      — `ch11-stft-apps/11.7.6-fast-octave.html`
-- [ ] 11.7.7 Spectral Rotation of Real Signals             — `ch11-stft-apps/11.7.7-spec-rot.html`
-- [ ] 11.7.8 Improving the Octave Band Filters             — `ch11-stft-apps/11.7.8-improve-octave.html`
-- [ ] 11.7.9 Aliasing on Downsampling                      — `ch11-stft-apps/11.7.9-alias-ds.html`
-- [ ] 11.7.10 Restricting Aliasing to Stop-Bands           — `ch11-stft-apps/11.7.10-alias-stop.html`
-- [ ] 11.7.10.1 Tightening the IFFTs                       — `ch11-stft-apps/11.7.10.1-tighten-ifft.html`
-- [ ] 11.7.11 Real Filter Bank Example                     — `ch11-stft-apps/11.7.11-real-fb-ex.html`
-- [ ] 11.7.12 Optimal Band Filters                         — `ch11-stft-apps/11.7.12-opt-band.html`
-- [ ] 11.8  FFT Filter-Bank Summary & OLA Duality          — `ch11-stft-apps/11.8-fb-summary.html`
-- [ ] 11.9  Pointers to Sound Examples                     — `ch11-stft-apps/11.9-sound-examples.html`
+- [~] 11.1  F0 Estimation from Spectral Peaks              — `ch11-stft-apps/11.1-f0-est.html`
+- [~] 11.1.1 Useful Preprocessing                          — `ch11-stft-apps/11.1.1-preprocessing.html`
+- [~] 11.1.2 Getting Closer to Maximum Likelihood          — `ch11-stft-apps/11.1.2-closer-ml.html`
+- [~] 11.1.3 References on F0 Estimation                   — `ch11-stft-apps/11.1.3-f0-refs.html`
+- [~] 11.2  Cross-Synthesis                                — `ch11-stft-apps/11.2-cross-synth.html`
+- [~] 11.3  Spectral Envelope Extraction                   — `ch11-stft-apps/11.3-spec-envelope.html`
+- [~] 11.3.1 Cepstral Windowing                            — `ch11-stft-apps/11.3.1-cepstral.html`
+- [~] 11.3.2 Linear Prediction Spectral Envelope           — `ch11-stft-apps/11.3.2-lp-envelope.html`
+- [~] 11.3.2.1 LP Is Peak Sensitive                        — `ch11-stft-apps/11.3.2.1-lp-peak.html`
+- [~] 11.3.2.2 Linear Prediction Methods                   — `ch11-stft-apps/11.3.2.2-lp-methods.html`
+- [~] 11.3.2.3 Computation of LP Coefficients              — `ch11-stft-apps/11.3.2.3-lp-comp.html`
+- [~] 11.3.2.4 LP Order Selection                          — `ch11-stft-apps/11.3.2.4-lp-order.html`
+- [~] 11.3.2.5 Summary of LP Spectral Envelopes            — `ch11-stft-apps/11.3.2.5-lp-summary.html`
+- [~] 11.3.3 Spectral Envelope Examples                    — `ch11-stft-apps/11.3.3-env-examples.html`
+- [~] 11.3.3.1 Signal Synthesis                            — `ch11-stft-apps/11.3.3.1-sig-synth.html`
+- [~] 11.3.3.2 Envelope by Cepstral Windowing              — `ch11-stft-apps/11.3.3.2-env-cepstral.html`
+- [~] 11.3.3.3 Envelope by Linear Prediction               — `ch11-stft-apps/11.3.3.3-env-lp.html`
+- [~] 11.3.3.4 LP in Matlab and Octave                     — `ch11-stft-apps/11.3.3.4-lp-matlab.html`
+- [~] 11.4  Spectral Modeling Synthesis                    — `ch11-stft-apps/11.4-sms.html`
+- [~] 11.4.1 Additive Synthesis (Early)                    — `ch11-stft-apps/11.4.1-additive.html`
+- [~] 11.4.2 Additive Synthesis Analysis                   — `ch11-stft-apps/11.4.2-additive-anal.html`
+- [~] 11.4.2.1 Following Spectral Peaks                    — `ch11-stft-apps/11.4.2.1-peaks-follow.html`
+- [~] 11.4.2.2 Sinusoidal Peak Finding                     — `ch11-stft-apps/11.4.2.2-peak-find.html`
+- [~] 11.4.2.3 Tracking Peaks Across FFTs                  — `ch11-stft-apps/11.4.2.3-peak-tracking.html`
+- [~] 11.4.3 Sines + Noise Modeling                        — `ch11-stft-apps/11.4.3-s-plus-n.html`
+- [~] 11.4.3.1 Sines+Noise Analysis                        — `ch11-stft-apps/11.4.3.1-sn-anal.html`
+- [~] 11.4.3.2 S+N Synthesis                               — `ch11-stft-apps/11.4.3.2-sn-synth.html`
+- [~] 11.4.3.3 Sines+Noise Summary                         — `ch11-stft-apps/11.4.3.3-sn-summary.html`
+- [~] 11.4.4 Sines + Noise + Transients                    — `ch11-stft-apps/11.4.4-snt.html`
+- [~] 11.4.4.1 S+N+T Time-Frequency Maps                   — `ch11-stft-apps/11.4.4.1-snt-tf.html`
+- [~] 11.4.4.2 S+N+T Noise Model                           — `ch11-stft-apps/11.4.4.2-snt-noise.html`
+- [~] 11.4.5 S+N+T Sound Examples                          — `ch11-stft-apps/11.4.5-snt-sounds.html`
+- [~] 11.5  Time Scale Modification                        — `ch11-stft-apps/11.5-tsm.html`
+- [~] 11.5.1 TSM and S+N+T                                 — `ch11-stft-apps/11.5.1-tsm-snt.html`
+- [~] 11.5.2 TSM by Resampling STFTs Across Time           — `ch11-stft-apps/11.5.2-tsm-resample.html`
+- [~] 11.5.3 Phase Continuation                            — `ch11-stft-apps/11.5.3-phase-cont.html`
+- [~] 11.5.4 TSM Examples                                  — `ch11-stft-apps/11.5.4-tsm-examples.html`
+- [~] 11.5.4.1 Phase-Continued STFT TSM                    — `ch11-stft-apps/11.5.4.1-pc-stft.html`
+- [~] 11.5.4.2 Relative-Phase-Preserving STFT TSM          — `ch11-stft-apps/11.5.4.2-rpp-stft.html`
+- [~] 11.5.4.3 SOLA-FS TSM                                 — `ch11-stft-apps/11.5.4.3-sola-fs.html`
+- [~] 11.5.5 Further Reading                               — `ch11-stft-apps/11.5.5-reading.html`
+- [~] 11.6  Gaussian Windowed Chirps (Chirplets)           — `ch11-stft-apps/11.6-chirplets.html`
+- [~] 11.6.1 Chirplet Fourier Transform                    — `ch11-stft-apps/11.6.1-chirplet-ft.html`
+- [~] 11.6.2 Modulated Gaussian-Windowed Chirp             — `ch11-stft-apps/11.6.2-mod-gauss-chirp.html`
+- [~] 11.6.3 Identifying Chirp Rate                        — `ch11-stft-apps/11.6.3-chirp-rate.html`
+- [~] 11.6.3.1 Chirplet Frequency-Rate Estimation          — `ch11-stft-apps/11.6.3.1-fr-est.html`
+- [~] 11.6.3.2 Simulation Results                          — `ch11-stft-apps/11.6.3.2-sim-results.html`
+- [~] 11.7  FFT Filter Banks                               — `ch11-stft-apps/11.7-fft-fb.html`
+- [~] 11.7.1 Audio Filter Banks                            — `ch11-stft-apps/11.7.1-audio-fb.html`
+- [~] 11.7.2 Basic Idea                                    — `ch11-stft-apps/11.7.2-basic.html`
+- [~] 11.7.3 Summing STFT Bins                             — `ch11-stft-apps/11.7.3-summing.html`
+- [~] 11.7.4 Inverse Transforming STFT Bin Groups          — `ch11-stft-apps/11.7.4-ift-groups.html`
+- [~] 11.7.5 Improving the Channel Filters                 — `ch11-stft-apps/11.7.5-improve.html`
+- [~] 11.7.6 Fast Octave Filter Banks                      — `ch11-stft-apps/11.7.6-fast-octave.html`
+- [~] 11.7.7 Spectral Rotation of Real Signals             — `ch11-stft-apps/11.7.7-spec-rot.html`
+- [~] 11.7.8 Improving the Octave Band Filters             — `ch11-stft-apps/11.7.8-improve-octave.html`
+- [~] 11.7.9 Aliasing on Downsampling                      — `ch11-stft-apps/11.7.9-alias-ds.html`
+- [~] 11.7.10 Restricting Aliasing to Stop-Bands           — `ch11-stft-apps/11.7.10-alias-stop.html`
+- [~] 11.7.10.1 Tightening the IFFTs                       — `ch11-stft-apps/11.7.10.1-tighten-ifft.html`
+- [~] 11.7.11 Real Filter Bank Example                     — `ch11-stft-apps/11.7.11-real-fb-ex.html`
+- [~] 11.7.12 Optimal Band Filters                         — `ch11-stft-apps/11.7.12-opt-band.html`
+- [~] 11.8  FFT Filter-Bank Summary & OLA Duality          — `ch11-stft-apps/11.8-fb-summary.html`
+- [~] 11.9  Pointers to Sound Examples                     — `ch11-stft-apps/11.9-sound-examples.html`
 
 ## World 12 · Multirate Filter Banks  (ch12-multirate/)
 

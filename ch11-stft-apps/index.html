@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>World 11 — STFT Applications · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="../index.html">◀ MAP</a></span><span>WORLD <b>11</b></span><span lang="en">STFT APPS</span><span lang="zh">STFT 應用</span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">World 11 — STFT Applications</span><span lang="zh">第 11 世界 — STFT 應用</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Fundamental_Frequency_Estimation_Spectral.html" target="_blank">SASP Ch. 11 ↗</a></small></h1>
+  <div class="nes-box nes-box--green" data-label="BRIEFING">
+    <p lang="en">The big-ticket uses of the STFT: pitch tracking, cross-synthesis, spectral envelopes, sines-noise-transients modelling, time-scale modification, chirplets, and octave filter banks.</p>
+    <p lang="zh">STFT 的主戰場應用：基頻追蹤、交叉合成、頻譜包絡、sines+noise+transients 建模、時間尺度變化、chirplet、八度濾波器組。</p>
+  </div>
+  <ul class="toc-list">
+    <li><a href="11.1-f0-est.html"><span><span class="num">11.1</span><span lang="en">F0 Estimation</span><span lang="zh">基頻估計</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.1.1-preprocessing.html"><span><span class="num">11.1.1</span><span lang="en">Useful Preprocessing</span><span lang="zh">實用前處理</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.1.2-closer-ml.html"><span><span class="num">11.1.2</span><span lang="en">Closer to ML</span><span lang="zh">靠近 ML</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.1.3-f0-refs.html"><span><span class="num">11.1.3</span><span lang="en">F0 References</span><span lang="zh">F0 參考文獻</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.2-cross-synth.html"><span><span class="num">11.2</span><span lang="en">Cross-Synthesis</span><span lang="zh">交叉合成</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3-spec-envelope.html"><span><span class="num">11.3</span><span lang="en">Spectral Envelope</span><span lang="zh">頻譜包絡</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.1-cepstral.html"><span><span class="num">11.3.1</span><span lang="en">Cepstral Windowing</span><span lang="zh">倒頻譜加窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.2-lp-envelope.html"><span><span class="num">11.3.2</span><span lang="en">LP Envelope</span><span lang="zh">LP 包絡</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.2.1-lp-peak.html"><span><span class="num">11.3.2.1</span><span lang="en">LP Peak Sensitivity</span><span lang="zh">LP 峰敏感</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.2.2-lp-methods.html"><span><span class="num">11.3.2.2</span><span lang="en">LP Methods</span><span lang="zh">LP 方法</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.2.3-lp-comp.html"><span><span class="num">11.3.2.3</span><span lang="en">LP Coefficient Computation</span><span lang="zh">LP 係數計算</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.2.4-lp-order.html"><span><span class="num">11.3.2.4</span><span lang="en">LP Order Selection</span><span lang="zh">LP 階數選擇</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.2.5-lp-summary.html"><span><span class="num">11.3.2.5</span><span lang="en">LP Summary</span><span lang="zh">LP 小結</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.3-env-examples.html"><span><span class="num">11.3.3</span><span lang="en">Envelope Examples</span><span lang="zh">包絡範例</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.3.1-sig-synth.html"><span><span class="num">11.3.3.1</span><span lang="en">Signal Synthesis</span><span lang="zh">訊號合成</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.3.2-env-cepstral.html"><span><span class="num">11.3.3.2</span><span lang="en">Envelope via Cepstrum</span><span lang="zh">倒頻譜做包絡</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.3.3-env-lp.html"><span><span class="num">11.3.3.3</span><span lang="en">Envelope via LP</span><span lang="zh">LP 做包絡</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.3.3.4-lp-matlab.html"><span><span class="num">11.3.3.4</span><span lang="en">LP in Matlab</span><span lang="zh">LP 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4-sms.html"><span><span class="num">11.4</span><span lang="en">Spectral Modeling Synthesis</span><span lang="zh">頻譜建模合成</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.1-additive.html"><span><span class="num">11.4.1</span><span lang="en">Additive (Early)</span><span lang="zh">早期加法合成</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.2-additive-anal.html"><span><span class="num">11.4.2</span><span lang="en">Additive Analysis</span><span lang="zh">加法分析</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.2.1-peaks-follow.html"><span><span class="num">11.4.2.1</span><span lang="en">Following Peaks</span><span lang="zh">追蹤波峰</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.2.2-peak-find.html"><span><span class="num">11.4.2.2</span><span lang="en">Peak Finding</span><span lang="zh">找波峰</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.2.3-peak-tracking.html"><span><span class="num">11.4.2.3</span><span lang="en">Tracking Peaks</span><span lang="zh">追蹤波峰序列</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.3-s-plus-n.html"><span><span class="num">11.4.3</span><span lang="en">Sines + Noise</span><span lang="zh">正弦 + 雜訊</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.3.1-sn-anal.html"><span><span class="num">11.4.3.1</span><span lang="en">S+N Analysis</span><span lang="zh">S+N 分析</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.3.2-sn-synth.html"><span><span class="num">11.4.3.2</span><span lang="en">S+N Synthesis</span><span lang="zh">S+N 合成</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.3.3-sn-summary.html"><span><span class="num">11.4.3.3</span><span lang="en">S+N Summary</span><span lang="zh">S+N 小結</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.4-snt.html"><span><span class="num">11.4.4</span><span lang="en">S+N+T Models</span><span lang="zh">S+N+T 模型</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.4.1-snt-tf.html"><span><span class="num">11.4.4.1</span><span lang="en">S+N+T TF Maps</span><span lang="zh">S+N+T 時頻圖</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.4.2-snt-noise.html"><span><span class="num">11.4.4.2</span><span lang="en">S+N+T Noise Model</span><span lang="zh">S+N+T 雜訊模型</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.4.5-snt-sounds.html"><span><span class="num">11.4.5</span><span lang="en">S+N+T Sounds</span><span lang="zh">S+N+T 聲音範例</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.5-tsm.html"><span><span class="num">11.5</span><span lang="en">Time-Scale Modification</span><span lang="zh">時間尺度變化</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.5.1-tsm-snt.html"><span><span class="num">11.5.1</span><span lang="en">TSM and S+N+T</span><span lang="zh">TSM 與 S+N+T</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.5.2-tsm-resample.html"><span><span class="num">11.5.2</span><span lang="en">TSM by Resampling STFTs</span><span lang="zh">STFT 重取樣做 TSM</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.5.3-phase-cont.html"><span><span class="num">11.5.3</span><span lang="en">Phase Continuation</span><span lang="zh">相位延續</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.5.4-tsm-examples.html"><span><span class="num">11.5.4</span><span lang="en">TSM Examples</span><span lang="zh">TSM 範例</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.5.4.1-pc-stft.html"><span><span class="num">11.5.4.1</span><span lang="en">Phase-Continued STFT TSM</span><span lang="zh">相位延續 STFT TSM</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.5.4.2-rpp-stft.html"><span><span class="num">11.5.4.2</span><span lang="en">Relative-Phase STFT TSM</span><span lang="zh">相對相位 STFT TSM</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.5.4.3-sola-fs.html"><span><span class="num">11.5.4.3</span><span lang="en">SOLA-FS TSM</span><span lang="zh">SOLA-FS TSM</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.5.5-reading.html"><span><span class="num">11.5.5</span><span lang="en">Further Reading</span><span lang="zh">延伸閱讀</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.6-chirplets.html"><span><span class="num">11.6</span><span lang="en">Chirplets</span><span lang="zh">Chirplet</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.6.1-chirplet-ft.html"><span><span class="num">11.6.1</span><span lang="en">Chirplet Fourier Transform</span><span lang="zh">Chirplet FT</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.6.2-mod-gauss-chirp.html"><span><span class="num">11.6.2</span><span lang="en">Modulated Gaussian Chirp</span><span lang="zh">調變高斯 chirp</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.6.3-chirp-rate.html"><span><span class="num">11.6.3</span><span lang="en">Identifying Chirp Rate</span><span lang="zh">辨識 chirp 率</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.6.3.1-fr-est.html"><span><span class="num">11.6.3.1</span><span lang="en">Frequency-Rate Estimation</span><span lang="zh">頻率率估計</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.6.3.2-sim-results.html"><span><span class="num">11.6.3.2</span><span lang="en">Simulation Results</span><span lang="zh">模擬結果</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7-fft-fb.html"><span><span class="num">11.7</span><span lang="en">FFT Filter Banks</span><span lang="zh">FFT 濾波器組</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.1-audio-fb.html"><span><span class="num">11.7.1</span><span lang="en">Audio Filter Banks</span><span lang="zh">音訊濾波器組</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.2-basic.html"><span><span class="num">11.7.2</span><span lang="en">Basic Idea</span><span lang="zh">基本概念</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.3-summing.html"><span><span class="num">11.7.3</span><span lang="en">Summing Bins</span><span lang="zh">bin 相加</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.4-ift-groups.html"><span><span class="num">11.7.4</span><span lang="en">IFFT Bin Groups</span><span lang="zh">IFFT bin 組</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.5-improve.html"><span><span class="num">11.7.5</span><span lang="en">Improving Channel Filters</span><span lang="zh">改善通道濾波器</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.6-fast-octave.html"><span><span class="num">11.7.6</span><span lang="en">Fast Octave FB</span><span lang="zh">快速八度 FB</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.7-spec-rot.html"><span><span class="num">11.7.7</span><span lang="en">Spectral Rotation</span><span lang="zh">頻譜旋轉</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.8-improve-octave.html"><span><span class="num">11.7.8</span><span lang="en">Improving Octave Bands</span><span lang="zh">改善八度頻帶</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.9-alias-ds.html"><span><span class="num">11.7.9</span><span lang="en">Aliasing on Downsampling</span><span lang="zh">降取樣混疊</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.10-alias-stop.html"><span><span class="num">11.7.10</span><span lang="en">Restricting Aliasing to Stopbands</span><span lang="zh">把混疊限於停帶</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.10.1-tighten-ifft.html"><span><span class="num">11.7.10.1</span><span lang="en">Tightening IFFTs</span><span lang="zh">IFFT 緊化</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.11-real-fb-ex.html"><span><span class="num">11.7.11</span><span lang="en">Real FB Example</span><span lang="zh">實 FB 範例</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.7.12-opt-band.html"><span><span class="num">11.7.12</span><span lang="en">Optimal Band Filters</span><span lang="zh">最優頻帶濾波器</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.8-fb-summary.html"><span><span class="num">11.8</span><span lang="en">FB Summary &amp; OLA Duality</span><span lang="zh">FB 小結與 OLA 對偶</span></span><span class="dim">▶</span></a></li>
+    <li><a href="11.9-sound-examples.html"><span><span class="num">11.9</span><span lang="en">Sound Example Pointers</span><span lang="zh">聲音範例指引</span></span><span class="dim">▶</span></a></li>
+  </ul>
+  <div class="pager"><a class="nes-btn" href="../ch10-filter-bank-stft/index.html">◀ W10</a><a class="nes-btn nes-btn--primary" href="11.1-f0-est.html">START ▶</a><a class="nes-btn" href="../ch12-multirate/index.html">World 12 ▶</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script>
+</body></html>

@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>11.5.3 Phase Continuation · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W11</a></span><span>STAGE <b>11-5-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 11-5-3 · Phase Continuation</span><span lang="zh">關卡 11-5-3 · 相位延續</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Phase_Continuation.html" target="_blank">SASP §11.5.3 ↗</a></small></h1>
+  <div class="nes-box" data-label="KEEP PARTIALS IN PHASE">
+    <p lang="en">Between frames, project each partial's phase forward using its instantaneous frequency and the new hop $R_s$. Without this the stretched signal gets a metallic "phasiness" artefact.</p>
+    <p lang="zh">frame 之間用瞬時頻率與新跳距 $R_s$ 推進每個 partial 的相位。否則伸縮後會有金屬感的「phasiness」破音。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="11.5.2-tsm-resample.html">◀ 11.5.2</a><a class="warp-pipe">11-5-3</a><a class="nes-btn nes-btn--primary" href="11.5.4-tsm-examples.html">NEXT ▶ 11.5.4</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

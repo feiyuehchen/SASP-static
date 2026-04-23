@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>11.1.1 Useful Preprocessing · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W11</a></span><span>STAGE <b>11-1-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 11-1-1 · Useful Preprocessing</span><span lang="zh">關卡 11-1-1 · 實用前處理</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Useful_Preprocessing.html" target="_blank">SASP §11.1.1 ↗</a></small></h1>
+  <ul>
+    <li lang="en">High-pass filter below ~60 Hz to remove rumble that confuses harmonic matching.</li>
+    <li lang="zh">先用 ~60 Hz 以下高通濾掉低頻 rumble，避免擾亂諧波匹配。</li>
+    <li lang="en">Apply a spectral whitening / LP-inverse filter when strong formants dominate.</li>
+    <li lang="zh">若強烈共振峰主導頻譜，做頻譜白化 / LP 反濾波。</li>
+    <li lang="en">Use log-magnitude spectrum so harmonics are more uniformly weighted.</li>
+    <li lang="zh">用對數振幅頻譜使諧波加權更均勻。</li>
+  </ul>
+  <div class="pager"><a class="nes-btn" href="11.1-f0-est.html">◀ 11.1</a><a class="warp-pipe">11-1-1</a><a class="nes-btn nes-btn--primary" href="11.1.2-closer-ml.html">NEXT ▶ 11.1.2</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

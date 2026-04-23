@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>11.1 F0 Estimation · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W11</a></span><span>STAGE <b>11-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 11-1 · F0 Estimation from Spectral Peaks</span><span lang="zh">關卡 11-1 · 由頻譜波峰估計基頻</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Fundamental_Frequency_Estimation_Spectral.html" target="_blank">SASP §11.1 ↗</a></small></h1>
+  <div class="nes-box" data-label="HARMONIC STACK">
+    <p lang="en">A periodic tone at $f_0$ shows up in the spectrum as peaks at $f_0,2f_0,3f_0,\ldots$. Finding $f_0$ reduces to: locate peaks, fit an integer-multiple comb, and report the smallest common divisor.</p>
+    <p lang="zh">基頻 $f_0$ 的週期音在頻譜中以 $f_0,2f_0,3f_0,\ldots$ 的波峰呈現。估基頻就是：找峰、擬合整數倍梳、回報最小公因數。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="index.html">◀ W11</a><a class="warp-pipe">11-1</a><a class="nes-btn nes-btn--primary" href="11.1.1-preprocessing.html">NEXT ▶ 11.1.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

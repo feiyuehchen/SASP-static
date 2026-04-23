@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>11.7.11 Real FB Example · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W11</a></span><span>STAGE <b>11-7-11</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 11-7-11 · Real Filter Bank Example</span><span lang="zh">關卡 11-7-11 · 實濾波器組範例</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Real_Filter_Bank_Example.html" target="_blank">SASP §11.7.11 ↗</a></small></h1>
+  <div class="nes-box" data-label="10-BAND OCTAVE EQ">
+    <p lang="en">A 10-band octave equaliser at $f_s=44.1$ kHz: build it from an STFT-plus-grouping recipe or from parallel biquads — both converge to the same frequency response. Pick by CPU budget and ease of modification.</p>
+    <p lang="zh">$f_s=44.1$ kHz 的 10 頻帶八度 EQ：用 STFT + bin 合併或平行 biquad，兩者頻率響應相同。看 CPU 預算與修改彈性選擇。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="11.7.10.1-tighten-ifft.html">◀ 11.7.10.1</a><a class="warp-pipe">11-7-11</a><a class="nes-btn nes-btn--primary" href="11.7.12-opt-band.html">NEXT ▶ 11.7.12</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>
