@@ -18,9 +18,9 @@ data-en-def …>` for hover tooltips.
 
 ## World 1 · Preface  (ch01-preface/)
 
-- [ ] 1.1  Acknowledgments                                 — `ch01-preface/1.1-acks.html`
-- [ ] 1.2  Book Series Overview                            — `ch01-preface/1.2-series.html`
-- [ ] 1.3  Errata                                          — `ch01-preface/1.3-errata.html`
+- [~] 1.1  Acknowledgments                                 — `ch01-preface/1.1-acks.html`
+- [~] 1.2  Book Series Overview                            — `ch01-preface/1.2-series.html`
+- [~] 1.3  Errata                                          — `ch01-preface/1.3-errata.html`
 
 ## World 2 · Introduction and Overview  (ch02-introduction/)
 
@@ -676,4 +676,4 @@ data-en-def …>` for hover tooltips.
 4. Every page gets a prev / next pager linking to its neighbors in the above order.
 5. No copyrighted prose from Smith's book. All explanations must be original.
 
-Current completed count: **41** / ≈ 530. Latest batch: full World 3 (30 more pages).
+Current completed count: **44** / ≈ 530. Latest batch: full World 1 preface (3 stubs).

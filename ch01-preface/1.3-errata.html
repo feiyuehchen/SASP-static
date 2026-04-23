@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>1.3 Errata · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W1</a></span>
+    <span>STAGE <b>1-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 1-3 · Errata</span>
+    <span lang="zh">關卡 1-3 · 勘誤</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Errata.html" target="_blank">SASP §1.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="ORIGINAL BOOK ERRATA">
+    <p lang="en">The canonical list of corrections for the printed edition of SASP lives on the SASP site itself — check the link above for the most up-to-date version. The online HTML edition is generally patched as errors are discovered.</p>
+    <p lang="zh">原書紙本版本的正式勘誤列表請見上方 SASP 官方連結 — 以那邊為準。線上 HTML 版通常是發現錯誤後就會修。</p>
+  </div>
+
+  <div class="nes-box nes-box--yellow" data-label="ABOUT THIS RE-RENDER">
+    <p lang="en">This 8-bit companion is an original rewrite. Its errata (typos, broken demos, incorrect explanations) are tracked at the project's GitHub issues: <a href="https://github.com/feiyuehchen/SASP-static/issues" target="_blank">github.com/feiyuehchen/SASP-static/issues</a>. If you find a bug, please open an issue — we will fix it and note it here.</p>
+    <p lang="zh">本 8 位元伴讀版是原創重寫。本站自己的錯誤（錯字、互動壞掉、觀念寫錯）在 GitHub Issues 追蹤：<a href="https://github.com/feiyuehchen/SASP-static/issues" target="_blank">github.com/feiyuehchen/SASP-static/issues</a>。發現問題請開 issue，修正後會更新這裡。</p>
+  </div>
+
+  <h2 lang="en">Known deviations from SASP</h2>
+  <h2 lang="zh">本站與 SASP 原文的已知差異</h2>
+
+  <ul>
+    <li lang="en">Numerical demos use in-browser JavaScript FFTs (Cooley–Tukey radix-2); speed and precision differ from Matlab/Octave reference implementations.</li>
+    <li lang="zh">數值示範使用瀏覽器內建 JavaScript FFT（Cooley–Tukey radix-2），速度與精度與 Matlab/Octave 參考實作有別。</li>
+    <li lang="en">For clarity, the 8-bit recreation rounds or truncates numbers when displaying them; full-precision results are kept internally.</li>
+    <li lang="zh">為了易讀，顯示時會四捨五入或截斷；內部仍保留完整精度。</li>
+    <li lang="en">All explanatory prose is original. If any phrasing matches SASP verbatim, treat it as an accidental collision and open an issue — we will rewrite.</li>
+    <li lang="zh">解說文字全為原創。若發現任何段落與 SASP 原文一字不差，視為意外撞詞，請開 issue，我們會改寫。</li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="1.2-series.html">◀ 1.2</a>
+    <a class="warp-pipe">1-3</a>
+    <a class="nes-btn nes-btn--primary" href="../ch02-introduction/index.html">WORLD 2 ▶</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

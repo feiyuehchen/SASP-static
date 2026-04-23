@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>1.2 Book Series Overview · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W1</a></span>
+    <span>STAGE <b>1-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 1-2 · Book Series Overview</span>
+    <span lang="zh">關卡 1-2 · 系列書籍總覽</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Book_Series_Overview.html" target="_blank">SASP §1.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="ABOUT">
+    <p lang="en">SASP is one volume in Julius Smith's open-access DSP book series hosted at CCRMA, Stanford.</p>
+    <p lang="zh">SASP 是 Julius Smith 在史丹佛 CCRMA 開放存取的 DSP 書系之一。</p>
+  </div>
+
+  <h2 lang="en">The series at a glance</h2>
+  <h2 lang="zh">系列一覽</h2>
+
+  <p lang="en">The four primary volumes — linked from the original site — each assume the previous one in rough order:</p>
+  <p lang="zh">主要四卷，依序閱讀較為順暢：</p>
+
+  <ul>
+    <li lang="en"><b>Mathematics of the DFT</b> — foundations: complex numbers, linear algebra, the DFT.</li>
+    <li lang="zh"><b>Mathematics of the DFT</b> — 基礎：複數、線性代數、DFT。</li>
+    <li lang="en"><b>Introduction to Digital Filters</b> — LTI systems, transfer functions, stability, z-plane.</li>
+    <li lang="zh"><b>Introduction to Digital Filters</b> — LTI 系統、轉移函數、穩定性、z 平面。</li>
+    <li lang="en"><b>Physical Audio Signal Processing</b> — digital waveguides, physical models of instruments and rooms.</li>
+    <li lang="zh"><b>Physical Audio Signal Processing</b> — 數位波導、樂器與空間的物理模型。</li>
+    <li lang="en"><b>Spectral Audio Signal Processing</b> (this one) — STFT, windows, filter banks, spectral modeling.</li>
+    <li lang="zh"><b>Spectral Audio Signal Processing</b>（本書） — STFT、視窗、濾波器組、頻譜建模。</li>
+  </ul>
+
+  <p lang="en">
+    All four are free to read online at <a href="https://ccrma.stanford.edu/~jos/" target="_blank" rel="noreferrer">ccrma.stanford.edu/~jos</a>,
+    along with additional shorter documents on physical modelling and virtual acoustics.
+    If you are totally new to digital signal processing, starting with "Mathematics of the DFT" is recommended before SASP.
+  </p>
+  <p lang="zh">
+    四卷都可在 <a href="https://ccrma.stanford.edu/~jos/" target="_blank" rel="noreferrer">ccrma.stanford.edu/~jos</a> 上線上閱讀，
+    另有幾份關於物理建模與虛擬聲學的短篇文件。如果你完全是 DSP 新手，建議先讀 <i>Mathematics of the DFT</i> 再來 SASP。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="1.1-acks.html">◀ 1.1</a>
+    <a class="warp-pipe">1-2</a>
+    <a class="nes-btn nes-btn--primary" href="1.3-errata.html">NEXT ▶ 1.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>
