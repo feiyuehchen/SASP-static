@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.3.1 LS Examples · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-3-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-3-1 · LS Examples</span>
+    <span lang="zh">關卡 5-3-1 · LS 範例</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Examples.html" target="_blank">SASP §5.3.1 ↗</a></small>
+  </h1>
+
+  <div class="viz-card">
+    <h3 lang="en">Three lengths of an LS lowpass at ωc=0.3π</h3>
+    <h3 lang="zh">三種長度的 LS 低通（ωc=0.3π）</h3>
+    <canvas id="fCanvas" style="height:240px;"></canvas>
+  </div>
+
+  <div class="nes-box nes-box--blue" data-label="OBSERVATION">
+    <p lang="en">Transition band narrows as $N$ grows, but the 9% Gibbs overshoot near the cutoff does not go down. That is why we need windowing (§5.5) or Chebyshev minimax (§5.10.2).</p>
+    <p lang="zh">長度 $N$ 增加 → 過渡帶變窄；但截止頻率附近的 9% Gibbs 過衝不會下降。這是為什麼要靠視窗法（§5.5）或 Chebyshev minimax（§5.10.2）。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.3-ls.html">◀ 5.3</a>
+    <a class="warp-pipe">5-3-1</a>
+    <a class="nes-btn nes-btn--primary" href="5.4-freq-samp.html">NEXT ▶ 5.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  function lsLP(N, wc) {
+    const mid = (N-1)/2, h = new Float32Array(N);
+    for (let n = 0; n < N; n++) {
+      const k = n - mid;
+      h[n] = (k === 0 ? wc/Math.PI : Math.sin(wc*k)/(Math.PI*k));
+    }
+    return h;
+  }
+  const wc = 0.3 * Math.PI;
+  const K = 400, om = DSP.linspace(0, Math.PI, K);
+  const magOf = N => {
+    const h = lsLP(N, wc);
+    const { re, im } = DSP.dtft(h, om);
+    const m = new Float32Array(K);
+    for (let i = 0; i < K; i++) m[i] = Math.hypot(re[i], im[i]);
+    return DSP.toDb(m, -60);
+  };
+  Viz.multiLine(document.getElementById('fCanvas'), [
+    { y: Array.from(magOf(21)),  xValues: Array.from(om), color:'#3CBCFC', label:'N=21' },
+    { y: Array.from(magOf(41)),  xValues: Array.from(om), color:'#F8B800', label:'N=41' },
+    { y: Array.from(magOf(101)), xValues: Array.from(om), color:'#F83800', label:'N=101' },
+  ], { xMin:0, xMax:Math.PI, yMin:-60, xLabel:'ω', yLabel:'dB', title:'LS LOWPASS vs LENGTH', xTicks:[{v:0,label:'0'},{v:Math.PI/2,label:'π/2'},{v:Math.PI,label:'π'}] });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.4 Chebyshev via LP · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-4 · Chebyshev FIR via Linear Programming</span>
+    <span lang="zh">關卡 5-10-4 · 用 LP 設計 Chebyshev FIR</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Chebyshev_FIR_Design_Linear.html" target="_blank">SASP §5.10.4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="SAME AS §4.13 FOR WINDOWS">
+    <p lang="en">Discretise the minimax problem on a dense frequency grid and solve an LP. Exactly the trick we used for window design — same code works, just change the target $H_d(\omega)$.</p>
+    <p lang="zh">把 minimax 問題在密格點上離散化、解 LP。與 §4.13 視窗設計是同一招 — 換個目標 $H_d(\omega)$ 就能用。</p>
+  </div>
+
+  <p lang="en">Slightly slower than Remez on the same problem, but handles non-standard constraints (non-negativity of $|H|$, combined bands, custom weights) that Parks-McClellan can't.</p>
+  <p lang="zh">比 Remez 慢一點，但能處理非標準約束（$|H|$ 非負、組合頻帶、自訂權重），Parks-McClellan 做不到。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10.3.2-ls-matlab.html">◀ 5.10.3.2</a>
+    <a class="warp-pipe">5-10-4</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.5-general-real.html">NEXT ▶ 5.10.5</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.5.2.1 Under kaiserord · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-5-2-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-5-2-1 · Under the Hood of kaiserord</span>
+    <span lang="zh">關卡 5-5-2-1 · kaiserord 內部</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Hood_kaiserord.html" target="_blank">SASP §5.5.2.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="TWO FORMULAS">
+    <p lang="en">Given transition width $\Delta\omega$ and target attenuation $A$ dB, <code>kaiserord</code> returns $N$ and $\beta$.</p>
+    <p lang="zh">給過渡帶寬 $\Delta\omega$ 與目標衰減 $A$ dB，<code>kaiserord</code> 回傳 $N$ 與 $\beta$。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">FORMULAS</span>
+    <div>$$N\;\approx\;\frac{A-8}{2.285\,\Delta\omega}+1$$</div>
+    <div>$$\beta\;\approx\;\begin{cases}0.1102(A-8.7),& A>50\\ 0.5842(A-21)^{0.4}+0.07886(A-21),& 21\le A\le 50\\ 0,& A<21\end{cases}$$</div>
+  </div>
+
+  <p lang="en">
+    Plug in, read out. The first formula is empirical but extremely
+    accurate in practice. The second is the Kaiser β table we saw in
+    §4.9.1.
+  </p>
+  <p lang="zh">代公式即可。第一條是經驗公式，但實務上非常準。第二條就是 §4.9.1 的 Kaiser β 表。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.5.2-bp-example.html">◀ 5.5.2</a>
+    <a class="warp-pipe">5-5-2-1</a>
+    <a class="nes-btn nes-btn--primary" href="5.5.2.2-vs-cheby.html">NEXT ▶ 5.5.2.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

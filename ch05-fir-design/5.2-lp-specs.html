@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.2 LP Design Specs · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-2 · Lowpass Filter Design Specifications</span>
+    <span lang="zh">關卡 5-2 · 低通濾波器設計規格</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Lowpass_Filter_Design_Specifications.html" target="_blank">SASP §5.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="FOUR KNOBS">
+    <p lang="en">A realisable lowpass is specified by four numbers.</p>
+    <p lang="zh">可實作的低通濾波器由四個數字規格決定。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">SPECIFICATION</span>
+    <div>
+      $$\begin{array}{ll}
+      \omega_p & \text{passband edge} \\
+      \omega_s & \text{stopband edge}\;(\omega_s>\omega_p) \\
+      \delta_p & \text{max passband ripple (linear)} \\
+      \delta_s & \text{max stopband ripple (linear)}
+      \end{array}$$
+    </div>
+  </div>
+
+  <p lang="en">Between $\omega_p$ and $\omega_s$ is the <span class="term" data-en="Transition band"
+    data-en-def="Frequency range between passband and stopband where the filter goes from nearly 1 to nearly 0."
+    data-zh-def="通帶和停帶之間、濾波器從幾乎 1 降到幾乎 0 的頻率區段。">transition band</span>. Its width, $\omega_s-\omega_p$, is what costs you filter length: narrower transition → more taps.</p>
+  <p lang="zh">$\omega_p$ 到 $\omega_s$ 之間是<span class="term" data-en="Transition band"
+    data-en-def="Frequency range between passband and stopband where the filter goes from nearly 1 to nearly 0."
+    data-zh-def="通帶和停帶之間、濾波器從幾乎 1 降到幾乎 0 的頻率區段。">過渡帶</span>。其寬度 $\omega_s-\omega_p$ 決定濾波器長度 — 過渡越窄，抽頭越多。</p>
+
+  <div class="nes-box nes-box--purple" data-label="LINEAR vs dB">
+    <p lang="en">Stopband ripple $\delta_s=10^{-A/20}$ where $A$ is stopband attenuation in dB. A spec of $A=60$ dB means $\delta_s=0.001$.</p>
+    <p lang="zh">停帶漣波 $\delta_s=10^{-A/20}$，$A$ 為 dB 衰減。$A=60$ dB → $\delta_s=0.001$。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.1-ideal-lp.html">◀ 5.1</a>
+    <a class="warp-pipe">5-2</a>
+    <a class="nes-btn nes-btn--primary" href="5.2.1-ideal-lp2.html">NEXT ▶ 5.2.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

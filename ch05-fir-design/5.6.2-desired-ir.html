@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.6.2 Preparing the Desired IR · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-6-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-6-2 · Preparing the Desired IR</span>
+    <span lang="zh">關卡 5-6-2 · 準備目標脈衝響應</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Filtering_Windowing_Ideal_Hilbert_Transform.html" target="_blank">SASP §5.6.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="THREE STEPS">
+    <p lang="en">Truncate the ideal $h_H[n]$ symmetrically about $n=0$, delay by half the length to make it causal, then apply a window (usually Kaiser).</p>
+    <p lang="zh">把理想 $h_H[n]$ 以 $n=0$ 為中心對稱截斷，整體延遲視窗一半使之因果，再乘上視窗（通常 Kaiser）。</p>
+  </div>
+
+  <p lang="en">
+    The result is a linear-phase Type III or Type IV FIR — depending on
+    whether $N$ is odd or even. Type IV (even $N$) is usually preferred
+    because it does not force the Hilbert response to zero at $\omega=\pi$.
+  </p>
+  <p lang="zh">結果是一個線性相位的第 III 或第 IV 型 FIR，看 $N$ 是奇或偶。通常選第 IV 型（偶 $N$），因為不會強迫在 $\omega=\pi$ 為零。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.6.1.1-hilbert-def.html">◀ 5.6.1.1</a>
+    <a class="warp-pipe">5-6-2</a>
+    <a class="nes-btn nes-btn--primary" href="5.6.2.1-matlab-cont.html">NEXT ▶ 5.6.2.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

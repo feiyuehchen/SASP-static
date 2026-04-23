@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>World 5 — FIR Filter Design · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="../index.html">◀ MAP</a></span>
+    <span>WORLD <b>5</b></span>
+    <span lang="en">FIR DESIGN</span>
+    <span lang="zh">FIR 設計</span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">World 5 — FIR Digital Filter Design</span>
+    <span lang="zh">第 5 世界 — FIR 數位濾波器設計</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Ideal_Lowpass_Filter.html" target="_blank">SASP Ch. 5 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="BRIEFING">
+    <p lang="en">Given a target frequency response, find finite impulse-response coefficients $h[n]$ that best realise it. Methods from the simplest (window a sinc) to the most powerful (LP minimax, SOCP for non-linear phase).</p>
+    <p lang="zh">給定目標頻率響應，找能最好逼近的有限脈衝響應係數 $h[n]$。方法從最簡單（sinc 加窗）到最強大（LP minimax、非線性相位 SOCP）都在這一關。</p>
+  </div>
+
+  <ul class="toc-list">
+    <li><a href="5.1-ideal-lp.html"><span><span class="num">5.1</span><span lang="en">Ideal Lowpass</span><span lang="zh">理想低通</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.2-lp-specs.html"><span><span class="num">5.2</span><span lang="en">Lowpass Design Specs</span><span lang="zh">低通設計規格</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.2.1-ideal-lp2.html"><span><span class="num">5.2.1</span><span lang="en">Ideal LP Revisited</span><span lang="zh">再看理想低通</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.3-ls.html"><span><span class="num">5.3</span><span lang="en">Least-Squares FIR</span><span lang="zh">最小平方 FIR</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.3.1-ls-examples.html"><span><span class="num">5.3.1</span><span lang="en">Examples</span><span lang="zh">範例</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.4-freq-samp.html"><span><span class="num">5.4</span><span lang="en">Frequency-Sampling</span><span lang="zh">頻率取樣法</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.5-window-method.html"><span><span class="num">5.5</span><span lang="en">Window Method</span><span lang="zh">視窗法</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.5.1-matlab-window.html"><span><span class="num">5.5.1</span><span lang="en">Matlab Window Support</span><span lang="zh">視窗法的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.5.2-bp-example.html"><span><span class="num">5.5.2</span><span lang="en">Bandpass Example</span><span lang="zh">帶通範例</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.5.2.1-kaiserord.html"><span><span class="num">5.5.2.1</span><span lang="en">Under kaiserord</span><span lang="zh">kaiserord 內部</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.5.2.2-vs-cheby.html"><span><span class="num">5.5.2.2</span><span lang="en">vs Chebyshev BP</span><span lang="zh">對比 Chebyshev 帶通</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.6-hilbert.html"><span><span class="num">5.6</span><span lang="en">Hilbert Transform Design</span><span lang="zh">Hilbert 轉換器設計</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.6.1-hilbert-theory.html"><span><span class="num">5.6.1</span><span lang="en">Primer on Hilbert Theory</span><span lang="zh">Hilbert 理論簡介</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.6.1.1-hilbert-def.html"><span><span class="num">5.6.1.1</span><span lang="en">Hilbert Transform</span><span lang="zh">Hilbert 轉換定義</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.6.2-desired-ir.html"><span><span class="num">5.6.2</span><span lang="en">Preparing Desired IR</span><span lang="zh">準備目標脈衝響應</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.6.2.1-matlab-cont.html"><span><span class="num">5.6.2.1</span><span lang="en">Matlab Continued</span><span lang="zh">Matlab 續</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.6.2.2-kaiser-in-hilbert.html"><span><span class="num">5.6.2.2</span><span lang="en">Kaiser in Hilbert</span><span lang="zh">Hilbert 中使用 Kaiser</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.6.2.3-hilbert-window.html"><span><span class="num">5.6.2.3</span><span lang="en">Hilbert by Window</span><span lang="zh">視窗法的 Hilbert</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.6.3-general-fir.html"><span><span class="num">5.6.3</span><span lang="en">More General FIR</span><span lang="zh">更一般化的 FIR</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.6.4-vs-optimal.html"><span><span class="num">5.6.4</span><span lang="en">vs Optimal Chebyshev</span><span lang="zh">對比最優 Chebyshev</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.6.5-hilbert-conclusion.html"><span><span class="num">5.6.5</span><span lang="en">Hilbert Conclusions</span><span lang="zh">Hilbert 結論</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.7-generalized-window.html"><span><span class="num">5.7</span><span lang="en">Generalized Window Method</span><span lang="zh">廣義視窗法</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.8-min-phase.html"><span><span class="num">5.8</span><span lang="en">Minimum-Phase Design</span><span lang="zh">最小相位設計</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.9-min-phase-cepstra.html"><span><span class="num">5.9</span><span lang="en">Min-Phase and Causal Cepstra</span><span lang="zh">最小相位與因果倒頻譜</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10-optimal-fir.html"><span><span class="num">5.10</span><span lang="en">Optimal FIR Design</span><span lang="zh">最優 FIR 設計</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.1-lp-norms.html"><span><span class="num">5.10.1</span><span lang="en">Lp Norms</span><span lang="zh">Lp 範數</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.1.1-lp-special.html"><span><span class="num">5.10.1.1</span><span lang="en">Special Cases</span><span lang="zh">特殊情形</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.1.2-lp-design.html"><span><span class="num">5.10.1.2</span><span lang="en">Lp Design</span><span lang="zh">Lp 設計</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.2-optimal-cheby.html"><span><span class="num">5.10.2</span><span lang="en">Optimal Chebyshev FIR</span><span lang="zh">最優 Chebyshev FIR</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.3-ls-linphase.html"><span><span class="num">5.10.3</span><span lang="en">LS Linear-Phase FIR</span><span lang="zh">最小平方線性相位 FIR</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.3.1-ls-geom.html"><span><span class="num">5.10.3.1</span><span lang="en">Geometric LS</span><span lang="zh">LS 的幾何解釋</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.3.2-ls-matlab.html"><span><span class="num">5.10.3.2</span><span lang="en">Matlab for LS</span><span lang="zh">LS 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.4-cheby-lp.html"><span><span class="num">5.10.4</span><span lang="en">Chebyshev via LP</span><span lang="zh">用 LP 設計 Chebyshev</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.5-general-real.html"><span><span class="num">5.10.5</span><span lang="en">More General Real FIR</span><span lang="zh">更一般化的實 FIR</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.6-nonlin-phase.html"><span><span class="num">5.10.6</span><span lang="en">Non-Linear Phase FIR</span><span lang="zh">非線性相位 FIR</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.6.1-nlp-problem.html"><span><span class="num">5.10.6.1</span><span lang="en">Problem Formulation</span><span lang="zh">問題描述</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.7-matlab-general.html"><span><span class="num">5.10.7</span><span lang="en">Matlab for General FIR</span><span lang="zh">一般 FIR 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.8-socp.html"><span><span class="num">5.10.8</span><span lang="en">SOCP</span><span lang="zh">二次錐問題</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.8.1-socp-resources.html"><span><span class="num">5.10.8.1</span><span lang="en">SOCP Resources</span><span lang="zh">SOCP 資源</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.9-nonlin-opt.html"><span><span class="num">5.10.9</span><span lang="en">Nonlinear Opt in Matlab</span><span lang="zh">Matlab 非線性最佳化</span></span><span class="dim">▶</span></a></li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="../ch04-windows/index.html">◀ W4</a>
+    <a class="nes-btn nes-btn--primary" href="5.1-ideal-lp.html">START ▶</a>
+    <a class="nes-btn" href="../ch06-sinusoids/index.html">World 6 ▶</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+</body>
+</html>

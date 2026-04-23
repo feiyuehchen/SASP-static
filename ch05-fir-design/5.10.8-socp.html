@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.8 SOCP · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-8</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-8 · Second-Order Cone Problems</span>
+    <span lang="zh">關卡 5-10-8 · 二次錐問題</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Second_Order_Cone_Problems.html" target="_blank">SASP §5.10.8 ↗</a></small>
+  </h1>
+
+  <div class="formula">
+    <span class="label">SOCP STANDARD FORM</span>
+    <div>$$\min_{x}\;c^{T}x\quad\text{s.t.}\quad \|A_i x+b_i\|_2\le d_i^{T}x+e_i,\;\; i=1,\ldots,m$$</div>
+  </div>
+
+  <p lang="en">
+    Generalises LP (LP is the case where all Euclidean norms degenerate
+    to scalars). Modern interior-point solvers (ECOS, MOSEK, Gurobi) do
+    SOCP at roughly LP speed. Critical for complex-valued minimax FIR.
+  </p>
+  <p lang="zh">推廣自 LP（LP 是所有歐氏範數退化為純量的情形）。現代內點法求解器（ECOS、MOSEK、Gurobi）速度接近 LP。複值 minimax FIR 設計必備。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10.7-matlab-general.html">◀ 5.10.7</a>
+    <a class="warp-pipe">5-10-8</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.8.1-socp-resources.html">NEXT ▶ 5.10.8.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

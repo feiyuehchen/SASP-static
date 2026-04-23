@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.5.2 Bandpass Example · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-5-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-5-2 · Bandpass Example</span>
+    <span lang="zh">關卡 5-5-2 · 帶通範例</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Bandpass_Filter_Design_Example.html" target="_blank">SASP §5.5.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="BANDPASS = LP1 − LP2">
+    <p lang="en">A bandpass ideal response is the difference of two lowpasses. Its impulse response is the difference of two sincs.</p>
+    <p lang="zh">理想帶通 = 兩個低通之差。其脈衝響應 = 兩個 sinc 之差。</p>
+  </div>
+
+  <div class="formula">
+    <div>$$h_{BP}[n]=\frac{\sin(\omega_H n)-\sin(\omega_L n)}{\pi n}\quad\text{for }n\ne 0$$</div>
+  </div>
+
+  <div class="viz-card">
+    <canvas id="fCanvas" style="height:200px;"></canvas>
+    <div class="controls">
+      <label>ωL/π</label>
+      <input type="range" id="loSlider" min="0.05" max="0.45" step="0.01" value="0.2"/>
+      <span class="val" id="loVal">0.20</span>
+      <label>ωH/π</label>
+      <input type="range" id="hiSlider" min="0.1" max="0.9" step="0.01" value="0.4"/>
+      <span class="val" id="hiVal">0.40</span>
+      <label>N</label>
+      <input type="range" id="nSlider" min="31" max="401" step="10" value="101"/>
+      <span class="val" id="nVal">101</span>
+    </div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.5.1-matlab-window.html">◀ 5.5.1</a>
+    <a class="warp-pipe">5-5-2</a>
+    <a class="nes-btn nes-btn--primary" href="5.5.2.1-kaiserord.html">NEXT ▶ 5.5.2.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { lo: 0.2, hi: 0.4, N: 101 };
+  function bp(N, wl, wh) {
+    const mid = (N-1)/2;
+    const w = DSP.WINDOWS.hamming(N);
+    const h = new Float32Array(N);
+    for (let n = 0; n < N; n++) {
+      const k = n - mid;
+      const v = (k === 0 ? (wh-wl)/Math.PI : (Math.sin(wh*k)-Math.sin(wl*k))/(Math.PI*k));
+      h[n] = v * w[n];
+    }
+    return h;
+  }
+  function redraw() {
+    const h = bp(state.N|0, state.lo*Math.PI, state.hi*Math.PI);
+    const K = 400, om = DSP.linspace(0, Math.PI, K);
+    const { re, im } = DSP.dtft(h, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), DSP.toDb(mag,-80), { xValues: Array.from(om), xMin:0, xMax:Math.PI, yMin:-80, xLabel:'ω', yLabel:'dB', title:`HAMMING-WINDOWED BP, N=${state.N|0}`, xTicks:[{v:0,label:'0'},{v:Math.PI/2,label:'π/2'},{v:Math.PI,label:'π'}] });
+  }
+  $('loSlider').addEventListener('input', () => { state.lo = parseFloat($('loSlider').value); $('loVal').textContent = state.lo.toFixed(2); redraw(); });
+  $('hiSlider').addEventListener('input', () => { state.hi = parseFloat($('hiSlider').value); $('hiVal').textContent = state.hi.toFixed(2); redraw(); });
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+  redraw();
+})();
+</script>
+</body>
+</html>

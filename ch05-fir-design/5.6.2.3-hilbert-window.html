@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.6.2.3 Hilbert by Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-6-2-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-6-2-3 · Hilbert Transformer by the Window Method</span>
+    <span lang="zh">關卡 5-6-2-3 · 用視窗法設計 Hilbert 轉換器</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Windowing_Desired_Impulse_Response.html" target="_blank">SASP §5.6.2.3 ↗</a></small>
+  </h1>
+
+  <div class="viz-card">
+    <h3 lang="en">Lab · Windowed Hilbert response</h3>
+    <h3 lang="zh">實驗 · 視窗化 Hilbert 響應</h3>
+    <canvas id="fCanvas" style="height:200px;"></canvas>
+  </div>
+
+  <div class="nes-box nes-box--blue" data-label="READ-OUT">
+    <p lang="en">Magnitude climbs from 0 near $\omega=0$, reaches ~1 in the useful band, and falls back near $\omega=\pi$. Wider useful band ⇒ narrower dips near 0 and π.</p>
+    <p lang="zh">振幅從 $\omega=0$ 附近的 0 爬升、在可用頻段約為 1、在 $\omega=\pi$ 附近又下降。可用頻段越寬，0 與 π 附近的凹陷就越窄。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.6.2.2-kaiser-in-hilbert.html">◀ 5.6.2.2</a>
+    <a class="warp-pipe">5-6-2-3</a>
+    <a class="nes-btn nes-btn--primary" href="5.6.3-general-fir.html">NEXT ▶ 5.6.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const N = 64;
+  const h = new Float32Array(N);
+  const mid = N/2 - 1;
+  for (let n = 0; n < N; n++) {
+    const k = n - mid;
+    if (k !== 0 && (k % 2) !== 0) h[n] = 2 / (Math.PI * k);
+  }
+  const w = DSP.WINDOWS.kaiser(N, 6);
+  for (let n = 0; n < N; n++) h[n] *= w[n];
+  const K = 400, om = DSP.linspace(0, Math.PI, K);
+  const { re, im } = DSP.dtft(h, om);
+  const mag = new Float32Array(K);
+  for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+  Viz.line(document.getElementById('fCanvas'), mag, { xValues: Array.from(om), xMin:0, xMax:Math.PI, yMin:0, yMax:1.2, xLabel:'ω', yLabel:'|H(ω)|', title:'KAISER-WINDOWED HILBERT FIR (N=64, β=6)', xTicks:[{v:0,label:'0'},{v:Math.PI/2,label:'π/2'},{v:Math.PI,label:'π'}] });
+})();
+</script>
+</body>
+</html>

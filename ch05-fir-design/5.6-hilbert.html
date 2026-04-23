@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.6 Hilbert Transform Design · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-6</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-6 · Hilbert Transform Design</span>
+    <span lang="zh">關卡 5-6 · Hilbert 轉換器設計</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Hilbert_Transform_Design_Example.html" target="_blank">SASP §5.6 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="THE GOAL">
+    <p lang="en">Design an FIR whose ideal frequency response is $-j\operatorname{sgn}(\omega)$ — i.e. shifts positive frequencies by $-90°$ and negative frequencies by $+90°$. Useful for analytic signal construction and single-sideband modulation.</p>
+    <p lang="zh">設計理想頻率響應為 $-j\operatorname{sgn}(\omega)$ 的 FIR — 正頻率相位減 90°、負頻率相位加 90°。在分析訊號建構、SSB 調變中很有用。</p>
+  </div>
+
+  <p lang="en">
+    Unlike the ideal lowpass, the Hilbert ideal has a jump at $\omega=0$
+    as well as at $\omega=\pm\pi$. FIR designs must tolerate the cusp
+    while still delivering a wide useful pass band.
+  </p>
+  <p lang="zh">和理想低通不同，Hilbert 理想在 $\omega=0$ 和 $\omega=\pm\pi$ 都有跳變；FIR 設計必須忍受這些尖角、仍提供寬的可用通帶。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.5.2.2-vs-cheby.html">◀ 5.5.2.2</a>
+    <a class="warp-pipe">5-6</a>
+    <a class="nes-btn nes-btn--primary" href="5.6.1-hilbert-theory.html">NEXT ▶ 5.6.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

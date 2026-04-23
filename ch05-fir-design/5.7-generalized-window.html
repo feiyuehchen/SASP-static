@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.7 Generalized Window Method · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-7</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-7 · Generalized Window Method</span>
+    <span lang="zh">關卡 5-7 · 廣義視窗法</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Generalized_Window_Method.html" target="_blank">SASP §5.7 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="IDEA">
+    <p lang="en">When the desired spectrum is known only on a dense grid (not a formula), the "window method" generalises to: IFFT the desired magnitude, window the result.</p>
+    <p lang="zh">若目標頻譜只能在密格點給出（無封閉式），視窗法可廣義為「對目標做 IFFT、再乘上視窗」。</p>
+  </div>
+
+  <div class="formula">
+    <div>$$h[n]=w[n]\cdot\underbrace{\text{IFFT}\{H_d(e^{j 2\pi k/M})\}[n]}_{\text{target IR}}$$</div>
+  </div>
+
+  <p lang="en">Works for multi-band equalisers, arbitrary-shaped filters, frequency-warped responses — anything you can sample. Zero-pad the grid to at least $2N$ before IFFT to avoid time-domain aliasing.</p>
+  <p lang="zh">多頻帶 EQ、任意形狀濾波器、頻率扭曲響應都能用。把頻率格點至少補零到 $2N$ 再 IFFT，避免時域混疊。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.6.5-hilbert-conclusion.html">◀ 5.6.5</a>
+    <a class="warp-pipe">5-7</a>
+    <a class="nes-btn nes-btn--primary" href="5.8-min-phase.html">NEXT ▶ 5.8</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.9 Min-Phase &amp; Causal Cepstra · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-9</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-9 · Min-Phase &amp; Causal Cepstra</span>
+    <span lang="zh">關卡 5-9 · 最小相位與因果倒頻譜</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Minimum_Phase_Causal_Cepstra.html" target="_blank">SASP §5.9 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="KEY EQUIVALENCE">
+    <p lang="en">A sequence is minimum-phase iff its <span class="term" data-en="Complex cepstrum"
+      data-en-def="The inverse Fourier transform of the complex logarithm of a spectrum."
+      data-zh-def="頻譜取複對數後的反傅立葉轉換。">complex cepstrum</span> is causal (zero for $n<0$).</p>
+    <p lang="zh">序列是最小相位，等價於其<span class="term" data-en="Complex cepstrum"
+      data-en-def="The inverse Fourier transform of the complex logarithm of a spectrum."
+      data-zh-def="頻譜取複對數後的反傅立葉轉換。">複倒頻譜</span>為因果（$n<0$ 處為 0）。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">COMPLEX CEPSTRUM</span>
+    <div>$$\hat{h}[n]=\mathcal{F}^{-1}\{\ln H(\omega)\}$$</div>
+  </div>
+
+  <p lang="en">
+    Forcing $\hat h[n]=0$ for $n<0$ (and doubling the positive half to
+    preserve magnitude) implements the "exponentiate back" step of the
+    previous page. Numerically stable as long as $|H(\omega)|$ never
+    vanishes (add a tiny floor if needed).
+  </p>
+  <p lang="zh">把 $\hat h[n]=0$（$n<0$）、正時間部分乘 2 保持振幅，就是上一頁的「指數還原」。只要 $|H(\omega)|$ 不為 0（若接近可加一個小地板）就數值穩定。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.8-min-phase.html">◀ 5.8</a>
+    <a class="warp-pipe">5-9</a>
+    <a class="nes-btn nes-btn--primary" href="5.10-optimal-fir.html">NEXT ▶ 5.10</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

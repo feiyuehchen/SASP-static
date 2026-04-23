@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.2 Optimal Chebyshev FIR · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-2 · Optimal Chebyshev FIR</span>
+    <span lang="zh">關卡 5-10-2 · 最優 Chebyshev FIR</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Optimal_Chebyshev_FIR_Filters.html" target="_blank">SASP §5.10.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--purple" data-label="PARKS-McCLELLAN">
+    <p lang="en">Minimise the maximum weighted error between the designed and desired responses. Characterised by the alternation theorem: the optimum has at least $N/2+2$ alternating equi-ripple extrema.</p>
+    <p lang="zh">最小化目標與設計響應間加權誤差的最大值。由交替定理刻畫：最優解至少有 $N/2+2$ 個等漣波交替極值。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">MINIMAX PROBLEM</span>
+    <div>$$\min_{h}\;\max_{\omega}\;W(\omega)\,|H_d(\omega)-H(\omega)|$$</div>
+  </div>
+
+  <p lang="en">
+    $W(\omega)$ weights the error band-by-band: higher weight = lower
+    error there. Matlab's <code>firpm</code> (Parks-McClellan) solves
+    this by Remez exchange (§4.13.8). Output is optimal in the Chebyshev
+    / minimax sense and is universally called "optimal FIR design".
+  </p>
+  <p lang="zh">
+    $W(\omega)$ 逐頻帶加權誤差 — 權重越高、該帶誤差越小。Matlab 的 <code>firpm</code> 用 Remez 交換（§4.13.8）求解。
+    結果在 Chebyshev/minimax 意義下最優，俗稱「最優 FIR 設計」。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10.1.2-lp-design.html">◀ 5.10.1.2</a>
+    <a class="warp-pipe">5-10-2</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.3-ls-linphase.html">NEXT ▶ 5.10.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

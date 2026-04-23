@@ -138,46 +138,46 @@ data-en-def …>` for hover tooltips.
 
 ## World 5 · FIR Digital Filter Design  (ch05-fir-design/)
 
-- [ ] 5.1   Ideal Lowpass Filter                           — `ch05-fir-design/5.1-ideal-lp.html`
-- [ ] 5.2   Lowpass Filter Design Specifications           — `ch05-fir-design/5.2-lp-specs.html`
-- [ ] 5.2.1 Ideal Lowpass Filter Revisited                 — `ch05-fir-design/5.2.1-ideal-lp2.html`
-- [ ] 5.3   Least-Squares FIR Design                       — `ch05-fir-design/5.3-ls.html`
-- [ ] 5.3.1 Examples (LS)                                  — `ch05-fir-design/5.3.1-ls-examples.html`
-- [ ] 5.4   Frequency-Sampling FIR Design                  — `ch05-fir-design/5.4-freq-samp.html`
-- [ ] 5.5   Window Method for FIR Design                   — `ch05-fir-design/5.5-window-method.html`
-- [ ] 5.5.1 Matlab Support for the Window Method           — `ch05-fir-design/5.5.1-matlab-window.html`
-- [ ] 5.5.2 Bandpass Filter Design Example                 — `ch05-fir-design/5.5.2-bp-example.html`
-- [ ] 5.5.2.1 Under the Hood of kaiserord                  — `ch05-fir-design/5.5.2.1-kaiserord.html`
-- [ ] 5.5.2.2 Comparison to Optimal Chebyshev FIR BP       — `ch05-fir-design/5.5.2.2-vs-cheby.html`
-- [ ] 5.6   Hilbert Transform Design Example               — `ch05-fir-design/5.6-hilbert.html`
-- [ ] 5.6.1 Hilbert Transform Theory                       — `ch05-fir-design/5.6.1-hilbert-theory.html`
-- [ ] 5.6.1.1 Hilbert Transform (definition)               — `ch05-fir-design/5.6.1.1-hilbert-def.html`
-- [ ] 5.6.2 Preparing the Desired Impulse Response         — `ch05-fir-design/5.6.2-desired-ir.html`
-- [ ] 5.6.2.1 Matlab, Continued                            — `ch05-fir-design/5.6.2.1-matlab-cont.html`
-- [ ] 5.6.2.2 Kaiser Window (in Hilbert design)            — `ch05-fir-design/5.6.2.2-kaiser-in-hilbert.html`
-- [ ] 5.6.2.3 Hilbert Transformer by Window Method         — `ch05-fir-design/5.6.2.3-hilbert-window.html`
-- [ ] 5.6.3 More General FIR Filter Design                 — `ch05-fir-design/5.6.3-general-fir.html`
-- [ ] 5.6.4 Comparison to Optimal Chebyshev FIR            — `ch05-fir-design/5.6.4-vs-optimal.html`
-- [ ] 5.6.5 Conclusions (Hilbert)                          — `ch05-fir-design/5.6.5-hilbert-conclusion.html`
-- [ ] 5.7   Generalized Window Method                      — `ch05-fir-design/5.7-generalized-window.html`
-- [ ] 5.8   Minimum-Phase Filter Design                    — `ch05-fir-design/5.8-min-phase.html`
-- [ ] 5.9   Minimum-Phase and Causal Cepstra               — `ch05-fir-design/5.9-min-phase-cepstra.html`
-- [ ] 5.10  Optimal FIR Digital Filter Design              — `ch05-fir-design/5.10-optimal-fir.html`
-- [ ] 5.10.1 Lp Norms                                      — `ch05-fir-design/5.10.1-lp-norms.html`
-- [ ] 5.10.1.1 Special Cases (Lp)                          — `ch05-fir-design/5.10.1.1-lp-special.html`
-- [ ] 5.10.1.2 Filter Design using Lp Norms                — `ch05-fir-design/5.10.1.2-lp-design.html`
-- [ ] 5.10.2 Optimal Chebyshev FIR Filters                 — `ch05-fir-design/5.10.2-optimal-cheby.html`
-- [ ] 5.10.3 Least-Squares Linear-Phase FIR Design         — `ch05-fir-design/5.10.3-ls-linphase.html`
-- [ ] 5.10.3.1 Geometric Interp. of Least Squares          — `ch05-fir-design/5.10.3.1-ls-geom.html`
-- [ ] 5.10.3.2 Matlab Support for LS FIR                   — `ch05-fir-design/5.10.3.2-ls-matlab.html`
-- [ ] 5.10.4 Chebyshev FIR Design via LP                   — `ch05-fir-design/5.10.4-cheby-lp.html`
-- [ ] 5.10.5 More General Real FIR Filters                 — `ch05-fir-design/5.10.5-general-real.html`
-- [ ] 5.10.6 Nonlinear-Phase FIR Filter Design             — `ch05-fir-design/5.10.6-nonlin-phase.html`
-- [ ] 5.10.6.1 Problem Formulation                         — `ch05-fir-design/5.10.6.1-nlp-problem.html`
-- [ ] 5.10.7 Matlab for General FIR Filter Design          — `ch05-fir-design/5.10.7-matlab-general.html`
-- [ ] 5.10.8 Second-Order Cone Problems                    — `ch05-fir-design/5.10.8-socp.html`
-- [ ] 5.10.8.1 Resources                                   — `ch05-fir-design/5.10.8.1-socp-resources.html`
-- [ ] 5.10.9 Nonlinear Optimization in Matlab              — `ch05-fir-design/5.10.9-nonlin-opt.html`
+- [~] 5.1   Ideal Lowpass Filter                           — `ch05-fir-design/5.1-ideal-lp.html`
+- [~] 5.2   Lowpass Filter Design Specifications           — `ch05-fir-design/5.2-lp-specs.html`
+- [~] 5.2.1 Ideal Lowpass Filter Revisited                 — `ch05-fir-design/5.2.1-ideal-lp2.html`
+- [~] 5.3   Least-Squares FIR Design                       — `ch05-fir-design/5.3-ls.html`
+- [~] 5.3.1 Examples (LS)                                  — `ch05-fir-design/5.3.1-ls-examples.html`
+- [~] 5.4   Frequency-Sampling FIR Design                  — `ch05-fir-design/5.4-freq-samp.html`
+- [~] 5.5   Window Method for FIR Design                   — `ch05-fir-design/5.5-window-method.html`
+- [~] 5.5.1 Matlab Support for the Window Method           — `ch05-fir-design/5.5.1-matlab-window.html`
+- [~] 5.5.2 Bandpass Filter Design Example                 — `ch05-fir-design/5.5.2-bp-example.html`
+- [~] 5.5.2.1 Under the Hood of kaiserord                  — `ch05-fir-design/5.5.2.1-kaiserord.html`
+- [~] 5.5.2.2 Comparison to Optimal Chebyshev FIR BP       — `ch05-fir-design/5.5.2.2-vs-cheby.html`
+- [~] 5.6   Hilbert Transform Design Example               — `ch05-fir-design/5.6-hilbert.html`
+- [~] 5.6.1 Hilbert Transform Theory                       — `ch05-fir-design/5.6.1-hilbert-theory.html`
+- [~] 5.6.1.1 Hilbert Transform (definition)               — `ch05-fir-design/5.6.1.1-hilbert-def.html`
+- [~] 5.6.2 Preparing the Desired Impulse Response         — `ch05-fir-design/5.6.2-desired-ir.html`
+- [~] 5.6.2.1 Matlab, Continued                            — `ch05-fir-design/5.6.2.1-matlab-cont.html`
+- [~] 5.6.2.2 Kaiser Window (in Hilbert design)            — `ch05-fir-design/5.6.2.2-kaiser-in-hilbert.html`
+- [~] 5.6.2.3 Hilbert Transformer by Window Method         — `ch05-fir-design/5.6.2.3-hilbert-window.html`
+- [~] 5.6.3 More General FIR Filter Design                 — `ch05-fir-design/5.6.3-general-fir.html`
+- [~] 5.6.4 Comparison to Optimal Chebyshev FIR            — `ch05-fir-design/5.6.4-vs-optimal.html`
+- [~] 5.6.5 Conclusions (Hilbert)                          — `ch05-fir-design/5.6.5-hilbert-conclusion.html`
+- [~] 5.7   Generalized Window Method                      — `ch05-fir-design/5.7-generalized-window.html`
+- [~] 5.8   Minimum-Phase Filter Design                    — `ch05-fir-design/5.8-min-phase.html`
+- [~] 5.9   Minimum-Phase and Causal Cepstra               — `ch05-fir-design/5.9-min-phase-cepstra.html`
+- [~] 5.10  Optimal FIR Digital Filter Design              — `ch05-fir-design/5.10-optimal-fir.html`
+- [~] 5.10.1 Lp Norms                                      — `ch05-fir-design/5.10.1-lp-norms.html`
+- [~] 5.10.1.1 Special Cases (Lp)                          — `ch05-fir-design/5.10.1.1-lp-special.html`
+- [~] 5.10.1.2 Filter Design using Lp Norms                — `ch05-fir-design/5.10.1.2-lp-design.html`
+- [~] 5.10.2 Optimal Chebyshev FIR Filters                 — `ch05-fir-design/5.10.2-optimal-cheby.html`
+- [~] 5.10.3 Least-Squares Linear-Phase FIR Design         — `ch05-fir-design/5.10.3-ls-linphase.html`
+- [~] 5.10.3.1 Geometric Interp. of Least Squares          — `ch05-fir-design/5.10.3.1-ls-geom.html`
+- [~] 5.10.3.2 Matlab Support for LS FIR                   — `ch05-fir-design/5.10.3.2-ls-matlab.html`
+- [~] 5.10.4 Chebyshev FIR Design via LP                   — `ch05-fir-design/5.10.4-cheby-lp.html`
+- [~] 5.10.5 More General Real FIR Filters                 — `ch05-fir-design/5.10.5-general-real.html`
+- [~] 5.10.6 Nonlinear-Phase FIR Filter Design             — `ch05-fir-design/5.10.6-nonlin-phase.html`
+- [~] 5.10.6.1 Problem Formulation                         — `ch05-fir-design/5.10.6.1-nlp-problem.html`
+- [~] 5.10.7 Matlab for General FIR Filter Design          — `ch05-fir-design/5.10.7-matlab-general.html`
+- [~] 5.10.8 Second-Order Cone Problems                    — `ch05-fir-design/5.10.8-socp.html`
+- [~] 5.10.8.1 Resources                                   — `ch05-fir-design/5.10.8.1-socp-resources.html`
+- [~] 5.10.9 Nonlinear Optimization in Matlab              — `ch05-fir-design/5.10.9-nonlin-opt.html`
 
 ## World 6 · Spectrum Analysis of Sinusoids  (ch06-sinusoids/)
 
@@ -676,4 +676,4 @@ data-en-def …>` for hover tooltips.
 4. Every page gets a prev / next pager linking to its neighbors in the above order.
 5. No copyrighted prose from Smith's book. All explanations must be original.
 
-Current completed count: **108** / ≈ 530. Latest batch: full World 4 (64 window pages).
+Current completed count: **149** / ≈ 530. Latest batch: full World 5 (41 FIR-design pages).

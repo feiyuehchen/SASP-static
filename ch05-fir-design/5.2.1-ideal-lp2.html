@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.2.1 Ideal LP Revisited · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-2-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-2-1 · Ideal Lowpass, Revisited</span>
+    <span lang="zh">關卡 5-2-1 · 再看理想低通</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Ideal_Lowpass_Filter_Revisited.html" target="_blank">SASP §5.2.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="DEGENERATE SPEC">
+    <p lang="en">Take the specification with $\omega_p=\omega_s=\omega_c$ and $\delta_p=\delta_s=0$. The transition band has zero width and no ripple is allowed. That is the ideal lowpass — now we can see why no finite-length filter can meet it: an infinite sinc would be needed.</p>
+    <p lang="zh">把規格特殊化成 $\omega_p=\omega_s=\omega_c$ 且 $\delta_p=\delta_s=0$：過渡帶寬度為 0、不容許任何漣波。這正是理想低通 — 所以任何有限長濾波器達不到它：會要用無限長的 sinc。</p>
+  </div>
+
+  <p lang="en">
+    Design methods trade among $\omega_p,\omega_s,\delta_p,\delta_s,N$
+    (filter length). The design problem is: given any four, minimise the
+    fifth.
+  </p>
+  <p lang="zh">設計法的取捨就在 $\omega_p,\omega_s,\delta_p,\delta_s,N$（濾波器長度）之間。典型問題：給定四個量，最小化第五個。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.2-lp-specs.html">◀ 5.2</a>
+    <a class="warp-pipe">5-2-1</a>
+    <a class="nes-btn nes-btn--primary" href="5.3-ls.html">NEXT ▶ 5.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

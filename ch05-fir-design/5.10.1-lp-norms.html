@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.1 Lp Norms · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-1 · Lp Norms</span>
+    <span lang="zh">關卡 5-10-1 · Lp 範數</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Lp_norms.html" target="_blank">SASP §5.10.1 ↗</a></small>
+  </h1>
+
+  <div class="formula">
+    <span class="label">Lp NORM OF FREQUENCY-DOMAIN ERROR</span>
+    <div>$$\|E\|_p\;=\;\left[\int_{-\pi}^{\pi}\bigl|H_d(\omega)-H(\omega)\bigr|^{p}\,d\omega\right]^{1/p}$$</div>
+  </div>
+
+  <p lang="en">Designing $h[n]$ to minimise $\|E\|_p$ yields different optimal filters:</p>
+  <p lang="zh">最小化 $\|E\|_p$ 的 $h[n]$ 會是不同的最優濾波器：</p>
+
+  <ul>
+    <li lang="en">$p=2$: least-squares (§5.3).</li>
+    <li lang="zh">$p=2$：最小平方（§5.3）。</li>
+    <li lang="en">$p=\infty$: Chebyshev / minimax (equiripple).</li>
+    <li lang="zh">$p=\infty$：Chebyshev / minimax（等漣波）。</li>
+    <li lang="en">Intermediate $p$: blends of the two.</li>
+    <li lang="zh">中間 $p$：兩者的折衷。</li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10-optimal-fir.html">◀ 5.10</a>
+    <a class="warp-pipe">5-10-1</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.1.1-lp-special.html">NEXT ▶ 5.10.1.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

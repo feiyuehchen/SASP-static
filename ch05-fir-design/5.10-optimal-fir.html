@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10 Optimal FIR Design · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10 · Optimal FIR Design</span>
+    <span lang="zh">關卡 5-10 · 最優 FIR 設計</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Optimal_FIR_Digital_Filter.html" target="_blank">SASP §5.10 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="THE REST OF THIS WORLD">
+    <p lang="en">We now leave the windowed-sinc shortcuts behind and solve the design problem as a numerical optimisation. The objective is an $L^p$ norm of the error; different $p$ gives different optimal filters.</p>
+    <p lang="zh">接下來丟開視窗法捷徑，把設計問題當成數值最佳化。目標函數是誤差的 $L^p$ 範數；不同 $p$ 給出不同最優濾波器。</p>
+  </div>
+
+  <ul class="toc-list">
+    <li><a href="5.10.1-lp-norms.html"><span><span class="num">5.10.1</span><span lang="en">Lp Norms</span><span lang="zh">Lp 範數</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.2-optimal-cheby.html"><span><span class="num">5.10.2</span><span lang="en">Optimal Chebyshev FIR</span><span lang="zh">最優 Chebyshev FIR</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.3-ls-linphase.html"><span><span class="num">5.10.3</span><span lang="en">LS Linear-Phase FIR</span><span lang="zh">最小平方線性相位</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.4-cheby-lp.html"><span><span class="num">5.10.4</span><span lang="en">Chebyshev via LP</span><span lang="zh">用 LP 算 Chebyshev</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.5-general-real.html"><span><span class="num">5.10.5</span><span lang="en">More General Real FIR</span><span lang="zh">更一般化的實 FIR</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.6-nonlin-phase.html"><span><span class="num">5.10.6</span><span lang="en">Non-Linear Phase</span><span lang="zh">非線性相位</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.7-matlab-general.html"><span><span class="num">5.10.7</span><span lang="en">Matlab for General FIR</span><span lang="zh">一般 FIR 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.8-socp.html"><span><span class="num">5.10.8</span><span lang="en">SOCP</span><span lang="zh">二次錐問題</span></span><span class="dim">▶</span></a></li>
+    <li><a href="5.10.9-nonlin-opt.html"><span><span class="num">5.10.9</span><span lang="en">Nonlinear Opt</span><span lang="zh">非線性最佳化</span></span><span class="dim">▶</span></a></li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.9-min-phase-cepstra.html">◀ 5.9</a>
+    <a class="warp-pipe">5-10</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.1-lp-norms.html">NEXT ▶ 5.10.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

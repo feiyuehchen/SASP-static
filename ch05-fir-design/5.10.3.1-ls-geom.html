@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.3.1 Geometric LS · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-3-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-3-1 · Geometric Interpretation of Least Squares</span>
+    <span lang="zh">關卡 5-10-3-1 · 最小平方的幾何解釋</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Geometric_Interpretation_Least_Squares.html" target="_blank">SASP §5.10.3.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="ORTHOGONAL PROJECTION">
+    <p lang="en">The $L^2$-optimal filter is the orthogonal projection of the ideal response onto the space of length-$N$ linear-phase FIR filters. Just like fitting a line in regression.</p>
+    <p lang="zh">$L^2$ 最優濾波器 = 把理想響應正交投影到長度 $N$ 的線性相位 FIR 空間上。就像回歸裡擬合直線。</p>
+  </div>
+
+  <p lang="en">In this view the "basis vectors" are $\cos(k\omega)$ and the "inner product" is the weighted integral over $\Omega$. Filters beyond the space cannot be reached; projection is the closest you can get.</p>
+  <p lang="zh">這個觀點下，基底為 $\cos(k\omega)$，內積是 $\Omega$ 上的加權積分。空間之外的濾波器搆不到，投影給出最接近的那一個。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10.3-ls-linphase.html">◀ 5.10.3</a>
+    <a class="warp-pipe">5-10-3-1</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.3.2-ls-matlab.html">NEXT ▶ 5.10.3.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

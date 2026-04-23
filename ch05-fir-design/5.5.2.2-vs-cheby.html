@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.5.2.2 Window vs Chebyshev BP · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-5-2-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-5-2-2 · Window Method vs Optimal Chebyshev</span>
+    <span lang="zh">關卡 5-5-2-2 · 視窗法對比最優 Chebyshev</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Comparison_Optimal_Chebyshev_FIR.html" target="_blank">SASP §5.5.2.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="HOW CLOSE TO OPTIMAL?">
+    <p lang="en">Kaiser-windowed FIR is typically within 2–3 dB of the optimal Chebyshev design for the same filter length. Given the implementation simplicity, it is usually the right first choice.</p>
+    <p lang="zh">同長度下，Kaiser 視窗法的結果通常在最優 Chebyshev 2–3 dB 以內。實作簡單，通常是第一選擇。</p>
+  </div>
+
+  <p lang="en">
+    You would upgrade to the Parks-McClellan / Remez minimax design
+    (§5.10.2) when every last dB of stopband rejection matters or when
+    you need a truly equi-ripple passband response.
+  </p>
+  <p lang="zh">真的在意最後幾 dB 的停帶衰減、或需要完全等漣波的通帶時，才升級到 Parks-McClellan / Remez minimax（§5.10.2）。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.5.2.1-kaiserord.html">◀ 5.5.2.1</a>
+    <a class="warp-pipe">5-5-2-2</a>
+    <a class="nes-btn nes-btn--primary" href="5.6-hilbert.html">NEXT ▶ 5.6</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

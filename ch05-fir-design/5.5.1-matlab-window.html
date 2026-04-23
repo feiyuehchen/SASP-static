@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.5.1 Matlab Window Support · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-5-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-5-1 · Matlab Support for the Window Method</span>
+    <span lang="zh">關卡 5-5-1 · 視窗法的 Matlab</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Support_Window_Method.html" target="_blank">SASP §5.5.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--purple" data-label="CODE">
+    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
+% Matlab: fir1 does the whole job
+h = fir1(N-1, wc/pi, hann(N));         % lowpass
+h = fir1(N-1, [wp1 wp2]/pi*2, 'bandpass', blackman(N));
+
+% Python / scipy
+from scipy.signal import firwin
+h = firwin(N, wc/pi, window='hann')
+    </pre>
+  </div>
+
+  <p lang="en"><code>fir1</code> picks the window for you if you don't specify one. You can also pass your own custom window from World 4.</p>
+  <p lang="zh"><code>fir1</code> 若不指定視窗會自己選一個。也可以把第 4 世界的自訂視窗丟給它。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.5-window-method.html">◀ 5.5</a>
+    <a class="warp-pipe">5-5-1</a>
+    <a class="nes-btn nes-btn--primary" href="5.5.2-bp-example.html">NEXT ▶ 5.5.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

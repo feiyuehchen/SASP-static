@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.8.1 SOCP Resources · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-8-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-8-1 · SOCP Resources</span>
+    <span lang="zh">關卡 5-10-8-1 · SOCP 工具與參考</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Resources.html" target="_blank">SASP §5.10.8.1 ↗</a></small>
+  </h1>
+
+  <ul>
+    <li lang="en">CVXPY / CVX / YALMIP — modelling front-ends that translate human-readable problems into solver inputs.</li>
+    <li lang="zh">CVXPY / CVX / YALMIP — 把人類可讀的最佳化問題翻譯成求解器輸入的前端。</li>
+    <li lang="en">ECOS, MOSEK, Gurobi, SCS — SOCP-capable solvers, several open-source.</li>
+    <li lang="zh">ECOS、MOSEK、Gurobi、SCS — SOCP 求解器，其中若干為開源。</li>
+    <li lang="en">Boyd &amp; Vandenberghe, "Convex Optimization" — free textbook, covers the theory.</li>
+    <li lang="zh">Boyd 與 Vandenberghe《Convex Optimization》— 免費教科書，涵蓋理論。</li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10.8-socp.html">◀ 5.10.8</a>
+    <a class="warp-pipe">5-10-8-1</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.9-nonlin-opt.html">NEXT ▶ 5.10.9</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

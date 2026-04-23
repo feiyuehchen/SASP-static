@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.9 Nonlinear Opt · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-9</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-9 · Nonlinear Optimisation in Matlab</span>
+    <span lang="zh">關卡 5-10-9 · Matlab 非線性最佳化</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Nonlinear_Optimization_Matlab.html" target="_blank">SASP §5.10.9 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="WHEN CONVEX IS NOT ENOUGH">
+    <p lang="en">Some design goals — IIR filters, allpass sections, target magnitude AND group delay simultaneously — are not convex. Fall back to generic nonlinear optimisation: <code>fminunc</code>, <code>fmincon</code>, <code>fminsearch</code> in Matlab; <code>scipy.optimize</code> in Python.</p>
+    <p lang="zh">某些設計目標不是凸的 — 例如 IIR、全通段、同時要求振幅與群延遲。改用一般非線性最佳化：Matlab 的 <code>fminunc</code>、<code>fmincon</code>、<code>fminsearch</code>；Python 的 <code>scipy.optimize</code>。</p>
+  </div>
+
+  <p lang="en">
+    Trade-offs: solutions are only locally optimal; restart from several
+    random seeds and keep the best. Gradient information (when available)
+    speeds convergence dramatically.
+  </p>
+  <p lang="zh">取捨：解只是局部最優；從多個隨機起點試、留最好的。能提供梯度的話收斂會快很多。</p>
+
+  <div class="nes-box nes-box--green" data-label="NEXT WORLD">
+    <p lang="en">World 6: back to frequency domain — analysing sinusoids, their windowed spectra, and how to estimate their parameters.</p>
+    <p lang="zh">第 6 世界：回頻域 — 分析正弦波、它們加窗後的頻譜，以及如何估計其參數。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10.8.1-socp-resources.html">◀ 5.10.8.1</a>
+    <a class="warp-pipe">5-10-9</a>
+    <a class="nes-btn nes-btn--primary" href="../ch06-sinusoids/index.html">WORLD 6 ▶</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

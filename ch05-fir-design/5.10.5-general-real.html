@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.5 More General Real FIR · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-5</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-5 · More General Real FIR</span>
+    <span lang="zh">關卡 5-10-5 · 更一般化的實 FIR</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/More_General_Real_FIR.html" target="_blank">SASP §5.10.5 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="DROP LINEAR PHASE">
+    <p lang="en">Everything so far assumed a symmetric (linear-phase) FIR. If we drop that, the design space doubles but so does the flexibility — you can now shape magnitude and phase independently.</p>
+    <p lang="zh">前面都假設對稱（線性相位）FIR。拿掉這限制後設計空間翻倍，但靈活性也翻倍 — 可以獨立塑造振幅與相位。</p>
+  </div>
+
+  <p lang="en">
+    Complex filters (asymmetric real $h[n]$) still have real coefficients
+    but their frequency response is complex with non-linear phase. Design
+    via SOCP (§5.10.8) or non-linear optimisation (§5.10.9).
+  </p>
+  <p lang="zh">複濾波器（非對稱實 $h[n]$）係數仍為實，頻率響應卻是非線性相位的複數。用 SOCP（§5.10.8）或非線性最佳化（§5.10.9）設計。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10.4-cheby-lp.html">◀ 5.10.4</a>
+    <a class="warp-pipe">5-10-5</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.6-nonlin-phase.html">NEXT ▶ 5.10.6</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

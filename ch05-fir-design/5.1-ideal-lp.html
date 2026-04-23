@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.1 Ideal Lowpass · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-1 · The Ideal Lowpass Filter</span>
+    <span lang="zh">關卡 5-1 · 理想低通濾波器</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Ideal_Lowpass_Filter.html" target="_blank">SASP §5.1 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THE TARGET">
+        <p lang="en">Pass everything below $\omega_c$, block everything above. On paper it is a rectangle in frequency. In time it is a sinc — which extends to infinity.</p>
+        <p lang="zh">$\omega_c$ 以下全通、以上全擋。紙上是頻域的矩形，時域對應就是一條往兩邊無限延伸的 sinc。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">IDEAL H(ω), h[n]</span>
+        <div>$$H_d(\omega)=\begin{cases}1,& |\omega|<\omega_c\\ 0,& \omega_c<|\omega|\le\pi\end{cases}\quad\Longleftrightarrow\quad h_d[n]=\frac{\omega_c}{\pi}\,\mathrm{sinc}\!\left(\frac{\omega_c n}{\pi}\right)$$</div>
+      </div>
+
+      <p lang="en">Since $h_d[n]$ has infinite support and is non-causal, no finite-length real filter can realise it. Every FIR design method in this chapter is a trade-off for approximating it.</p>
+      <p lang="zh">因為 $h_d[n]$ 無限長且非因果，任何有限長實濾波器都做不到。本章每個 FIR 設計方法都是在做某種取捨的近似。</p>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <canvas id="tCanvas" style="height:120px;"></canvas>
+        <canvas id="fCanvas" style="height:140px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>ωc / π</label>
+          <input type="range" id="cSlider" min="0.1" max="0.9" step="0.05" value="0.3"/>
+          <span class="val" id="cVal">0.30</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Truncate $h_d[n]$ to $|n|\le L$ and you get an FIR of length $N=2L+1$. What artifact appears near the cutoff?</p>
+        <p lang="zh"><b>問：</b>把 $h_d[n]$ 截斷到 $|n|\le L$，得到長度 $N=2L+1$ 的 FIR。截止頻率附近會出現什麼現象？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Gibbs ripples — fixed ~9% overshoot.</button>
+          <button data-correct="1" lang="zh">Gibbs 漣波 — 約 9% 固定過衝。</button>
+          <button data-correct="0" lang="en">Aliasing.</button>
+          <button data-correct="0" lang="zh">混疊。</button>
+          <button data-correct="0" lang="en">Nothing — truncation is lossless.</button>
+          <button data-correct="0" lang="zh">無 — 截斷不損失資訊。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="index.html">◀ W5</a>
+    <a class="warp-pipe">5-1</a>
+    <a class="nes-btn nes-btn--primary" href="5.2-lp-specs.html">NEXT ▶ 5.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { c: 0.3 };
+  function redraw() {
+    const N = 41, mid = 20;
+    const h = new Float32Array(N);
+    const wc = state.c * Math.PI;
+    for (let n = 0; n < N; n++) {
+      const k = n - mid;
+      h[n] = (k === 0 ? wc/Math.PI : Math.sin(wc*k)/(Math.PI*k));
+    }
+    Viz.stem($('tCanvas'), h, { xLabel:'n', yLabel:'h[n]', title:'TRUNCATED SINC (N=41)' });
+    const K = 400, om = DSP.linspace(0, Math.PI, K);
+    const { re, im } = DSP.dtft(h, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), mag, { xValues: Array.from(om), xMin:0, xMax:Math.PI, yMin:0, yMax:1.2, xLabel:'ω', yLabel:'|H(ω)|', title:'FREQUENCY RESPONSE (Gibbs!)', xTicks:[{v:0,label:'0'},{v:Math.PI/2,label:'π/2'},{v:Math.PI,label:'π'}] });
+  }
+  $('cSlider').addEventListener('input', () => { state.c = parseFloat($('cSlider').value); $('cVal').textContent = state.c.toFixed(2); redraw(); });
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) { fb.innerHTML = '<span lang="en">🪙 +1 coin! Gibbs is the price of rectangular truncation in frequency.</span><span lang="zh">🪙 金幣 +1！矩形截斷的代價就是 Gibbs 過衝。</span>'; const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n; AudioKit.coin(); }
+    else { fb.innerHTML = '<span lang="en">✗ Truncation in time = rectangular window in freq.</span><span lang="zh">✗ 時域截斷 = 頻域乘矩形視窗。</span>'; }
+    I18N.apply(I18N.get());
+  }));
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

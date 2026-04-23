@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.8 Minimum-Phase Design · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-8</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-8 · Minimum-Phase Filter Design</span>
+    <span lang="zh">關卡 5-8 · 最小相位濾波器設計</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Minimum_Phase_Filter_Design.html" target="_blank">SASP §5.8 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="WHY MIN-PHASE?">
+    <p lang="en">A linear-phase FIR delays every frequency by the same amount — always $(N-1)/2$ samples. That is great for most things but wastes latency. A minimum-phase FIR with the same magnitude response has much smaller group delay near DC.</p>
+    <p lang="zh">線性相位 FIR 每個頻率延遲固定 $(N-1)/2$ 樣本。大多數情況很好，但浪費延遲。同振幅響應的最小相位 FIR 在 DC 附近群延遲小得多。</p>
+  </div>
+
+  <h2 lang="en">The recipe</h2>
+  <h2 lang="zh">作法</h2>
+
+  <ol>
+    <li lang="en">Design a linear-phase FIR $h_{lin}[n]$ for the desired magnitude.</li>
+    <li lang="zh">先對目標振幅設計線性相位 FIR $h_{lin}[n]$。</li>
+    <li lang="en">Compute the cepstrum of $|H_{lin}(\omega)|^2$.</li>
+    <li lang="zh">計算 $|H_{lin}(\omega)|^2$ 的倒頻譜。</li>
+    <li lang="en">Zero out the negative-time part (causal cepstrum).</li>
+    <li lang="zh">把負時間部分歸零（因果倒頻譜）。</li>
+    <li lang="en">Exponentiate back → $h_{min}[n]$.</li>
+    <li lang="zh">指數還原 → $h_{min}[n]$。</li>
+  </ol>
+
+  <p lang="en">Result: same $|H(\omega)|$ as the linear-phase design, but all zeros of the transfer function are inside the unit circle, giving minimum possible group delay.</p>
+  <p lang="zh">結果：$|H(\omega)|$ 與線性相位版本相同，但轉移函數所有零點都在單位圓內，群延遲為可能最小。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.7-generalized-window.html">◀ 5.7</a>
+    <a class="warp-pipe">5-8</a>
+    <a class="nes-btn nes-btn--primary" href="5.9-min-phase-cepstra.html">NEXT ▶ 5.9</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

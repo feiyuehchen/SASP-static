@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.1.2 Lp Design · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-1-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-1-2 · Filter Design using Lp Norms</span>
+    <span lang="zh">關卡 5-10-1-2 · 用 Lp 範數設計濾波器</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Filter_Design_using_Lp.html" target="_blank">SASP §5.10.1.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="IRLS">
+    <p lang="en">Iteratively Reweighted Least Squares (IRLS) solves the $L^p$ problem by repeated $L^2$ solves with adjusted weights. Converges to the $L^p$ minimum for $1\le p\le\infty$.</p>
+    <p lang="zh">IRLS（迭代加權最小平方）把 $L^p$ 問題變成多次加權 $L^2$ 解。對 $1\le p\le\infty$ 可收斂到 $L^p$ 最優。</p>
+  </div>
+
+  <p lang="en">
+    Each iteration updates the weights by the previous error magnitude
+    to the power $p-2$, then resolves the weighted normal equations.
+    Simple, robust, and flexible when you want a custom $p$.
+  </p>
+  <p lang="zh">
+    每次迭代以前次誤差的 $p-2$ 次方作為新權重，重解加權 normal equation。
+    實作簡單、穩健、想要自訂 $p$ 時很靈活。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10.1.1-lp-special.html">◀ 5.10.1.1</a>
+    <a class="warp-pipe">5-10-1-2</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.2-optimal-cheby.html">NEXT ▶ 5.10.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

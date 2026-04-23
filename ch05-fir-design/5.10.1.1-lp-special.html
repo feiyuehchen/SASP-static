@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.1.1 Lp Special Cases · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-1-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-1-1 · Special Cases</span>
+    <span lang="zh">關卡 5-10-1-1 · 特殊情形</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Special_Cases.html" target="_blank">SASP §5.10.1.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="FAMILIAR FACES">
+    <p lang="en">Some $p$ values give designs you already know by name.</p>
+    <p lang="zh">某些 $p$ 值會還原你已經認識的設計。</p>
+  </div>
+
+  <ul>
+    <li lang="en">$p=1$: minimises <em>total</em> absolute error — robust to outlier targets.</li>
+    <li lang="zh">$p=1$：最小化<em>總</em>絕對誤差 — 對異常目標穩健。</li>
+    <li lang="en">$p=2$: orthogonal projection onto the FIR subspace — the normal equations.</li>
+    <li lang="zh">$p=2$：在 FIR 子空間上的正交投影 — 對應 normal equation。</li>
+    <li lang="en">$p=\infty$: equiripple; worst-case error minimised.</li>
+    <li lang="zh">$p=\infty$：等漣波；最壞誤差最小。</li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10.1-lp-norms.html">◀ 5.10.1</a>
+    <a class="warp-pipe">5-10-1-1</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.1.2-lp-design.html">NEXT ▶ 5.10.1.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

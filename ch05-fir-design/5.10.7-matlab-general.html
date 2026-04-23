@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.10.7 Matlab for General FIR · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-10-7</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-10-7 · Matlab for General FIR</span>
+    <span lang="zh">關卡 5-10-7 · 一般 FIR 的 Matlab</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_General_FIR_Filter.html" target="_blank">SASP §5.10.7 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--purple" data-label="CODE">
+    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
+% Matlab: cfirpm for complex / non-linear-phase FIR
+h = cfirpm(N-1, bands, @lowpass_fresp);
+
+% Or use CVX for an explicit SOCP:
+cvx_begin
+  variable h(N) complex
+  minimize(max(abs(H_grid * h - Hd_grid)))
+cvx_end
+    </pre>
+  </div>
+
+  <p lang="en">CVX makes the SOCP readable. <code>cfirpm</code> is specialised and fast for common band specifications.</p>
+  <p lang="zh">CVX 讓 SOCP 可讀；<code>cfirpm</code> 對常見頻帶規格快。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.10.6.1-nlp-problem.html">◀ 5.10.6.1</a>
+    <a class="warp-pipe">5-10-7</a>
+    <a class="nes-btn nes-btn--primary" href="5.10.8-socp.html">NEXT ▶ 5.10.8</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

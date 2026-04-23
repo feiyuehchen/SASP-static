@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.4 Frequency-Sampling · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-4 · Frequency-Sampling Method</span>
+    <span lang="zh">關卡 5-4 · 頻率取樣法</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Frequency_Sampling_Method_FIR.html" target="_blank">SASP §5.4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="ONE-LINE DESIGN">
+    <p lang="en">Sample the target $H_d(\omega)$ at $N$ equally-spaced points and take the inverse DFT. The resulting FIR <em>exactly</em> matches the target at those frequencies — but ripples between them.</p>
+    <p lang="zh">在 $N$ 個均勻頻率點上取樣目標 $H_d(\omega)$，反 DFT 得到 FIR 係數。這條濾波器在那些頻率上<em>精確</em>等於目標，但在中間會振盪。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">FREQUENCY SAMPLING</span>
+    <div>$$h[n]=\frac{1}{N}\sum_{k=0}^{N-1}H_d\!\left(\frac{2\pi k}{N}\right)e^{j 2\pi k n/N}$$</div>
+  </div>
+
+  <p lang="en">Handy when the desired response is naturally specified on a frequency grid (e.g. graphic-EQ band gains). Not great for sharp transitions because it pins the response only at bin centres.</p>
+  <p lang="zh">當目標響應本來就定義在頻率格點上時很好用（例如圖形等化器的頻帶增益）。對銳利過渡帶不理想，因為只在 bin 中心上被釘死。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.3.1-ls-examples.html">◀ 5.3.1</a>
+    <a class="warp-pipe">5-4</a>
+    <a class="nes-btn nes-btn--primary" href="5.5-window-method.html">NEXT ▶ 5.5</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5.5 Window Method · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W5</a></span>
+    <span>STAGE <b>5-5</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 5-5 · Window Method for FIR Design</span>
+    <span lang="zh">關卡 5-5 · FIR 設計的視窗法</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Window_Method_FIR_Filter.html" target="_blank">SASP §5.5 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--purple" data-label="RECIPE">
+    <p lang="en">Step 1: compute $h_d[n]$ (the ideal infinite impulse response). Step 2: multiply by a taper window from World 4. Done.</p>
+    <p lang="zh">步驟 1：算理想（無限長）脈衝響應 $h_d[n]$。步驟 2：乘上第 4 世界裡的收尾視窗。結束。</p>
+  </div>
+
+  <div class="formula">
+    <div>$$h[n]=w[n]\cdot h_d[n]$$</div>
+  </div>
+
+  <p lang="en">
+    The convolution theorem tells us this smooths the ideal spectrum by
+    the window's spectrum. Choose the window to trade main-lobe
+    (transition-band) width for side-lobe depth (stopband attenuation):
+  </p>
+  <p lang="zh">
+    卷積定理告訴我們：時域相乘 = 頻域卷積。視窗的頻譜決定過渡帶與停帶衰減的取捨：
+  </p>
+
+  <ul>
+    <li lang="en">Hann: ~44 dB attenuation, moderate transition.</li>
+    <li lang="zh">Hann：約 44 dB 衰減、中等過渡。</li>
+    <li lang="en">Hamming: ~53 dB, similar transition.</li>
+    <li lang="zh">Hamming：約 53 dB、過渡相近。</li>
+    <li lang="en">Blackman: ~75 dB, ~2× wider transition.</li>
+    <li lang="zh">Blackman：約 75 dB、過渡寬約 2 倍。</li>
+    <li lang="en">Kaiser $\beta$: tunable for any target attenuation.</li>
+    <li lang="zh">Kaiser $\beta$：可調以達任意目標衰減。</li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="5.4-freq-samp.html">◀ 5.4</a>
+    <a class="warp-pipe">5-5</a>
+    <a class="nes-btn nes-btn--primary" href="5.5.1-matlab-window.html">NEXT ▶ 5.5.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>
