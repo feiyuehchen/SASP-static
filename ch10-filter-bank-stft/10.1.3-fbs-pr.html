@@ -1,13 +1,264 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.1.3 FBS Perfect Reconstruction · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-1-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-1-3 · FBS and Perfect Reconstruction</span><span lang="zh">關卡 10-1-3 · FBS 與完美重建</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/FBS_Perfect_Reconstruction.html" target="_blank">SASP §10.1.3 ↗</a></small></h1>
-  <div class="nes-box" data-label="DFT-FB SUMS TO DELTA">
-    <p lang="en">Sum the outputs of all $N$ bandpass filters of a DFT filter bank at hop $R=1$ — you get the original signal back exactly. That is FBS perfect reconstruction.</p>
-    <p lang="zh">把 DFT 濾波器組的 $N$ 個帶通輸出（$R=1$）全部相加，就得到原訊號。這就是 FBS 完美重建。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.1.3 FBS and Perfect Reconstruction · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-1-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.1.2-fb-view.html">◀ 10.1.2</a><a class="warp-pipe">10-1-3</a><a class="nes-btn nes-btn--primary" href="10.2-stft-fb.html">NEXT ▶ 10.2</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-1-3 · FBS Perfect Reconstruction</span>
+    <span lang="zh">關卡 10-1-3 · FBS 完美重建</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/FBS_Perfect_Reconstruction.html" target="_blank">SASP §10.1.3 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">Derive <em>filter-bank summation</em> (FBS): the inverse of the filter-bank view is simply "add all channels together". Show the exact condition under which this gives perfect reconstruction, and contrast it with OLA's COLA condition.</p>
+        <p lang="zh">推導「濾波器組相加」(FBS)：FB 觀點的逆變換就是「把所有通道相加」。我們要導出它完美重建的精確條件，並與 OLA 的 COLA 條件對比。</p>
+      </div>
+
+      <h2 lang="en">Sum the channels, hop $R=1$</h2>
+      <h2 lang="zh">加總所有通道，跳距 $R=1$</h2>
+
+      <p lang="en">Stay at hop $R=1$ so there is no downsampling — every sample of every channel is kept. Multiply each channel by $e^{j 2\pi k n/N}$ (undo the demodulation) and sum over $k$:</p>
+      <p lang="zh">先取跳距 $R=1$（不做降取樣，所有樣本都留著）。把每個通道乘回 $e^{j 2\pi k n/N}$（抵銷分析端的解調變）再對 $k$ 求和：</p>
+
+      <div class="formula">
+        <span class="label">FBS FORMULA</span>
+        <div>$$\hat x[n]\;=\;\frac{1}{N\,w[0]}\sum_{k=0}^{N-1} X_n[k]\,e^{j 2\pi k n / N}$$</div>
+      </div>
+
+      <p lang="en">Plug the analysis formula in and separate sums:</p>
+      <p lang="zh">把分析公式代入並分開求和：</p>
+
+      <div class="formula">
+        <div>$$\sum_{k=0}^{N-1} X_n[k]\,e^{j 2\pi k n / N}\;=\;\sum_{\ell} x[\ell]\,w[\ell-n]\underbrace{\sum_{k=0}^{N-1} e^{j 2\pi k (n-\ell)/N}}_{=\;N\,\delta[n-\ell\bmod N]}$$</div>
+      </div>
+
+      <p lang="en">The inner DFT sum is $N$ when $n-\ell$ is a multiple of $N$ and zero otherwise. If $w$ has length $\le N$, only $\ell=n$ survives, giving:</p>
+      <p lang="zh">內層 DFT 和只有在 $n-\ell$ 是 $N$ 的倍數時為 $N$、其他為 0。若 $w$ 的長度 $\le N$，則只有 $\ell=n$ 存活，得：</p>
+
+      <div class="formula">
+        <div>$$\sum_{k=0}^{N-1} X_n[k]\,e^{j 2\pi k n / N}\;=\;N\,x[n]\,w[0]$$</div>
+      </div>
+
+      <p lang="en">Dividing by $N\,w[0]$ returns $x[n]$ exactly. That's FBS perfect reconstruction.</p>
+      <p lang="zh">除以 $N\,w[0]$ 即得 $x[n]$。這就是 FBS 完美重建。</p>
+
+      <h2 lang="en">When does it fail?</h2>
+      <h2 lang="zh">何時會失效？</h2>
+
+      <p lang="en">Two requirements:</p>
+      <p lang="zh">兩個要求：</p>
+
+      <div class="formula" style="font-family:inherit;">
+        <span class="label">FBS PR REQUIREMENTS</span>
+        <div style="font-size:14px; line-height:1.8; text-align:left;">
+          <span lang="en">
+            <b>(1)</b> Hop $R=1$, or more generally $R$ such that no aliasing contaminates the downsampled channels.<br>
+            <b>(2)</b> Window length $\le N$ (no time-aliasing when summing the DFT basis).
+          </span>
+          <span lang="zh">
+            <b>(1)</b> 跳距 $R=1$，或更一般地 $R$ 使得降取樣後通道不被混疊污染。<br>
+            <b>(2)</b> 視窗長度 $\le N$（加總 DFT 基底時無時間混疊）。
+          </span>
+        </div>
+      </div>
+
+      <p lang="en">When (2) is relaxed to window length $M > N$ (Portnoff windows, §10.7), time-aliased copies of the window overlap and PR still holds if the window's subsampled DTFT satisfies the
+        <span class="term"
+          data-en="Nyquist(N) condition"
+          data-en-def="Window transform satisfies W(2π k/N)=0 for k≠0 (mod N), or equivalently the window's N-sample aliasing collapses to a single non-zero impulse."
+          data-zh-def="視窗變換滿足 W(2π k/N)=0，k≠0 (mod N)；等價於視窗在時間軸以 N 取樣混疊後只剩單一非零脈衝。">Nyquist(N) condition</span>.
+        This is the FB dual of OLA's COLA.</p>
+      <p lang="zh">若放寬 (2) 讓視窗長度 $M > N$（Portnoff 視窗，§10.7），視窗的時間混疊拷貝會重疊，但只要視窗的子取樣 DTFT 滿足
+        <span class="term"
+          data-en="Nyquist(N) condition"
+          data-en-def="Window transform satisfies W(2π k/N)=0 for k≠0 (mod N), or equivalently the window's N-sample aliasing collapses to a single non-zero impulse."
+          data-zh-def="視窗變換滿足 W(2π k/N)=0，k≠0 (mod N)；等價於視窗在時間軸以 N 取樣混疊後只剩單一非零脈衝。">Nyquist(N) 條件</span>
+        仍然完美重建。這就是 OLA 的 COLA 在 FB 側的對偶。</p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>COLA ↔ Nyquist(N).</b> COLA says "window sums to a constant in time"; Nyquist(N) says "window transform vanishes at all non-zero multiples of $2\pi/N$ in frequency". These two statements are Poisson-summation images of each other. Any window that reconstructs via OLA also reconstructs via FBS — just with different arithmetic.</p>
+        <p lang="zh"><b>COLA ↔ Nyquist(N)。</b>COLA 說「視窗在時間軸相加為定值」；Nyquist(N) 說「視窗變換在所有非零的 $2\pi/N$ 倍頻率處為零」。兩者互為 Poisson 求和的兩面。任何能 OLA 還原的視窗也一定能 FBS 還原 — 只是算術不同。</p>
+      </div>
+
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · FBS sum vs. input</h3>
+        <h3 lang="zh">實驗 · FBS 加總與原訊號</h3>
+
+        <canvas id="fbsCanvas" style="height:280px;"></canvas>
+
+        <div class="controls">
+          <label>Window</label>
+          <select id="winSel">
+            <option value="rect">Rectangular</option>
+            <option value="hann" selected>Hann</option>
+            <option value="hamming">Hamming</option>
+            <option value="blackman">Blackman</option>
+          </select>
+
+          <label>N</label>
+          <input type="range" id="nSlider" min="16" max="128" step="16" value="32"/>
+          <span class="val" id="nVal">32</span>
+
+          <label>Signal</label>
+          <select id="sigSel">
+            <option value="tone" selected>Sine</option>
+            <option value="impulse">Impulse</option>
+            <option value="noise">White noise</option>
+          </select>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Sky blue: input $x[n]$ (length $4N$). Yellow: the FBS reconstruction
+            $\hat x[n] = \tfrac{1}{N w[0]}\sum_{k=0}^{N-1}X_n[k]e^{j2\pi k n/N}$ at hop $R=1$. With a well-behaved window and window length $\le N$, the two curves sit on top of each other — visible error is always either window-length mismatch or numeric noise.</p>
+          <p lang="zh">天藍：輸入 $x[n]$（長度 $4N$）。黃色：跳距 $R=1$ 下的 FBS 重建
+            $\hat x[n] = \tfrac{1}{N w[0]}\sum_{k=0}^{N-1}X_n[k]e^{j2\pi k n/N}$。只要視窗良好、長度 $\le N$，兩條曲線會完全貼合 — 看得到的誤差不是視窗長度不對就是浮點雜訊。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.1.2-fb-view.html">◀ 10.1.2</a>
+    <a class="warp-pipe">10-1-3</a>
+    <a class="nes-btn nes-btn--primary" href="10.2-stft-fb.html">NEXT ▶ 10.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { win:'hann', N:32, sig:'tone' };
+  const winFn = { rect: DSP.rectWindow, hann: DSP.hannWindow, hamming: DSP.hammingWindow, blackman: DSP.blackmanWindow };
+
+  function redraw(){
+    const { win, N, sig } = state;
+    const L = N * 4;
+    // make signal
+    let x = new Float32Array(L);
+    if (sig === 'tone'){
+      const k0 = 3.7;  // non-integer bin, nicer test
+      for (let n=0;n<L;n++) x[n] = 0.7*Math.cos(2*Math.PI*k0*n/N);
+    } else if (sig === 'impulse'){
+      x[Math.floor(L/2)] = 1;
+    } else {
+      for (let n=0;n<L;n++) x[n] = (Math.random()*2-1)*0.5;
+    }
+
+    const w = winFn[win](N);
+    const w0 = w[0] || 1e-9;
+
+    // FBS reconstruction with R=1, centred frames (symmetric window so w[n-n'] nonzero for n in [n', n'+N))
+    const xhat = new Float32Array(L);
+    for (let np = 0; np < L; np++){
+      // X_{n'}[k]
+      // we accumulate sum_k X[k] e^{j 2π k n' / N} directly, which after simplification
+      // on R=1, window-length = N gives  N * x[n'] w[0]
+      // but to actually show the sum, compute it numerically:
+      // However computing N complex exps × N samples × L positions is O(L N²). For display just do exact x[n'] w[0] N / (N w[0]) = x[n'].
+      // To make it pedagogical, compute one-bin sum carefully.
+      // Use the derived shortcut: hat_x[n'] = x[n'] (under conditions); otherwise the sum.
+      // We'll compute genuinely but with a small N so it's fast.
+      let acc_re = 0, acc_im = 0;
+      // row m at time n': X_{n'}[k] for each k
+      for (let k=0; k<N; k++){
+        let Re=0, Im=0;
+        for (let n=0; n<N; n++){
+          const idx = np + n - Math.floor(N/2);  // centred
+          if (idx < 0 || idx >= L) continue;
+          const amp = x[idx] * w[n];
+          const th = -2*Math.PI*k*idx/N;
+          Re += amp * Math.cos(th);
+          Im += amp * Math.sin(th);
+        }
+        // multiply by e^{j 2π k n' / N}
+        const th2 = 2*Math.PI*k*np/N;
+        const c2 = Math.cos(th2), s2 = Math.sin(th2);
+        acc_re += Re*c2 - Im*s2;
+        acc_im += Re*s2 + Im*c2;
+      }
+      xhat[np] = acc_re / (N * w0);
+    }
+
+    // plot x and xhat overlay
+    const c = $('fbsCanvas');
+    const ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad = { l:32, r:12, t:14, b:28 };
+    const iw = W-pad.l-pad.r, ih = H-pad.t-pad.b;
+    const yAbsMax = Math.max(1, Math.max(...x.map(Math.abs)), Math.max(...xhat.map(Math.abs)));
+    const yTo = v => pad.t + ih * (1 - (v + yAbsMax) / (2*yAbsMax));
+    const xTo = i => pad.l + iw * i / (L-1);
+    ctx.strokeStyle='#262644';
+    for (let g=0; g<=10; g++){ const xx=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(xx,pad.t); ctx.lineTo(xx,H-pad.b); ctx.stroke(); }
+    for (let g=0; g<=6; g++){ const yy=pad.t+ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l,yy); ctx.lineTo(W-pad.r,yy); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, pad.t + ih/2); ctx.lineTo(W-pad.r, pad.t + ih/2); ctx.stroke();
+
+    // input (sky)
+    ctx.strokeStyle='#5aa0ff'; ctx.lineWidth=2;
+    ctx.beginPath(); for (let i=0;i<L;i++){ const xx=xTo(i), yy=yTo(x[i]); if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy); } ctx.stroke();
+    // xhat (yellow)
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1.5; ctx.globalAlpha=0.85;
+    ctx.beginPath(); for (let i=0;i<L;i++){ const xx=xTo(i), yy=yTo(xhat[i]); if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy); } ctx.stroke();
+    ctx.globalAlpha=1;
+
+    // error
+    let err2 = 0;
+    const skip = N; // edge effects
+    for (let i=skip;i<L-skip;i++){ const d = x[i]-xhat[i]; err2 += d*d; }
+    const rmse = Math.sqrt(err2 / Math.max(1, L-2*skip));
+    ctx.fillStyle='#ffd95a'; ctx.font='10px "Press Start 2P", monospace';
+    ctx.fillText('hat_x (FBS)', 10, 14);
+    ctx.fillStyle='#5aa0ff'; ctx.fillText('x (input)', 96, 14);
+    ctx.fillStyle = rmse < 0.01 ? '#78d66a' : rmse < 0.1 ? '#ffd95a' : '#ff5a5a';
+    ctx.fillText('RMSE (interior): '+rmse.toFixed(4), W-pad.r-210, 14);
+  }
+
+  $('winSel').addEventListener('change', e=>{ state.win=e.target.value; redraw(); });
+  $('nSlider').addEventListener('input', e=>{ state.N = parseInt(e.target.value,10); $('nVal').textContent=state.N; redraw(); });
+  $('sigSel').addEventListener('change', e=>{ state.sig=e.target.value; redraw(); });
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+})();
+</script>
 </body></html>

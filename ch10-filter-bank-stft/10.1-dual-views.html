@@ -1,13 +1,158 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.1 Dual Views of the STFT · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-1 · Dual Views of the STFT</span><span lang="zh">關卡 10-1 · STFT 雙重觀點</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Dual_Views_Short_Time.html" target="_blank">SASP §10.1 ↗</a></small></h1>
-  <div class="nes-box" data-label="TWO EQUAL TRUTHS">
-    <p lang="en">OLA view: each frame is a short FFT; stitch them back. FB view: each frequency bin is a bandpass filter. Same numbers, different reading — the choice shapes how you design modifications and reconstruction.</p>
-    <p lang="zh">OLA 觀點：每 frame 是一次短 FFT、拼回去。FB 觀點：每個頻率 bin 是一個帶通濾波器。數字相同、解讀不同 — 選哪個影響你如何設計修改與重建。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.1 Dual Views of the STFT · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="index.html">◀ W10</a><a class="warp-pipe">10-1</a><a class="nes-btn nes-btn--primary" href="10.1.1-ola-view.html">NEXT ▶ 10.1.1</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-1 · Dual Views of the STFT</span>
+    <span lang="zh">關卡 10-1 · STFT 雙重觀點</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Dual_Views_Short_Time.html" target="_blank">SASP §10.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">The STFT is a 2-D array $X_m[k]$ indexed by time-frame $m$ and frequency-bin $k$. This stage shows that you can read that array two equivalent ways — row by row (OLA) or column by column (filter bank) — and that the reading you pick dictates how cheap or expensive each modification is.</p>
+    <p lang="zh">STFT 是一個以時間 frame $m$ 與頻率 bin $k$ 為索引的二維陣列 $X_m[k]$。本關展示兩種等價讀法 — 一列一列讀（OLA）或一行一行讀（濾波器組）— 而你選哪種讀法，直接決定每種修改操作是便宜還是昂貴。</p>
+  </div>
+
+  <h2 lang="en">Two equivalent readings of the same matrix</h2>
+  <h2 lang="zh">同一個矩陣的兩種等價讀法</h2>
+
+  <p lang="en">
+    Write the analysis formula once:
+  </p>
+  <p lang="zh">
+    分析公式只寫一次：
+  </p>
+
+  <div class="formula">
+    <span class="label">STFT (ANALYSIS)</span>
+    <div>$$X_m[k]\;=\;\sum_{n=-\infty}^{\infty} x[n]\;w[n-mR]\;e^{-j 2\pi k n / N}$$</div>
+  </div>
+
+  <p lang="en">
+    where $w[\cdot]$ is the
+    <span class="term"
+      data-en="Analysis window"
+      data-en-def="A finite-support weighting sequence applied to each frame before the FFT. Shapes side-lobes and time-localisation."
+      data-zh-def="在 FFT 前套在每個 frame 上的有限支撐加權序列；決定旁波瓣與時間定位。">analysis window</span>,
+    $R$ is the
+    <span class="term"
+      data-en="Hop size"
+      data-en-def="The number of samples between the starts of consecutive frames; smaller R = more redundancy and better time resolution."
+      data-zh-def="相鄰 frame 起點之間的樣本數；R 越小冗餘越多、時間解析度越好。">hop</span>,
+    and $N$ is the FFT length. Fix $m$ and vary $k$ — you get one frame's spectrum. Fix $k$ and vary $m$ — you get one bin's time history.
+  </p>
+  <p lang="zh">
+    其中 $w[\cdot]$ 是<span class="term"
+      data-en="Analysis window"
+      data-en-def="A finite-support weighting sequence applied to each frame before the FFT. Shapes side-lobes and time-localisation."
+      data-zh-def="在 FFT 前套在每個 frame 上的有限支撐加權序列；決定旁波瓣與時間定位。">分析視窗</span>，
+    $R$ 是<span class="term"
+      data-en="Hop size"
+      data-en-def="The number of samples between the starts of consecutive frames; smaller R = more redundancy and better time resolution."
+      data-zh-def="相鄰 frame 起點之間的樣本數；R 越小冗餘越多、時間解析度越好。">跳距</span>，
+    $N$ 是 FFT 長度。固定 $m$、讓 $k$ 跑 — 拿到某個 frame 的頻譜；固定 $k$、讓 $m$ 跑 — 拿到某個 bin 的時間歷程。
+  </p>
+
+  <div class="nes-box nes-box--yellow" data-label="OLA VIEW (ROW)">
+    <p lang="en"><b>Fix $m$, read across $k$.</b> Row $m$ is a single short-time spectrum — the DFT of the windowed frame $x[n]w[n-mR]$. Reconstruction is "IFFT each row, then overlap-add".</p>
+    <p lang="zh"><b>固定 $m$，沿 $k$ 讀。</b>第 $m$ 列是一個短時頻譜 — 加窗 frame $x[n]w[n-mR]$ 的 DFT。重建方式：「每列 IFFT、再重疊相加」。</p>
+  </div>
+
+  <div class="nes-box nes-box--blue" data-label="FB VIEW (COLUMN)">
+    <p lang="en"><b>Fix $k$, read across $m$.</b> Column $k$ is the output of a bandpass filter centred at $\omega_k=2\pi k/N$, whose impulse response is a modulated copy of the window. Reconstruction is "sum all channels (with optional synthesis filters)".</p>
+    <p lang="zh"><b>固定 $k$，沿 $m$ 讀。</b>第 $k$ 行是一個中心頻率在 $\omega_k=2\pi k/N$ 的帶通濾波器輸出，其脈衝響應為視窗的調變拷貝。重建方式：「所有通道相加（可選配合成濾波器）」。</p>
+  </div>
+
+  <h2 lang="en">Why carry both interpretations?</h2>
+  <h2 lang="zh">為什麼要同時有兩種解讀？</h2>
+
+  <p lang="en">
+    Certain modifications are trivial in one view and awkward in the other:
+  </p>
+  <p lang="zh">
+    某些修改在一種觀點下很自然，在另一種觀點下會很彆扭：
+  </p>
+
+  <div class="formula" style="font-family:inherit;">
+    <span class="label">WHEN TO USE WHICH</span>
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>OLA-natural:</b> frame-based edits (per-frame spectral whitening, noise gates, phase-reset TSM),<br>
+        signal lengths that must change (time-scale modification).<br><br>
+        <b>FB-natural:</b> per-band edits (equalisation, constant-Q reshaping, per-channel AGC),<br>
+        analysis → filtering loops (source separation, gammatone pipelines),<br>
+        and anything where you want to <em>reason</em> about each bin as a bandpass filter.
+      </span>
+      <span lang="zh">
+        <b>OLA 自然：</b>以 frame 為單位的修改（逐 frame 頻譜白化、噪聲閘、相位重置的 TSM）、<br>
+        以及會改變訊號長度的操作（時間伸縮）。<br><br>
+        <b>FB 自然：</b>各頻帶獨立的修改（等化、constant-Q 重塑、逐通道 AGC）、<br>
+        「分析 → 濾波」迴路（聲源分離、gammatone 流水線），<br>
+        以及任何「把每個 bin <em>當成</em>帶通濾波器來推理」的情境。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Same data, different lens.</b> The OLA and FB views compute exactly the same $X_m[k]$ — there is no approximation. Switching lens only changes which conditions for perfect reconstruction are easy to state: OLA demands
+      <span class="term"
+        data-en="COLA (Constant Overlap-Add)"
+        data-en-def="The analysis windows (possibly raised to a power) summed across all frame positions equal a constant. Guarantees lossless OLA reconstruction."
+        data-zh-def="所有 frame 位置的分析視窗（可能乘方後）相加為定值；保證 OLA 重建無損。">COLA</span>
+      on the window; FB demands
+      <span class="term"
+        data-en="Nyquist(N) window"
+        data-en-def="A window whose N-sample sub-sample of its Fourier transform is a Kronecker delta. Guarantees lossless filter-bank summation."
+        data-zh-def="視窗的傅立葉變換在每 N 個點取一次樣後等於 Kronecker delta；保證濾波器組相加重建無損。">Nyquist(N)</span>
+      on the window. They are Poisson-summation duals of each other — we'll prove it in §10.6.</p>
+    <p lang="zh"><b>同一筆資料、兩種濾鏡。</b>OLA 與 FB 兩種觀點算出的 $X_m[k]$ 完全相同 — 沒有任何近似。切換觀點只會改變「完美重建條件」看起來怎麼寫：OLA 要求視窗滿足
+      <span class="term"
+        data-en="COLA (Constant Overlap-Add)"
+        data-en-def="The analysis windows (possibly raised to a power) summed across all frame positions equal a constant. Guarantees lossless OLA reconstruction."
+        data-zh-def="所有 frame 位置的分析視窗（可能乘方後）相加為定值；保證 OLA 重建無損。">COLA</span>；FB 則要求視窗滿足
+      <span class="term"
+        data-en="Nyquist(N) window"
+        data-en-def="A window whose N-sample sub-sample of its Fourier transform is a Kronecker delta. Guarantees lossless filter-bank summation."
+        data-zh-def="視窗的傅立葉變換在每 N 個點取一次樣後等於 Kronecker delta；保證濾波器組相加重建無損。">Nyquist(N)</span>
+      條件。兩者互為 Poisson 求和對偶 — §10.6 會證。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="index.html">◀ W10</a>
+    <a class="warp-pipe">10-1</a>
+    <a class="nes-btn nes-btn--primary" href="10.1.1-ola-view.html">NEXT ▶ 10.1.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

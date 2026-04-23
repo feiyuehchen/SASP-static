@@ -1,13 +1,364 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.1.2 Filter-Bank View · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-1-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-1-2 · Filter-Bank View</span><span lang="zh">關卡 10-1-2 · 濾波器組觀點</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Filter_Bank_Summation_FBS_Interpretation.html" target="_blank">SASP §10.1.2 ↗</a></small></h1>
-  <div class="nes-box" data-label="COLUMN-BY-COLUMN">
-    <p lang="en">Read each column of the STFT matrix (fixed frequency bin vs time) as the output of a bandpass filter. The filter's impulse response is the analysis window modulated to that frequency.</p>
-    <p lang="zh">把 STFT 矩陣每一行（固定 bin 對時間）讀成一個帶通濾波器輸出。濾波器的脈衝響應 = 分析視窗乘上對應頻率的複正弦。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.1.2 Filter-Bank View · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-1-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.1.1-ola-view.html">◀ 10.1.1</a><a class="warp-pipe">10-1-2</a><a class="nes-btn nes-btn--primary" href="10.1.3-fbs-pr.html">NEXT ▶ 10.1.3</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-1-2 · Filter-Bank View of the STFT</span>
+    <span lang="zh">關卡 10-1-2 · STFT 的濾波器組觀點</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Filter_Bank_Summation_FBS_Interpretation.html" target="_blank">SASP §10.1.2 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">Show that column $k$ of the STFT matrix — the time history of bin $k$ — is exactly the output of a bandpass filter $h_k[n]$ applied to the input. We'll derive $h_k$ from the analysis formula, show $H_k(\omega)$ is a frequency-shifted copy of the window's spectrum, and see how the window's main-lobe width becomes the filter's bandwidth.</p>
+        <p lang="zh">證明 STFT 矩陣第 $k$ 行 — 某個 bin 隨時間的變化 — 就是一個帶通濾波器 $h_k[n]$ 套在輸入上的輸出。接下來從分析公式導出 $h_k$、證明 $H_k(\omega)$ 是視窗頻譜的頻率位移版，並看視窗主波瓣寬度如何決定此濾波器的頻寬。</p>
+      </div>
+
+      <h2 lang="en">Starting point — stare at the analysis formula</h2>
+      <h2 lang="zh">起點 — 盯著分析公式</h2>
+
+      <p lang="en">Keep $k$ fixed and let $m$ run. With the hop written as a continuous time index $n' = mR$:</p>
+      <p lang="zh">固定 $k$，讓 $m$ 跑。把跳距寫成連續時間索引 $n' = mR$：</p>
+
+      <div class="formula">
+        <span class="label">COLUMN k (BEFORE HOP-DECIMATION)</span>
+        <div>$$X_{n'}[k]\;=\;\sum_{n} x[n]\,w[n-n']\,e^{-j 2\pi k n / N}$$</div>
+      </div>
+
+      <p lang="en">Pull the exponential out of the sum using the shift $n = (n-n') + n'$:</p>
+      <p lang="zh">用替換 $n = (n-n') + n'$ 把指數拆開：</p>
+
+      <div class="formula">
+        <div>$$X_{n'}[k]\;=\;e^{-j 2\pi k n' / N}\sum_{n} x[n]\,w[n-n']\,e^{-j 2\pi k (n-n') / N}$$</div>
+      </div>
+
+      <p lang="en">The sum has the shape of a convolution. Define the filter:</p>
+      <p lang="zh">求和寫成卷積的樣子。定義濾波器：</p>
+
+      <div class="formula">
+        <span class="label">CHANNEL k IMPULSE RESPONSE</span>
+        <div>$$h_k[n]\;\triangleq\;w[-n]\,e^{j 2\pi k n / N}$$</div>
+      </div>
+
+      <p lang="en">Then column $k$ is literally <em>convolution times a phase factor</em>:</p>
+      <p lang="zh">於是第 $k$ 行就是「卷積 × 相位因子」：</p>
+
+      <div class="formula">
+        <div>$$X_{n'}[k]\;=\;e^{-j 2\pi k n' / N}\,(x * h_k)[n']$$</div>
+      </div>
+
+      <p lang="en">That leading exponential is the only difference between the STFT bin and a straight bandpass output. It's often absorbed into the synthesis (gives zero-phase at $n=0$), or dropped when we only care about $|X_{n'}[k]|^2$ (spectrograms).</p>
+      <p lang="zh">前面那個複指數是 STFT bin 與純帶通輸出之間唯一的差別。通常會被合成端吸收（使 $n=0$ 時相位為零），或在只看 $|X_{n'}[k]|^2$（聲譜圖）時直接忽略。</p>
+
+      <h2 lang="en">What does $H_k(\omega)$ look like?</h2>
+      <h2 lang="zh">$H_k(\omega)$ 長什麼樣？</h2>
+
+      <p lang="en">Take the DTFT of $h_k[n] = w[-n]\,e^{j 2\pi k n / N}$. Time-reversal conjugates the spectrum; modulation shifts it:</p>
+      <p lang="zh">對 $h_k[n] = w[-n]\,e^{j 2\pi k n / N}$ 取 DTFT。時間反轉共軛頻譜、乘複指數平移頻譜：</p>
+
+      <div class="formula">
+        <span class="label">CHANNEL k FREQUENCY RESPONSE</span>
+        <div>$$H_k(\omega)\;=\;W^*\!\left(\omega_k - \omega\right)\;=\;W(\omega - \omega_k)\Big|_{\text{for real }w},\quad \omega_k\triangleq\tfrac{2\pi k}{N}$$</div>
+      </div>
+
+      <p lang="en">So every channel is a shifted copy of the same prototype lowpass $W(\omega)$, just re-centred to $\omega_k$. The STFT is a <em>uniformly modulated filter bank</em>.</p>
+      <p lang="zh">所以每個通道都是同一個低通原型 $W(\omega)$ 的頻率位移版，只差把中心平移到 $\omega_k$。STFT 就是一個「均勻調變濾波器組」。</p>
+
+      <div class="nes-box nes-box--green" data-label="CONSEQUENCE">
+        <p lang="en"><b>Window shape → filter quality.</b>
+          Main-lobe width of $W$ ⇒ channel bandwidth.<br>
+          Side-lobe level of $W$ ⇒ out-of-band rejection between channels.<br>
+          Window length $M$ ⇒ filter length (so longer windows = narrower but slower filters).
+        </p>
+        <p lang="zh"><b>視窗形狀 → 濾波器品質。</b>
+          $W$ 的主波瓣寬 ⇒ 通道頻寬。<br>
+          $W$ 的旁波瓣位階 ⇒ 通道間的外頻率抑制。<br>
+          視窗長度 $M$ ⇒ 濾波器長度（視窗越長 → 越窄但越慢）。
+        </p>
+      </div>
+
+      <h2 lang="en">Hop and downsampling</h2>
+      <h2 lang="zh">跳距與降取樣</h2>
+
+      <p lang="en">The STFT samples column $k$ at times $n'=mR$, i.e. it <em>downsamples</em> the bandpass output by $R$. Each channel has bandwidth $\sim 2\pi/N$ (around a window of length $\sim N$), so <span class="term"
+        data-en="Nyquist rate"
+        data-en-def="The minimum sample rate needed to represent a bandlimited signal without aliasing — twice the highest frequency present."
+        data-zh-def="為無混疊地表示一個頻帶受限訊號所需的最低取樣率 — 最高頻率的兩倍。">Nyquist</span>
+        demands $R\le N$. Oversampled STFTs ($R<N$) are redundant but forgiving; critically-sampled ($R=N$) needs careful window design to avoid aliasing.</p>
+      <p lang="zh">STFT 在時刻 $n'=mR$ 取樣第 $k$ 行的帶通輸出 — 也就是把該輸出以 $R$ <em>降取樣</em>。每通道頻寬約 $2\pi/N$（視窗長度約 $N$），所以
+        <span class="term"
+          data-en="Nyquist rate"
+          data-en-def="The minimum sample rate needed to represent a bandlimited signal without aliasing — twice the highest frequency present."
+          data-zh-def="為無混疊地表示一個頻帶受限訊號所需的最低取樣率 — 最高頻率的兩倍。">Nyquist</span>
+        要求 $R\le N$。過取樣（$R<N$）冗餘但寬容；臨界取樣（$R=N$）則須精心設計視窗以免混疊。</p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>FB view is frequency-first.</b> Each bin is a bandpass-filtered version of the input. This is the right lens for equalisers, modal analysis, source separation, and anything where you want to reason "what happens to this frequency?" locally, without thinking about frames.</p>
+        <p lang="zh"><b>FB 觀點「頻率優先」。</b>每個 bin 就是輸入被帶通濾波後的結果。這是等化器、模態分析、聲源分離，以及任何「就這個頻率想它怎麼變」的情境最自然的觀點 — 完全不必想 frame。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · The window becomes a bandpass filter</h3>
+        <h3 lang="zh">實驗 · 視窗如何變成帶通濾波器</h3>
+
+        <canvas id="winCanvas" style="height:140px;"></canvas>
+        <canvas id="fbCanvas"  style="height:220px; margin-top:8px;"></canvas>
+
+        <div class="controls">
+          <label>Window</label>
+          <select id="winSel">
+            <option value="rect">Rectangular</option>
+            <option value="hann" selected>Hann</option>
+            <option value="hamming">Hamming</option>
+            <option value="blackman">Blackman</option>
+            <option value="kaiser">Kaiser β=8</option>
+          </select>
+
+          <label>N (win len)</label>
+          <input type="range" id="nSlider" min="16" max="128" step="8" value="32"/>
+          <span class="val" id="nVal">32</span>
+
+          <label>bin k</label>
+          <input type="range" id="kSlider" min="0" max="31" step="1" value="4"/>
+          <span class="val" id="kVal">4</span>
+
+          <label>FFT bins to show</label>
+          <input type="range" id="mSlider" min="1" max="16" step="1" value="8"/>
+          <span class="val" id="mVal">8</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: $w[n]$ (the channel's time-domain shape, modulated). Bottom: $|H_k(\omega)|$ in dB on $(-\pi,\pi]$. The highlighted lobe is the requested bin $k$ at centre $\omega_k=2\pi k/N$; the faded lobes are neighbouring channels. Change the window to see main-lobe width (bandwidth) and side-lobe level (inter-channel leakage) move.</p>
+          <p lang="zh">上圖：$w[n]$（通道的時域形狀，已調變）。下圖：$|H_k(\omega)|$ 在 $(-\pi,\pi]$ 的分貝。實心波瓣 = 所選 bin $k$，中心在 $\omega_k=2\pi k/N$；淡色波瓣 = 鄰近通道。換視窗即可看主波瓣寬（頻寬）與旁波瓣位階（通道間洩漏）一起變。</p>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You double the window length $N$ (keep the same window shape). What happens to the bandwidth of each channel $H_k(\omega)$?</p>
+        <p lang="zh"><b>問：</b>把視窗長度 $N$ 變為原來 2 倍（視窗形狀不變），每個通道 $H_k(\omega)$ 的頻寬會怎麼變？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">Doubles.</button>
+          <button data-correct="0" lang="zh">變成 2 倍。</button>
+          <button data-correct="1" lang="en">Halves.</button>
+          <button data-correct="1" lang="zh">變成一半。</button>
+          <button data-correct="0" lang="en">Unchanged.</button>
+          <button data-correct="0" lang="zh">不變。</button>
+          <button data-correct="0" lang="en">Quadruples.</button>
+          <button data-correct="0" lang="zh">變成 4 倍。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.1.1-ola-view.html">◀ 10.1.1</a>
+    <a class="warp-pipe">10-1-2</a>
+    <a class="nes-btn nes-btn--primary" href="10.1.3-fbs-pr.html">NEXT ▶ 10.1.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { win: 'hann', N: 32, k: 4, M: 8 };
+  const winFn = {
+    rect: DSP.rectWindow, hann: DSP.hannWindow, hamming: DSP.hammingWindow,
+    blackman: DSP.blackmanWindow, kaiser: N => DSP.kaiserWindow(N, 8)
+  };
+
+  function redraw(){
+    const { win, N, k, M } = state;
+    const w = winFn[win](N);
+
+    // modulated time-domain channel h_k[n] = w[-n] e^{j 2π k n / N}
+    // we just display magnitude of the modulated window in time
+    const hRe = new Float32Array(N), hIm = new Float32Array(N);
+    for (let n = 0; n < N; n++){
+      // time-reverse index: wReversed[n] = w[N-1-n] (causal shift)
+      const wn = w[N-1-n];
+      const th = 2 * Math.PI * k * n / N;
+      hRe[n] = wn * Math.cos(th);
+      hIm[n] = wn * Math.sin(th);
+    }
+
+    // top canvas: real and imag parts of h_k
+    const c1 = $('winCanvas');
+    const ctx1 = c1.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c1.width = c1.clientWidth*dpr; c1.height = c1.clientHeight*dpr; ctx1.scale(dpr,dpr);
+    const W1 = c1.clientWidth, H1 = c1.clientHeight;
+    ctx1.fillStyle = '#0b0c1a'; ctx1.fillRect(0,0,W1,H1);
+    const pad1 = { l:32, r:12, t:10, b:22 };
+    const iw1 = W1-pad1.l-pad1.r, ih1 = H1-pad1.t-pad1.b;
+    ctx1.strokeStyle = '#262644';
+    for (let g=0; g<=10; g++){ const x=pad1.l+iw1*g/10; ctx1.beginPath(); ctx1.moveTo(x,pad1.t); ctx1.lineTo(x,H1-pad1.b); ctx1.stroke(); }
+    ctx1.strokeStyle = '#e6e6ff';
+    const y0 = pad1.t + ih1/2;
+    ctx1.beginPath(); ctx1.moveTo(pad1.l,y0); ctx1.lineTo(W1-pad1.r, y0); ctx1.stroke();
+    const xToN = i => pad1.l + iw1 * i / (N-1);
+    const yTo = v => y0 - (ih1/2) * v;   // [-1,1]
+    // real = sky
+    ctx1.strokeStyle = '#5aa0ff'; ctx1.lineWidth = 2; ctx1.beginPath();
+    for (let n=0; n<N; n++){ const x=xToN(n), y=yTo(hRe[n]); if(n===0) ctx1.moveTo(x,y); else ctx1.lineTo(x,y); }
+    ctx1.stroke();
+    // imag = pink
+    ctx1.strokeStyle = '#ff6aa0'; ctx1.beginPath();
+    for (let n=0; n<N; n++){ const x=xToN(n), y=yTo(hIm[n]); if(n===0) ctx1.moveTo(x,y); else ctx1.lineTo(x,y); }
+    ctx1.stroke();
+    ctx1.fillStyle='#8f8fa8'; ctx1.font='9px "Press Start 2P", monospace';
+    ctx1.fillText('h_k[n]  (blue=Re, pink=Im)', 8, 18);
+
+    // bottom canvas: |H_k(ω)| for several neighbouring k's, highlight k
+    const c2 = $('fbCanvas');
+    const ctx2 = c2.getContext('2d');
+    c2.width = c2.clientWidth*dpr; c2.height = c2.clientHeight*dpr; ctx2.scale(dpr,dpr);
+    const W2 = c2.clientWidth, H2 = c2.clientHeight;
+    ctx2.fillStyle = '#0b0c1a'; ctx2.fillRect(0,0,W2,H2);
+    const pad2 = { l:44, r:12, t:16, b:28 };
+    const iw2 = W2-pad2.l-pad2.r, ih2 = H2-pad2.t-pad2.b;
+    const K = 512;
+    const omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    // W(ω): DTFT of the window (real, symmetric) — we can just use DSP.dtft on shifted window
+    const w0 = new Float32Array(N);
+    for (let n=0;n<N;n++) w0[n] = w[n];
+    const { re: Wre, im: Wim } = DSP.dtft(w0, omegas);
+    const Wmag = new Float32Array(K);
+    for (let i=0;i<K;i++) Wmag[i] = Math.hypot(Wre[i], Wim[i]);
+
+    const dBfloor = -80;
+    const toDb = v => Math.max(dBfloor, 20 * Math.log10(Math.max(v, 1e-10) / Math.max(...Wmag)));
+    // grid
+    ctx2.strokeStyle = '#262644';
+    for (let g=0; g<=10; g++){ const x=pad2.l+iw2*g/10; ctx2.beginPath(); ctx2.moveTo(x,pad2.t); ctx2.lineTo(x,H2-pad2.b); ctx2.stroke(); }
+    for (let g=0; g<=8; g++){ const y=pad2.t+ih2*g/8; ctx2.beginPath(); ctx2.moveTo(pad2.l,y); ctx2.lineTo(W2-pad2.r,y); ctx2.stroke(); }
+    ctx2.strokeStyle = '#e6e6ff'; ctx2.lineWidth = 2;
+    ctx2.beginPath(); ctx2.moveTo(pad2.l, H2-pad2.b); ctx2.lineTo(W2-pad2.r, H2-pad2.b); ctx2.moveTo(pad2.l, pad2.t); ctx2.lineTo(pad2.l, H2-pad2.b); ctx2.stroke();
+
+    // plot neighbour bands (dim)
+    const xTo = i => pad2.l + iw2 * i / (K-1);
+    const yDb = db => pad2.t + ih2 * (1 - (db - dBfloor) / (0 - dBfloor));
+    const shiftMag = (delta) => {
+      // H_k shift: circular shift Wmag by delta bins (delta in (-N/2, N/2])
+      const out = new Float32Array(K);
+      const shiftK = Math.round(delta / (2*Math.PI/N) * (K/N));
+      // actually: H_k(ω) = W(ω - ω_k). So shift in ω by ω_k (= 2πk/N). omega axis covers 2π over K samples so shift = round(k/N * K).
+      const rowShift = Math.round(delta / (2*Math.PI) * K);
+      for (let i=0;i<K;i++){
+        let src = i - rowShift; src = ((src % K) + K) % K;
+        out[i] = Wmag[src];
+      }
+      return out;
+    };
+    const bandsToShow = [];
+    for (let j = k - M; j <= k + M; j++){
+      const kk = ((j % N) + N) % N;
+      bandsToShow.push(kk);
+    }
+    // dedupe keep order
+    const seen = new Set();
+    const uniq = bandsToShow.filter(v => seen.has(v)? false : (seen.add(v), true));
+
+    // dim
+    ctx2.globalAlpha = 0.35; ctx2.lineWidth = 1;
+    for (const kk of uniq){
+      if (kk === k) continue;
+      const omega_k = 2*Math.PI * kk / N;
+      // use wrap to [-pi,pi]
+      const shift = omega_k > Math.PI ? omega_k - 2*Math.PI : omega_k;
+      const mag = shiftMag(shift);
+      ctx2.strokeStyle = '#5aa0ff';
+      ctx2.beginPath();
+      for (let i=0;i<K;i++){ const x=xTo(i), y=yDb(toDb(mag[i])); if(i===0) ctx2.moveTo(x,y); else ctx2.lineTo(x,y); }
+      ctx2.stroke();
+    }
+    // highlight k
+    ctx2.globalAlpha = 1; ctx2.lineWidth = 2.5; ctx2.strokeStyle = '#ffd95a';
+    const omega_k = 2*Math.PI * k / N;
+    const shift = omega_k > Math.PI ? omega_k - 2*Math.PI : omega_k;
+    const magK = shiftMag(shift);
+    ctx2.beginPath();
+    for (let i=0;i<K;i++){ const x=xTo(i), y=yDb(toDb(magK[i])); if(i===0) ctx2.moveTo(x,y); else ctx2.lineTo(x,y); }
+    ctx2.stroke();
+
+    // x-ticks at -π, -π/2, 0, π/2, π
+    ctx2.fillStyle='#8f8fa8'; ctx2.font='9px "Press Start 2P", monospace';
+    const xTicks = [['-π',-Math.PI],['-π/2',-Math.PI/2],['0',0],['π/2',Math.PI/2],['π',Math.PI]];
+    for (const [lbl,v] of xTicks){
+      const i = (v + Math.PI)/(2*Math.PI) * (K-1);
+      const x = xTo(i);
+      ctx2.beginPath(); ctx2.strokeStyle='#6a6a88'; ctx2.moveTo(x, H2-pad2.b); ctx2.lineTo(x, H2-pad2.b+4); ctx2.stroke();
+      ctx2.fillStyle='#8f8fa8'; ctx2.fillText(lbl, x-10, H2-pad2.b+16);
+    }
+    // y-ticks
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = yDb(db);
+      ctx2.beginPath(); ctx2.strokeStyle='#6a6a88'; ctx2.moveTo(pad2.l-4, y); ctx2.lineTo(pad2.l, y); ctx2.stroke();
+      ctx2.fillStyle='#8f8fa8'; ctx2.fillText(db+'dB', 4, y+3);
+    }
+    ctx2.fillStyle='#ffd95a'; ctx2.fillText('|H_k(ω)|  bin '+k, 10, 12);
+  }
+
+  $('winSel').addEventListener('change', e=>{ state.win=e.target.value; redraw(); });
+  $('nSlider').addEventListener('input', e=>{ state.N = parseInt(e.target.value,10); $('nVal').textContent=state.N; $('kSlider').max = state.N-1; if(state.k >= state.N) state.k = state.N-1; $('kVal').textContent=state.k; $('kSlider').value=state.k; redraw(); });
+  $('kSlider').addEventListener('input', e=>{ state.k=parseInt(e.target.value,10); $('kVal').textContent=state.k; redraw(); });
+  $('mSlider').addEventListener('input', e=>{ state.M=parseInt(e.target.value,10); $('mVal').textContent=state.M; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const correct = btn.getAttribute('data-correct')==='1';
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      const fb = $('qFeedback');
+      if (correct){
+        fb.innerHTML='<span lang="en">🪙 +1 coin! Longer window = narrower main lobe in $W(\\omega)$, so each $H_k$ has half the bandwidth — classic time–frequency uncertainty at work.</span><span lang="zh">🪙 金幣 +1！視窗變長 → $W(\\omega)$ 主波瓣變窄，所以每個 $H_k$ 的頻寬減半 — 時頻測不準直接體現。</span>';
+        const c=(parseInt(localStorage.getItem('dsp.coins')||'0',10)+1);
+        localStorage.setItem('dsp.coins',c); $('coins').textContent=c;
+      } else {
+        fb.innerHTML='<span lang="en">✗ Re-try — the channel is a modulated copy of the window spectrum, so window length = filter length.</span><span lang="zh">✗ 再試 — 通道是視窗頻譜的調變版，視窗長度等於濾波器長度。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+})();
+</script>
 </body></html>

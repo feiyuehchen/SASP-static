@@ -1,13 +1,278 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.1.1 OLA View · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-1-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-1-1 · Overlap-Add View</span><span lang="zh">關卡 10-1-1 · 重疊相加觀點</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Overlap_Add_OLA_Interpretation_STFT.html" target="_blank">SASP §10.1.1 ↗</a></small></h1>
-  <div class="nes-box" data-label="ROW-BY-ROW">
-    <p lang="en">Read each row of the STFT matrix (one time frame, all frequencies) as a short FFT. Perfect reconstruction = overlap-add of inverse FFTs — as long as the window tapers satisfy COLA.</p>
-    <p lang="zh">把 STFT 矩陣每一列（一個時間 frame、所有頻率）讀成一次短 FFT。完美重建 = 反 FFT 後重疊相加，只要視窗滿足 COLA。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.1.1 Overlap-Add View · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-1-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.1-dual-views.html">◀ 10.1</a><a class="warp-pipe">10-1-1</a><a class="nes-btn nes-btn--primary" href="10.1.2-fb-view.html">NEXT ▶ 10.1.2</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-1-1 · Overlap-Add View of the STFT</span>
+    <span lang="zh">關卡 10-1-1 · STFT 的重疊相加觀點</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Overlap_Add_OLA_Interpretation_STFT.html" target="_blank">SASP §10.1.1 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">Show that the STFT can be built and inverted frame-by-frame: window a chunk, FFT it, store it, move the window by $R$ samples, repeat. Reconstruction = IFFT each column of the matrix and overlap-add back. Perfect reconstruction condition = windows must add up to a constant (COLA).</p>
+        <p lang="zh">證明 STFT 可以「一 frame 一 frame」正反向計算：加窗一段、FFT、存起來、把視窗前進 $R$ 個樣本、重複。逆向 = 把矩陣每一列 IFFT 再重疊相加回來。完美重建條件 = 視窗加總成定值（COLA）。</p>
+      </div>
+
+      <h2 lang="en">Analysis — windowed frame DFT</h2>
+      <h2 lang="zh">分析 — 加窗 frame 的 DFT</h2>
+
+      <p lang="en">Let $x_m[n] \triangleq x[n]\,w[n-mR]$ be the <em>windowed frame</em> starting at sample $mR$. Then:</p>
+      <p lang="zh">令 $x_m[n] \triangleq x[n]\,w[n-mR]$ 為第 $m$ 個「加窗 frame」（起始於樣本 $mR$），則：</p>
+
+      <div class="formula">
+        <span class="label">ROW m OF THE STFT</span>
+        <div>$$X_m[k]\;=\;\sum_{n=-\infty}^{\infty} x_m[n]\,e^{-j 2\pi k n / N}\;=\;\mathrm{DFT}_N\{x_m[n]\}[k]$$</div>
+      </div>
+
+      <p lang="en">Each row of the STFT matrix is literally the FFT of one windowed frame. If $w$ has length $N$ you can do an $N$-point FFT; if you want extra
+        <span class="term"
+          data-en="Zero-padding"
+          data-en-def="Appending zeros to a frame before the FFT, interpolating the spectrum between DFT bins for clearer peak localisation."
+          data-zh-def="在 FFT 前把 frame 後面補零，讓 DFT bin 之間的頻譜更精細，峰值定位更清楚。">zero-padding</span>
+        for smoother spectra use $L\ge N$ and treat the windowed frame as length-$L$.</p>
+      <p lang="zh">STFT 矩陣的每一列就是一個加窗 frame 的 FFT。若 $w$ 長度為 $N$，直接做 $N$ 點 FFT；若想用<span class="term"
+          data-en="Zero-padding"
+          data-en-def="Appending zeros to a frame before the FFT, interpolating the spectrum between DFT bins for clearer peak localisation."
+          data-zh-def="在 FFT 前把 frame 後面補零，讓 DFT bin 之間的頻譜更精細，峰值定位更清楚。">零填充</span>讓頻譜更平滑，就取 $L\ge N$，把 frame 當成長度 $L$ 即可。</p>
+
+      <h2 lang="en">Synthesis — IFFT + overlap-add</h2>
+      <h2 lang="zh">合成 — IFFT + 重疊相加</h2>
+
+      <p lang="en">Take the IFFT of row $m$ to recover the windowed frame $\tilde x_m[n]$. If we never modified $X_m[k]$, then $\tilde x_m[n]=x_m[n]=x[n]w[n-mR]$. Summing over all frame positions:</p>
+      <p lang="zh">對第 $m$ 列做 IFFT 拿回加窗 frame $\tilde x_m[n]$。若沒動 $X_m[k]$ 則 $\tilde x_m[n]=x_m[n]=x[n]w[n-mR]$。對所有 frame 位置求和：</p>
+
+      <div class="formula">
+        <span class="label">OLA RECONSTRUCTION</span>
+        <div>$$\hat x[n]\;=\;\sum_{m} \tilde x_m[n]\;=\;x[n]\underbrace{\sum_{m} w[n-mR]}_{\text{window sum}}$$</div>
+      </div>
+
+      <p lang="en">The bracketed sum slides the window along the time axis with step $R$ and adds up everything at the current sample $n$. For lossless reconstruction we need this sum to be <em>independent of $n$</em>:</p>
+      <p lang="zh">括弧裡的和把視窗以步距 $R$ 沿時間軸滑動、在當前樣本 $n$ 處全部加起來。為了無損重建，此和必須<em>與 $n$ 無關</em>：</p>
+
+      <div class="formula">
+        <span class="label">COLA CONDITION</span>
+        <div>$$\sum_{m} w[n-mR]\;=\;\text{const}\quad\text{for all }n$$</div>
+      </div>
+
+      <p lang="en">When COLA holds, $\hat x[n]=\text{const}\cdot x[n]$ and we recover $x$ (up to a known scale). Many classic windows satisfy COLA at standard hops — rectangular at $R=N$, Hann at $R=N/2$, Hamming at $R\approx 0.23 N$, Blackman at $R=N/3$.</p>
+      <p lang="zh">COLA 成立時 $\hat x[n]=\text{const}\cdot x[n]$，$x$ 被原貌還原（只差已知倍數）。經典視窗在標準跳距下都滿足 COLA — rect 在 $R=N$、Hann 在 $R=N/2$、Hamming 在 $R\approx 0.23 N$、Blackman 在 $R=N/3$。</p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>OLA view is time-first.</b> It treats the STFT matrix as a stack of short spectra. This is the view nearly every audio effects plugin ships with — it plays nicely with real-time streaming, block-based modifications, and time-axis rescaling.</p>
+        <p lang="zh"><b>OLA 觀點「時間優先」。</b>把 STFT 矩陣看成一疊短時頻譜。這正是幾乎所有音訊 plugin 的預設觀點 — 跟即時串流、分塊修改、時間軸重採樣都完全相容。</p>
+      </div>
+
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Watch OLA reconstruct the window sum</h3>
+        <h3 lang="zh">實驗 · 看 OLA 如何把視窗疊回定值</h3>
+
+        <canvas id="winSumCanvas" style="height:260px;"></canvas>
+
+        <div class="controls">
+          <label>Window</label>
+          <select id="winSel">
+            <option value="rect">Rectangular</option>
+            <option value="hann" selected>Hann</option>
+            <option value="hamming">Hamming</option>
+            <option value="blackman">Blackman</option>
+          </select>
+
+          <label>N</label>
+          <input type="range" id="nSlider" min="16" max="128" step="8" value="64"/>
+          <span class="val" id="nVal">64</span>
+
+          <label>R (hop)</label>
+          <input type="range" id="rSlider" min="4" max="128" step="4" value="32"/>
+          <span class="val" id="rVal">32</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Faint pink curves: individual $w[n-mR]$ at many frame positions. Thick yellow line: their sum. A flat yellow line means COLA holds at this ($w$, $R$). Try Hann at $R=N/2$ vs $R=N$ — one is flat, the other ripples.</p>
+          <p lang="zh">淡粉曲線：多個 frame 位置的 $w[n-mR]$。粗黃線：它們的加總。黃線平 → COLA 成立；有波紋 → COLA 不成立。試試 Hann 的 $R=N/2$ 與 $R=N$，一個平、一個會抖。</p>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> With a Hann window of length $N$, which single hop $R$ is the canonical COLA choice?</p>
+        <p lang="zh"><b>問：</b>長度 $N$ 的 Hann 視窗，標準的 COLA 跳距是下列哪個？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">$R = N$</button>
+          <button data-correct="0" lang="zh">$R = N$</button>
+          <button data-correct="1" lang="en">$R = N/2$</button>
+          <button data-correct="1" lang="zh">$R = N/2$</button>
+          <button data-correct="0" lang="en">$R = N/3$</button>
+          <button data-correct="0" lang="zh">$R = N/3$</button>
+          <button data-correct="0" lang="en">$R = 1$ only</button>
+          <button data-correct="0" lang="zh">只有 $R = 1$</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.1-dual-views.html">◀ 10.1</a>
+    <a class="warp-pipe">10-1-1</a>
+    <a class="nes-btn nes-btn--primary" href="10.1.2-fb-view.html">NEXT ▶ 10.1.2</a>
+  </div>
+
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { win:'hann', N:64, R:32 };
+  const winFn = { rect: DSP.rectWindow, hann: DSP.hannWindow, hamming: DSP.hammingWindow, blackman: DSP.blackmanWindow };
+
+  function redraw(){
+    const { win, N, R } = state;
+    const w = winFn[win](N);
+    const L = N * 5;
+    // paint each frame position
+    const frames = [];
+    for (let m = -1; m * R < L + N; m++){
+      const shift = m * R;
+      const row = new Float32Array(L);
+      for (let i = 0; i < N; i++){
+        const n = i + shift;
+        if (n >= 0 && n < L) row[n] = w[i];
+      }
+      frames.push(row);
+    }
+    const sum = new Float32Array(L);
+    for (const f of frames) for (let n = 0; n < L; n++) sum[n] += f[n];
+
+    // find a middle region where we have full coverage
+    const start = N, end = L - N;
+    const showLen = end - start;
+    const sumSlice = sum.slice(start, end);
+    const framesSlice = frames.map(f => f.slice(start, end));
+
+    const c = $('winSumCanvas');
+    const ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    c.width = c.clientWidth * dpr; c.height = c.clientHeight * dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle = '#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad = { l:36, r:12, t:10, b:28 };
+    const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
+    const yMax = Math.max(1.2, Math.max(...sumSlice)*1.1);
+    const yTo = v => pad.t + ih * (1 - v / yMax);
+    const xTo = i => pad.l + iw * i / (showLen - 1);
+
+    // grid
+    ctx.strokeStyle = '#262644'; ctx.lineWidth = 1;
+    for (let g = 0; g <= 10; g++){
+      const x = pad.l + iw * g / 10;
+      ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, H - pad.b); ctx.stroke();
+    }
+    for (let g = 0; g <= 5; g++){
+      const y = pad.t + ih * g / 5;
+      ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    }
+    // axis
+    ctx.strokeStyle = '#e6e6ff'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H - pad.b); ctx.lineTo(W - pad.r, H - pad.b); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, H - pad.b); ctx.stroke();
+
+    // frames (pink)
+    ctx.strokeStyle = '#ff6aa0'; ctx.globalAlpha = 0.45; ctx.lineWidth = 1;
+    for (const f of framesSlice){
+      ctx.beginPath();
+      let started = false;
+      for (let i = 0; i < showLen; i++){
+        const v = f[i]; if (v === 0 && !started) continue;
+        const x = xTo(i), y = yTo(v);
+        if (!started){ ctx.moveTo(x,y); started = true; } else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    // sum (yellow, thick)
+    ctx.strokeStyle = '#ffd95a'; ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (let i = 0; i < showLen; i++){
+      const x = xTo(i), y = yTo(sumSlice[i]);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // labels
+    ctx.fillStyle = '#8f8fa8'; ctx.font = '10px "Press Start 2P", monospace';
+    ctx.fillText('n', W - 16, H - 8);
+    ctx.fillText('Σ w[n-mR]', 10, 18);
+
+    // cola-ness indicator
+    const mean = sumSlice.reduce((a,b)=>a+b,0)/showLen;
+    const ripple = Math.max(...sumSlice) - Math.min(...sumSlice);
+    const rel = ripple / Math.max(mean, 1e-9);
+    const verdict = rel < 0.02 ? 'COLA OK' : rel < 0.15 ? 'NEAR COLA' : 'NOT COLA';
+    const color = rel < 0.02 ? '#78d66a' : rel < 0.15 ? '#ffd95a' : '#ff5a5a';
+    ctx.fillStyle = color; ctx.font = '11px "Press Start 2P", monospace';
+    ctx.fillText(verdict, W - pad.r - 96, pad.t + 14);
+  }
+
+  $('winSel').addEventListener('change', e => { state.win = e.target.value; redraw(); });
+  $('nSlider').addEventListener('input', e => { state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+  $('rSlider').addEventListener('input', e => { state.R = parseInt(e.target.value,10); $('rVal').textContent = state.R; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const correct = btn.getAttribute('data-correct') === '1';
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      const fb = $('qFeedback');
+      if (correct) {
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! A Hann window at $R=N/2$ overlaps by 50%, and adjacent frames' squared-cosine tapers add to a constant — the classic COLA hop.</span><span lang="zh">🪙 金幣 +1！Hann 視窗在 $R=N/2$ 有 50% 重疊，相鄰 frame 的 $\\cos^2$ 形狀相加正好為定值 — 這就是經典的 COLA 跳距。</span>';
+        const coins = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
+        localStorage.setItem('dsp.coins', coins); $('coins').textContent = coins;
+      } else {
+        fb.innerHTML = '<span lang="en">✗ Try the canvas — move the R slider to that value and watch the window-sum line.</span><span lang="zh">✗ 試試互動圖 — 把 R 拉到那個值，看視窗和那條線有沒有平。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+})();
+</script>
 </body></html>
