@@ -479,33 +479,33 @@ data-en-def …>` for hover tooltips.
 
 ## Appendix World A · Notation  (appendix/notation/)
 
-- [ ] A.1   Frequency and Time                             — `appendix/notation/A.1-freq-time.html`
-- [ ] A.2   Signal Notation                                — `appendix/notation/A.2-sig-notation.html`
-- [ ] A.3   Fourier Transform Notation                     — `appendix/notation/A.3-ft-notation.html`
+- [~] A.1   Frequency and Time                             — `appendix/notation/A.1-freq-time.html`
+- [~] A.2   Signal Notation                                — `appendix/notation/A.2-sig-notation.html`
+- [~] A.3   Fourier Transform Notation                     — `appendix/notation/A.3-ft-notation.html`
 
 ## Appendix World B · Continuous Fourier Theorems  (appendix/ct-fourier/)
 
-- [ ] B.1   Radians versus Cycles                          — `appendix/ct-fourier/B.1-radians-cycles.html`
-- [ ] B.2   Differentiation Theorem                        — `appendix/ct-fourier/B.2-diff.html`
-- [ ] B.3   Differentiation Theorem Dual                   — `appendix/ct-fourier/B.3-diff-dual.html`
-- [ ] B.4   Scaling Theorem                                — `appendix/ct-fourier/B.4-scaling.html`
-- [ ] B.5   Shift Theorem                                  — `appendix/ct-fourier/B.5-shift.html`
-- [ ] B.6   Modulation Theorem (Shift Dual)                — `appendix/ct-fourier/B.6-modulation.html`
-- [ ] B.7   Convolution Theorem                            — `appendix/ct-fourier/B.7-conv.html`
-- [ ] B.8   Flip Theorems                                  — `appendix/ct-fourier/B.8-flip.html`
-- [ ] B.9   Power Theorem                                  — `appendix/ct-fourier/B.9-power.html`
-- [ ] B.10  The Continuous-Time Impulse                    — `appendix/ct-fourier/B.10-ct-impulse.html`
-- [ ] B.11  Gaussian Pulse                                 — `appendix/ct-fourier/B.11-gauss.html`
-- [ ] B.12  Rectangular Pulse                              — `appendix/ct-fourier/B.12-rect.html`
-- [ ] B.13  Sinc Impulse                                   — `appendix/ct-fourier/B.13-sinc.html`
-- [ ] B.14  Impulse Trains                                 — `appendix/ct-fourier/B.14-impulse-train.html`
-- [ ] B.15  Poisson Summation Formula                      — `appendix/ct-fourier/B.15-psf.html`
-- [ ] B.16  Sampling Theory                                — `appendix/ct-fourier/B.16-sampling.html`
-- [ ] B.17  The Uncertainty Principle                      — `appendix/ct-fourier/B.17-uncertainty.html`
-- [ ] B.17.1 Second Moments                                — `appendix/ct-fourier/B.17.1-2nd-moments.html`
-- [ ] B.17.2 Time-Limited Signals                          — `appendix/ct-fourier/B.17.2-time-limited.html`
-- [ ] B.17.3 Time-Bandwidth Products Unbounded Above       — `appendix/ct-fourier/B.17.3-tb-unbounded.html`
-- [ ] B.18  Relation of Smoothness to Roll-Off Rate        — `appendix/ct-fourier/B.18-smooth-rolloff.html`
+- [~] B.1   Radians versus Cycles                          — `appendix/ct-fourier/B.1-radians-cycles.html`
+- [~] B.2   Differentiation Theorem                        — `appendix/ct-fourier/B.2-diff.html`
+- [~] B.3   Differentiation Theorem Dual                   — `appendix/ct-fourier/B.3-diff-dual.html`
+- [~] B.4   Scaling Theorem                                — `appendix/ct-fourier/B.4-scaling.html`
+- [~] B.5   Shift Theorem                                  — `appendix/ct-fourier/B.5-shift.html`
+- [~] B.6   Modulation Theorem (Shift Dual)                — `appendix/ct-fourier/B.6-modulation.html`
+- [~] B.7   Convolution Theorem                            — `appendix/ct-fourier/B.7-conv.html`
+- [~] B.8   Flip Theorems                                  — `appendix/ct-fourier/B.8-flip.html`
+- [~] B.9   Power Theorem                                  — `appendix/ct-fourier/B.9-power.html`
+- [~] B.10  The Continuous-Time Impulse                    — `appendix/ct-fourier/B.10-ct-impulse.html`
+- [~] B.11  Gaussian Pulse                                 — `appendix/ct-fourier/B.11-gauss.html`
+- [~] B.12  Rectangular Pulse                              — `appendix/ct-fourier/B.12-rect.html`
+- [~] B.13  Sinc Impulse                                   — `appendix/ct-fourier/B.13-sinc.html`
+- [~] B.14  Impulse Trains                                 — `appendix/ct-fourier/B.14-impulse-train.html`
+- [~] B.15  Poisson Summation Formula                      — `appendix/ct-fourier/B.15-psf.html`
+- [~] B.16  Sampling Theory                                — `appendix/ct-fourier/B.16-sampling.html`
+- [~] B.17  The Uncertainty Principle                      — `appendix/ct-fourier/B.17-uncertainty.html`
+- [~] B.17.1 Second Moments                                — `appendix/ct-fourier/B.17.1-2nd-moments.html`
+- [~] B.17.2 Time-Limited Signals                          — `appendix/ct-fourier/B.17.2-time-limited.html`
+- [~] B.17.3 Time-Bandwidth Products Unbounded Above       — `appendix/ct-fourier/B.17.3-tb-unbounded.html`
+- [~] B.18  Relation of Smoothness to Roll-Off Rate        — `appendix/ct-fourier/B.18-smooth-rolloff.html`
 
 ## Appendix World C · Statistical Signal Processing  (appendix/stats/)
 
