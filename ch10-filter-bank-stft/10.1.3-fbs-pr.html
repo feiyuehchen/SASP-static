@@ -40,7 +40,7 @@
     <section>
       <div class="nes-box" data-label="GOAL">
         <p lang="en">Derive <em>filter-bank summation</em> (FBS): the inverse of the filter-bank view is simply "add all channels together". Show the exact condition under which this gives perfect reconstruction, and contrast it with OLA's COLA condition.</p>
-        <p lang="zh">推導「濾波器組相加」(FBS)：FB 觀點的逆變換就是「把所有通道相加」。我們要導出它完美重建的精確條件，並與 OLA 的 COLA 條件對比。</p>
+        <p lang="zh">推導「濾波器組相加」(FBS)：FB 詮釋的逆轉換就是「把所有通道相加」。我們要導出它完美重建的精確條件，並與 OLA 的 COLA 條件對比。</p>
       </div>
 
       <h2 lang="en">Sum the channels, hop $R=1$</h2>
@@ -95,18 +95,18 @@
         <span class="term"
           data-en="Nyquist(N) condition"
           data-en-def="Window transform satisfies W(2π k/N)=0 for k≠0 (mod N), or equivalently the window's N-sample aliasing collapses to a single non-zero impulse."
-          data-zh-def="視窗變換滿足 W(2π k/N)=0，k≠0 (mod N)；等價於視窗在時間軸以 N 取樣混疊後只剩單一非零脈衝。">Nyquist(N) condition</span>.
+          data-zh-def="視窗轉換滿足 W(2π k/N)=0，k≠0 (mod N)；等價於視窗在時間軸以 N 取樣混疊後只剩單一非零脈衝。">Nyquist(N) condition</span>.
         This is the FB dual of OLA's COLA.</p>
       <p lang="zh">若放寬 (2) 讓視窗長度 $M > N$（Portnoff 視窗，§10.7），視窗的時間混疊拷貝會重疊，但只要視窗的子取樣 DTFT 滿足
         <span class="term"
           data-en="Nyquist(N) condition"
           data-en-def="Window transform satisfies W(2π k/N)=0 for k≠0 (mod N), or equivalently the window's N-sample aliasing collapses to a single non-zero impulse."
-          data-zh-def="視窗變換滿足 W(2π k/N)=0，k≠0 (mod N)；等價於視窗在時間軸以 N 取樣混疊後只剩單一非零脈衝。">Nyquist(N) 條件</span>
+          data-zh-def="視窗轉換滿足 W(2π k/N)=0，k≠0 (mod N)；等價於視窗在時間軸以 N 取樣混疊後只剩單一非零脈衝。">Nyquist(N) 條件</span>
         仍然完美重建。這就是 OLA 的 COLA 在 FB 側的對偶。</p>
 
       <div class="nes-box nes-box--purple" data-label="KEY IDEA">
         <p lang="en"><b>COLA ↔ Nyquist(N).</b> COLA says "window sums to a constant in time"; Nyquist(N) says "window transform vanishes at all non-zero multiples of $2\pi/N$ in frequency". These two statements are Poisson-summation images of each other. Any window that reconstructs via OLA also reconstructs via FBS — just with different arithmetic.</p>
-        <p lang="zh"><b>COLA ↔ Nyquist(N)。</b>COLA 說「視窗在時間軸相加為定值」；Nyquist(N) 說「視窗變換在所有非零的 $2\pi/N$ 倍頻率處為零」。兩者互為 Poisson 求和的兩面。任何能 OLA 還原的視窗也一定能 FBS 還原 — 只是算術不同。</p>
+        <p lang="zh"><b>COLA ↔ Nyquist(N)。</b>COLA 說「視窗在時間軸相加為定值」；Nyquist(N) 說「視窗轉換在所有非零的 $2\pi/N$ 倍頻率處為零」。兩者互為 Poisson 求和的兩面。任何能 OLA 還原的視窗也一定能 FBS 還原 — 只是算術不同。</p>
       </div>
 
     </section>

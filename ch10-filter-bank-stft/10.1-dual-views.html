@@ -32,7 +32,7 @@
 
   <h1 class="page-title">
     <span lang="en">Stage 10-1 · Dual Views of the STFT</span>
-    <span lang="zh">關卡 10-1 · STFT 雙重觀點</span>
+    <span lang="zh">關卡 10-1 · STFT 雙重詮釋</span>
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Dual_Views_Short_Time.html" target="_blank">SASP §10.1 ↗</a></small>
   </h1>
 
@@ -98,7 +98,7 @@
     Certain modifications are trivial in one view and awkward in the other:
   </p>
   <p lang="zh">
-    某些修改在一種觀點下很自然，在另一種觀點下會很彆扭：
+    某些修改在一種詮釋下很自然，在另一種詮釋下會很彆扭：
   </p>
 
   <div class="formula" style="font-family:inherit;">
@@ -131,9 +131,9 @@
       <span class="term"
         data-en="Nyquist(N) window"
         data-en-def="A window whose N-sample sub-sample of its Fourier transform is a Kronecker delta. Guarantees lossless filter-bank summation."
-        data-zh-def="視窗的傅立葉變換在每 N 個點取一次樣後等於 Kronecker delta；保證濾波器組相加重建無損。">Nyquist(N)</span>
+        data-zh-def="視窗的傅立葉轉換在每 N 個點取一次樣後等於 Kronecker delta；保證濾波器組相加重建無損。">Nyquist(N)</span>
       on the window. They are Poisson-summation duals of each other — we'll prove it in §10.6.</p>
-    <p lang="zh"><b>同一筆資料、兩種濾鏡。</b>OLA 與 FB 兩種觀點算出的 $X_m[k]$ 完全相同 — 沒有任何近似。切換觀點只會改變「完美重建條件」看起來怎麼寫：OLA 要求視窗滿足
+    <p lang="zh"><b>同一筆資料、兩種濾鏡。</b>OLA 與 FB 兩種詮釋算出的 $X_m[k]$ 完全相同 — 沒有任何近似。切換詮釋只會改變「完美重建條件」看起來怎麼寫：OLA 要求視窗滿足
       <span class="term"
         data-en="COLA (Constant Overlap-Add)"
         data-en-def="The analysis windows (possibly raised to a power) summed across all frame positions equal a constant. Guarantees lossless OLA reconstruction."
@@ -141,7 +141,7 @@
       <span class="term"
         data-en="Nyquist(N) window"
         data-en-def="A window whose N-sample sub-sample of its Fourier transform is a Kronecker delta. Guarantees lossless filter-bank summation."
-        data-zh-def="視窗的傅立葉變換在每 N 個點取一次樣後等於 Kronecker delta；保證濾波器組相加重建無損。">Nyquist(N)</span>
+        data-zh-def="視窗的傅立葉轉換在每 N 個點取一次樣後等於 Kronecker delta；保證濾波器組相加重建無損。">Nyquist(N)</span>
       條件。兩者互為 Poisson 求和對偶 — §10.6 會證。</p>
   </div>
 
