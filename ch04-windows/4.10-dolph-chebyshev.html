@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.10 Dolph-Chebyshev Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-10</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-10 · Dolph-Chebyshev Window</span>
+    <span lang="zh">關卡 4-10 · Dolph-Chebyshev 視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Dolph_Chebyshev_Window.html" target="_blank">SASP §4.10 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="EQUAL-RIPPLE SIDE LOBES">
+    <p lang="en">All its side lobes have the <em>exact same</em> height. For any chosen side-lobe level $A$ dB, this window has the narrowest possible main lobe — proven optimal for that criterion.</p>
+    <p lang="zh">所有旁瓣都是<em>同一高度</em>。對任何指定旁瓣高度 $A$ dB，這個視窗擁有最窄的主瓣 — 在此準則下可證明最優。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">SPECTRUM (CLOSED FORM)</span>
+    <div>$$W(\omega)=\frac{\cos\!\bigl[N\cos^{-1}\!\bigl(\beta\cos(\omega/2)\bigr)\bigr]}{\cosh\!\bigl[N\cosh^{-1}(\beta)\bigr]}$$</div>
+  </div>
+
+  <p lang="en">
+    Time-domain $w[n]$ is obtained by inverse FFT of this magnitude
+    spectrum. $\beta$ is related to the side-lobe level $A$ by
+    $\beta=\cosh(\tfrac{1}{N}\cosh^{-1}(10^{A/20}))$.
+  </p>
+  <p lang="zh">
+    時域 $w[n]$ 由上面振幅頻譜反 FFT 得到。
+    $\beta$ 與旁瓣高度 $A$ 的關係：$\beta=\cosh\!\bigl(\tfrac{1}{N}\cosh^{-1}(10^{A/20})\bigr)$。
+  </p>
+
+  <div class="nes-box nes-box--yellow" data-label="QUIRK">
+    <p lang="en">Because all side lobes are equally tall, total side-lobe energy is high even though each is small. For steady-state sinusoid separation this is ideal; for transient or impulsive signals, the equal-ripple pattern can add distracting structure.</p>
+    <p lang="zh">因為所有旁瓣都等高，單一旁瓣雖低，但總旁瓣能量不小。
+      對穩態正弦分離理想；但對瞬態訊號，這個等漣波圖樣可能看起來很礙眼。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.9.4-kaiser-vs-dpss.html">◀ 4.9.4</a>
+    <a class="warp-pipe">4-10</a>
+    <a class="nes-btn nes-btn--primary" href="4.10.1-matlab-cheby.html">NEXT ▶ 4.10.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.12 Optimized Windows · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-12</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-12 · Optimized Windows</span>
+    <span lang="zh">關卡 4-12 · 最佳化視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Optimized_Windows.html" target="_blank">SASP §4.12 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="BEYOND CLOSED FORMS">
+    <p lang="en">Instead of starting from a named formula, state the desired spectrum properties (main-lobe width, side-lobe floor, smoothness) as constraints and solve a numerical optimisation. The rest of World 4 is about that recipe.</p>
+    <p lang="zh">不從已命名公式出發 — 把主瓣寬、旁瓣地板、平滑度直接寫成約束，用數值最佳化求解。第 4 世界剩下的篇幅都在講這條路。</p>
+  </div>
+
+  <ul class="toc-list">
+    <li><a href="4.12.1-audio-coding.html"><span><span class="num">4.12.1</span><span lang="en">Windows for audio coding</span><span lang="zh">音訊編碼用視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.12.2-general-rule.html"><span><span class="num">4.12.2</span><span lang="en">General rule</span><span lang="zh">通則</span></span><span class="dim">▶</span></a></li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.11.3-exact-discrete-gauss.html">◀ 4.11.3</a>
+    <a class="warp-pipe">4-12</a>
+    <a class="nes-btn nes-btn--primary" href="4.12.1-audio-coding.html">NEXT ▶ 4.12.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

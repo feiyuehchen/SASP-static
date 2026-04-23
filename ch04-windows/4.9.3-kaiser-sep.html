@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.9.3 Min Freq Separation vs Length · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-9-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-9-3 · Min Frequency Separation vs Length</span>
+    <span lang="zh">關卡 4-9-3 · 最小頻率分離 vs 長度</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Minimum_Frequency_Separation_vs_Window.html" target="_blank">SASP §4.9.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="DESIGN RULE">
+    <p lang="en">To resolve two tones at $\Delta f$ apart (at sample rate $f_s$) with side-lobe floor $A$ dB, pick</p>
+    <p lang="zh">要在取樣率 $f_s$ 下分離相差 $\Delta f$ 的兩個音、並維持 $A$ dB 旁瓣地板，長度至少：</p>
+  </div>
+
+  <div class="formula">
+    <div>$$N\;\gtrsim\;\frac{A-8}{2.285\,(2\pi\,\Delta f/f_s)}$$</div>
+  </div>
+
+  <p lang="en">
+    That is Kaiser's own design formula. A $60$ dB floor with $\Delta f=100$
+    Hz at $f_s=48000$ means $N\approx 1700$ samples. Beyond that, the
+    main-lobe width is always the bottleneck — not the side-lobe floor.
+  </p>
+  <p lang="zh">
+    這是 Kaiser 自己的設計公式。$f_s=48000$、$\Delta f=100$ Hz、60 dB 地板 → $N\approx 1700$。
+    超過後，主瓣寬度才是真正的瓶頸，而不是旁瓣地板。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.9.2-kaiser-xforms.html">◀ 4.9.2</a>
+    <a class="warp-pipe">4-9-3</a>
+    <a class="nes-btn nes-btn--primary" href="4.9.4-kaiser-vs-dpss.html">NEXT ▶ 4.9.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

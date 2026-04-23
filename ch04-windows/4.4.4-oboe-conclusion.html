@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.4.4 Conclusions (Oboe) · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-4-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-4-4 · Conclusions (Oboe)</span>
+    <span lang="zh">關卡 4-4-4 · 雙簧管結論</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Conclusions.html" target="_blank">SASP §4.4.4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="TAKEAWAY">
+    <p lang="en">Pick your window by what you are looking for.</p>
+    <p lang="zh">選視窗的依據：你要看什麼。</p>
+  </div>
+
+  <ul>
+    <li lang="en"><b>Close resolution of nearby partials</b> → Hann or Hamming. Narrowish main lobe, reasonable side-lobe floor.</li>
+    <li lang="zh"><b>相近 partial 要分開</b> → Hann 或 Hamming。主瓣窄一點、旁瓣還算夠深。</li>
+    <li lang="en"><b>Deep dynamic range, tones are well-separated</b> → Blackman or 3-term Blackman-Harris. Accept a wider main lobe for a 60–70 dB floor.</li>
+    <li lang="zh"><b>要深的動態範圍、頻率分得開</b> → Blackman 或 3-term Blackman-Harris。允許主瓣寬一點，換 60–70 dB 的底板。</li>
+    <li lang="en"><b>Need both</b> → Kaiser (§4.9) or DPSS (§4.8), which have a tunable knob.</li>
+    <li lang="zh"><b>兩邊都要</b> → Kaiser（§4.9）或 DPSS（§4.8），這兩個有可調旋鈕。</li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.4.3-oboe-blackman.html">◀ 4.4.3</a>
+    <a class="warp-pipe">4-4-4</a>
+    <a class="nes-btn nes-btn--primary" href="4.5-bartlett.html">NEXT ▶ 4.5</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.10.4.2 Dolph-Chebyshev Definition · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-10-4-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-10-4-2 · Window Definition</span>
+    <span lang="zh">關卡 4-10-4-2 · 視窗定義</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Dolph_Chebyshev_Window_Definition.html" target="_blank">SASP §4.10.4.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="START FROM THE SPECTRUM">
+    <p lang="en">We <em>declare</em> the spectrum to be a scaled $T_{N-1}$ and back out $w[n]$ by inverse DFT. No direct time-domain formula.</p>
+    <p lang="zh">先<em>宣告</em>頻譜形狀為縮放的 $T_{N-1}$，再用反 DFT 推出 $w[n]$。沒有直接的時域公式。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">SPECTRUM</span>
+    <div>$$W(\omega)=\frac{T_{N-1}\!\bigl(\beta\cos(\omega/2)\bigr)}{T_{N-1}(\beta)},\qquad \beta=\cosh\!\left(\tfrac{1}{N-1}\cosh^{-1} 10^{A/20}\right)$$</div>
+  </div>
+
+  <p lang="en">
+    Evaluate $W$ on $N$ uniformly spaced points around the unit circle,
+    then inverse FFT → the Dolph-Chebyshev coefficients $w[n]$.
+  </p>
+  <p lang="zh">
+    在單位圓上均勻取 $N$ 點算 $W$、再反 FFT，得到 Dolph-Chebyshev 係數 $w[n]$。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.10.4.1-cheby-poly.html">◀ 4.10.4.1</a>
+    <a class="warp-pipe">4-10-4-2</a>
+    <a class="nes-btn nes-btn--primary" href="4.10.4.3-cheby-mainlobe.html">NEXT ▶ 4.10.4.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

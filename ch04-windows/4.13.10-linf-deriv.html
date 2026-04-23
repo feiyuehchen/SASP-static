@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.13.10 L∞ Derivative Objective · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-13-10</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-13-10 · L∞ Derivative Objective</span>
+    <span lang="zh">關卡 4-13-10 · L∞ 導數目標</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/L_Infinity_Norm_Derivative_Objective.html" target="_blank">SASP §4.13.10 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="MINIMISE THE MAX JUMP">
+    <p lang="en">Swap the side-lobe-depth objective for the largest first-difference of the window: $\min \max_n|w[n+1]-w[n]|$. Produces the smoothest possible shape for a given main-lobe target.</p>
+    <p lang="zh">把旁瓣深度目標換成「最大相鄰差」的最小化：$\min\max_n|w[n+1]-w[n]|$。在給定主瓣目標下產生最平滑的形狀。</p>
+  </div>
+
+  <p lang="en">The resulting window has roll-off that beats Hann/Hamming/Blackman at the smoothness axis, at the cost of a somewhat higher first side lobe.</p>
+  <p lang="zh">所得視窗在平滑度軸上勝過 Hann/Hamming/Blackman，代價是第一旁瓣稍高。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.13.9-monotonic.html">◀ 4.13.9</a>
+    <a class="warp-pipe">4-13-10</a>
+    <a class="nes-btn nes-btn--primary" href="4.13.11-l1-deriv.html">NEXT ▶ 4.13.11</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

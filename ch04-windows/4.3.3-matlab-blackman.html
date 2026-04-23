@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.3.3 Matlab for Classic Blackman · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-3-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-3-3 · Matlab / Octave for Classic Blackman</span>
+    <span lang="zh">關卡 4-3-3 · 經典 Blackman 的 Matlab</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Classic_Blackman_Window.html" target="_blank">SASP §4.3.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="CODE">
+    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
+% Matlab / Octave
+n = (0:N-1)';
+w = 0.42 - 0.5*cos(2*pi*n/(N-1)) + 0.08*cos(4*pi*n/(N-1));
+
+% Python / NumPy
+n = np.arange(N)
+w = (0.42
+     - 0.5*np.cos(2*np.pi*n/(N-1))
+     + 0.08*np.cos(4*np.pi*n/(N-1)))
+
+% JavaScript (this site)
+const w = DSP.WINDOWS.blackman(N);
+    </pre>
+  </div>
+
+  <p lang="en">Matlab's built-in <code>blackman(N)</code> uses the same classic coefficients by default.</p>
+  <p lang="zh">Matlab 內建 <code>blackman(N)</code> 預設就是這組經典係數。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.3.2-classic-blackman.html">◀ 4.3.2</a>
+    <a class="warp-pipe">4-3-3</a>
+    <a class="nes-btn nes-btn--primary" href="4.3.4-3term-bh.html">NEXT ▶ 4.3.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

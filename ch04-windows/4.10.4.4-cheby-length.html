@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.10.4.4 Length Computation · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-10-4-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-10-4-4 · Length Computation</span>
+    <span lang="zh">關卡 4-10-4-4 · 長度計算</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Dolph_Chebyshev_Window_Length_Computation.html" target="_blank">SASP §4.10.4.4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="INVERT THE RULE">
+    <p lang="en">Given a target main-lobe half-width $\omega_0$ and side-lobe attenuation $A$ (dB), solve for $N$.</p>
+    <p lang="zh">給主瓣半寬 $\omega_0$ 與旁瓣衰減 $A$（dB），反推 $N$。</p>
+  </div>
+
+  <div class="formula">
+    <div>$$N\;=\;1+\left\lceil\frac{\cosh^{-1}(10^{A/20})}{\cosh^{-1}\!\bigl(1/\cos(\omega_0/2)\bigr)}\right\rceil$$</div>
+  </div>
+
+  <p lang="en">
+    Typical back-of-envelope: $A=80$ dB, $\omega_0=0.05\pi$ → $N\approx 120$.
+    Smaller main lobes or deeper side lobes both need more samples; the
+    cost grows roughly logarithmically in $A$ and inversely with
+    $\omega_0$.
+  </p>
+  <p lang="zh">
+    快速估算：$A=80$ dB、$\omega_0=0.05\pi$ → $N\approx 120$。
+    要主瓣更窄或旁瓣更深都要更多樣本；成本對 $A$ 大致對數、對 $\omega_0$ 反比。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.10.4.3-cheby-mainlobe.html">◀ 4.10.4.3</a>
+    <a class="warp-pipe">4-10-4-4</a>
+    <a class="nes-btn nes-btn--primary" href="4.11-gaussian.html">NEXT ▶ 4.11</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.1.2 Rectangular Summary · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-1-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-1-2 · Rectangular Summary</span>
+    <span lang="zh">關卡 4-1-2 · 矩形小結</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Summary.html" target="_blank">SASP §4.1.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="CHEAT CARD">
+    <p lang="en">The rectangular window in 5 numbers.</p>
+    <p lang="zh">一張卡片看懂矩形視窗。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">RECTANGULAR ESSENTIALS</span>
+    <div>
+      $$\begin{array}{ll}
+      \text{Shape} & w[n]=1,\ 0\le n<N \\
+      \text{Main-lobe width} & 4\pi/N \\
+      \text{First side lobe} & -13.26\ \text{dB} \\
+      \text{Side-lobe roll-off} & -6\ \text{dB/octave} \\
+      \text{Coherent gain} & N \\
+      \text{Processing gain} & 0\ \text{dB (reference)}
+      \end{array}$$
+    </div>
+  </div>
+
+  <p lang="en">
+    Every other window in this world is a shape deformation of this one.
+    When we talk about "Hann gives 31 dB better side-lobe rejection than
+    rectangular", we are comparing against these numbers.
+  </p>
+  <p lang="zh">
+    之後所有視窗都是從這個出發的形狀變形。當我們說「Hann 比矩形旁瓣壓得好 31 dB」，
+    參考點就是上面這張表。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.1.1-sidelobes.html">◀ 4.1.1</a>
+    <a class="warp-pipe">4-1-2</a>
+    <a class="nes-btn nes-btn--primary" href="4.2-generalized-hamming.html">NEXT ▶ 4.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

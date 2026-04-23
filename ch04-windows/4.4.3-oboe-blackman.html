@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.4.3 Blackman-Windowed Oboe · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-4-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-4-3 · Blackman-Windowed Oboe</span>
+    <span lang="zh">關卡 4-4-3 · Blackman 加窗的雙簧管</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Blackman_Windowed_Oboe_Recording.html" target="_blank">SASP §4.4.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="CLEANEST">
+    <p lang="en">Noise floor now sits around $-70$ dB. We can see every harmonic the synthetic oboe has. The main lobes are visibly wider, but for a periodic signal with well-separated harmonics that is a worthwhile trade.</p>
+    <p lang="zh">雜訊地板下降到約 $-70$ dB，所有諧波都看得見。主瓣明顯變寬；對這種諧波分得開的週期訊號來說，這個代價很值得。</p>
+  </div>
+
+  <div class="viz-card">
+    <canvas id="fCanvas" style="height:260px;"></canvas>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.4.2-oboe-hamming.html">◀ 4.4.2</a>
+    <a class="warp-pipe">4-4-3</a>
+    <a class="nes-btn nes-btn--primary" href="4.4.4-oboe-conclusion.html">NEXT ▶ 4.4.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const fs = 8000, N = 512, M = 4096;
+  const x = new Float32Array(N);
+  const harm = [1,0.6,0.35,0.2,0.1,0.05,0.02,0.01];
+  for (let n = 0; n < N; n++) {
+    let s = 0;
+    for (let k = 0; k < harm.length; k++) s += harm[k] * Math.sin(2*Math.PI*200*(k+1)*n/fs + k*0.7);
+    x[n] = 0.5 * s;
+  }
+  const w = DSP.WINDOWS.blackman(N);
+  const xw = new Float32Array(M);
+  for (let n = 0; n < N; n++) xw[n] = x[n] * w[n];
+  const re = new Float32Array(M), im = new Float32Array(M);
+  re.set(xw); DSP.fft(re, im);
+  const H = M/2 + 1, out = new Float32Array(H);
+  for (let k = 0; k < H; k++) out[k] = Math.hypot(re[k], im[k]);
+  const freqs = Array.from({length:H},(_,k)=>k*fs/M);
+  Viz.line($('fCanvas'), DSP.toDb(out,-80), { xValues: freqs, xMin:0, xMax:3000, yMin:-80, xLabel:'f (Hz)', yLabel:'dB', title:'BLACKMAN-WINDOWED OBOE', color:'#F83800', xTicks:[{v:0,label:'0'},{v:1000,label:'1k'},{v:2000,label:'2k'},{v:3000,label:'3k'}] });
+})();
+</script>
+</body>
+</html>

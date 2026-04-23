@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.3.1 Blackman Window Family · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-3-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-3-1 · Blackman Window Family</span>
+    <span lang="zh">關卡 4-3-1 · Blackman 視窗家族</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Blackman_Window_Family.html" target="_blank">SASP §4.3.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="THREE-TERM FAMILY">
+    <p lang="en">Three-cosine windows parametrized by two numbers. Choose them to minimise the first side-lobe, give a $-58$ dB plateau, or force side lobes to decay fastest asymptotically.</p>
+    <p lang="zh">由兩個參數決定的三項餘弦視窗家族。選不同參數可最小化第一旁瓣、形成 $-58$ dB 平台、或讓旁瓣漸進衰減最快。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">FORM</span>
+    <div>$$w[n]=a_0-a_1\cos\!\left(\frac{2\pi n}{N-1}\right)+a_2\cos\!\left(\frac{4\pi n}{N-1}\right)$$</div>
+  </div>
+
+  <p lang="en">Common members:</p>
+  <p lang="zh">常見成員：</p>
+  <ul>
+    <li lang="en"><b>Classic Blackman:</b> $(0.42, 0.5, 0.08)$.</li>
+    <li lang="zh"><b>經典 Blackman：</b>$(0.42, 0.5, 0.08)$。</li>
+    <li lang="en"><b>Exact Blackman:</b> $(0.42659, 0.49656, 0.07685)$.</li>
+    <li lang="zh"><b>精確 Blackman：</b>$(0.42659, 0.49656, 0.07685)$。</li>
+    <li lang="en"><b>Nuttall 3-term:</b> minimises first side lobe; tighter than classic Blackman.</li>
+    <li lang="zh"><b>Nuttall 三項：</b>把第一旁瓣壓得更低，比經典 Blackman 更緊。</li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.3-blackman-harris.html">◀ 4.3</a>
+    <a class="warp-pipe">4-3-1</a>
+    <a class="nes-btn nes-btn--primary" href="4.3.2-classic-blackman.html">NEXT ▶ 4.3.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

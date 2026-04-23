@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.3.5 Frequency-Domain Blackman-Harris · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-3-5</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-3-5 · Frequency-Domain Blackman-Harris</span>
+    <span lang="zh">關卡 4-3-5 · 頻域 Blackman-Harris 實作</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Frequency_Domain_Implementation_Blackman_Harris_Family.html" target="_blank">SASP §4.3.5 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="IMPLEMENTATION TRICK">
+    <p lang="en">A cosine-sum window applied to time-domain samples is equivalent to adding a few shifted copies of the rectangular-window DFT in the frequency domain.</p>
+    <p lang="zh">時域上「乘一個餘弦和視窗」等價於頻域上「把矩形視窗的 DFT 做幾個位移副本相加」。</p>
+  </div>
+
+  <p lang="en">
+    Because each cosine term is a frequency shift, applying the window in
+    the time domain is like convolving the spectrum with a few deltas
+    whose weights are the $a_k$. In real codecs this is sometimes done
+    directly in the frequency domain — especially for windows much
+    longer than the transform size.
+  </p>
+  <p lang="zh">
+    每個餘弦項就是一個頻率位移，時域乘視窗等同於頻域上對頻譜做若干 delta 卷積（權重為 $a_k$）。
+    實際編碼器有時直接在頻域做這件事 — 尤其當視窗比 transform 長許多時。
+  </p>
+
+  <div class="formula">
+    <span class="label">SPECTRAL IDENTITY</span>
+    <div>$$W(\omega)=\sum_{k=0}^{K-1}(-1)^{k}\,a_k\,W_R\!\left(\omega-\frac{2\pi k}{N-1}\right)$$</div>
+  </div>
+
+  <p lang="en">
+    For $K=3$ this is three deltas, so the Blackman window's spectrum is
+    the sum of three shifted Dirichlet kernels — a straight read from
+    the convolution theorem of §3.7.
+  </p>
+  <p lang="zh">
+    $K=3$ 時共三個 delta，所以 Blackman 頻譜就是三個位移過的 Dirichlet 核相加 —
+    §3.7 的卷積定理直接套用。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.3.4-3term-bh.html">◀ 4.3.4</a>
+    <a class="warp-pipe">4-3-5</a>
+    <a class="nes-btn nes-btn--primary" href="4.3.6-pow-cos.html">NEXT ▶ 4.3.6</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

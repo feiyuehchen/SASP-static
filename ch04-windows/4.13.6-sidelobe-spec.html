@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.13.6 Sidelobe Specification · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-13-6</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-13-6 · Sidelobe Specification</span>
+    <span lang="zh">關卡 4-13-6 · 旁瓣規格</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Sidelobe_Specification.html" target="_blank">SASP §4.13.6 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="CUSTOM SHAPES">
+    <p lang="en">Instead of one flat floor, allow the side-lobe envelope to depend on $\omega$: deeper where it matters, relaxed where it does not.</p>
+    <p lang="zh">不必所有旁瓣都同一高度 — 可以讓旁瓣包絡隨 $\omega$ 變化：在重要頻段更深，其他地方可放寬。</p>
+  </div>
+
+  <div class="formula">
+    <div>$$|W(\omega_i)|\le\delta\cdot g(\omega_i)\quad \forall\omega_i\in\text{stopband}$$</div>
+  </div>
+
+  <p lang="en">
+    Weight function $g(\omega)$: set small where you must suppress
+    interference, large where you don't care. Same LP, different
+    right-hand side.
+  </p>
+  <p lang="zh">
+    權重函數 $g(\omega)$：在必須壓干擾的頻段取小值、其他取大值。同一個 LP，只是右端不同。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.13.5-dc-constraint.html">◀ 4.13.5</a>
+    <a class="warp-pipe">4-13-6</a>
+    <a class="nes-btn nes-btn--primary" href="4.13.7-lp-std.html">NEXT ▶ 4.13.7</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.2.4 Matlab for the Hamming Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-2-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-2-4 · Matlab / Octave for the Hamming Window</span>
+    <span lang="zh">關卡 4-2-4 · Hamming 視窗的 Matlab / Octave</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Hamming_Window.html" target="_blank">SASP §4.2.4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="SHORT AND SHARP">
+    <p lang="en">Built in as <code>hamming(N)</code>. Or a one-liner:</p>
+    <p lang="zh">內建函式 <code>hamming(N)</code>；一行版：</p>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="CODE">
+    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
+% Matlab / Octave
+w = 0.54 - 0.46 * cos(2*pi*(0:N-1)'/(N-1));
+
+% Python / NumPy
+w = 0.54 - 0.46 * np.cos(2*np.pi*np.arange(N) / (N-1))
+
+% JavaScript (this site)
+const w = DSP.WINDOWS.hamming(N);
+    </pre>
+  </div>
+
+  <p lang="en">Values 0.54 and 0.46 are rounded — the mathematically optimal Hamming uses 0.53836 and 0.46164. The 0.54/0.46 pair is the traditional round-number version; the difference is tiny.</p>
+  <p lang="zh">0.54 與 0.46 其實是近似；數學最優的 Hamming 是 0.53836 / 0.46164。0.54 / 0.46 是傳統好記版本，差異極小。</p>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> If you implement <code>w = 0.50 - 0.50*cos(...)</code> instead of 0.54/0.46, you get:</p>
+    <p lang="zh"><b>問：</b>寫成 <code>w = 0.50 - 0.50*cos(...)</code>，實際是哪個視窗？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Hann.</button>
+      <button data-correct="1" lang="zh">Hann。</button>
+      <button data-correct="0" lang="en">Still Hamming.</button>
+      <button data-correct="0" lang="zh">還是 Hamming。</button>
+      <button data-correct="0" lang="en">Blackman.</button>
+      <button data-correct="0" lang="zh">Blackman。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.2.3-hamming.html">◀ 4.2.3</a>
+    <a class="warp-pipe">4-2-4</a>
+    <a class="nes-btn nes-btn--primary" href="4.2.5-ghamming-summary.html">NEXT ▶ 4.2.5</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! 0.5/0.5 ⇒ Hann. The Hamming magic number is 0.54/0.46.</span><span lang="zh">🪙 金幣 +1！0.5 / 0.5 是 Hann；Hamming 的神奇數字是 0.54 / 0.46。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ The α values are what distinguish the family members.</span><span lang="zh">✗ α 值決定家族成員。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

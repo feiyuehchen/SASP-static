@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.13 Window Design by Linear Programming · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-13</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-13 · Window Design by Linear Programming</span>
+    <span lang="zh">關卡 4-13 · 線性規劃設計視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Window_Design_Linear_Programming.html" target="_blank">SASP §4.13 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="ROAD MAP">
+    <p lang="en">Think of $w[n]$ as an $N$-vector of unknowns. The spectrum is a linear function of that vector. Constraints on the spectrum become linear inequalities — which is exactly what a linear program (LP) solver eats.</p>
+    <p lang="zh">把 $w[n]$ 當成一個 $N$ 維未知向量。頻譜是它的線性函數，對頻譜的要求就變成線性不等式 — 正是 LP 求解器吃的輸入。</p>
+  </div>
+
+  <ul class="toc-list">
+    <li><a href="4.13.1-lp.html"><span><span class="num">4.13.1</span><span lang="en">Linear programming</span><span lang="zh">線性規劃</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.2-lp-cheby.html"><span><span class="num">4.13.2</span><span lang="en">LP for Chebyshev</span><span lang="zh">LP 設計 Chebyshev</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.3-sym-constraint.html"><span><span class="num">4.13.3</span><span lang="en">Symmetric constraint</span><span lang="zh">對稱約束</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.4-pos-constraint.html"><span><span class="num">4.13.4</span><span lang="en">Positive-sample constraint</span><span lang="zh">正樣本約束</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.5-dc-constraint.html"><span><span class="num">4.13.5</span><span lang="en">DC constraint</span><span lang="zh">DC 約束</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.6-sidelobe-spec.html"><span><span class="num">4.13.6</span><span lang="en">Sidelobe spec</span><span lang="zh">旁瓣規格</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.7-lp-std.html"><span><span class="num">4.13.7</span><span lang="en">LP standard form</span><span lang="zh">LP 標準式</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.8-remez.html"><span><span class="num">4.13.8</span><span lang="en">Remez exchange</span><span lang="zh">Remez 交換</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.8.1-remez-conv.html"><span><span class="num">4.13.8.1</span><span lang="en">Remez convergence</span><span lang="zh">Remez 收斂</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.9-monotonic.html"><span><span class="num">4.13.9</span><span lang="en">Monotonicity constraint</span><span lang="zh">單調約束</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.10-linf-deriv.html"><span><span class="num">4.13.10</span><span lang="en">L∞ derivative objective</span><span lang="zh">L∞ 導數目標</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.11-l1-deriv.html"><span><span class="num">4.13.11</span><span lang="en">L1 derivative objective</span><span lang="zh">L1 導數目標</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.12-windows-summary.html"><span><span class="num">4.13.12</span><span lang="en">World 4 summary</span><span lang="zh">第 4 世界總結</span></span><span class="dim">▶</span></a></li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.12.2-general-rule.html">◀ 4.12.2</a>
+    <a class="warp-pipe">4-13</a>
+    <a class="nes-btn nes-btn--primary" href="4.13.1-lp.html">NEXT ▶ 4.13.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.2.3 Hamming Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-2-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-2-3 · Hamming Window</span>
+    <span lang="zh">關卡 4-2-3 · Hamming 視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Hamming_Window.html" target="_blank">SASP §4.2.3 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="TUNED TO ZERO THE FIRST SIDELOBE">
+        <p lang="en">Same shape as Hann but with α tuned to flatten the first side lobe all the way to $-42$ dB. Cost: farther side lobes drop more slowly.</p>
+        <p lang="zh">形狀同 Hann，但把 α 調成讓第一旁瓣壓到 $-42$ dB。代價是遠處旁瓣滾降較慢。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">HAMMING</span>
+        <div>$$w[n]=0.54-0.46\cos\!\left(\frac{2\pi n}{N-1}\right)$$</div>
+      </div>
+
+      <ul>
+        <li lang="en">First side lobe $\approx -42$ dB (almost 12 dB better than Hann!)</li>
+        <li lang="zh">第一旁瓣約 $-42$ dB（比 Hann 還低近 12 dB！）</li>
+        <li lang="en">But side-lobe roll-off is only $6$ dB/octave — far side lobes eventually exceed Hann's.</li>
+        <li lang="zh">但旁瓣滾降僅 $6$ dB/八度 — 遠離主瓣後反而比 Hann 高。</li>
+        <li lang="en">Ends don't reach zero; the window "sits on a pedestal" of about $0.08$.</li>
+        <li lang="zh">兩端不會降到 0；視窗坐在約 $0.08$ 的底座上。</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Hann vs Hamming</h3>
+        <h3 lang="zh">實驗 · Hann 對比 Hamming</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You want the deepest side lobe <em>near</em> the main lobe. Hann or Hamming?</p>
+        <p lang="zh"><b>問：</b>希望<em>靠近主瓣</em>的旁瓣最深，選 Hann 還是 Hamming？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Hamming — its first side lobe is deeper.</button>
+          <button data-correct="1" lang="zh">Hamming — 第一旁瓣更深。</button>
+          <button data-correct="0" lang="en">Hann — it decays faster everywhere.</button>
+          <button data-correct="0" lang="zh">Hann — 全部都衰減快。</button>
+          <button data-correct="0" lang="zh">Either works equally.</button>
+          <button data-correct="0" lang="zh">兩者一樣。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.2.2-matlab-hann.html">◀ 4.2.2</a>
+    <a class="warp-pipe">4-2-3</a>
+    <a class="nes-btn nes-btn--primary" href="4.2.4-matlab-hamming.html">NEXT ▶ 4.2.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 48;
+  function redraw() {
+    const h = DSP.WINDOWS.hann(N), m = DSP.WINDOWS.hamming(N);
+    Viz.multiLine($('tCanvas'), [
+      { y: Array.from(h), color:'#3CBCFC', label:'Hann' },
+      { y: Array.from(m), color:'#F8B800', label:'Hamming' },
+    ], { yMin:-0.05, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:'TIME SHAPES' });
+    const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const magOf = w => {
+      const { re, im } = DSP.dtft(w, om);
+      const mg = new Float32Array(K);
+      for (let i = 0; i < K; i++) mg[i] = Math.hypot(re[i], im[i]);
+      return DSP.toDb(mg, -80);
+    };
+    Viz.multiLine($('fCanvas'), [
+      { y: Array.from(magOf(h)), color:'#3CBCFC', label:'Hann' },
+      { y: Array.from(magOf(m)), color:'#F8B800', label:'Hamming' },
+    ], { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-80, xLabel:'ω', yLabel:'dB', title:'SPECTRA (dB)', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+  redraw();
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Hamming: -42 dB near; Hann: -31 dB near but faster decay farther out.</span><span lang="zh">🪙 金幣 +1！Hamming 近主瓣 -42 dB；Hann 近 -31 dB，但遠處衰減更快。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Look at the first side lobe in the plot — Hamming wins there.</span><span lang="zh">✗ 看圖上第一旁瓣 — Hamming 贏。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
+</body>
+</html>

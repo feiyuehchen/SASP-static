@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.3.4 Three-Term Blackman-Harris · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-3-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-3-4 · Three-Term Blackman-Harris</span>
+    <span lang="zh">關卡 4-3-4 · 三項 Blackman-Harris</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Three_Term_Blackman_Harris_Window.html" target="_blank">SASP §4.3.4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="OPTIMIZED 3-TERM">
+    <p lang="en">Same three-cosine shape as Blackman, but the weights are re-tuned by Blackman and Harris (1978) to push the first side-lobe all the way down to $-71$ dB.</p>
+    <p lang="zh">三項餘弦形狀同 Blackman，但 Blackman 與 Harris（1978）重新調整權重，把第一旁瓣壓到 $-71$ dB。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">3-TERM BLACKMAN-HARRIS</span>
+    <div>$$a_0=0.42323,\; a_1=0.49755,\; a_2=0.07922$$</div>
+  </div>
+
+  <p lang="en">
+    Very close numerically to classic Blackman but gains about $13$ dB of
+    first-side-lobe depth. Useful when near-main-lobe interference
+    matters and main-lobe width is acceptable.
+  </p>
+  <p lang="zh">
+    數值上很接近經典 Blackman，但第一旁瓣深度多約 $13$ dB。
+    當近主瓣干擾重要、主瓣寬度可接受時很適合。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.3.3-matlab-blackman.html">◀ 4.3.3</a>
+    <a class="warp-pipe">4-3-4</a>
+    <a class="nes-btn nes-btn--primary" href="4.3.5-fd-bh.html">NEXT ▶ 4.3.5</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

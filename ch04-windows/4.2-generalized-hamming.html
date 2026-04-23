@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.2 Generalized Hamming Family · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-2 · Generalized Hamming Family</span>
+    <span lang="zh">關卡 4-2 · 廣義 Hamming 家族</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Generalized_Hamming_Window_Family.html" target="_blank">SASP §4.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="ONE FAMILY, ONE KNOB">
+    <p lang="en">A two-term cosine combination. One parameter $\alpha$ picks whether you are closer to a rectangle ($\alpha=1$), a Hann ($\alpha=0.5$), or a Hamming ($\alpha\approx 0.54$).</p>
+    <p lang="zh">一個兩項餘弦組合。用一個參數 $\alpha$ 就能在矩形（$\alpha=1$）、Hann（$\alpha=0.5$）、Hamming（$\alpha\approx 0.54$）之間切換。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">GENERALIZED HAMMING</span>
+    <div>$$w[n]=\alpha-(1-\alpha)\cos\!\left(\frac{2\pi n}{N-1}\right),\quad 0\le n<N$$</div>
+  </div>
+
+  <p lang="en">
+    The spectrum is a linear combination of the rectangular's
+    $W_R(\omega)$ and two shifted copies. Choosing $\alpha$ cancels the
+    first side-lobe of $W_R$ to differing degrees, exchanging main-lobe
+    width for side-lobe depth.
+  </p>
+  <p lang="zh">
+    頻譜是矩形 $W_R(\omega)$ 與兩份平移副本的線性組合。選 $\alpha$ 不同，對 $W_R$ 的第一旁瓣抵消程度不同，
+    用主瓣寬度換旁瓣深度。
+  </p>
+
+  <div class="viz-card">
+    <h3 lang="en">Lab · Sweep α</h3>
+    <h3 lang="zh">實驗 · 滑動 α</h3>
+    <canvas id="tCanvas" style="height:130px;"></canvas>
+    <canvas id="fCanvas" style="height:180px; margin-top:6px;"></canvas>
+    <div class="controls">
+      <label>α</label>
+      <input type="range" id="aSlider" min="0.3" max="1.0" step="0.01" value="0.54"/>
+      <span class="val" id="aVal">0.54</span>
+
+      <label>N</label>
+      <input type="range" id="nSlider" min="16" max="128" step="4" value="48"/>
+      <span class="val" id="nVal">48</span>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> As $\alpha$ drops from 1 toward 0.5, what happens?</p>
+    <p lang="zh"><b>問：</b>$\alpha$ 從 1 降到 0.5，會發生什麼？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Main lobe widens, side lobes drop.</button>
+      <button data-correct="1" lang="zh">主瓣變寬、旁瓣下降。</button>
+      <button data-correct="0" lang="en">Main lobe narrows, side lobes rise.</button>
+      <button data-correct="0" lang="zh">主瓣變窄、旁瓣升高。</button>
+      <button data-correct="0" lang="en">Nothing changes.</button>
+      <button data-correct="0" lang="zh">沒變化。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.1.2-rect-summary.html">◀ 4.1.2</a>
+    <a class="warp-pipe">4-2</a>
+    <a class="nes-btn nes-btn--primary" href="4.2.1-hann.html">NEXT ▶ 4.2.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { a: 0.54, N: 48 };
+
+  function genHamming(N, a) {
+    const w = new Float32Array(N);
+    for (let n = 0; n < N; n++) w[n] = a - (1-a) * Math.cos(2*Math.PI*n/(N-1));
+    return w;
+  }
+
+  function redraw() {
+    const w = genHamming(state.N, state.a);
+    Viz.stem($('tCanvas'), w, { yMin:-0.1, yMax:1.2, xLabel:'n', yLabel:'w[n]', title:`α=${state.a.toFixed(2)}, N=${state.N}` });
+    const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), DSP.toDb(mag, -80), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-80, xLabel:'ω', yLabel:'20 log |W|', title:'SPECTRUM (dB)', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+
+  $('aSlider').addEventListener('input', () => { state.a = parseFloat($('aSlider').value); $('aVal').textContent = state.a.toFixed(2); redraw(); });
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Less rectangular, more tapered → wider main lobe, deeper sidelobes. The universal trade.</span><span lang="zh">🪙 金幣 +1！越不像矩形 → 主瓣變寬、旁瓣變深。永恆的取捨。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Slide α from 1 to 0.5 and look at the dB plot.</span><span lang="zh">✗ 把 α 從 1 滑到 0.5，看 dB 圖。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

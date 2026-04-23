@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.1 Rectangular Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-1 · Rectangular Window</span>
+    <span lang="zh">關卡 4-1 · 矩形視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Rectangular_Window.html" target="_blank">SASP §4.1 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THE SIMPLEST WINDOW">
+        <p lang="en">Slice out a run of $N$ samples; set everything else to zero. That is the rectangular window — the one you implicitly use whenever you "take an FFT of the first 1024 samples."</p>
+        <p lang="zh">取出連續 $N$ 個樣本、其餘歸零。這就是矩形視窗 — 當你「對前 1024 個樣本做 FFT」時，其實就是它。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">DEFINITION</span>
+        <div>$$w_R[n]=\begin{cases}1,& 0\le n<N\\ 0,& \text{otherwise}\end{cases}$$</div>
+        <span class="label">DTFT (ASYMPTOTIC DIRICHLET)</span>
+        <div>$$W_R(\omega)=e^{-j\omega(N-1)/2}\,\frac{\sin(N\omega/2)}{\sin(\omega/2)}$$</div>
+      </div>
+
+      <h2 lang="en">Key numbers</h2>
+      <h2 lang="zh">關鍵數字</h2>
+
+      <ul>
+        <li lang="en"><b>Main-lobe width</b>: $4\pi/N$ (zero-to-zero).</li>
+        <li lang="zh"><b>主瓣寬度</b>：$4\pi/N$（零點到零點）。</li>
+        <li lang="en"><b>First side-lobe level</b>: about $-13$ dB below the main lobe — quite loud.</li>
+        <li lang="zh"><b>第一旁瓣高度</b>：約比主瓣低 $13$ dB — 相當高。</li>
+        <li lang="en"><b>Side-lobe roll-off</b>: $6$ dB/octave (slow). That is the price for having the narrowest possible main lobe.</li>
+        <li lang="zh"><b>旁瓣滾降</b>：$6$ dB/八度（很慢）。這是擁有最窄主瓣的代價。</li>
+      </ul>
+
+      <div class="nes-box nes-box--yellow" data-label="WHEN TO USE">
+        <p lang="en">The rectangular window is the best choice <em>only</em> when the signal is exactly $N$ samples of a periodic signal whose period divides $N$. Otherwise the huge side lobes will smear other frequencies. Almost always, you should reach for Hann or Hamming instead.</p>
+        <p lang="zh">矩形視窗只在「訊號剛好是 $N$ 個樣本、週期整除 $N$」時是最佳選擇。
+          否則巨大的旁瓣會把別的頻率糊掉。實務上通常改用 Hann 或 Hamming。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Rectangular window shape &amp; transform</h3>
+        <h3 lang="zh">實驗 · 矩形視窗形狀與轉換</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:180px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="8" max="128" step="4" value="32"/>
+          <span class="val" id="nVal">32</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You double $N$ for a rectangular window. What happens to the first side lobe?</p>
+        <p lang="zh"><b>問：</b>矩形視窗的 $N$ 變 2 倍。第一旁瓣會怎麼變？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Stays at about $-13$ dB (side-lobe level depends on shape, not length).</button>
+          <button data-correct="1" lang="zh">仍約為 $-13$ dB（旁瓣高度看形狀，不看長度）。</button>
+          <button data-correct="0" lang="en">Drops by 6 dB.</button>
+          <button data-correct="0" lang="zh">下降 6 dB。</button>
+          <button data-correct="0" lang="en">Doubles to about $-26$ dB.</button>
+          <button data-correct="0" lang="zh">翻倍到約 $-26$ dB。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="index.html">◀ W4</a>
+    <a class="warp-pipe">4-1</a>
+    <a class="nes-btn nes-btn--primary" href="4.1.1-sidelobes.html">NEXT ▶ 4.1.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 32 };
+
+  function redraw() {
+    const w = DSP.WINDOWS.rect(state.N);
+    Viz.stem($('tCanvas'), w, { yMin:-0.1, yMax:1.2, xLabel:'n', yLabel:'w[n]', title: `RECTANGULAR, N=${state.N}` });
+    const K = 600;
+    const om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    const db = DSP.toDb(mag, -80);
+    Viz.line($('fCanvas'), db, { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-80, xLabel:'ω', yLabel:'20 log |W|', title:'SPECTRUM (dB)', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Side-lobe level is a <em>shape</em> property. Length only scales the main-lobe width and peak height.</span><span lang="zh">🪙 金幣 +1！旁瓣高度由「形狀」決定，長度只會調整主瓣寬度與峰值高度。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Try doubling N in the slider — peak relative height does not move.</span><span lang="zh">✗ 把 N 拉大試試看 — 旁瓣相對高度不會動。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

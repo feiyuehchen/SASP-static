@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.3.6 Power-of-Cosine Family · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-3-6</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-3-6 · Power-of-Cosine Family</span>
+    <span lang="zh">關卡 4-3-6 · 餘弦冪次家族</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Power_of_Cosine_Window_Family.html" target="_blank">SASP §4.3.6 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="SIMPLE YET USEFUL">
+    <p lang="en">$w[n]=\sin^p(\pi n/(N-1))$, or equivalently $\bigl[\tfrac{1}{2}(1-\cos(2\pi n/(N-1)))\bigr]^{p/2}$. $p=1$ is the MLT sine window; $p=2$ is the Hann; higher $p$ gives even softer taper.</p>
+    <p lang="zh">$w[n]=\sin^p(\pi n/(N-1))$，或等於 $\bigl[\tfrac{1}{2}(1-\cos(2\pi n/(N-1)))\bigr]^{p/2}$。$p=1$ 是 MLT 正弦視窗；$p=2$ 是 Hann；$p$ 更大代表收尾更軟。</p>
+  </div>
+
+  <p lang="en">
+    Advantages: no extra cosine coefficients to tune. Disadvantages:
+    loses the flexibility of Blackman-Harris. Useful when you want a
+    smooth one-parameter family (for example sweeping window softness
+    in real time).
+  </p>
+  <p lang="zh">
+    優點：沒有額外的餘弦係數要調。缺點：沒有 Blackman-Harris 的彈性。適用於想用單一參數平滑調整視窗柔軟度的情境（例如即時動態調整）。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.3.5-fd-bh.html">◀ 4.3.5</a>
+    <a class="warp-pipe">4-3-6</a>
+    <a class="nes-btn nes-btn--primary" href="4.4-oboe.html">NEXT ▶ 4.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.13.3 Symmetric Window Constraint · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-13-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-13-3 · Symmetric Constraint</span>
+    <span lang="zh">關卡 4-13-3 · 對稱約束</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Symmetric_Window_Constraint.html" target="_blank">SASP §4.13.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="CUT THE UNKNOWNS IN HALF">
+    <p lang="en">A real symmetric window of length $N$ has only $\lceil N/2\rceil$ distinct values — $w[n]=w[N-1-n]$ ties the pairs together. Add these equality constraints and the LP is half the size.</p>
+    <p lang="zh">長度 $N$ 的實對稱視窗只有 $\lceil N/2\rceil$ 個獨立值 — $w[n]=w[N-1-n]$ 把兩兩綁定。加上這些等式約束，LP 就變一半大。</p>
+  </div>
+
+  <p lang="en">Bonus: symmetry automatically gives zero-phase spectra (§3.5.2).</p>
+  <p lang="zh">附帶好處：對稱自動給出零相位頻譜（§3.5.2）。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.13.2-lp-cheby.html">◀ 4.13.2</a>
+    <a class="warp-pipe">4-13-3</a>
+    <a class="nes-btn nes-btn--primary" href="4.13.4-pos-constraint.html">NEXT ▶ 4.13.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.13.5 DC Constraint · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-13-5</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-13-5 · DC Constraint</span>
+    <span lang="zh">關卡 4-13-5 · DC 約束</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/DC_Constraint.html" target="_blank">SASP §4.13.5 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="NORMALIZE THE PEAK">
+    <p lang="en">Without a DC constraint the LP would solve $w=0$. Fixing the main-lobe peak $W(0)=\sum w[n]=1$ turns the problem into "how low can side lobes go if DC is clamped to 1".</p>
+    <p lang="zh">沒有 DC 約束，LP 會直接解出 $w=0$。把主瓣峰 $W(0)=\sum w[n]=1$ 釘住，問題就變成「DC 固定為 1 時旁瓣能壓到多低」。</p>
+  </div>
+
+  <div class="formula">
+    <div>$$\sum_{n=0}^{N-1} w[n]\;=\;1$$</div>
+  </div>
+
+  <p lang="en">This is a single equality constraint — cheap to add, essential for the LP to be well-posed.</p>
+  <p lang="zh">只是一條等式約束 — 加起來便宜、是 LP 定義良好不可少的。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.13.4-pos-constraint.html">◀ 4.13.4</a>
+    <a class="warp-pipe">4-13-5</a>
+    <a class="nes-btn nes-btn--primary" href="4.13.6-sidelobe-spec.html">NEXT ▶ 4.13.6</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

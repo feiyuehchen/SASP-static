@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.10.1 Matlab for Dolph-Chebyshev · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-10-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-10-1 · Matlab for Dolph-Chebyshev</span>
+    <span lang="zh">關卡 4-10-1 · Dolph-Chebyshev 的 Matlab</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Dolph_Chebyshev_Window.html" target="_blank">SASP §4.10.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--purple" data-label="CODE">
+    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
+% Matlab
+A_dB = 60;                     % desired side-lobe attenuation
+w = chebwin(N, A_dB);
+
+% Python (scipy)
+from scipy.signal.windows import chebwin
+w = chebwin(N, at=60)
+    </pre>
+  </div>
+
+  <p lang="en">Matlab's <code>chebwin</code> takes the side-lobe attenuation in dB directly, so no need to invert the $\beta$ formula by hand.</p>
+  <p lang="zh">Matlab 的 <code>chebwin</code> 直接吃 dB 衰減，不必手算 $\beta$。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.10-dolph-chebyshev.html">◀ 4.10</a>
+    <a class="warp-pipe">4-10-1</a>
+    <a class="nes-btn nes-btn--primary" href="4.10.2-cheby-examples.html">NEXT ▶ 4.10.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

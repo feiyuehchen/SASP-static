@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.6 Poisson Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-6</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-6 · Poisson (Exponential) Window</span>
+    <span lang="zh">關卡 4-6 · Poisson（指數）視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Poisson_Window.html" target="_blank">SASP §4.6 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="EXPONENTIAL DECAY FROM CENTRE">
+        <p lang="en">A two-sided exponential. Its spectrum is a Lorentzian (Cauchy) peak — extremely slow side-lobe roll-off, but no zeros: adequate when you want every frequency represented.</p>
+        <p lang="zh">雙邊指數衰減。頻譜是 Lorentzian 峰 — 旁瓣滾降極慢，但沒有零點；當你希望頻譜在所有頻率都有值時好用。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">POISSON</span>
+        <div>$$w[n]=e^{-\alpha|n-(N-1)/2|/((N-1)/2)}$$</div>
+      </div>
+
+      <p lang="en">
+        Large $\alpha$ means steeper decay → wider main lobe but quieter
+        side lobes. Small $\alpha$ approaches a rectangular window.
+      </p>
+      <p lang="zh">
+        $\alpha$ 大 → 衰減快 → 主瓣寬、旁瓣低。$\alpha$ 小則接近矩形視窗。
+      </p>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:180px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>α</label>
+          <input type="range" id="aSlider" min="0.5" max="6" step="0.1" value="2"/>
+          <span class="val" id="aVal">2.0</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.5.1-matlab-bartlett.html">◀ 4.5.1</a>
+    <a class="warp-pipe">4-6</a>
+    <a class="nes-btn nes-btn--primary" href="4.7-hann-poisson.html">NEXT ▶ 4.7</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 64, M = (N-1)/2;
+  const state = { a: 2.0 };
+  function make() {
+    const w = new Float32Array(N);
+    for (let n = 0; n < N; n++) w[n] = Math.exp(-state.a * Math.abs(n - M) / M);
+    return w;
+  }
+  function redraw() {
+    const w = make();
+    Viz.stem($('tCanvas'), w, { yMin:-0.05, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`POISSON α=${state.a.toFixed(1)}` });
+    const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), DSP.toDb(mag,-80), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-80, xLabel:'ω', yLabel:'dB', title:'SPECTRUM', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+  $('aSlider').addEventListener('input', () => { state.a = parseFloat($('aSlider').value); $('aVal').textContent = state.a.toFixed(1); redraw(); });
+  redraw();
+})();
+</script>
+</body>
+</html>

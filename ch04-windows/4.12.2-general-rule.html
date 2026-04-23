@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.12.2 General Rule · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-12-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-12-2 · General Rule</span>
+    <span lang="zh">關卡 4-12-2 · 通則</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/General_Rule.html" target="_blank">SASP §4.12.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="ONE LINE">
+    <p lang="en">Pick the window that makes your worst-case interferer smallest in the band you care about, subject to the main-lobe and reconstruction constraints you can afford.</p>
+    <p lang="zh">在可接受的主瓣寬與重建約束下，選能讓你最關心的那一帶上最糟干擾變最小的視窗。</p>
+  </div>
+
+  <p lang="en">
+    That is the entire philosophy of window design. Every named window in
+    this world is one point on a Pareto frontier. The next section shows
+    how to compute other points using linear programming.
+  </p>
+  <p lang="zh">
+    這就是視窗設計的全部哲學。本世界所有的具名視窗，都是某條柏拉圖前緣上的一點。
+    下一節會示範如何用線性規劃算出其他點。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.12.1-audio-coding.html">◀ 4.12.1</a>
+    <a class="warp-pipe">4-12-2</a>
+    <a class="nes-btn nes-btn--primary" href="4.13-linprog.html">NEXT ▶ 4.13</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

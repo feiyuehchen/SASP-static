@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.11.2 Gaussian Window &amp; Transform · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-11-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-11-2 · Gaussian &amp; Its Transform</span>
+    <span lang="zh">關卡 4-11-2 · Gaussian 與其轉換</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Gaussian_Window_Transform.html" target="_blank">SASP §4.11.2 ↗</a></small>
+  </h1>
+
+  <div class="formula">
+    <span class="label">SELF-DUAL UNDER FT (CONTINUOUS)</span>
+    <div>$$w(t)=e^{-t^{2}/(2\sigma^{2})}\;\longleftrightarrow\;W(\Omega)=\sigma\sqrt{2\pi}\,e^{-\Omega^{2}\sigma^{2}/2}$$</div>
+  </div>
+
+  <p lang="en">
+    The time and frequency widths multiply to a constant ($\sigma_t \sigma_\Omega = 1$, at the minimum), which is the continuous form of the uncertainty principle. For the discrete, truncated version, the spectrum is only approximately Gaussian near the main lobe and has weak residual side lobes from the truncation.
+  </p>
+  <p lang="zh">
+    時間寬度與頻率寬度的乘積為常數（$\sigma_t \sigma_\Omega = 1$，取極小值），正是不確定性原理的連續形式。
+    對離散、截斷版本，頻譜只在主瓣附近近似高斯，截斷邊緣會有弱旁瓣。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.11.1-matlab-gaussian.html">◀ 4.11.1</a>
+    <a class="warp-pipe">4-11-2</a>
+    <a class="nes-btn nes-btn--primary" href="4.11.3-exact-discrete-gauss.html">NEXT ▶ 4.11.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

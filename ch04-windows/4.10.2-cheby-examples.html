@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.10.2 Example Chebyshev Windows · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-10-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-10-2 · Example Chebyshev Windows</span>
+    <span lang="zh">關卡 4-10-2 · Chebyshev 視窗範例</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Example_Chebyshev_Windows_Transforms.html" target="_blank">SASP §4.10.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="SAMPLE ATTENUATIONS">
+    <p lang="en">Three settings of the attenuation parameter — note the equi-ripple side lobes.</p>
+    <p lang="zh">三種衰減參數 — 注意旁瓣等高。</p>
+  </div>
+
+  <div class="viz-card">
+    <canvas id="fCanvas" style="height:260px;"></canvas>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.10.1-matlab-cheby.html">◀ 4.10.1</a>
+    <a class="warp-pipe">4-10-2</a>
+    <a class="nes-btn nes-btn--primary" href="4.10.3-cheby-vs-hamming.html">NEXT ▶ 4.10.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  /* Very rough Chebyshev-window approximation by inverse-FFT of its
+     target-shape magnitude spectrum. Sufficient for a pedagogical plot. */
+  function chebyshev(N, Adb) {
+    const beta = Math.cosh(Math.acosh(Math.pow(10, Adb/20)) / (N-1));
+    const K = 4*N;
+    const W = new Float32Array(K);
+    for (let k = 0; k < K; k++) {
+      const w = 2*Math.PI*k/K;
+      const x = beta * Math.cos(w/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else num = Math.cosh((N-1)*Math.acosh(x));
+      const den = Math.cosh((N-1)*Math.acosh(beta));
+      W[k] = num / den;
+    }
+    // Assume real symmetric spectrum; inverse DFT manually
+    const w = new Float32Array(N);
+    for (let n = 0; n < N; n++) {
+      let s = 0;
+      for (let k = 0; k < K; k++) {
+        s += W[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/K);
+      }
+      w[n] = s / K;
+    }
+    // normalize peak to 1
+    let mx = 0; for (let n = 0; n < N; n++) if (w[n] > mx) mx = w[n];
+    for (let n = 0; n < N; n++) w[n] /= mx;
+    return w;
+  }
+
+  const N = 64;
+  const K = 600, om = Array.from({length:K},(_,i)=>-Math.PI+2*Math.PI*i/(K-1));
+  const magOf = A => {
+    const w = chebyshev(N, A);
+    const re = new Float32Array(K), im = new Float32Array(K);
+    for (let i = 0; i < K; i++) {
+      let r = 0, ii = 0;
+      for (let n = 0; n < N; n++) { r += w[n]*Math.cos(om[i]*n); ii -= w[n]*Math.sin(om[i]*n); }
+      re[i] = r; im[i] = ii;
+    }
+    const m = new Float32Array(K);
+    for (let i = 0; i < K; i++) m[i] = Math.hypot(re[i], im[i]);
+    return Array.from(DSP.toDb(m, -100));
+  };
+
+  Viz.multiLine(document.getElementById('fCanvas'), [
+    { y: magOf(40),  xValues: om, color:'#3CBCFC', label:'A=40 dB' },
+    { y: magOf(60),  xValues: om, color:'#F8B800', label:'A=60 dB' },
+    { y: magOf(100), xValues: om, color:'#F83800', label:'A=100 dB' },
+  ], { xMin:-Math.PI, xMax:Math.PI, yMin:-100, xLabel:'ω', yLabel:'dB', title:'DOLPH-CHEBYSHEV (equal-ripple side lobes)', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+})();
+</script>
+</body>
+</html>

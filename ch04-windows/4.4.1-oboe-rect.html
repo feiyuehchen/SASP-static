@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.4.1 Rect-Windowed Oboe · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-4-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-4-1 · Rect-Windowed Oboe</span>
+    <span lang="zh">關卡 4-4-1 · 矩形加窗的雙簧管</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Rectangular_Windowed_Oboe_Recording.html" target="_blank">SASP §4.4.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="OBSERVATION">
+    <p lang="en">Strong harmonics show up fine. But the spaces <em>between</em> harmonics fill up to about $-13$ dB — that is the side-lobe leakage of the rectangular window.</p>
+    <p lang="zh">強諧波看得清楚；但諧波<em>之間</em>的凹谷被填到約 $-13$ dB — 那是矩形視窗的旁瓣洩漏。</p>
+  </div>
+
+  <div class="viz-card">
+    <canvas id="fCanvas" style="height:260px;"></canvas>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> Could you see a partial that is 50 dB quieter than the fundamental with this window?</p>
+    <p lang="zh"><b>問：</b>用矩形視窗，能看到比基頻小 50 dB 的 partial 嗎？</p>
+    <div class="choices">
+      <button data-correct="0" lang="en">Yes — rectangular has unlimited dynamic range.</button>
+      <button data-correct="0" lang="zh">可以 — 矩形視窗動態範圍無限。</button>
+      <button data-correct="1" lang="en">No — it would be buried under the $-13$ dB side-lobe floor.</button>
+      <button data-correct="1" lang="zh">不行 — 它會被 $-13$ dB 旁瓣地板蓋住。</button>
+      <button data-correct="0" lang="en">Only if the recording is longer.</button>
+      <button data-correct="0" lang="zh">只有錄音更長才行。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.4-oboe.html">◀ 4.4</a>
+    <a class="warp-pipe">4-4-1</a>
+    <a class="nes-btn nes-btn--primary" href="4.4.2-oboe-hamming.html">NEXT ▶ 4.4.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const fs = 8000, N = 512, M = 4096;
+  const x = new Float32Array(N);
+  const harm = [1,0.6,0.35,0.2,0.1,0.05,0.02,0.01];
+  for (let n = 0; n < N; n++) {
+    let s = 0;
+    for (let k = 0; k < harm.length; k++) s += harm[k] * Math.sin(2*Math.PI*200*(k+1)*n/fs + k*0.7);
+    x[n] = 0.5 * s;
+  }
+  const w = DSP.WINDOWS.rect(N);
+  const xw = new Float32Array(M);
+  for (let n = 0; n < N; n++) xw[n] = x[n] * w[n];
+  const re = new Float32Array(M), im = new Float32Array(M);
+  re.set(xw); DSP.fft(re, im);
+  const H = M/2 + 1, out = new Float32Array(H);
+  for (let k = 0; k < H; k++) out[k] = Math.hypot(re[k], im[k]);
+  const freqs = Array.from({length:H},(_,k)=>k*fs/M);
+  Viz.line($('fCanvas'), DSP.toDb(out,-80), { xValues: freqs, xMin:0, xMax:3000, yMin:-80, xLabel:'f (Hz)', yLabel:'dB', title:'RECT-WINDOWED OBOE', xTicks:[{v:0,label:'0'},{v:1000,label:'1k'},{v:2000,label:'2k'},{v:3000,label:'3k'}] });
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! The first side lobe is only -13 dB down; anything quieter is lost in the floor.</span><span lang="zh">🪙 金幣 +1！第一旁瓣才 -13 dB，更弱的訊號會埋在底板裡。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Recording length changes resolution, not dynamic range.</span><span lang="zh">✗ 錄音長度改變解析度，不是動態範圍。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

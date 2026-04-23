@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.10.4.3 Main-Lobe Width · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-10-4-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-10-4-3 · Main-Lobe Width</span>
+    <span lang="zh">關卡 4-10-4-3 · 主瓣寬度</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Dolph_Chebyshev_Window_Main_Lobe_Width.html" target="_blank">SASP §4.10.4.3 ↗</a></small>
+  </h1>
+
+  <div class="formula">
+    <span class="label">HALF MAIN-LOBE WIDTH (ω)</span>
+    <div>$$\omega_0\;=\;2\cos^{-1}\!\left(\frac{1}{\beta}\right)$$</div>
+  </div>
+
+  <p lang="en">
+    For large attenuation $A$, $\beta\approx\tfrac{1}{N-1}\ln(2\cdot 10^{A/20})$,
+    and the main-lobe width is roughly proportional to $A/N$. So doubling
+    $N$ halves the main lobe for the same side-lobe depth.
+  </p>
+  <p lang="zh">
+    大 $A$ 時，$\beta\approx\tfrac{1}{N-1}\ln(2\cdot 10^{A/20})$，主瓣寬大致正比於 $A/N$。
+    即：固定旁瓣深度下，$N$ 變 2 倍，主瓣寬減半。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.10.4.2-cheby-def.html">◀ 4.10.4.2</a>
+    <a class="warp-pipe">4-10-4-3</a>
+    <a class="nes-btn nes-btn--primary" href="4.10.4.4-cheby-length.html">NEXT ▶ 4.10.4.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

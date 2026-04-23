@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.2.5 Summary — Generalized Hamming · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-2-5</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-2-5 · Summary — Generalized Hamming</span>
+    <span lang="zh">關卡 4-2-5 · 廣義 Hamming 小結</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Summary_Generalized_Hamming_Windows.html" target="_blank">SASP §4.2.5 ↗</a></small>
+  </h1>
+
+  <div class="formula">
+    <span class="label">CHEAT CARD — 2-TERM COSINES</span>
+    <div>
+      $$\begin{array}{llcc}
+      \text{Name} & \alpha & \text{1st SL} & \text{Roll-off} \\
+      \text{Rectangular} & 1 & -13.3\ \text{dB} & 6\ \text{dB/oct} \\
+      \text{Hann} & 0.5 & -31.5\ \text{dB} & 18\ \text{dB/oct} \\
+      \text{Hamming} & 0.54 & -42.7\ \text{dB} & 6\ \text{dB/oct} \\
+      \end{array}$$
+    </div>
+  </div>
+
+  <p lang="en">
+    Main-lobe width in this family is $8\pi/N$ for anything but pure
+    rectangle. The trade is always: first side lobe vs. asymptotic
+    roll-off. If you know where your interfering signals live, pick the
+    window whose worst side lobe is lowest in that band.
+  </p>
+  <p lang="zh">
+    除了純矩形外，這家族的主瓣寬皆 $8\pi/N$。取捨永遠是「第一旁瓣 vs 漸進滾降」。
+    若知道干擾訊號出現在哪一帶，就選在那一帶上旁瓣最低的視窗。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.2.4-matlab-hamming.html">◀ 4.2.4</a>
+    <a class="warp-pipe">4-2-5</a>
+    <a class="nes-btn nes-btn--primary" href="4.2.6-mlt-sine.html">NEXT ▶ 4.2.6</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.2.1 Hann Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-2-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-2-1 · Hann Window</span>
+    <span lang="zh">關卡 4-2-1 · Hann 視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Hann_Hanning_Raised_Cosine.html" target="_blank">SASP §4.2.1 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="HANN (= HANNING, RAISED COSINE)">
+        <p lang="en">The default audio window for a reason: tapers smoothly to zero at both ends, kills the rectangular's first side lobe, and leaves you with a clean $-31$ dB floor.</p>
+        <p lang="zh">音訊預設視窗的原因：兩端平滑收斂到 0、抵消矩形的第一旁瓣，留下乾淨的 $-31$ dB 旁瓣地板。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">HANN</span>
+        <div>$$w[n]=\frac{1}{2}\Bigl[1-\cos\!\left(\frac{2\pi n}{N-1}\right)\Bigr]$$</div>
+      </div>
+
+      <ul>
+        <li lang="en">$\alpha=0.5$ in the generalized Hamming family.</li>
+        <li lang="zh">廣義 Hamming 家族裡的 $\alpha=0.5$。</li>
+        <li lang="en">Main-lobe width $8\pi/N$ (twice the rectangular).</li>
+        <li lang="zh">主瓣寬 $8\pi/N$（矩形的 2 倍）。</li>
+        <li lang="en">First side lobe $\approx -31$ dB.</li>
+        <li lang="zh">第一旁瓣約 $-31$ dB。</li>
+        <li lang="en">Side-lobe roll-off $18$ dB/octave (much faster than rectangular).</li>
+        <li lang="zh">旁瓣滾降 $18$ dB/八度（比矩形快很多）。</li>
+        <li lang="en">A Hann window squared is also a Hann window (squared) — useful for COLA reconstruction.</li>
+        <li lang="zh">Hann 平方仍是 Hann 類型 — COLA 重建常用。</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Hann shape &amp; spectrum</h3>
+        <h3 lang="zh">實驗 · Hann 形狀與頻譜</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:180px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="16" max="128" step="4" value="48"/>
+          <span class="val" id="nVal">48</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Why is the Hann window popular for STFT overlap-add?</p>
+        <p lang="zh"><b>問：</b>為什麼 Hann 視窗在 STFT 重疊相加裡最常用？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">At 50% overlap it satisfies the COLA condition exactly (sum is constant).</button>
+          <button data-correct="1" lang="zh">50% 重疊時精確滿足 COLA 條件（和是定值）。</button>
+          <button data-correct="0" lang="en">It has the smallest main lobe of any window.</button>
+          <button data-correct="0" lang="zh">它是所有視窗中主瓣最窄的。</button>
+          <button data-correct="0" lang="en">It is the only window with zero leakage.</button>
+          <button data-correct="0" lang="zh">它是唯一沒有洩漏的視窗。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.2-generalized-hamming.html">◀ 4.2</a>
+    <a class="warp-pipe">4-2-1</a>
+    <a class="nes-btn nes-btn--primary" href="4.2.2-matlab-hann.html">NEXT ▶ 4.2.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 48 };
+
+  function redraw() {
+    const w = DSP.WINDOWS.hann(state.N);
+    Viz.stem($('tCanvas'), w, { yMin:-0.1, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`HANN, N=${state.N}` });
+    const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), DSP.toDb(mag, -80), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-80, xLabel:'ω', yLabel:'dB', title:'HANN SPECTRUM (dB)', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! COLA at 50% overlap makes STFT resynthesis exact with Hann. Details in World 9.</span><span lang="zh">🪙 金幣 +1！50% 重疊的 COLA 讓 STFT 再合成在 Hann 下精確還原。詳見第 9 世界。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Hann is popular for reconstruction, not for resolution.</span><span lang="zh">✗ Hann 之所以常用，是因為重建友善，不是解析度。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.13.8 Remez Exchange Algorithm · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-13-8</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-13-8 · Remez Exchange</span>
+    <span lang="zh">關卡 4-13-8 · Remez 交換演算法</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Remez_Exchange_Algorithm.html" target="_blank">SASP §4.13.8 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="MUCH FASTER THAN GRID LP">
+    <p lang="en">A smarter way to solve the minimax side-lobe problem. Instead of thousands of frequency-grid inequalities, exchange a small set of extremal frequencies iteratively. Converges in a handful of steps.</p>
+    <p lang="zh">解 minimax 旁瓣問題的快速方法。不用密格點上的幾千條不等式，而是迭代地交換一小組極值頻率。幾步內收斂。</p>
+  </div>
+
+  <p lang="en">
+    Historically used for FIR filter design (Parks-McClellan). For window
+    design the structure is the same: the extremal set has at most
+    $\lceil N/2\rceil+1$ points, and the solution equalises the error
+    magnitude at all of them.
+  </p>
+  <p lang="zh">
+    歷史上用於 FIR 濾波器設計（Parks-McClellan）。視窗設計結構相同：
+    極值集合最多 $\lceil N/2\rceil+1$ 個點，解會讓所有這些點上的誤差振幅一致。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.13.7-lp-std.html">◀ 4.13.7</a>
+    <a class="warp-pipe">4-13-8</a>
+    <a class="nes-btn nes-btn--primary" href="4.13.8.1-remez-conv.html">NEXT ▶ 4.13.8.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

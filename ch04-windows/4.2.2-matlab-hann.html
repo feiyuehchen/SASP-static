@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.2.2 Matlab for the Hann Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-2-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-2-2 · Matlab / Octave for the Hann Window</span>
+    <span lang="zh">關卡 4-2-2 · Hann 視窗的 Matlab / Octave</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Hann_Window.html" target="_blank">SASP §4.2.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="THE ONE-LINER">
+    <p lang="en">Matlab has <code>hann(N)</code> and <code>hanning(N)</code>. They differ only at the endpoints — <code>hann</code> includes the zeros, <code>hanning</code> does not.</p>
+    <p lang="zh">Matlab 提供 <code>hann(N)</code> 與 <code>hanning(N)</code>。差別只在端點：<code>hann</code> 含兩邊的零，<code>hanning</code> 不含。</p>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="PORTABLE DEFINITION">
+    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
+% Matlab / Octave
+w = 0.5 - 0.5 * cos(2*pi*(0:N-1)'/(N-1));
+
+% Python / NumPy
+w = 0.5 - 0.5 * np.cos(2*np.pi*np.arange(N) / (N-1))
+
+% JavaScript (this site's DSP.js)
+const w = DSP.WINDOWS.hann(N);
+    </pre>
+  </div>
+
+  <p lang="en">
+    Any language. Any rate. Remember: the <code>(N-1)</code> in the
+    denominator matters for symmetry. Using <code>N</code> instead will
+    shift the window by half a sample and break COLA tricks.
+  </p>
+  <p lang="zh">
+    任何語言、任何取樣率。注意：分母是 <code>N-1</code>，用 <code>N</code> 會讓視窗偏移半個樣本、破壞 COLA 的條件。
+  </p>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> A colleague wrote <code>w = 0.5 - 0.5*cos(2*pi*(0:N-1)/N)</code>. What is wrong?</p>
+    <p lang="zh"><b>問：</b>同事寫 <code>w = 0.5 - 0.5*cos(2*pi*(0:N-1)/N)</code>。哪裡不對？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Denominator should be $N-1$, not $N$ (off by half a sample).</button>
+      <button data-correct="1" lang="zh">分母應是 $N-1$，不是 $N$（差半個樣本）。</button>
+      <button data-correct="0" lang="en">The 0.5 coefficients should be 0.54.</button>
+      <button data-correct="0" lang="zh">兩個 0.5 應該改成 0.54。</button>
+      <button data-correct="0" lang="en">It is fine.</button>
+      <button data-correct="0" lang="zh">沒問題。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.2.1-hann.html">◀ 4.2.1</a>
+    <a class="warp-pipe">4-2-2</a>
+    <a class="nes-btn nes-btn--primary" href="4.2.3-hamming.html">NEXT ▶ 4.2.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! $N$ gives a <em>periodic</em> Hann with no explicit end zero; $N-1$ gives the symmetric version the maths assumes.</span><span lang="zh">🪙 金幣 +1！用 $N$ 會得到「週期版」Hann，沒有明確的端點零；數學上一般用的是對稱版（$N-1$）。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ The 0.5 weights are correct for Hann. The off-by-one is in the denominator.</span><span lang="zh">✗ 0.5 係數沒錯，錯的是分母差 1。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

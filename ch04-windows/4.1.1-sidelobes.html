@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.1.1 Side Lobes · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-1-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-1-1 · Side Lobes</span>
+    <span lang="zh">關卡 4-1-1 · 旁瓣</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Rectangular_Window_Side_Lobes.html" target="_blank">SASP §4.1.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="WHY THEY MATTER">
+    <p lang="en">Side lobes are the spectral "bleed-through" from one frequency into its neighbours. They decide how easily a weak tone can be hidden next to a strong one.</p>
+    <p lang="zh">旁瓣是一個頻率「漏」到鄰近頻率的部分。決定了弱音被強音遮蔽的難易度。</p>
+  </div>
+
+  <h2 lang="en">Anatomy of the rectangular spectrum</h2>
+  <h2 lang="zh">矩形頻譜的解剖圖</h2>
+
+  <p lang="en">
+    $|W_R(\omega)|$ has a tall main lobe centred at $\omega=0$ surrounded
+    by a series of smaller lobes. Each lobe corresponds to one period of
+    $\sin(N\omega/2)$. The $k$-th side-lobe peak sits near
+    $\omega \approx (2k+1)\pi/N$ and has height roughly
+    $1/[(k+\tfrac12)\pi]$ relative to the main lobe.
+  </p>
+  <p lang="zh">
+    $|W_R(\omega)|$ 主瓣在 $\omega=0$ 中心，兩側一個個小旁瓣。每個旁瓣對應 $\sin(N\omega/2)$ 的一個週期。
+    第 $k$ 個旁瓣峰大約在 $\omega\approx(2k+1)\pi/N$，相對主瓣高度約 $1/[(k+\tfrac12)\pi]$。
+  </p>
+
+  <ul>
+    <li lang="en">First side lobe: about $-13.26$ dB.</li>
+    <li lang="zh">第一旁瓣：約 $-13.26$ dB。</li>
+    <li lang="en">Second side lobe: about $-17.8$ dB.</li>
+    <li lang="zh">第二旁瓣：約 $-17.8$ dB。</li>
+    <li lang="en">Roll-off: $6$ dB per octave of frequency (each doubling of $\omega$ halves the envelope).</li>
+    <li lang="zh">滾降：每頻率八度 $6$ dB（$\omega$ 翻倍，包絡折半）。</li>
+  </ul>
+
+  <div class="nes-box nes-box--yellow" data-label="AUDIO CONSEQUENCE">
+    <p lang="en">A 440 Hz tone at 0 dB will put energy at about $-13$ dB into neighbours. If you want to hear a 100× quieter ($-40$ dB) tone nearby, the rectangular window cannot show it — you need a window with deeper side lobes (Hann, Blackman, Kaiser, …).</p>
+    <p lang="zh">0 dB 的 440 Hz 音會在鄰近頻率留下約 $-13$ dB 的能量。如果要看到比它小 100 倍（$-40$ dB）的弱音，
+      矩形視窗看不到 — 得換旁瓣更深的視窗（Hann、Blackman、Kaiser…）。</p>
+  </div>
+
+  <div class="viz-card">
+    <h3 lang="en">Lab · Hide a weak tone behind a strong one</h3>
+    <h3 lang="zh">實驗 · 讓弱音藏在強音旁</h3>
+    <canvas id="fCanvas" style="height:200px;"></canvas>
+    <div class="controls">
+      <label>Δf (bins)</label>
+      <input type="range" id="dfSlider" min="1" max="20" step="0.5" value="5"/>
+      <span class="val" id="dfVal">5</span>
+
+      <label>WEAK dB</label>
+      <input type="range" id="wSlider" min="-60" max="-5" step="1" value="-25"/>
+      <span class="val" id="wVal">-25</span>
+
+      <label>WIN</label>
+      <select id="winSel">
+        <option value="rect" selected>Rectangular</option>
+        <option value="hann">Hann</option>
+        <option value="blackman">Blackman</option>
+      </select>
+      <span class="val" id="winName">RECT</span>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> For the rectangular window at $N=128$, at about what $\omega$ does the first side-lobe peak sit?</p>
+    <p lang="zh"><b>問：</b>$N=128$ 的矩形視窗，第一旁瓣峰大約落在什麼 $\omega$？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">$\approx 3\pi/128$.</button>
+      <button data-correct="1" lang="zh">$\approx 3\pi/128$。</button>
+      <button data-correct="0" lang="en">$\pi/2$.</button>
+      <button data-correct="0" lang="zh">$\pi/2$。</button>
+      <button data-correct="0" lang="en">Depends on signal frequency.</button>
+      <button data-correct="0" lang="zh">看訊號頻率。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.1-rectangular.html">◀ 4.1</a>
+    <a class="warp-pipe">4-1-1</a>
+    <a class="nes-btn nes-btn--primary" href="4.1.2-rect-summary.html">NEXT ▶ 4.1.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 512;
+  const state = { df: 5, wDb: -25, win: 'rect' };
+
+  function redraw() {
+    const w = DSP.WINDOWS[state.win](N);
+    const x = new Float32Array(N);
+    const weak = Math.pow(10, state.wDb / 20);
+    for (let n = 0; n < N; n++) {
+      x[n] = (Math.cos(2*Math.PI*20*n/N) + weak * Math.cos(2*Math.PI*(20+state.df)*n/N)) * w[n];
+    }
+    const K = 600;
+    const om = DSP.linspace(0, Math.PI, K);
+    const { re, im } = DSP.dtft(x, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    const db = DSP.toDb(mag, -80);
+    Viz.line($('fCanvas'), db, { xValues: Array.from(om), xMin:0, xMax:0.3, yMin:-80, xLabel:'ω', yLabel:'dB', title:`WIN=${state.win.toUpperCase()} — can you see the weak tone?`, xTicks:[{v:0,label:'0'},{v:0.1,label:'0.1'},{v:0.2,label:'0.2'},{v:0.3,label:'0.3'}] });
+  }
+
+  $('dfSlider').addEventListener('input', () => { state.df = parseFloat($('dfSlider').value); $('dfVal').textContent = state.df; redraw(); });
+  $('wSlider').addEventListener('input',  () => { state.wDb = parseInt($('wSlider').value,10); $('wVal').textContent = state.wDb; redraw(); });
+  $('winSel').addEventListener('change',  () => { state.win = $('winSel').value; $('winName').textContent = state.win.toUpperCase(); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! First side-lobe peak is at $\\omega \\approx 3\\pi/N$.</span><span lang="zh">🪙 金幣 +1！第一旁瓣峰在 $\\omega\\approx 3\\pi/N$。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Formula: side-lobe peak k at ≈ (2k+1)π/N.</span><span lang="zh">✗ 公式：第 k 個旁瓣峰 ≈ (2k+1)π/N。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

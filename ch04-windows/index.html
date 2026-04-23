@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>World 4 — Spectrum-Analysis Windows · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="../index.html">◀ MAP</a></span>
+    <span>WORLD <b>4</b></span>
+    <span lang="en">WINDOWS</span>
+    <span lang="zh">視窗函數</span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">World 4 — Spectrum-Analysis Windows</span>
+    <span lang="zh">第 4 世界 — 頻譜分析視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Rectangular_Window.html" target="_blank">SASP Ch. 4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="BRIEFING">
+    <p lang="en">Every spectrum we compute is the spectrum of a windowed segment. The window's shape controls main-lobe width, side-lobe level, and how much spectral leakage we suffer. This world catalogues every window you will see in practice.</p>
+    <p lang="zh">所有頻譜都是加過視窗的片段的頻譜。視窗形狀決定主瓣寬、旁瓣高度與頻譜洩漏嚴重度。
+      這個世界把實務上會看到的視窗都介紹一遍。</p>
+  </div>
+
+  <h2 lang="en">Stages</h2>
+  <h2 lang="zh">關卡列表</h2>
+
+  <ul class="toc-list">
+    <li><a href="4.1-rectangular.html"><span><span class="num">4.1</span><span lang="en">Rectangular Window</span><span lang="zh">矩形視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.1.1-sidelobes.html"><span><span class="num">4.1.1</span><span lang="en">Side Lobes</span><span lang="zh">旁瓣</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.1.2-rect-summary.html"><span><span class="num">4.1.2</span><span lang="en">Rect Summary</span><span lang="zh">矩形小結</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.2-generalized-hamming.html"><span><span class="num">4.2</span><span lang="en">Generalized Hamming Family</span><span lang="zh">廣義 Hamming 家族</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.2.1-hann.html"><span><span class="num">4.2.1</span><span lang="en">Hann (Hanning · Raised Cosine)</span><span lang="zh">Hann（Hanning · Raised Cosine）</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.2.2-matlab-hann.html"><span><span class="num">4.2.2</span><span lang="en">Matlab for Hann</span><span lang="zh">Hann 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.2.3-hamming.html"><span><span class="num">4.2.3</span><span lang="en">Hamming</span><span lang="zh">Hamming</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.2.4-matlab-hamming.html"><span><span class="num">4.2.4</span><span lang="en">Matlab for Hamming</span><span lang="zh">Hamming 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.2.5-ghamming-summary.html"><span><span class="num">4.2.5</span><span lang="en">Summary (Gen. Hamming)</span><span lang="zh">廣義 Hamming 小結</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.2.6-mlt-sine.html"><span><span class="num">4.2.6</span><span lang="en">MLT Sine Window</span><span lang="zh">MLT 正弦視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.3-blackman-harris.html"><span><span class="num">4.3</span><span lang="en">Blackman-Harris Family</span><span lang="zh">Blackman-Harris 家族</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.3.1-blackman-family.html"><span><span class="num">4.3.1</span><span lang="en">Blackman Window Family</span><span lang="zh">Blackman 視窗家族</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.3.2-classic-blackman.html"><span><span class="num">4.3.2</span><span lang="en">Classic Blackman</span><span lang="zh">經典 Blackman</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.3.3-matlab-blackman.html"><span><span class="num">4.3.3</span><span lang="en">Matlab for Blackman</span><span lang="zh">Blackman 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.3.4-3term-bh.html"><span><span class="num">4.3.4</span><span lang="en">3-Term Blackman-Harris</span><span lang="zh">三項 Blackman-Harris</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.3.5-fd-bh.html"><span><span class="num">4.3.5</span><span lang="en">Frequency-Domain Blackman-Harris</span><span lang="zh">頻域 Blackman-Harris</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.3.6-pow-cos.html"><span><span class="num">4.3.6</span><span lang="en">Power-of-Cosine Family</span><span lang="zh">餘弦冪次家族</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.4-oboe.html"><span><span class="num">4.4</span><span lang="en">Spectrum Analysis of an Oboe Tone</span><span lang="zh">雙簧管音的頻譜分析</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.4.1-oboe-rect.html"><span><span class="num">4.4.1</span><span lang="en">Rect-Windowed Oboe</span><span lang="zh">矩形加窗的雙簧管</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.4.2-oboe-hamming.html"><span><span class="num">4.4.2</span><span lang="en">Hamming-Windowed Oboe</span><span lang="zh">Hamming 加窗的雙簧管</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.4.3-oboe-blackman.html"><span><span class="num">4.4.3</span><span lang="en">Blackman-Windowed Oboe</span><span lang="zh">Blackman 加窗的雙簧管</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.4.4-oboe-conclusion.html"><span><span class="num">4.4.4</span><span lang="en">Conclusions (Oboe)</span><span lang="zh">雙簧管結論</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.5-bartlett.html"><span><span class="num">4.5</span><span lang="en">Bartlett (Triangular)</span><span lang="zh">Bartlett（三角形）</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.5.1-matlab-bartlett.html"><span><span class="num">4.5.1</span><span lang="en">Matlab for Bartlett</span><span lang="zh">Bartlett 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.6-poisson.html"><span><span class="num">4.6</span><span lang="en">Poisson</span><span lang="zh">Poisson</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.7-hann-poisson.html"><span><span class="num">4.7</span><span lang="en">Hann-Poisson</span><span lang="zh">Hann-Poisson</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.7.1-matlab-hann-poisson.html"><span><span class="num">4.7.1</span><span lang="en">Matlab for Hann-Poisson</span><span lang="zh">Hann-Poisson 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.8-dpss.html"><span><span class="num">4.8</span><span lang="en">Slepian / DPSS</span><span lang="zh">Slepian / DPSS</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.8.1-matlab-dpss.html"><span><span class="num">4.8.1</span><span lang="en">Matlab for DPSS</span><span lang="zh">DPSS 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.9-kaiser.html"><span><span class="num">4.9</span><span lang="en">Kaiser Window</span><span lang="zh">Kaiser 視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.9.1-kaiser-beta.html"><span><span class="num">4.9.1</span><span lang="en">Kaiser β parameter</span><span lang="zh">Kaiser β 參數</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.9.2-kaiser-xforms.html"><span><span class="num">4.9.2</span><span lang="en">Kaiser Windows &amp; Transforms</span><span lang="zh">Kaiser 視窗與轉換</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.9.3-kaiser-sep.html"><span><span class="num">4.9.3</span><span lang="en">Min Freq Separation vs Length</span><span lang="zh">最小頻率分離 vs 長度</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.9.4-kaiser-vs-dpss.html"><span><span class="num">4.9.4</span><span lang="en">Kaiser vs DPSS</span><span lang="zh">Kaiser 對照 DPSS</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.10-dolph-chebyshev.html"><span><span class="num">4.10</span><span lang="en">Dolph-Chebyshev</span><span lang="zh">Dolph-Chebyshev</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.10.1-matlab-cheby.html"><span><span class="num">4.10.1</span><span lang="en">Matlab for Dolph-Chebyshev</span><span lang="zh">Dolph-Chebyshev 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.10.2-cheby-examples.html"><span><span class="num">4.10.2</span><span lang="en">Example Chebyshev Windows</span><span lang="zh">Chebyshev 視窗範例</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.10.3-cheby-vs-hamming.html"><span><span class="num">4.10.3</span><span lang="en">Chebyshev vs Hamming</span><span lang="zh">Chebyshev 對照 Hamming</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.10.4-cheby-theory.html"><span><span class="num">4.10.4</span><span lang="en">Dolph-Chebyshev Theory</span><span lang="zh">Dolph-Chebyshev 理論</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.10.4.1-cheby-poly.html"><span><span class="num">4.10.4.1</span><span lang="en">Chebyshev Polynomials</span><span lang="zh">Chebyshev 多項式</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.10.4.2-cheby-def.html"><span><span class="num">4.10.4.2</span><span lang="en">Dolph-Chebyshev Definition</span><span lang="zh">Dolph-Chebyshev 定義</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.10.4.3-cheby-mainlobe.html"><span><span class="num">4.10.4.3</span><span lang="en">Main-Lobe Width</span><span lang="zh">主瓣寬度</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.10.4.4-cheby-length.html"><span><span class="num">4.10.4.4</span><span lang="en">Length Computation</span><span lang="zh">長度計算</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.11-gaussian.html"><span><span class="num">4.11</span><span lang="en">Gaussian Window</span><span lang="zh">高斯視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.11.1-matlab-gaussian.html"><span><span class="num">4.11.1</span><span lang="en">Matlab for Gaussian</span><span lang="zh">Gaussian 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.11.2-gauss-xform.html"><span><span class="num">4.11.2</span><span lang="en">Gaussian Window &amp; Transform</span><span lang="zh">Gaussian 視窗與轉換</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.11.3-exact-discrete-gauss.html"><span><span class="num">4.11.3</span><span lang="en">Exact Discrete Gaussian</span><span lang="zh">精確離散 Gaussian</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.12-optimized.html"><span><span class="num">4.12</span><span lang="en">Optimized Windows</span><span lang="zh">最佳化視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.12.1-audio-coding.html"><span><span class="num">4.12.1</span><span lang="en">Windows for Audio Coding</span><span lang="zh">音訊編碼用視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.12.2-general-rule.html"><span><span class="num">4.12.2</span><span lang="en">General Rule</span><span lang="zh">通則</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13-linprog.html"><span><span class="num">4.13</span><span lang="en">Window Design by LP</span><span lang="zh">用線性規劃設計視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.1-lp.html"><span><span class="num">4.13.1</span><span lang="en">Linear Programming</span><span lang="zh">線性規劃</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.2-lp-cheby.html"><span><span class="num">4.13.2</span><span lang="en">LP for Chebyshev Windows</span><span lang="zh">LP 設計 Chebyshev 視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.3-sym-constraint.html"><span><span class="num">4.13.3</span><span lang="en">Symmetric Constraint</span><span lang="zh">對稱約束</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.4-pos-constraint.html"><span><span class="num">4.13.4</span><span lang="en">Positive-Sample Constraint</span><span lang="zh">正樣本約束</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.5-dc-constraint.html"><span><span class="num">4.13.5</span><span lang="en">DC Constraint</span><span lang="zh">DC 約束</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.6-sidelobe-spec.html"><span><span class="num">4.13.6</span><span lang="en">Sidelobe Spec</span><span lang="zh">旁瓣規格</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.7-lp-std.html"><span><span class="num">4.13.7</span><span lang="en">LP Standard Form</span><span lang="zh">LP 標準式</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.8-remez.html"><span><span class="num">4.13.8</span><span lang="en">Remez Exchange</span><span lang="zh">Remez 交換</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.8.1-remez-conv.html"><span><span class="num">4.13.8.1</span><span lang="en">Remez Convergence</span><span lang="zh">Remez 收斂</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.9-monotonic.html"><span><span class="num">4.13.9</span><span lang="en">Monotonicity Constraint</span><span lang="zh">單調約束</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.10-linf-deriv.html"><span><span class="num">4.13.10</span><span lang="en">L∞ Derivative Objective</span><span lang="zh">L∞ 導數目標</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.11-l1-deriv.html"><span><span class="num">4.13.11</span><span lang="en">L1 Derivative Objective</span><span lang="zh">L1 導數目標</span></span><span class="dim">▶</span></a></li>
+    <li><a href="4.13.12-windows-summary.html"><span><span class="num">4.13.12</span><span lang="en">Summary (Windows)</span><span lang="zh">視窗世界總結</span></span><span class="dim">▶</span></a></li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="../ch03-fourier-transforms/index.html">◀ W3</a>
+    <a class="nes-btn nes-btn--primary" href="4.1-rectangular.html">START ▶</a>
+    <a class="nes-btn" href="../ch05-fir-design/index.html">World 5 ▶</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+</body>
+</html>

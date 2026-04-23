@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.9.2 Kaiser Windows and Transforms · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-9-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-9-2 · Kaiser Windows &amp; Transforms</span>
+    <span lang="zh">關卡 4-9-2 · Kaiser 視窗與轉換</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Kaiser_Windows_Transforms.html" target="_blank">SASP §4.9.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="TRANSFORM FAMILY">
+    <p lang="en">The DTFT of the continuous Kaiser window is itself a scaled sinc-like $\sinh$ function; in practice we just compute it numerically by FFT.</p>
+    <p lang="zh">連續型 Kaiser 視窗的 DTFT 本身是一個縮放的 sinh 類 sinc；實務上用 FFT 算。</p>
+  </div>
+
+  <div class="viz-card">
+    <h3 lang="en">Lab · β = {2, 6, 10}</h3>
+    <h3 lang="zh">實驗 · β = {2, 6, 10}</h3>
+    <canvas id="fCanvas" style="height:240px;"></canvas>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.9.1-kaiser-beta.html">◀ 4.9.1</a>
+    <a class="warp-pipe">4-9-2</a>
+    <a class="nes-btn nes-btn--primary" href="4.9.3-kaiser-sep.html">NEXT ▶ 4.9.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 64;
+  const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
+  const magOf = b => {
+    const w = DSP.WINDOWS.kaiser(N, b);
+    const { re, im } = DSP.dtft(w, om);
+    const m = new Float32Array(K);
+    for (let i = 0; i < K; i++) m[i] = Math.hypot(re[i], im[i]);
+    return DSP.toDb(m, -120);
+  };
+  Viz.multiLine($('fCanvas'), [
+    { y: Array.from(magOf(2)),  color:'#3CBCFC', label:'β=2' },
+    { y: Array.from(magOf(6)),  color:'#F8B800', label:'β=6' },
+    { y: Array.from(magOf(10)), color:'#F83800', label:'β=10' },
+  ], { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-120, xLabel:'ω', yLabel:'dB', title:'KAISER SPECTRA — β trades main-lobe width for side-lobe depth', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+})();
+</script>
+</body>
+</html>

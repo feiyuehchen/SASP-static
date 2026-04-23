@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.2.6 MLT Sine Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-2-6</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-2-6 · MLT Sine Window</span>
+    <span lang="zh">關卡 4-2-6 · MLT 正弦視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/MLT_Sine_Window.html" target="_blank">SASP §4.2.6 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="CODEC'S FAVOURITE">
+    <p lang="en">A half-cycle of sine. Designed so the sum of squares of overlapping windows is constant — the MLT / MDCT reconstruction condition used in MP3, AAC, Vorbis, Opus.</p>
+    <p lang="zh">半週期的正弦。設計上讓相鄰視窗的平方和為常數 — MLT / MDCT 完美重建的條件；MP3、AAC、Vorbis、Opus 都用。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">MLT SINE WINDOW</span>
+    <div>$$w[n]=\sin\!\left(\frac{\pi\,(n+\tfrac12)}{N}\right),\quad 0\le n<N$$</div>
+    <span class="label">PROPERTY</span>
+    <div>$$w^2[n]+w^2[n+N]=1$$</div>
+  </div>
+
+  <p lang="en">
+    Why codecs like it: with $50\%$ overlap the analysis window and the
+    synthesis window are both the MLT sine, and the sum-of-squares
+    condition lets you reconstruct exactly even after frequency-domain
+    quantisation of intermediate frames.
+  </p>
+  <p lang="zh">
+    編碼器愛用它的原因：50% 重疊下，分析與合成視窗都是 MLT 正弦，
+    平方和守恆讓你即使在中間對頻譜做量化，仍可精確重建。
+  </p>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> Two neighbouring MLT sine windows at 50% overlap. At the overlap point, the sum $w^2[n]+w^2[n+N]$ equals:</p>
+    <p lang="zh"><b>問：</b>50% 重疊的兩個 MLT 正弦視窗。在重疊點，$w^2[n]+w^2[n+N]$ 的值是？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">1 — that is why reconstruction is exact.</button>
+      <button data-correct="1" lang="zh">1 — 正是精確重建的關鍵。</button>
+      <button data-correct="0" lang="en">0.5.</button>
+      <button data-correct="0" lang="zh">0.5。</button>
+      <button data-correct="0" lang="en">Varies with $n$.</button>
+      <button data-correct="0" lang="zh">隨 $n$ 變化。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.2.5-ghamming-summary.html">◀ 4.2.5</a>
+    <a class="warp-pipe">4-2-6</a>
+    <a class="nes-btn nes-btn--primary" href="4.3-blackman-harris.html">NEXT ▶ 4.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Pythagoras: sin² + cos² = 1 — at 50% overlap the two windows become sin & cos of the same argument.</span><span lang="zh">🪙 金幣 +1！畢氏：sin² + cos² = 1 — 50% 重疊下兩視窗是同角度的 sin 與 cos。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Use sin² θ + cos² θ = 1.</span><span lang="zh">✗ 用 sin²θ + cos²θ = 1。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

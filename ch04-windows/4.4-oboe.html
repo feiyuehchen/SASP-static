@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.4 Oboe Tone Spectrum Analysis · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-4 · Oboe Tone Spectrum Analysis</span>
+    <span lang="zh">關卡 4-4 · 雙簧管音的頻譜分析</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Spectrum_Analysis_Oboe_Tone.html" target="_blank">SASP §4.4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="CASE STUDY">
+    <p lang="en">Real-world example. An oboe tone is highly harmonic — many partials at integer multiples of the fundamental. The spectrum tells us which harmonics are loud, but leakage from the analysis window can obscure the quieter ones.</p>
+    <p lang="zh">實戰案例。雙簧管聲音是高度諧波性的 — 基頻的整數倍處有很多 partial。
+      頻譜告訴我們哪些諧波比較強，但分析視窗的洩漏可能把較弱的諧波蓋住。</p>
+  </div>
+
+  <p lang="en">The following three pages compare three window choices on a synthetic oboe-like tone. We generate 8 harmonics of a 200 Hz fundamental at $f_s=8000$ Hz with slowly decreasing amplitude, window 512 samples, zero-pad to 4096, take the FFT.</p>
+  <p lang="zh">接下來三頁比較三種視窗用在一段仿雙簧管音上：在 $f_s=8000$ Hz 下生成 200 Hz 基頻的 8 個諧波、振幅漸減，取 512 樣本加窗、補零到 4096、做 FFT。</p>
+
+  <div class="viz-card">
+    <h3 lang="en">Lab · All three windows side by side</h3>
+    <h3 lang="zh">實驗 · 三種視窗並排</h3>
+    <canvas id="fCanvas" style="height:260px;"></canvas>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.3.6-pow-cos.html">◀ 4.3.6</a>
+    <a class="warp-pipe">4-4</a>
+    <a class="nes-btn nes-btn--primary" href="4.4.1-oboe-rect.html">NEXT ▶ 4.4.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const fs = 8000, N = 512, M = 4096;
+  const x = new Float32Array(N);
+  const harm = [1,0.6,0.35,0.2,0.1,0.05,0.02,0.01];
+  for (let n = 0; n < N; n++) {
+    let s = 0;
+    for (let k = 0; k < harm.length; k++) s += harm[k] * Math.sin(2*Math.PI*200*(k+1)*n/fs + k*0.7);
+    x[n] = 0.5 * s;
+  }
+
+  function mag(win) {
+    const w = DSP.WINDOWS[win](N);
+    const xw = new Float32Array(M);
+    for (let n = 0; n < N; n++) xw[n] = x[n] * w[n];
+    const re = new Float32Array(M), im = new Float32Array(M);
+    re.set(xw); DSP.fft(re, im);
+    const H = M/2 + 1;
+    const out = new Float32Array(H);
+    for (let k = 0; k < H; k++) out[k] = Math.hypot(re[k], im[k]);
+    return DSP.toDb(out, -80);
+  }
+
+  const freqs = Array.from({length: M/2 + 1}, (_,k) => k * fs / M);
+
+  Viz.multiLine($('fCanvas'), [
+    { y: Array.from(mag('rect')),     xValues: freqs, color:'#3CBCFC', label:'Rectangular' },
+    { y: Array.from(mag('hamming')),  xValues: freqs, color:'#F8B800', label:'Hamming' },
+    { y: Array.from(mag('blackman')), xValues: freqs, color:'#F83800', label:'Blackman' },
+  ], { xMin: 0, xMax: 3000, yMin: -80, xLabel:'f (Hz)', yLabel:'dB', title:'OBOE (8 harmonics) — 3 window choices', xTicks: [{v:0,label:'0'},{v:1000,label:'1k'},{v:2000,label:'2k'},{v:3000,label:'3k'}] });
+})();
+</script>
+</body>
+</html>

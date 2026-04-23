@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.9 Kaiser Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-9</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-9 · Kaiser Window</span>
+    <span lang="zh">關卡 4-9 · Kaiser 視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Kaiser_Window.html" target="_blank">SASP §4.9 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box nes-box--purple" data-label="THE POCKET KNIFE">
+        <p lang="en">One parameter $\beta$ smoothly slides between rectangular ($\beta=0$) and extremely-tapered windows ($\beta\gg 1$). A close approximation to the DPSS but with a closed-form expression.</p>
+        <p lang="zh">一個參數 $\beta$ 平滑地從矩形（$\beta=0$）滑到極度收尾的視窗（$\beta\gg 1$）。DPSS 的近似版本，有顯式公式。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">KAISER</span>
+        <div>$$w[n]=\frac{I_0\!\left(\beta\sqrt{1-\bigl[\frac{2n-(N-1)}{N-1}\bigr]^{2}}\right)}{I_0(\beta)}$$</div>
+      </div>
+
+      <p lang="en">$I_0$ is the modified Bessel function of the first kind, order 0. Our <code>DSP.WINDOWS.kaiser(N, β)</code> uses a small series for $I_0$ that is accurate to machine precision.</p>
+      <p lang="zh">$I_0$ 是零階第一類修正 Bessel 函數。本站 <code>DSP.WINDOWS.kaiser(N, β)</code> 用級數展開計算，精度到機器誤差。</p>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Sweep β</h3>
+        <h3 lang="zh">實驗 · 調 β</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:190px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>β</label>
+          <input type="range" id="bSlider" min="0" max="14" step="0.2" value="6"/>
+          <span class="val" id="bVal">6.0</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.8.1-matlab-dpss.html">◀ 4.8.1</a>
+    <a class="warp-pipe">4-9</a>
+    <a class="nes-btn nes-btn--primary" href="4.9.1-kaiser-beta.html">NEXT ▶ 4.9.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { b: 6 };
+  const N = 64;
+  function redraw() {
+    const w = DSP.WINDOWS.kaiser(N, state.b);
+    Viz.stem($('tCanvas'), w, { yMin:-0.05, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`KAISER β=${state.b.toFixed(1)}` });
+    const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), DSP.toDb(mag,-100), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-100, xLabel:'ω', yLabel:'dB', title:'SPECTRUM (dB)', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+  $('bSlider').addEventListener('input', () => { state.b = parseFloat($('bSlider').value); $('bVal').textContent = state.b.toFixed(1); redraw(); });
+  redraw();
+})();
+</script>
+</body>
+</html>

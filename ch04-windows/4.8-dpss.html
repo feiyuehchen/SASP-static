@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.8 Slepian / DPSS · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-8</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-8 · Slepian / DPSS (Prolate Spheroidal)</span>
+    <span lang="zh">關卡 4-8 · Slepian / DPSS（扁球體波函數）</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Slepian_DPSS_Window.html" target="_blank">SASP §4.8 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="MAX ENERGY CONCENTRATION">
+    <p lang="en">The DPSS (Discrete Prolate Spheroidal Sequences) is the window that maximises the fraction of its spectrum energy inside a chosen bandwidth $|\omega|<W$. Provably optimal at this objective.</p>
+    <p lang="zh">DPSS（離散扁球體波函數）是讓「頻譜能量集中在選定頻寬 $|\omega|<W$ 內的比例」最大化的視窗。這個目標函數下是可證明最佳的。</p>
+  </div>
+
+  <p lang="en">
+    The shape is the dominant eigenvector of a certain Toeplitz matrix;
+    in practice Matlab's <code>dpss(N, NW)</code> gives it back, with
+    <code>NW</code> being the time-bandwidth product. <code>NW</code>
+    controls the trade-off: larger <code>NW</code> means lower sidelobes
+    and wider main lobe.
+  </p>
+  <p lang="zh">
+    形狀是某個 Toeplitz 矩陣的主特徵向量；實務上 Matlab 的 <code>dpss(N, NW)</code> 直接給你，
+    <code>NW</code> 為時間頻寬乘積。<code>NW</code> 越大 → 旁瓣越低、主瓣越寬。
+  </p>
+
+  <ul>
+    <li lang="en">Theoretically optimal for sidelobe suppression at a given main-lobe width.</li>
+    <li lang="zh">在主瓣寬給定時，旁瓣壓制理論最優。</li>
+    <li lang="en">Multiple orthogonal DPSS sequences exist — used in the multi-taper spectral estimator.</li>
+    <li lang="zh">同一 <code>NW</code> 下有多個互正交的 DPSS 序列 — 多視窗頻譜估計（multi-taper）就是用它們。</li>
+    <li lang="en">Computation is nontrivial; Kaiser (next) is a close approximation.</li>
+    <li lang="zh">計算較複雜；Kaiser（下一關）是它的近似。</li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.7.1-matlab-hann-poisson.html">◀ 4.7.1</a>
+    <a class="warp-pipe">4-8</a>
+    <a class="nes-btn nes-btn--primary" href="4.8.1-matlab-dpss.html">NEXT ▶ 4.8.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

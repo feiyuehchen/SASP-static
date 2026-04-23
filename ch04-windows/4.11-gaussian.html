@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.11 Gaussian Window · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-11</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-11 · Gaussian Window</span>
+    <span lang="zh">關卡 4-11 · 高斯視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Gaussian_Window_Transform.html" target="_blank">SASP §4.11 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box nes-box--purple" data-label="THE MINIMUM-TBP WINDOW">
+        <p lang="en">A Gaussian in time is a Gaussian in frequency. This is the <em>only</em> function that achieves the minimum time-bandwidth product, which is why it keeps showing up in STFT theory.</p>
+        <p lang="zh">時域高斯 ↔ 頻域高斯。這是<em>唯一</em>能達到最小時間頻寬積的函數，也因此 STFT 理論裡到處看得到它。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">GAUSSIAN</span>
+        <div>$$w[n]=\exp\!\left(-\tfrac12\Bigl[\tfrac{n-(N-1)/2}{\sigma\,(N-1)/2}\Bigr]^{2}\right)$$</div>
+      </div>
+
+      <ul>
+        <li lang="en">$\sigma$ controls how tight the taper is. $\sigma=0.4$ is a common default.</li>
+        <li lang="zh">$\sigma$ 決定收尾嚴格度；$\sigma=0.4$ 是常見預設。</li>
+        <li lang="en">No zeros in the spectrum — side lobes smoothly decay.</li>
+        <li lang="zh">頻譜沒有零點 — 旁瓣平滑衰減。</li>
+        <li lang="en">Gaussian-windowed chirplets are the centrepiece of World 11 §11.6.</li>
+        <li lang="zh">Gaussian 加窗的 chirplet 是第 11 世界 §11.6 的核心。</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:170px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>σ</label>
+          <input type="range" id="sSlider" min="0.15" max="0.6" step="0.01" value="0.4"/>
+          <span class="val" id="sVal">0.40</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.10.4.4-cheby-length.html">◀ 4.10.4.4</a>
+    <a class="warp-pipe">4-11</a>
+    <a class="nes-btn nes-btn--primary" href="4.11.1-matlab-gaussian.html">NEXT ▶ 4.11.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 64;
+  const state = { s: 0.4 };
+  function redraw() {
+    const w = DSP.WINDOWS.gaussian(N, state.s);
+    Viz.stem($('tCanvas'), w, { yMin:-0.05, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`GAUSSIAN σ=${state.s.toFixed(2)}` });
+    const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), DSP.toDb(mag,-100), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-100, xLabel:'ω', yLabel:'dB', title:'SPECTRUM', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+  $('sSlider').addEventListener('input', () => { state.s = parseFloat($('sSlider').value); $('sVal').textContent = state.s.toFixed(2); redraw(); });
+  redraw();
+})();
+</script>
+</body>
+</html>

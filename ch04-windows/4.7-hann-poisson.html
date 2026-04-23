@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.7 Hann-Poisson · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-7</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-7 · Hann-Poisson Window</span>
+    <span lang="zh">關卡 4-7 · Hann-Poisson 視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Hann_Poisson_Window.html" target="_blank">SASP §4.7 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="MIX THE TWO">
+    <p lang="en">Product of a Hann and a Poisson window. Inherits the Hann's gentle zeros and the Poisson's exponential decay, killing side lobes faster than either.</p>
+    <p lang="zh">Hann 與 Poisson 的乘積。同時擁有 Hann 的兩端平滑為零、以及 Poisson 的指數衰減，旁瓣壓得比兩者都低。</p>
+  </div>
+
+  <div class="formula">
+    <div>$$w[n]=\tfrac{1}{2}\Bigl(1-\cos\tfrac{2\pi n}{N-1}\Bigr)\cdot e^{-\alpha|n-(N-1)/2|/((N-1)/2)}$$</div>
+  </div>
+
+  <p lang="en">Useful when you want Hann's nice COLA behaviour plus an extra tunable taper.</p>
+  <p lang="zh">當你想要 Hann 的 COLA 特性，又想多一個可調收尾時適用。</p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.6-poisson.html">◀ 4.6</a>
+    <a class="warp-pipe">4-7</a>
+    <a class="nes-btn nes-btn--primary" href="4.7.1-matlab-hann-poisson.html">NEXT ▶ 4.7.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

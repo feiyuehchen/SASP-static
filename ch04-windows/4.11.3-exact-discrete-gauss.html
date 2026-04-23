@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.11.3 Exact Discrete Gaussian · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-11-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-11-3 · Exact Discrete Gaussian</span>
+    <span lang="zh">關卡 4-11-3 · 精確離散高斯</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Exact_Discrete_Gaussian_Window.html" target="_blank">SASP §4.11.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="DISCRETE SELF-DUAL">
+    <p lang="en">On the unit circle (DTFT), a sampled Gaussian is NOT self-dual. The <em>exact discrete Gaussian</em> is the sequence whose DFT is also proportional to itself — a genuine discrete analogue built from Jacobi theta functions.</p>
+    <p lang="zh">在單位圓上，取樣高斯並不是真的自身對偶。<em>精確離散高斯</em>是其 DFT 與自己成比例的序列 — 用 Jacobi theta 函數建構的離散對應版。</p>
+  </div>
+
+  <p lang="en">
+    For most audio practice the sampled Gaussian from §4.11 is close
+    enough; the exact version matters when you build theoretical
+    frameworks that need perfect self-duality (e.g. certain chirp-Gabor
+    decompositions).
+  </p>
+  <p lang="zh">
+    音訊實務中 §4.11 的取樣高斯已經夠用；只有在需要完美自身對偶的理論框架中才要用精確版，例如某些 chirp-Gabor 分解。
+  </p>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.11.2-gauss-xform.html">◀ 4.11.2</a>
+    <a class="warp-pipe">4-11-3</a>
+    <a class="nes-btn nes-btn--primary" href="4.12-optimized.html">NEXT ▶ 4.12</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

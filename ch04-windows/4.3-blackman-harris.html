@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>4.3 Blackman-Harris Family · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W4</a></span>
+    <span>STAGE <b>4-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 4-3 · Blackman-Harris Family</span>
+    <span lang="zh">關卡 4-3 · Blackman-Harris 家族</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Blackman_Harris_Window_Family.html" target="_blank">SASP §4.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="THREE OR FOUR COSINE TERMS">
+    <p lang="en">Generalize the two-term Hamming family to three or four cosines. More knobs → more zeros we can place on the side lobes of $W_R$. Result: ultra-low side lobes, at the cost of wider main lobes.</p>
+    <p lang="zh">把兩項 Hamming 家族推廣到三項或四項餘弦。多了旋鈕 → 可以在 $W_R$ 的旁瓣上放更多零。結果是旁瓣極低，代價是主瓣更寬。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">GENERAL FORM</span>
+    <div>$$w[n]=\sum_{k=0}^{K-1}(-1)^{k}\,a_k\cos\!\left(\frac{2\pi k n}{N-1}\right)$$</div>
+  </div>
+
+  <ul>
+    <li lang="en">$K=2$ gives Hann (a₀=0.5, a₁=0.5) or Hamming (0.54, 0.46).</li>
+    <li lang="zh">$K=2$：Hann（0.5, 0.5）或 Hamming（0.54, 0.46）。</li>
+    <li lang="en">$K=3$ classical Blackman: (0.42, 0.5, 0.08). First side lobe $\approx -58$ dB.</li>
+    <li lang="zh">$K=3$ 經典 Blackman：(0.42, 0.5, 0.08)。第一旁瓣約 $-58$ dB。</li>
+    <li lang="en">$K=4$ Nuttall / Blackman-Harris with optimized $a_k$: $-74$ to $-92$ dB.</li>
+    <li lang="zh">$K=4$ Nuttall / Blackman-Harris（最佳化的 $a_k$）：$-74$ 到 $-92$ dB。</li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="4.2.6-mlt-sine.html">◀ 4.2.6</a>
+    <a class="warp-pipe">4-3</a>
+    <a class="nes-btn nes-btn--primary" href="4.3.1-blackman-family.html">NEXT ▶ 4.3.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

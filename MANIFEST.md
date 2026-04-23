@@ -71,70 +71,70 @@ data-en-def …>` for hover tooltips.
 
 ## World 4 · Spectrum Analysis Windows  (ch04-windows/)
 
-- [ ] 4.1   The Rectangular Window                         — `ch04-windows/4.1-rectangular.html`
-- [ ] 4.1.1 Side Lobes                                     — `ch04-windows/4.1.1-sidelobes.html`
-- [ ] 4.1.2 Summary (Rect)                                 — `ch04-windows/4.1.2-rect-summary.html`
-- [ ] 4.2   Generalized Hamming Window Family              — `ch04-windows/4.2-generalized-hamming.html`
-- [ ] 4.2.1 Hann (Hanning · Raised Cosine)                 — `ch04-windows/4.2.1-hann.html`
-- [ ] 4.2.2 Matlab for the Hann Window                     — `ch04-windows/4.2.2-matlab-hann.html`
-- [ ] 4.2.3 Hamming Window                                 — `ch04-windows/4.2.3-hamming.html`
-- [ ] 4.2.4 Matlab for the Hamming Window                  — `ch04-windows/4.2.4-matlab-hamming.html`
-- [ ] 4.2.5 Summary of Generalized Hamming Windows         — `ch04-windows/4.2.5-ghamming-summary.html`
-- [ ] 4.2.6 MLT Sine Window                                — `ch04-windows/4.2.6-mlt-sine.html`
-- [ ] 4.3   Blackman-Harris Window Family                  — `ch04-windows/4.3-blackman-harris.html`
-- [ ] 4.3.1 Blackman Window Family                         — `ch04-windows/4.3.1-blackman-family.html`
-- [ ] 4.3.2 Classic Blackman                               — `ch04-windows/4.3.2-classic-blackman.html`
-- [ ] 4.3.3 Matlab for Classic Blackman                    — `ch04-windows/4.3.3-matlab-blackman.html`
-- [ ] 4.3.4 Three-Term Blackman-Harris                     — `ch04-windows/4.3.4-3term-bh.html`
-- [ ] 4.3.5 Frequency-Domain Blackman-Harris               — `ch04-windows/4.3.5-fd-bh.html`
-- [ ] 4.3.6 Power-of-Cosine Window Family                  — `ch04-windows/4.3.6-pow-cos.html`
-- [ ] 4.4   Spectrum Analysis of an Oboe Tone              — `ch04-windows/4.4-oboe.html`
-- [ ] 4.4.1 Rect-Windowed Oboe                             — `ch04-windows/4.4.1-oboe-rect.html`
-- [ ] 4.4.2 Hamming-Windowed Oboe                          — `ch04-windows/4.4.2-oboe-hamming.html`
-- [ ] 4.4.3 Blackman-Windowed Oboe                         — `ch04-windows/4.4.3-oboe-blackman.html`
-- [ ] 4.4.4 Conclusions (Oboe)                             — `ch04-windows/4.4.4-oboe-conclusion.html`
-- [ ] 4.5   Bartlett (Triangular) Window                   — `ch04-windows/4.5-bartlett.html`
-- [ ] 4.5.1 Matlab for the Bartlett Window                 — `ch04-windows/4.5.1-matlab-bartlett.html`
-- [ ] 4.6   Poisson Window                                 — `ch04-windows/4.6-poisson.html`
-- [ ] 4.7   Hann-Poisson Window                            — `ch04-windows/4.7-hann-poisson.html`
-- [ ] 4.7.1 Matlab for the Hann-Poisson Window             — `ch04-windows/4.7.1-matlab-hann-poisson.html`
-- [ ] 4.8   Slepian / DPSS Window                          — `ch04-windows/4.8-dpss.html`
-- [ ] 4.8.1 Matlab for the DPSS Window                     — `ch04-windows/4.8.1-matlab-dpss.html`
-- [ ] 4.9   Kaiser Window                                  — `ch04-windows/4.9-kaiser.html`
-- [ ] 4.9.1 Kaiser Window Beta Parameter                   — `ch04-windows/4.9.1-kaiser-beta.html`
-- [ ] 4.9.2 Kaiser Windows and Transforms                  — `ch04-windows/4.9.2-kaiser-xforms.html`
-- [ ] 4.9.3 Minimum Frequency Separation vs. Length        — `ch04-windows/4.9.3-kaiser-sep.html`
-- [ ] 4.9.4 Kaiser and DPSS Compared                       — `ch04-windows/4.9.4-kaiser-vs-dpss.html`
-- [ ] 4.10  Dolph-Chebyshev Window                         — `ch04-windows/4.10-dolph-chebyshev.html`
-- [ ] 4.10.1 Matlab for Dolph-Chebyshev                    — `ch04-windows/4.10.1-matlab-cheby.html`
-- [ ] 4.10.2 Example Chebyshev Windows                     — `ch04-windows/4.10.2-cheby-examples.html`
-- [ ] 4.10.3 Chebyshev vs Hamming                          — `ch04-windows/4.10.3-cheby-vs-hamming.html`
-- [ ] 4.10.4 Dolph-Chebyshev Window Theory                 — `ch04-windows/4.10.4-cheby-theory.html`
-- [ ] 4.10.4.1 Chebyshev Polynomials                       — `ch04-windows/4.10.4.1-cheby-poly.html`
-- [ ] 4.10.4.2 Dolph-Chebyshev Window Definition           — `ch04-windows/4.10.4.2-cheby-def.html`
-- [ ] 4.10.4.3 Main-Lobe Width                             — `ch04-windows/4.10.4.3-cheby-mainlobe.html`
-- [ ] 4.10.4.4 Length Computation                          — `ch04-windows/4.10.4.4-cheby-length.html`
-- [ ] 4.11  Gaussian Window and Transform                  — `ch04-windows/4.11-gaussian.html`
-- [ ] 4.11.1 Matlab for the Gaussian Window                — `ch04-windows/4.11.1-matlab-gaussian.html`
-- [ ] 4.11.2 Gaussian Window and Transform (detail)        — `ch04-windows/4.11.2-gauss-xform.html`
-- [ ] 4.11.3 Exact Discrete Gaussian Window                — `ch04-windows/4.11.3-exact-discrete-gauss.html`
-- [ ] 4.12  Optimized Windows                              — `ch04-windows/4.12-optimized.html`
-- [ ] 4.12.1 Optimal Windows for Audio Coding              — `ch04-windows/4.12.1-audio-coding.html`
-- [ ] 4.12.2 General Rule                                  — `ch04-windows/4.12.2-general-rule.html`
-- [ ] 4.13  Optimal Window Design by linprog               — `ch04-windows/4.13-linprog.html`
-- [ ] 4.13.1 Linear Programming                            — `ch04-windows/4.13.1-lp.html`
-- [ ] 4.13.2 LP Formulation of Chebyshev Window Design     — `ch04-windows/4.13.2-lp-cheby.html`
-- [ ] 4.13.3 Symmetric Window Constraint                   — `ch04-windows/4.13.3-sym-constraint.html`
-- [ ] 4.13.4 Positive Window-Sample Constraint             — `ch04-windows/4.13.4-pos-constraint.html`
-- [ ] 4.13.5 DC Constraint                                 — `ch04-windows/4.13.5-dc-constraint.html`
-- [ ] 4.13.6 Sidelobe Specification                        — `ch04-windows/4.13.6-sidelobe-spec.html`
-- [ ] 4.13.7 LP Standard Form                              — `ch04-windows/4.13.7-lp-std.html`
-- [ ] 4.13.8 Remez Exchange Algorithm                      — `ch04-windows/4.13.8-remez.html`
-- [ ] 4.13.8.1 Convergence of Remez                        — `ch04-windows/4.13.8.1-remez-conv.html`
-- [ ] 4.13.9 Monotonicity Constraint                       — `ch04-windows/4.13.9-monotonic.html`
-- [ ] 4.13.10 L-Infinity Norm of Derivative Objective      — `ch04-windows/4.13.10-linf-deriv.html`
-- [ ] 4.13.11 L-One Norm of Derivative Objective           — `ch04-windows/4.13.11-l1-deriv.html`
-- [ ] 4.13.12 Summary (Windows)                            — `ch04-windows/4.13.12-windows-summary.html`
+- [~] 4.1   The Rectangular Window                         — `ch04-windows/4.1-rectangular.html`
+- [~] 4.1.1 Side Lobes                                     — `ch04-windows/4.1.1-sidelobes.html`
+- [~] 4.1.2 Summary (Rect)                                 — `ch04-windows/4.1.2-rect-summary.html`
+- [~] 4.2   Generalized Hamming Window Family              — `ch04-windows/4.2-generalized-hamming.html`
+- [~] 4.2.1 Hann (Hanning · Raised Cosine)                 — `ch04-windows/4.2.1-hann.html`
+- [~] 4.2.2 Matlab for the Hann Window                     — `ch04-windows/4.2.2-matlab-hann.html`
+- [~] 4.2.3 Hamming Window                                 — `ch04-windows/4.2.3-hamming.html`
+- [~] 4.2.4 Matlab for the Hamming Window                  — `ch04-windows/4.2.4-matlab-hamming.html`
+- [~] 4.2.5 Summary of Generalized Hamming Windows         — `ch04-windows/4.2.5-ghamming-summary.html`
+- [~] 4.2.6 MLT Sine Window                                — `ch04-windows/4.2.6-mlt-sine.html`
+- [~] 4.3   Blackman-Harris Window Family                  — `ch04-windows/4.3-blackman-harris.html`
+- [~] 4.3.1 Blackman Window Family                         — `ch04-windows/4.3.1-blackman-family.html`
+- [~] 4.3.2 Classic Blackman                               — `ch04-windows/4.3.2-classic-blackman.html`
+- [~] 4.3.3 Matlab for Classic Blackman                    — `ch04-windows/4.3.3-matlab-blackman.html`
+- [~] 4.3.4 Three-Term Blackman-Harris                     — `ch04-windows/4.3.4-3term-bh.html`
+- [~] 4.3.5 Frequency-Domain Blackman-Harris               — `ch04-windows/4.3.5-fd-bh.html`
+- [~] 4.3.6 Power-of-Cosine Window Family                  — `ch04-windows/4.3.6-pow-cos.html`
+- [~] 4.4   Spectrum Analysis of an Oboe Tone              — `ch04-windows/4.4-oboe.html`
+- [~] 4.4.1 Rect-Windowed Oboe                             — `ch04-windows/4.4.1-oboe-rect.html`
+- [~] 4.4.2 Hamming-Windowed Oboe                          — `ch04-windows/4.4.2-oboe-hamming.html`
+- [~] 4.4.3 Blackman-Windowed Oboe                         — `ch04-windows/4.4.3-oboe-blackman.html`
+- [~] 4.4.4 Conclusions (Oboe)                             — `ch04-windows/4.4.4-oboe-conclusion.html`
+- [~] 4.5   Bartlett (Triangular) Window                   — `ch04-windows/4.5-bartlett.html`
+- [~] 4.5.1 Matlab for the Bartlett Window                 — `ch04-windows/4.5.1-matlab-bartlett.html`
+- [~] 4.6   Poisson Window                                 — `ch04-windows/4.6-poisson.html`
+- [~] 4.7   Hann-Poisson Window                            — `ch04-windows/4.7-hann-poisson.html`
+- [~] 4.7.1 Matlab for the Hann-Poisson Window             — `ch04-windows/4.7.1-matlab-hann-poisson.html`
+- [~] 4.8   Slepian / DPSS Window                          — `ch04-windows/4.8-dpss.html`
+- [~] 4.8.1 Matlab for the DPSS Window                     — `ch04-windows/4.8.1-matlab-dpss.html`
+- [~] 4.9   Kaiser Window                                  — `ch04-windows/4.9-kaiser.html`
+- [~] 4.9.1 Kaiser Window Beta Parameter                   — `ch04-windows/4.9.1-kaiser-beta.html`
+- [~] 4.9.2 Kaiser Windows and Transforms                  — `ch04-windows/4.9.2-kaiser-xforms.html`
+- [~] 4.9.3 Minimum Frequency Separation vs. Length        — `ch04-windows/4.9.3-kaiser-sep.html`
+- [~] 4.9.4 Kaiser and DPSS Compared                       — `ch04-windows/4.9.4-kaiser-vs-dpss.html`
+- [~] 4.10  Dolph-Chebyshev Window                         — `ch04-windows/4.10-dolph-chebyshev.html`
+- [~] 4.10.1 Matlab for Dolph-Chebyshev                    — `ch04-windows/4.10.1-matlab-cheby.html`
+- [~] 4.10.2 Example Chebyshev Windows                     — `ch04-windows/4.10.2-cheby-examples.html`
+- [~] 4.10.3 Chebyshev vs Hamming                          — `ch04-windows/4.10.3-cheby-vs-hamming.html`
+- [~] 4.10.4 Dolph-Chebyshev Window Theory                 — `ch04-windows/4.10.4-cheby-theory.html`
+- [~] 4.10.4.1 Chebyshev Polynomials                       — `ch04-windows/4.10.4.1-cheby-poly.html`
+- [~] 4.10.4.2 Dolph-Chebyshev Window Definition           — `ch04-windows/4.10.4.2-cheby-def.html`
+- [~] 4.10.4.3 Main-Lobe Width                             — `ch04-windows/4.10.4.3-cheby-mainlobe.html`
+- [~] 4.10.4.4 Length Computation                          — `ch04-windows/4.10.4.4-cheby-length.html`
+- [~] 4.11  Gaussian Window and Transform                  — `ch04-windows/4.11-gaussian.html`
+- [~] 4.11.1 Matlab for the Gaussian Window                — `ch04-windows/4.11.1-matlab-gaussian.html`
+- [~] 4.11.2 Gaussian Window and Transform (detail)        — `ch04-windows/4.11.2-gauss-xform.html`
+- [~] 4.11.3 Exact Discrete Gaussian Window                — `ch04-windows/4.11.3-exact-discrete-gauss.html`
+- [~] 4.12  Optimized Windows                              — `ch04-windows/4.12-optimized.html`
+- [~] 4.12.1 Optimal Windows for Audio Coding              — `ch04-windows/4.12.1-audio-coding.html`
+- [~] 4.12.2 General Rule                                  — `ch04-windows/4.12.2-general-rule.html`
+- [~] 4.13  Optimal Window Design by linprog               — `ch04-windows/4.13-linprog.html`
+- [~] 4.13.1 Linear Programming                            — `ch04-windows/4.13.1-lp.html`
+- [~] 4.13.2 LP Formulation of Chebyshev Window Design     — `ch04-windows/4.13.2-lp-cheby.html`
+- [~] 4.13.3 Symmetric Window Constraint                   — `ch04-windows/4.13.3-sym-constraint.html`
+- [~] 4.13.4 Positive Window-Sample Constraint             — `ch04-windows/4.13.4-pos-constraint.html`
+- [~] 4.13.5 DC Constraint                                 — `ch04-windows/4.13.5-dc-constraint.html`
+- [~] 4.13.6 Sidelobe Specification                        — `ch04-windows/4.13.6-sidelobe-spec.html`
+- [~] 4.13.7 LP Standard Form                              — `ch04-windows/4.13.7-lp-std.html`
+- [~] 4.13.8 Remez Exchange Algorithm                      — `ch04-windows/4.13.8-remez.html`
+- [~] 4.13.8.1 Convergence of Remez                        — `ch04-windows/4.13.8.1-remez-conv.html`
+- [~] 4.13.9 Monotonicity Constraint                       — `ch04-windows/4.13.9-monotonic.html`
+- [~] 4.13.10 L-Infinity Norm of Derivative Objective      — `ch04-windows/4.13.10-linf-deriv.html`
+- [~] 4.13.11 L-One Norm of Derivative Objective           — `ch04-windows/4.13.11-l1-deriv.html`
+- [~] 4.13.12 Summary (Windows)                            — `ch04-windows/4.13.12-windows-summary.html`
 
 ## World 5 · FIR Digital Filter Design  (ch05-fir-design/)
 
@@ -676,4 +676,4 @@ data-en-def …>` for hover tooltips.
 4. Every page gets a prev / next pager linking to its neighbors in the above order.
 5. No copyrighted prose from Smith's book. All explanations must be original.
 
-Current completed count: **44** / ≈ 530. Latest batch: full World 1 preface (3 stubs).
+Current completed count: **108** / ≈ 530. Latest batch: full World 4 (64 window pages).
