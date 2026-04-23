@@ -1,13 +1,103 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.3.3 BP from LP · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-3-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-3-3 · Making a Bandpass Filter from a Lowpass</span><span lang="zh">關卡 10-3-3 · 由 LP 得到 BP</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Making_Bandpass_Filter_Lowpass.html" target="_blank">SASP §10.3.3 ↗</a></small></h1>
-  <div class="nes-box" data-label="ONE PROTOTYPE, MANY BANDS">
-    <p lang="en">$h_k[n] = h_{\text{LP}}[n]\,e^{j\omega_k n}$. Design the lowpass once; modulate to whichever centre frequency you need.</p>
-    <p lang="zh">$h_k[n]=h_{\text{LP}}[n]\,e^{j\omega_k n}$。原型低通設計一次，調變到任意中心頻率。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.3.3 LP → BP · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-3-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.3.2-mod-complex.html">◀ 10.3.2</a><a class="warp-pipe">10-3-3</a><a class="nes-btn nes-btn--primary" href="10.3.4-uniform-rs.html">NEXT ▶ 10.3.4</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-3-3 · Making a Bandpass Filter from a Lowpass</span>
+    <span lang="zh">關卡 10-3-3 · 由低通構造帶通</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Making_Bandpass_Filter_Lowpass.html" target="_blank">SASP §10.3.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Combine §10.3.1 (running-sum LP) with §10.3.2 (modulation) into one recipe: <em>any</em> lowpass prototype $h_0$ becomes a bandpass centred at $\omega_c$ by $h_c[n]=h_0[n]\,e^{j\omega_c n}$. This is the single building block of every uniform FB in the book.</p>
+    <p lang="zh">把 §10.3.1（累計和低通）與 §10.3.2（調變）合成一個配方：任意低通原型 $h_0$ 藉由 $h_c[n]=h_0[n]\,e^{j\omega_c n}$ 就成為中心在 $\omega_c$ 的帶通。本書所有均勻 FB 都靠這一個單一積木。</p>
+  </div>
+
+  <h2 lang="en">The recipe</h2>
+  <h2 lang="zh">配方</h2>
+
+  <div class="formula">
+    <span class="label">LP → BP</span>
+    <div>$$h_c[n]\;=\;h_0[n]\,e^{j\omega_c n}\;\;\Longleftrightarrow\;\;H_c(\omega)\;=\;H_0(\omega-\omega_c)$$</div>
+  </div>
+
+  <p lang="en">Three statements that say the same thing:</p>
+  <p lang="zh">以下三句是同一件事：</p>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>(1)</b> Multiply $h_0[n]$ pointwise by the complex exponential $e^{j\omega_c n}$.<br>
+        <b>(2)</b> Shift $H_0$'s spectrum right by $\omega_c$ on the unit circle.<br>
+        <b>(3)</b> Rotate the pole-zero diagram of $H_0(z)$ by angle $\omega_c$ counter-clockwise.
+      </span>
+      <span lang="zh">
+        <b>(1)</b> 對 $h_0[n]$ 逐點乘上複指數 $e^{j\omega_c n}$。<br>
+        <b>(2)</b> 單位圓上把 $H_0$ 的頻譜向右平移 $\omega_c$。<br>
+        <b>(3)</b> 在 $z$ 平面上把 $H_0(z)$ 的極零點逆時針旋轉角度 $\omega_c$。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Worked example · rectangular LP centred at $\omega_c=\pi/2$</h2>
+  <h2 lang="zh">實例 · 中心在 $\omega_c=\pi/2$ 的矩形低通</h2>
+
+  <p lang="en">Take the length-$8$ running sum $h_0[n]=1,1,1,1,1,1,1,1$. Apply $e^{j(\pi/2)n}$, which cycles through $1,j,-1,-j,1,j,-1,-j$. The bandpass $h_c[n]$ becomes exactly that sequence of $\pm 1,\pm j$ values. Its spectrum is the Dirichlet sinc shifted to be centred at $\omega=\pi/2$ — a bandpass with all 7 zeros on the unit circle at $\omega\in\{\pi/2+2\pi k/8 : k=1..7\}$.</p>
+  <p lang="zh">取長度 $8$ 累計和 $h_0[n]=1,1,1,1,1,1,1,1$。套上 $e^{j(\pi/2)n}$，它依序輸出 $1,j,-1,-j,1,j,-1,-j$。帶通 $h_c[n]$ 就是這個 $\pm 1,\pm j$ 序列。其頻譜為 Dirichlet sinc 平移至中心 $\omega=\pi/2$ — 一個帶通，7 個零點都在單位圓上 $\omega\in\{\pi/2+2\pi k/8 : k=1..7\}$。</p>
+
+  <h2 lang="en">Why $\omega_k=2\pi k/N$ is the magic spacing</h2>
+  <h2 lang="zh">為何 $\omega_k=2\pi k/N$ 是那個神奇間距</h2>
+
+  <p lang="en">For the length-$N$ rectangle, $H_0$'s <em>zeros</em> lie at $\omega=2\pi k/N$ for $k=1,\ldots,N-1$ (§10.3.1). Shifting by the same spacing places channel $k$'s peak exactly on channel $k-1$'s first zero. Result: critically sampled coverage of $[0, 2\pi)$, and the $N$ channels together reconstruct the signal perfectly when summed (§10.1.3 FBS).</p>
+  <p lang="zh">長度 $N$ 矩形的 $H_0$ 零點在 $\omega=2\pi k/N$（$k=1,\ldots,N-1$；見 §10.3.1）。以相同間距位移，第 $k$ 通道的峰恰好落在第 $k-1$ 通道的第一零點。結果：$[0, 2\pi)$ 被臨界取樣覆蓋，$N$ 個通道相加就精確重建原訊號（§10.1.3 FBS）。</p>
+
+  <h2 lang="en">Real-valued variant · cosine modulation</h2>
+  <h2 lang="zh">實值版本 · 餘弦調變</h2>
+
+  <p lang="en">Using $\cos(\omega_c n)=\tfrac{1}{2}(e^{j\omega_c n}+e^{-j\omega_c n})$ gives a two-sided bandpass (peaks at $\pm\omega_c$). For real FBs (MDCT, MPEG Layer I/II) this is the preferred modulation — it keeps everything real-valued, at the cost of needing $2\times$ as many channels to cover the same frequency range uniquely.</p>
+  <p lang="zh">用 $\cos(\omega_c n)=\tfrac{1}{2}(e^{j\omega_c n}+e^{-j\omega_c n})$ 會得到雙邊帶通（$\pm\omega_c$ 兩個峰）。對實值 FB（MDCT、MPEG Layer I/II）這是首選 — 全部實數運算，代價是需要 $2\times$ 通道才能覆蓋相同頻率範圍。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Every bandpass in this chapter = one prototype × one complex sinusoid.</b> Once you internalise this, a "DFT filter bank" is a one-liner: rect × $N$ equally spaced exponentials. Switching to Hamming / Blackman / Kaiser / Gaussian just changes the first factor.</p>
+    <p lang="zh"><b>本章所有帶通 = 一個原型 × 一個複正弦。</b>內化這個觀念，「DFT 濾波器組」就是一句話：矩形 × $N$ 個等距複指數。換成 Hamming / Blackman / Kaiser / Gauss 只是改了前者。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.3.2-mod-complex.html">◀ 10.3.2</a>
+    <a class="warp-pipe">10-3-3</a>
+    <a class="nes-btn nes-btn--primary" href="10.3.4-uniform-rs.html">NEXT ▶ 10.3.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

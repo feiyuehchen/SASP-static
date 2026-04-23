@@ -1,13 +1,97 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.3.2 Modulation by Complex Sinusoid · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-3-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-3-2 · Modulation by a Complex Sinusoid</span><span lang="zh">關卡 10-3-2 · 複正弦調變</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Modulation_Complex_Sinusoid.html" target="_blank">SASP §10.3.2 ↗</a></small></h1>
-  <div class="nes-box" data-label="SHIFT THE SPECTRUM">
-    <p lang="en">Multiplying an impulse response by $e^{j\omega_0 n}$ shifts its frequency response by $\omega_0$. That is how we turn one prototype lowpass into $N$ different bandpass filters.</p>
-    <p lang="zh">脈衝響應乘上 $e^{j\omega_0 n}$ → 頻率響應位移 $\omega_0$。這就是把一個原型低通變成 $N$ 個不同中心的帶通。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.3.2 Modulation by a Complex Sinusoid · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-3-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.3.1-running-sum.html">◀ 10.3.1</a><a class="warp-pipe">10-3-2</a><a class="nes-btn nes-btn--primary" href="10.3.3-lp-to-bp.html">NEXT ▶ 10.3.3</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-3-2 · Modulation by a Complex Sinusoid</span>
+    <span lang="zh">關卡 10-3-2 · 複正弦調變</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Modulation_Complex_Sinusoid.html" target="_blank">SASP §10.3.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Review the modulation theorem as it is used in the DFT filter bank: multiplying a sequence by $e^{j\omega_c n}$ shifts its entire DTFT by $\omega_c$. With this single identity, we convert lowpass ↔ bandpass at will and connect the <em>prototype</em> rectangular filter to the $N$ bandpass channels of the DFT FB.</p>
+    <p lang="zh">複習調變定理在 DFT 濾波器組中的用法：序列乘上 $e^{j\omega_c n}$ 就把整個 DTFT 位移 $\omega_c$。只靠這一條恆等式，我們就能自由切換低通↔帶通，並把<em>原型</em>矩形濾波器連上 DFT FB 的 $N$ 個帶通通道。</p>
+  </div>
+
+  <h2 lang="en">The modulation theorem (discrete-time)</h2>
+  <h2 lang="zh">調變定理（離散時間版）</h2>
+
+  <div class="formula">
+    <span class="label">SHIFT IN FREQUENCY</span>
+    <div>$$x[n]\,e^{j\omega_c n}\;\longleftrightarrow\;X(\omega - \omega_c)$$</div>
+  </div>
+
+  <p lang="en">Multiplying a sequence by a complex exponential in the <em>time domain</em> slides its spectrum rigidly by $\omega_c$ in the <em>frequency domain</em>. The shape of $|X|$ stays identical — only its centre moves.</p>
+  <p lang="zh">在<em>時域</em>將序列乘上複指數，等同於<em>頻域</em>把整個頻譜剛性位移 $\omega_c$。$|X|$ 的形狀不變，只有中心搬家。</p>
+
+  <h2 lang="en">Proof in one line</h2>
+  <h2 lang="zh">一行證明</h2>
+
+  <div class="formula">
+    <div>$$\mathcal{F}\{x[n]\,e^{j\omega_c n}\}\;=\;\sum_n x[n]\,e^{j\omega_c n}\,e^{-j\omega n}\;=\;\sum_n x[n]\,e^{-j(\omega-\omega_c)n}\;=\;X(\omega-\omega_c)$$</div>
+  </div>
+
+  <h2 lang="en">Using it: turn an $N$-sample lowpass into a bandpass</h2>
+  <h2 lang="zh">應用：把 $N$-樣本低通變成帶通</h2>
+
+  <p lang="en">Take the running-sum lowpass $h_{\text{RS}}[n]$ (a rectangle from §10.3.1). Multiply by $e^{j\omega_k n}$ with $\omega_k=2\pi k/N$:</p>
+  <p lang="zh">取 §10.3.1 的累計和低通 $h_{\text{RS}}[n]$（矩形）。乘上 $e^{j\omega_k n}$，其中 $\omega_k=2\pi k/N$：</p>
+
+  <div class="formula">
+    <span class="label">CHANNEL k IMPULSE RESP.</span>
+    <div>$$h_k[n]\;=\;h_{\text{RS}}[n]\,e^{j\omega_k n}\;\longleftrightarrow\;H_{\text{RS}}(\omega-\omega_k)$$</div>
+  </div>
+
+  <p lang="en">A lowpass centred at $0$ becomes a bandpass centred at $\omega_k$, with <em>exactly</em> the same magnitude shape. Because $\omega_k$ is chosen to be $2\pi k/N$, adjacent channels butt up at the Dirichlet sinc's spectral nulls: channel $k-1$'s null coincides with channel $k$'s peak.</p>
+  <p lang="zh">中心在 $0$ 的低通變成中心在 $\omega_k$ 的帶通，振幅形狀<em>完全不變</em>。因為 $\omega_k$ 刻意取在 $2\pi k/N$，相鄰通道正好在 Dirichlet sinc 的零點上對齊：第 $k-1$ 通道的零點恰好是第 $k$ 通道的峰。</p>
+
+  <h2 lang="en">Why complex exponentials, not cosines?</h2>
+  <h2 lang="zh">為什麼用複指數而非餘弦？</h2>
+
+  <p lang="en">Real-valued modulation $x[n]\cos(\omega_c n)$ would split the spectrum into <em>two</em> copies at $\pm\omega_c$ — fine for AM radio, bad for a filter bank because now each "band" has two lobes. Complex exponentials produce a single one-sided shift, which is what the DFT-FB view needs so each $k$ maps to exactly one channel. That's why the DFT uses $e^{-j\omega_k n}$ and not $\cos(\omega_k n)$.</p>
+  <p lang="zh">實值調變 $x[n]\cos(\omega_c n)$ 會把頻譜劈成 $\pm\omega_c$ 兩份 — 對 AM 無線電 OK，對濾波器組不好，因為每個「頻帶」會長兩個波瓣。複指數只做單邊位移，這就是 DFT-FB 觀點所需 — 每個 $k$ 恰好對應一個通道。DFT 用 $e^{-j\omega_k n}$、不用 $\cos(\omega_k n)$ 的原因就在此。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Modulation is the FB's secret weapon.</b> With one identity ($x e^{j\omega_c n} \leftrightarrow X(\omega-\omega_c)$) we promote a single prototype lowpass to $N$ equally-spaced bandpasses. The DFT FB uses the rectangle; Hann/Hamming/Blackman FBs (§10.4+) use the same modulation with a nicer prototype.</p>
+    <p lang="zh"><b>調變是 FB 的祕密武器。</b>靠一條恆等式 $x e^{j\omega_c n} \leftrightarrow X(\omega-\omega_c)$，就把一個原型低通升級成 $N$ 個等距帶通。DFT FB 用矩形；Hann/Hamming/Blackman FB（§10.4+）把原型換成更漂亮的視窗、同樣靠這條調變。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.3.1-running-sum.html">◀ 10.3.1</a>
+    <a class="warp-pipe">10-3-2</a>
+    <a class="nes-btn nes-btn--primary" href="10.3.3-lp-to-bp.html">NEXT ▶ 10.3.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

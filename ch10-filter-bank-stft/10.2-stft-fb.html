@@ -1,12 +1,329 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.2 STFT Filter Bank · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-2 · STFT Filter Bank</span><span lang="zh">關卡 10-2 · STFT 濾波器組</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/STFT_Filter_Bank.html" target="_blank">SASP §10.2 ↗</a></small></h1>
-  <div class="formula"><div>$$h_k[n]\;=\;w[n]\,e^{j\omega_k n}$$</div></div>
-  <p lang="en">The $k$-th filter is the window modulated by the complex sinusoid at frequency $\omega_k=2\pi k/N$. Its output is $X_m[k]$ versus $m$ — exactly the STFT column.</p>
-  <p lang="zh">第 $k$ 個濾波器 = 視窗乘上頻率 $\omega_k=2\pi k/N$ 的複正弦。輸出就是 $X_m[k]$ 隨 $m$ 的序列 — 即 STFT 的該行。</p>
-  <div class="pager"><a class="nes-btn" href="10.1.3-fbs-pr.html">◀ 10.1.3</a><a class="warp-pipe">10-2</a><a class="nes-btn nes-btn--primary" href="10.2.1-matlab-examples.html">NEXT ▶ 10.2.1</a></div>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.2 STFT Filter Bank · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-2 · STFT as a Uniform Filter Bank</span>
+    <span lang="zh">關卡 10-2 · STFT 作為均勻濾波器組</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/STFT_Filter_Bank.html" target="_blank">SASP §10.2 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">Concretise the FB interpretation: write out the exact impulse response and frequency response of every channel, describe the standard block diagram (modulate → lowpass → downsample), compare the direct cost vs. the FFT shortcut, and lock in the vocabulary that §§10.3–10.9 will use.</p>
+        <p lang="zh">把 FB 詮釋落實到計算式：寫出每個通道的脈衝響應與頻率響應、標準方塊圖（調變 → 低通 → 降取樣）、直接法與 FFT 捷徑的成本比較，並固定後面 §10.3–10.9 會用到的術語。</p>
+      </div>
+
+      <h2 lang="en">Channel-$k$ filter, in two equivalent forms</h2>
+      <h2 lang="zh">第 $k$ 通道濾波器的兩種等價寫法</h2>
+
+      <p lang="en">From §10.1.2, the STFT bin $k$ is the output of a filter whose impulse response is a modulated window. Two parametrisations are in common use:</p>
+      <p lang="zh">§10.1.2 導出：STFT 第 $k$ 個 bin 是某個「調變視窗」濾波器的輸出。常見兩種參數化：</p>
+
+      <div class="formula">
+        <span class="label">FORM A (CAUSAL, W · SINUSOID)</span>
+        <div>$$h_k[n]\;=\;w[n]\,e^{j\omega_k n},\qquad \omega_k\;=\;\frac{2\pi k}{N}$$</div>
+      </div>
+
+      <div class="formula">
+        <span class="label">FORM B (NON-CAUSAL, TIME-REVERSED)</span>
+        <div>$$h_k[n]\;=\;w[-n]\,e^{j\omega_k n}$$</div>
+      </div>
+
+      <p lang="en">Form A is what a signal-processing engineer writes when implementing the FB causally — the window is the filter's impulse response directly. Form B is what falls out of the analysis formula $X_m[k]=\sum_n x[n]w[n-mR]e^{-j\omega_k n}$ if you want the output at time $mR$ to be literally $(x * h_k)[mR]$. They differ only by a time shift; the magnitude response is the same.</p>
+      <p lang="zh">Form A 是工程師「直接把視窗當成濾波器脈衝響應」的因果寫法。Form B 是從分析公式 $X_m[k]=\sum_n x[n]w[n-mR]e^{-j\omega_k n}$ 倒推，要讓輸出在時刻 $mR$ 恰好等於 $(x * h_k)[mR]$ 時需要的非因果版。兩者只差一個時間位移；振幅響應完全一致。</p>
+
+      <h2 lang="en">Channel-$k$ frequency response</h2>
+      <h2 lang="zh">第 $k$ 通道頻率響應</h2>
+
+      <div class="formula">
+        <span class="label">H_k(ω)</span>
+        <div>$$H_k(\omega)\;=\;W(\omega - \omega_k)$$</div>
+      </div>
+
+      <p lang="en">Every channel is a frequency-shifted copy of the <em>prototype lowpass</em> $W(\omega)=\sum_n w[n]e^{-j\omega n}$. This is what makes the STFT a <span class="term"
+          data-en="Uniform modulated filter bank"
+          data-en-def="A filter bank where every channel is the same prototype lowpass shifted to equally spaced centre frequencies. DFT, MDCT, and cosine-modulated banks are all of this form."
+          data-zh-def="每個通道都是同一原型低通平移到等距中心頻率的濾波器組。DFT、MDCT、餘弦調變組都屬此形。">uniform modulated filter bank</span> — same shape, equally spaced centres at $\omega_k=2\pi k/N$.</p>
+      <p lang="zh">每個通道都是<em>原型低通</em> $W(\omega)=\sum_n w[n]e^{-j\omega n}$ 的頻率位移版。這就讓 STFT 變成一個<span class="term"
+          data-en="Uniform modulated filter bank"
+          data-en-def="A filter bank where every channel is the same prototype lowpass shifted to equally spaced centre frequencies. DFT, MDCT, and cosine-modulated banks are all of this form."
+          data-zh-def="每個通道都是同一原型低通平移到等距中心頻率的濾波器組。DFT、MDCT、餘弦調變組都屬此形。">均勻調變濾波器組</span> — 同一形狀、在 $\omega_k=2\pi k/N$ 等距排列。</p>
+
+      <h2 lang="en">Standard block diagram</h2>
+      <h2 lang="zh">標準方塊圖</h2>
+
+      <p lang="en">A production STFT FB is usually implemented as <em>demodulate → lowpass → downsample</em>:</p>
+      <p lang="zh">產品級 STFT FB 通常實作為「先解調變 → 低通 → 降取樣」：</p>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <code>x[n] ─→ × e<sup>-jω<sub>k</sub>n</sup> ─→ w[n] (LP) ─→ ↓R ─→ X<sub>m</sub>[k]</code>
+        </div>
+      </div>
+
+      <p lang="en">Flow: <b>(1)</b> multiply by $e^{-j\omega_k n}$ to slide band $k$ down to baseband. <b>(2)</b> window with $w[n]$ (lowpass). <b>(3)</b> downsample by $R$. Running one of these per $k$ gives every column of the STFT matrix. The sum-over-all-$k$ inverse (FBS) is covered in §10.1.3 and §10.4.</p>
+      <p lang="zh">流程：<b>(1)</b> 乘上 $e^{-j\omega_k n}$ 把第 $k$ 頻帶滑到基頻。<b>(2)</b> 用 $w[n]$（低通）加窗。<b>(3)</b> 以 $R$ 降取樣。每個 $k$ 跑一套就得到 STFT 矩陣的所有行。相加逆變換（FBS）見 §10.1.3、§10.4。</p>
+
+      <h2 lang="en">Complexity — direct FB vs. FFT-based STFT</h2>
+      <h2 lang="zh">複雜度 — 直接 FB vs. FFT-based STFT</h2>
+
+      <p lang="en">Both compute the same numbers; they just arrange the arithmetic differently:</p>
+      <p lang="zh">兩者算出相同的數字，只是運算次序不同：</p>
+
+      <div class="formula" style="font-family:inherit;">
+        <span class="label">COST PER OUTPUT FRAME (length-N window)</span>
+        <div style="font-size:13px; line-height:1.8; text-align:left;">
+          <span lang="en">
+            <b>Direct FB (Form A):</b> $N$ channels × $N$-tap FIR = <b>$O(N^2)$</b> complex multiplies.<br>
+            <b>FFT STFT:</b> one $N$-point FFT = <b>$O(N \log N)$</b> multiplies.<br>
+            <b>Speed-up:</b> factor of $N/\log_2 N$ — e.g. ~100× at $N=1024$.
+          </span>
+          <span lang="zh">
+            <b>直接 FB（Form A）：</b>$N$ 通道 × $N$ tap FIR = <b>$O(N^2)$</b> 複數乘法。<br>
+            <b>FFT STFT：</b>一次 $N$ 點 FFT = <b>$O(N \log N)$</b> 乘法。<br>
+            <b>加速：</b>$N/\log_2 N$ 倍 — $N=1024$ 時約 100×。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>FB view ≠ FB implementation.</b> Running $N$ independent FIRs is the slow brute force. In practice we always compute STFT with an FFT and <em>think</em> about the result through the FB lens when designing modifications. The FB view is a conceptual tool; the FFT is the arithmetic tool.</p>
+        <p lang="zh"><b>FB 詮釋 ≠ FB 實作。</b>分別跑 $N$ 個 FIR 是蠻力慢法；實務上一律以 FFT 計算 STFT，而在「設計修改」時才用 FB 詮釋來思考。FB 是概念工具；FFT 是計算工具。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Watch 8 channels respond to a chirp</h3>
+        <h3 lang="zh">實驗 · 看 8 個通道如何追一段啾頻訊號</h3>
+
+        <canvas id="chirpCanvas"   style="height:130px;"></canvas>
+        <canvas id="channelsCanvas" style="height:240px; margin-top:8px;"></canvas>
+
+        <div class="controls">
+          <label>Window</label>
+          <select id="winSel">
+            <option value="rect">Rectangular</option>
+            <option value="hann" selected>Hann</option>
+            <option value="hamming">Hamming</option>
+            <option value="blackman">Blackman</option>
+          </select>
+          <label>N</label>
+          <input type="range" id="nSlider" min="16" max="64" step="8" value="32"/>
+          <span class="val" id="nVal">32</span>
+          <label>Signal f₀→f₁</label>
+          <select id="chirpSel">
+            <option value="up" selected>up chirp</option>
+            <option value="down">down chirp</option>
+            <option value="tone">pure tone</option>
+            <option value="impulse">impulse</option>
+          </select>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: input $x[n]$. Bottom: magnitude $|X_n[k]|$ for $k=0,1,\dots,7$ (first 8 bins) plotted as 8 coloured traces over time $n$. For an up-chirp you should see the peak response walk from low-$k$ to higher-$k$ channels.</p>
+          <p lang="zh">上：輸入 $x[n]$。下：前 8 個 bin 的 $|X_n[k]|$（$k=0..7$）隨時間 $n$ 變化，以 8 條色線呈現。上升啾頻時能看到峰值從低頻通道一路往高頻通道走。</p>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> For an STFT with $N=1024$ and hop $R=256$, which is closest to the CPU saving of using the FFT instead of a direct $N$-channel FIR filter bank (per output frame)?</p>
+        <p lang="zh"><b>問：</b>$N=1024$、跳距 $R=256$ 的 STFT，每輸出 frame 若用 FFT 取代直接的 $N$ 通道 FIR 濾波器組，省下多少運算？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">≈ 2×</button>
+          <button data-correct="0" lang="zh">約 2 倍</button>
+          <button data-correct="0" lang="en">≈ 10×</button>
+          <button data-correct="0" lang="zh">約 10 倍</button>
+          <button data-correct="1" lang="en">≈ 100×</button>
+          <button data-correct="1" lang="zh">約 100 倍</button>
+          <button data-correct="0" lang="en">≈ 10 000×</button>
+          <button data-correct="0" lang="zh">約 10000 倍</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.1.3-fbs-pr.html">◀ 10.1.3</a>
+    <a class="warp-pipe">10-2</a>
+    <a class="nes-btn nes-btn--primary" href="10.2.1-matlab-examples.html">NEXT ▶ 10.2.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { win: 'hann', N: 32, sig: 'up' };
+  const winFn = { rect: DSP.rectWindow, hann: DSP.hannWindow, hamming: DSP.hammingWindow, blackman: DSP.blackmanWindow };
+  const palette = ['#5aa0ff','#ffd95a','#ff6aa0','#78d66a','#c58cff','#ff9a3c','#5dffd0','#ff5a5a'];
+
+  function makeSignal(L){
+    const x = new Float32Array(L);
+    const { sig } = state;
+    if (sig === 'impulse'){ x[Math.floor(L/2)] = 1; return x; }
+    if (sig === 'tone'){
+      for (let n=0;n<L;n++) x[n] = Math.cos(2*Math.PI * 0.12 * n);
+      return x;
+    }
+    const f0 = sig==='up' ? 0.02 : 0.35;
+    const f1 = sig==='up' ? 0.35 : 0.02;
+    for (let n=0;n<L;n++){
+      const t = n/(L-1);
+      const f = f0 + (f1-f0)*t;
+      // instantaneous phase = 2π integral of f
+      const phase = 2*Math.PI * (f0 + 0.5*(f1-f0)*t) * n;
+      x[n] = Math.cos(phase);
+    }
+    return x;
+  }
+
+  function redraw(){
+    const { win, N } = state;
+    const L = 256;
+    const x = makeSignal(L);
+    const w = winFn[win](N);
+
+    // top plot
+    const c1 = $('chirpCanvas');
+    const ctx1 = c1.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c1.width = c1.clientWidth*dpr; c1.height = c1.clientHeight*dpr; ctx1.scale(dpr,dpr);
+    const W1 = c1.clientWidth, H1 = c1.clientHeight;
+    ctx1.fillStyle='#0b0c1a'; ctx1.fillRect(0,0,W1,H1);
+    const pad1 = { l:32, r:12, t:8, b:22 };
+    const iw1 = W1-pad1.l-pad1.r, ih1 = H1-pad1.t-pad1.b;
+    ctx1.strokeStyle='#262644';
+    for (let g=0; g<=10; g++){ const xp = pad1.l + iw1*g/10; ctx1.beginPath(); ctx1.moveTo(xp, pad1.t); ctx1.lineTo(xp, H1-pad1.b); ctx1.stroke(); }
+    ctx1.strokeStyle='#e6e6ff'; ctx1.lineWidth = 1;
+    const y0 = pad1.t + ih1/2;
+    ctx1.beginPath(); ctx1.moveTo(pad1.l, y0); ctx1.lineTo(W1-pad1.r, y0); ctx1.stroke();
+    ctx1.strokeStyle='#5aa0ff'; ctx1.lineWidth = 1.5;
+    ctx1.beginPath();
+    for (let n=0; n<L; n++){
+      const xp = pad1.l + iw1*n/(L-1);
+      const yp = y0 - (ih1/2)*x[n];
+      if (n===0) ctx1.moveTo(xp,yp); else ctx1.lineTo(xp,yp);
+    }
+    ctx1.stroke();
+    ctx1.fillStyle='#8f8fa8'; ctx1.font='10px "Press Start 2P", monospace';
+    ctx1.fillText('x[n]', 8, 18);
+
+    // Compute |X_n[k]| for k=0..7 using direct FB: shift+window+FFT-like evaluation
+    const K = 8;
+    const channels = [];
+    for (let k=0;k<K;k++){
+      const yRe = new Float32Array(L), yIm = new Float32Array(L);
+      for (let n=0; n<L; n++){
+        // output = sum_tau w[tau] x[n-tau] e^{-j 2π k (n-tau) / N}
+        let acc_re = 0, acc_im = 0;
+        for (let tau=0; tau<N; tau++){
+          const idx = n - tau; if (idx < 0 || idx >= L) continue;
+          const ang = -2*Math.PI * k * idx / N;
+          acc_re += w[tau] * x[idx] * Math.cos(ang);
+          acc_im += w[tau] * x[idx] * Math.sin(ang);
+        }
+        yRe[n] = acc_re; yIm[n] = acc_im;
+      }
+      const mag = new Float32Array(L);
+      for (let n=0;n<L;n++) mag[n] = Math.hypot(yRe[n], yIm[n]);
+      channels.push(mag);
+    }
+
+    // bottom plot: each channel as colored line, vertically stacked inside same axes
+    const c2 = $('channelsCanvas');
+    const ctx2 = c2.getContext('2d');
+    c2.width = c2.clientWidth*dpr; c2.height = c2.clientHeight*dpr; ctx2.scale(dpr,dpr);
+    const W2 = c2.clientWidth, H2 = c2.clientHeight;
+    ctx2.fillStyle='#0b0c1a'; ctx2.fillRect(0,0,W2,H2);
+    const pad2 = { l:32, r:12, t:14, b:28 };
+    const iw2 = W2-pad2.l-pad2.r, ih2 = H2-pad2.t-pad2.b;
+    ctx2.strokeStyle='#262644';
+    for (let g=0; g<=10; g++){ const xp = pad2.l + iw2*g/10; ctx2.beginPath(); ctx2.moveTo(xp, pad2.t); ctx2.lineTo(xp, H2-pad2.b); ctx2.stroke(); }
+    // horizontal guides for each channel
+    const yMax = Math.max(1, Math.max(...channels.flatMap(c => Array.from(c))));
+    const yTo = v => pad2.t + ih2 * (1 - v / yMax);
+    for (let k=0; k<K; k++){
+      const color = palette[k];
+      ctx2.strokeStyle = color; ctx2.lineWidth = 1.8;
+      ctx2.beginPath();
+      for (let n=0; n<L; n++){
+        const xp = pad2.l + iw2*n/(L-1);
+        const yp = yTo(channels[k][n]);
+        if (n===0) ctx2.moveTo(xp,yp); else ctx2.lineTo(xp,yp);
+      }
+      ctx2.stroke();
+    }
+    // legend
+    ctx2.font='9px "Press Start 2P", monospace';
+    let xLeg = pad2.l;
+    for (let k=0;k<K;k++){
+      ctx2.fillStyle = palette[k];
+      ctx2.fillText('k='+k, xLeg, 12);
+      xLeg += 40;
+    }
+    ctx2.fillStyle='#8f8fa8';
+    ctx2.fillText('n', W2-16, H2-8);
+  }
+
+  $('winSel').addEventListener('change', e=>{ state.win=e.target.value; redraw(); });
+  $('nSlider').addEventListener('input', e=>{ state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+  $('chirpSel').addEventListener('change', e=>{ state.sig = e.target.value; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const correct = btn.getAttribute('data-correct')==='1';
+      btn.classList.add(correct?'correct':'wrong');
+      const fb = $('qFeedback');
+      if (correct){
+        fb.innerHTML='<span lang="en">🪙 +1 coin! Direct $O(N^2)=10^6$; FFT $O(N\\log_2 N)\\approx 10^4$; ratio ≈ 100×.</span><span lang="zh">🪙 金幣 +1！直接法 $O(N^2)=10^6$；FFT $O(N\\log_2 N)\\approx 10^4$；比例約 100 倍。</span>';
+        const c=(parseInt(localStorage.getItem('dsp.coins')||'0',10)+1);
+        localStorage.setItem('dsp.coins',c); $('coins').textContent=c;
+      } else {
+        fb.innerHTML='<span lang="en">✗ Compute $N/\\log_2 N$ at $N=1024$.</span><span lang="zh">✗ 算算看 $N/\\log_2 N$（$N=1024$ 時）。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+})();
+</script>
 </body></html>

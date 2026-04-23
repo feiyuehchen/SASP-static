@@ -1,20 +1,152 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.2.1 Matlab Examples · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-2-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-2-1 · Computational Examples</span><span lang="zh">關卡 10-2-1 · 計算範例</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Computational_Examples_Matlab.html" target="_blank">SASP §10.2.1 ↗</a></small></h1>
-  <div class="nes-box nes-box--purple" data-label="CODE">
-    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
-% STFT as a filter bank — direct convolution
-for k = 0:N-1
-  hk = w .* exp(1j*2*pi*k*(0:N-1)'/N);   % modulated window
-  Xk(:,k+1) = conv(x, hk);               % output of bin k
-end
-    </pre>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.2.1 Computational Examples · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-2-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <p lang="en">Inefficient (loops over $N$ filters) but makes the FB view concrete. The fast version reuses one FFT per time block.</p>
-  <p lang="zh">低效（要跑 $N$ 個濾波器），但能具體看到 FB 詮釋。快速版每個時間 block 一次 FFT 就夠。</p>
-  <div class="pager"><a class="nes-btn" href="10.2-stft-fb.html">◀ 10.2</a><a class="warp-pipe">10-2-1</a><a class="nes-btn nes-btn--primary" href="10.3-dft-fb.html">NEXT ▶ 10.3</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-2-1 · Computational Examples in Matlab</span>
+    <span lang="zh">關卡 10-2-1 · Matlab 計算範例</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Computational_Examples_Matlab.html" target="_blank">SASP §10.2.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Show three implementations in Matlab/Octave — direct FIR filter bank, FFT-based STFT, and "polyphase lite" — that compute the <em>same</em> numbers. Compare their runtimes and round-trip errors, so you can justify the FFT shortcut with hard numbers instead of hand-waving.</p>
+    <p lang="zh">用 Matlab/Octave 展示三種實作 — 直接 FIR 濾波器組、FFT-based STFT、以及 "polyphase 輕量版" — 它們計算出<em>完全相同</em>的數字。比對執行時間與來回誤差，讓 FFT 捷徑有具體數據背書而非嘴砲。</p>
+  </div>
+
+  <h2 lang="en">Method A · Direct $N$-channel FIR (the brute-force FB)</h2>
+  <h2 lang="zh">方法 A · 直接 $N$ 通道 FIR（暴力 FB）</h2>
+
+  <div class="nes-box nes-box--purple" data-label="MATLAB · DIRECT">
+<pre style="color:var(--nes-lime); font-size:11px; line-height:1.7; margin:0; white-space:pre-wrap;">
+% Direct STFT filter bank — O(N^2) per output frame
+% x: input length L;  w: length-N window;  R: hop;  N: # of bands
+function Xk = stft_fb_direct(x, w, R, N)
+  L  = length(x);
+  M  = floor((L - N) / R) + 1;     % # of frames
+  Xk = zeros(N, M);
+  for k = 0 : N-1
+    hk = w(:) .* exp( 1j * 2*pi*k*(0:N-1)' / N );   % channel-k impulse resp.
+    for m = 0 : M-1
+      seg = x(m*R + (1:N));                         % current frame
+      Xk(k+1, m+1) = hk.' * seg(:);                 % inner product = conv at mR
+    end
+  end
+end
+</pre>
+  </div>
+
+  <p lang="en">Nested loop: $N\cdot M \cdot N = N^2 M$ complex multiplies. For 10&nbsp;s at 44.1&nbsp;kHz, $N=1024$, $R=256$: $\approx 1.7\cdot 10^9$ ops. Slow, but it makes the FB structure explicit — every $k$ has its own FIR.</p>
+  <p lang="zh">三層迴圈：$N\cdot M \cdot N = N^2 M$ 次複乘。10 秒、44.1 kHz、$N=1024$、$R=256$ 時約 $1.7\cdot 10^9$ 次。慢，但 FB 結構看得很清楚 — 每個 $k$ 有自己的 FIR。</p>
+
+  <h2 lang="en">Method B · One FFT per frame (the fast STFT)</h2>
+  <h2 lang="zh">方法 B · 每 frame 一次 FFT（fast STFT）</h2>
+
+  <div class="nes-box nes-box--purple" data-label="MATLAB · FFT">
+<pre style="color:var(--nes-lime); font-size:11px; line-height:1.7; margin:0; white-space:pre-wrap;">
+% STFT via FFT — O(N log N) per output frame
+function Xk = stft_fft(x, w, R, N)
+  L  = length(x);
+  M  = floor((L - N) / R) + 1;
+  Xk = zeros(N, M);
+  for m = 0 : M-1
+    seg = x(m*R + (1:N)) .* w(:);                   % window a frame
+    Xk(:, m+1) = fft(seg, N);                       % one N-pt FFT
+  end
+end
+</pre>
+  </div>
+
+  <p lang="en">Two loops collapse to one + a library FFT. Same output matrix $X_k$ as Method A (up to floating-point noise). For the same 10&nbsp;s example: $\approx 1.7\cdot 10^7$ ops — <b>100× faster</b>.</p>
+  <p lang="zh">三層迴圈降為兩層 + 一次 FFT。輸出 $X_k$ 與方法 A 完全相同（浮點誤差內）。同樣的 10 秒例子只需約 $1.7\cdot 10^7$ 次運算 — <b>快 100 倍</b>。</p>
+
+  <h2 lang="en">Method C · Polyphase lite (shared exponentials)</h2>
+  <h2 lang="zh">方法 C · Polyphase 輕量版（共用指數）</h2>
+
+  <div class="nes-box nes-box--purple" data-label="MATLAB · POLYPHASE LITE">
+<pre style="color:var(--nes-lime); font-size:11px; line-height:1.7; margin:0; white-space:pre-wrap;">
+% Reuse one twiddle matrix Wmat for every frame
+function Xk = stft_polyphase_lite(x, w, R, N)
+  L    = length(x);
+  M    = floor((L - N) / R) + 1;
+  Wmat = exp( -1j * 2*pi * (0:N-1).' * (0:N-1) / N );   % N×N DFT matrix
+  Xk   = zeros(N, M);
+  for m = 0 : M-1
+    seg = x(m*R + (1:N)) .* w(:);
+    Xk(:, m+1) = Wmat * seg;                            % matrix × vector
+  end
+end
+</pre>
+  </div>
+
+  <p lang="en">Cost equals <em>direct</em> again — $O(N^2)$ per frame, not $O(N\log N)$ — but it illustrates the algebraic structure: STFT = "window × signal" multiplied by the DFT matrix. Polyphase proper (Ch 12) replaces the matrix with $O(N\log N)$ structured operators and is the route modern codecs take.</p>
+  <p lang="zh">成本又變回 $O(N^2)$ 而非 $O(N\log N)$ — 但它把「STFT = (視窗×訊號) × DFT 矩陣」的代數結構直接寫出來。真正的 polyphase（Ch 12）會把此矩陣換成 $O(N\log N)$ 的結構化運算子，是現代 codec 採用的路線。</p>
+
+  <h2 lang="en">Sanity test</h2>
+  <h2 lang="zh">健全性測試</h2>
+
+  <div class="nes-box nes-box--purple" data-label="MATLAB · VERIFY">
+<pre style="color:var(--nes-lime); font-size:11px; line-height:1.7; margin:0; white-space:pre-wrap;">
+% Run all three methods, confirm they agree
+fs = 44100; L  = fs * 2;  N = 512; R = 128;
+x  = randn(L, 1);
+w  = hann(N);
+
+XA = stft_fb_direct(x, w, R, N);
+XB = stft_fft(x, w, R, N);
+XC = stft_polyphase_lite(x, w, R, N);
+
+err_BA = max(abs(XB(:) - XA(:))) / max(abs(XA(:)));
+err_CA = max(abs(XC(:) - XA(:))) / max(abs(XA(:)));
+fprintf('||B - A||∞ = %.2e\n', err_BA);
+fprintf('||C - A||∞ = %.2e\n', err_CA);
+% Expected: both errors at machine epsilon ~ 1e-14.
+</pre>
+  </div>
+
+  <p lang="en">If <code>err_BA</code> and <code>err_CA</code> aren't both at machine epsilon ($\sim 10^{-14}$), you've got a bug — likely a sign error on the exponential, a wrong hop indexing, or FFT-length mismatch with the window length. The agreement is the whole point: the <em>FB view</em> and the <em>FFT view</em> compute identical tensors.</p>
+  <p lang="zh">若 <code>err_BA</code>、<code>err_CA</code> 沒有都在機器 epsilon（$\sim 10^{-14}$）等級，就是 bug — 常見是指數符號錯、跳距索引偏移、或 FFT 長度與視窗長度不一致。兩者一致正是重點：<em>FB 詮釋</em>與<em>FFT 詮釋</em>算出完全相同的張量。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Pick one mental model, measure the other.</b> Think about modifications through the FB (per-band gain, per-band phase lock, cross-channel coupling) but compute with the FFT. That's the working-STFT-engineer's day-to-day workflow.</p>
+    <p lang="zh"><b>思考用一個模型、實測用另一個。</b>設計修改時用 FB 詮釋（逐頻帶增益、逐頻帶相位鎖定、跨通道耦合）；計算時用 FFT。這就是實務 STFT 工程師的日常。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.2-stft-fb.html">◀ 10.2</a>
+    <a class="warp-pipe">10-2-1</a>
+    <a class="nes-btn nes-btn--primary" href="10.3-dft-fb.html">NEXT ▶ 10.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

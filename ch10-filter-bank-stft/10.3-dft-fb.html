@@ -1,13 +1,251 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.3 DFT Filter Bank · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-3 · The DFT Filter Bank</span><span lang="zh">關卡 10-3 · DFT 濾波器組</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/DFT_Filter_Bank.html" target="_blank">SASP §10.3 ↗</a></small></h1>
-  <div class="nes-box" data-label="RECTANGULAR WINDOW CASE">
-    <p lang="en">Pick $w$ = rectangular of length $N$. The STFT filter bank becomes the classic <em>DFT filter bank</em>: each channel is a shifted running-sum filter. Cheapest and most symmetric of the family.</p>
-    <p lang="zh">取 $w$ = 長度 $N$ 矩形。STFT 濾波器組就成了經典的 <em>DFT 濾波器組</em>：每個通道是位移的累計和濾波器。最便宜、最對稱的成員。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.3 The DFT Filter Bank · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.2.1-matlab-examples.html">◀ 10.2.1</a><a class="warp-pipe">10-3</a><a class="nes-btn nes-btn--primary" href="10.3.1-running-sum.html">NEXT ▶ 10.3.1</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-3 · The DFT Filter Bank</span>
+    <span lang="zh">關卡 10-3 · DFT 濾波器組</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/DFT_Filter_Bank.html" target="_blank">SASP §10.3 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">Show that the plain unmodified DFT is <em>itself</em> a filter bank — specifically, a uniform FB whose prototype lowpass is a length-$N$ running sum (rectangular window). Every other FB in this chapter is built by replacing that rectangular window with a nicer one.</p>
+        <p lang="zh">證明「原始、未加窗的 DFT」<em>本身</em>就是一個濾波器組 — 更精確地說，是以長度 $N$ 累計和（矩形視窗）為原型低通的均勻 FB。本章其他 FB 其實都是把那個矩形視窗換成更漂亮的視窗。</p>
+      </div>
+
+      <h2 lang="en">The DFT, stared at until it becomes a filter bank</h2>
+      <h2 lang="zh">盯著 DFT 看到它變成濾波器組</h2>
+
+      <p lang="en">Start with the $N$-point DFT of a sequence $x$ at time $n$ (imagine the DFT is recomputed for each starting $n$):</p>
+      <p lang="zh">從以時間 $n$ 起算的 $N$ 點 DFT 出發（想像對每個 $n$ 都重算一次 DFT）：</p>
+
+      <div class="formula">
+        <div>$$X_n[k]\;=\;\sum_{m=0}^{N-1} x[n+m]\,e^{-j 2\pi k m / N}$$</div>
+      </div>
+
+      <p lang="en">Substitute $\ell = n+m$ (so $m=\ell-n$):</p>
+      <p lang="zh">換元 $\ell = n+m$：</p>
+
+      <div class="formula">
+        <div>$$X_n[k]\;=\;e^{j 2\pi k n / N}\sum_{\ell=n}^{n+N-1} x[\ell]\,e^{-j 2\pi k \ell / N}$$</div>
+      </div>
+
+      <p lang="en">The inner sum is a running (length-$N$) sum of $x[\ell]e^{-j\omega_k \ell}$ — that is, the modulated signal put through a <em>rectangular-window lowpass</em>. Peeling off the leading exponential leaves a pure filter-bank output:</p>
+      <p lang="zh">內部求和就是對 $x[\ell]e^{-j\omega_k \ell}$ 做長度 $N$ 的累計和 — 即「調變後的訊號通過矩形視窗低通」。把前頭的複指數剝掉，就只剩一個濾波器組的輸出：</p>
+
+      <div class="formula">
+        <span class="label">DFT FILTER BANK FORM</span>
+        <div>$$X_n[k]\;=\;e^{j\omega_k n}\cdot\bigl(\; [x \cdot e^{-j\omega_k\cdot}] \;\ast\; h_{\text{RS}}\;\bigr)[n]$$</div>
+      </div>
+
+      <p lang="en">where $h_{\text{RS}}[n]$ is the length-$N$ <em>running-sum</em> filter: $h_{\text{RS}}[n]=1$ for $n\in\{0,\ldots,N-1\}$ and zero elsewhere. Its spectrum is the familiar Dirichlet sinc with first null at $\omega=2\pi/N$.</p>
+      <p lang="zh">其中 $h_{\text{RS}}[n]$ 是長度 $N$ 的<em>累計和</em>濾波器：$n\in\{0,\ldots,N-1\}$ 時為 $1$，其餘為 $0$。其頻譜就是熟悉的 Dirichlet sinc，第一個零點在 $\omega=2\pi/N$。</p>
+
+      <h2 lang="en">What this decomposition says</h2>
+      <h2 lang="zh">這個分解告訴我們什麼</h2>
+
+      <p lang="en">Reading the DFT-FB form step by step:</p>
+      <p lang="zh">一步步讀這個 DFT-FB 形式：</p>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.8; text-align:left;">
+          <span lang="en">
+            <b>1.</b> Demodulate $x[\ell]\cdot e^{-j\omega_k\ell}$: slide band $k$ down to DC.<br>
+            <b>2.</b> Running sum: take the length-$N$ moving average (the rectangular lowpass).<br>
+            <b>3.</b> Remodulate by $e^{j\omega_k n}$: push the DC bin back up to $\omega_k$.
+          </span>
+          <span lang="zh">
+            <b>1.</b> 解調 $x[\ell]\cdot e^{-j\omega_k\ell}$：把第 $k$ 頻帶滑到直流。<br>
+            <b>2.</b> 累計和：做長度 $N$ 的滑動平均（矩形低通）。<br>
+            <b>3.</b> 以 $e^{j\omega_k n}$ 重新調變：把直流 bin 推回到 $\omega_k$。
+          </span>
+        </div>
+      </div>
+
+      <p lang="en">The DFT secretly runs this demodulate-lowpass-remodulate pipeline once for every $k$. Because the prototype is a rectangle, the side-lobes are brutal (−13&nbsp;dB) — this is exactly what nicer windows (§10.3.3+) fix.</p>
+      <p lang="zh">DFT 暗中對每個 $k$ 都跑一次「解調 → 低通 → 再調變」流水線。由於原型是矩形視窗，旁波瓣只有 −13 dB — 後面用比較漂亮的視窗就是要修正這點（§10.3.3 起）。</p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Every DFT is a FB; every FB is (essentially) a windowed DFT.</b> This duality is the whole engine of Ch 10. The rest of the chapter is choosing the prototype window to control leakage — the rectangular's Dirichlet sinc is just the starting point.</p>
+        <p lang="zh"><b>每個 DFT 都是一個 FB；每個 FB（本質上）都是加窗 DFT。</b>這個對偶性就是 Ch 10 的引擎。本章之後就是在選原型視窗來控制洩漏 — 矩形視窗的 Dirichlet sinc 只是起點。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · DFT channel responses on the unit circle</h3>
+        <h3 lang="zh">實驗 · DFT 通道響應在單位圓上</h3>
+
+        <canvas id="dftFbCanvas" style="height:320px;"></canvas>
+
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="4" max="32" step="1" value="8"/>
+          <span class="val" id="nVal">8</span>
+          <label>Highlight k</label>
+          <input type="range" id="kSlider" min="0" max="7" step="1" value="2"/>
+          <span class="val" id="kVal">2</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Yellow: the highlighted channel $k$ — a Dirichlet sinc centred at $\omega_k=2\pi k/N$. Blue: the other $N-1$ channels, forming a uniform grid on $[0, 2\pi)$. The sidelobe pattern repeats every $2\pi/N$; between bin centres, multiple channels all respond — this is why the rectangular FB leaks badly.</p>
+          <p lang="zh">黃色：被標亮的第 $k$ 通道 — 以 $\omega_k=2\pi k/N$ 為中心的 Dirichlet sinc。藍色：其他 $N-1$ 個通道，均勻鋪在 $[0, 2\pi)$ 上。旁波瓣圖樣每 $2\pi/N$ 重複一次；bin 中心之間的頻率會同時被多個通道響應 — 這就是矩形 FB 洩漏嚴重的原因。</p>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> At which $\omega$ in $(-\pi,\pi]$ does a length-$N$ running-sum (rectangular) filter's magnitude $|H_{\text{RS}}(\omega)|$ first hit zero?</p>
+        <p lang="zh"><b>問：</b>長度 $N$ 的累計和（矩形）濾波器的 $|H_{\text{RS}}(\omega)|$ 在 $(-\pi,\pi]$ 上第一個零點在哪？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">$\omega = 2\pi$</button>
+          <button data-correct="0" lang="zh">$\omega = 2\pi$</button>
+          <button data-correct="1" lang="en">$\omega = 2\pi/N$</button>
+          <button data-correct="1" lang="zh">$\omega = 2\pi/N$</button>
+          <button data-correct="0" lang="en">$\omega = \pi/2$</button>
+          <button data-correct="0" lang="zh">$\omega = \pi/2$</button>
+          <button data-correct="0" lang="en">$\omega = \pi/N$</button>
+          <button data-correct="0" lang="zh">$\omega = \pi/N$</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.2.1-matlab-examples.html">◀ 10.2.1</a>
+    <a class="warp-pipe">10-3</a>
+    <a class="nes-btn nes-btn--primary" href="10.3.1-running-sum.html">NEXT ▶ 10.3.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 8, k: 2 };
+
+  function redraw(){
+    const { N, k } = state;
+    $('kSlider').max = N-1;
+    if (state.k >= N) { state.k = N-1; $('kSlider').value = state.k; $('kVal').textContent = state.k; }
+
+    const c = $('dftFbCanvas');
+    const ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad = { l:44, r:12, t:16, b:28 };
+    const iw = W-pad.l-pad.r, ih = H-pad.t-pad.b;
+
+    const K = 720;
+    function dirichlet(omega){
+      const half = omega/2;
+      if (Math.abs(Math.sin(half)) < 1e-10) return N;
+      return Math.sin(N*half) / Math.sin(half);
+    }
+    const dBfloor = -60;
+    const toDb = v => Math.max(dBfloor, 20*Math.log10(Math.max(Math.abs(v)/N, 1e-6)));
+    const yDb = db => pad.t + ih * (1 - (db - dBfloor)/(0 - dBfloor));
+    const xTo = i => pad.l + iw * i/(K-1);
+
+    // grid
+    ctx.strokeStyle='#262644';
+    for (let g=0; g<=12; g++){ const x = pad.l + iw*g/12; ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, H-pad.b); ctx.stroke(); }
+    for (let g=0; g<=6; g++){ const y = pad.t + ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W-pad.r, y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, H-pad.b); ctx.stroke();
+
+    for (let kk = 0; kk < N; kk++){
+      const omega_k = 2*Math.PI * kk / N;
+      const color = (kk === k) ? '#ffd95a' : '#5aa0ff';
+      const lw    = (kk === k) ? 2.4 : 1;
+      const alpha = (kk === k) ? 1.0 : 0.35;
+      ctx.globalAlpha = alpha; ctx.strokeStyle = color; ctx.lineWidth = lw;
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const omega = -Math.PI + 2*Math.PI * i/(K-1);
+        let diff = omega - omega_k;
+        while (diff > Math.PI) diff -= 2*Math.PI;
+        while (diff <= -Math.PI) diff += 2*Math.PI;
+        const v = dirichlet(diff);
+        const y = yDb(toDb(v));
+        if (i===0) ctx.moveTo(xTo(i), y); else ctx.lineTo(xTo(i), y);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    const xt = [['-π',-Math.PI],['-π/2',-Math.PI/2],['0',0],['π/2',Math.PI/2],['π',Math.PI]];
+    for (const [lbl,v] of xt){
+      const i = (v + Math.PI)/(2*Math.PI) * (K-1);
+      const x = xTo(i);
+      ctx.fillText(lbl, x-10, H-pad.b+14);
+    }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = yDb(db);
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+    ctx.fillStyle='#ffd95a'; ctx.fillText('k = '+k+'   N = '+N, 10, 12);
+  }
+
+  $('nSlider').addEventListener('input', e=>{ state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+  $('kSlider').addEventListener('input', e=>{ state.k = parseInt(e.target.value,10); $('kVal').textContent = state.k; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const correct = btn.getAttribute('data-correct')==='1';
+      btn.classList.add(correct?'correct':'wrong');
+      const fb = $('qFeedback');
+      if (correct){
+        fb.innerHTML='<span lang="en">🪙 +1 coin! A length-$N$ rect has first spectral zero at $\\omega=2\\pi/N$ — exactly one DFT bin away from DC.</span><span lang="zh">🪙 金幣 +1！長度 $N$ 矩形視窗頻譜第一零在 $\\omega=2\\pi/N$ — 距直流恰一個 DFT bin 寬。</span>';
+        const c=(parseInt(localStorage.getItem('dsp.coins')||'0',10)+1);
+        localStorage.setItem('dsp.coins',c); $('coins').textContent=c;
+      } else {
+        fb.innerHTML='<span lang="en">✗ sin(Nω/2) = 0 at ω = 2π/N.</span><span lang="zh">✗ $\\sin(N\\omega/2) = 0$ 在 $\\omega = 2\\pi/N$。</span>';
+      }
+      I18N.apply(I18N.get());
+    });
+  });
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+})();
+</script>
 </body></html>

@@ -1,12 +1,121 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.3.1 Running-Sum LP · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-3-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-3-1 · Running-Sum Lowpass</span><span lang="zh">關卡 10-3-1 · 累計和低通</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Running_Sum_Lowpass_Filter.html" target="_blank">SASP §10.3.1 ↗</a></small></h1>
-  <div class="formula"><div>$$y[n]=\sum_{k=0}^{N-1}x[n-k]\quad\Longleftrightarrow\quad H(\omega)=e^{-j\omega(N-1)/2}\,\frac{\sin(N\omega/2)}{\sin(\omega/2)}$$</div></div>
-  <p lang="en">The prototype: a length-$N$ running sum. Its frequency response is the Dirichlet kernel; zeros at multiples of $2\pi/N$ — exactly where the other DFT-FB channels want to put their peaks.</p>
-  <p lang="zh">原型：長度 $N$ 的累計和。頻率響應為 Dirichlet 核；零點位於 $2\pi/N$ 的倍數 — 正是其他 DFT-FB 通道想放峰的位置。</p>
-  <div class="pager"><a class="nes-btn" href="10.3-dft-fb.html">◀ 10.3</a><a class="warp-pipe">10-3-1</a><a class="nes-btn nes-btn--primary" href="10.3.2-mod-complex.html">NEXT ▶ 10.3.2</a></div>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.3.1 Running-Sum Lowpass · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-3-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-3-1 · The Running-Sum Lowpass</span>
+    <span lang="zh">關卡 10-3-1 · 累計和低通</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Running_Sum_Lowpass_Filter.html" target="_blank">SASP §10.3.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">The length-$N$ running sum is the cheapest possible lowpass — $N-1$ adds, no multiplies. It's also the worst behaved (Dirichlet sinc with $-13$&nbsp;dB side lobes). Yet it's the secret prototype filter hiding inside <em>every</em> unwindowed DFT filter bank. Get to know it.</p>
+    <p lang="zh">長度 $N$ 累計和是最便宜的低通 — 只要 $N-1$ 次加、完全不乘。它也是表現最糟的（Dirichlet sinc，旁波瓣僅 $-13$ dB）。但它正是藏在<em>所有</em>未加窗 DFT 濾波器組背後的祕密原型。讓我們仔細認識它。</p>
+  </div>
+
+  <h2 lang="en">Impulse response</h2>
+  <h2 lang="zh">脈衝響應</h2>
+
+  <div class="formula">
+    <div>$$h_{\text{RS}}[n]\;=\;\begin{cases}1, & 0\le n < N \\ 0, & \text{otherwise}\end{cases}$$</div>
+  </div>
+
+  <p lang="en">A length-$N$ rectangle of height 1. Apply to any $x[n]$ and you get the running sum of the last $N$ samples:</p>
+  <p lang="zh">高度 1、長度 $N$ 的矩形。套在任意 $x[n]$ 上，就是最近 $N$ 個樣本的累計和：</p>
+
+  <div class="formula">
+    <div>$$y[n]\;=\;(x * h_{\text{RS}})[n]\;=\;\sum_{m=0}^{N-1} x[n-m]$$</div>
+  </div>
+
+  <p lang="en">Equivalent to an $N$-tap moving average up to a scale factor $N$. In the DFT-FB interpretation we keep the scale-$N$ version so the DC bin matches $\sum_n x[n]$ directly.</p>
+  <p lang="zh">等同於 $N$-tap 移動平均（差一個倍數 $N$）。在 DFT-FB 詮釋下我們保留倍數 $N$ 版本，讓直流 bin 恰好等於 $\sum_n x[n]$。</p>
+
+  <h2 lang="en">Frequency response — the Dirichlet sinc</h2>
+  <h2 lang="zh">頻率響應 — Dirichlet sinc</h2>
+
+  <div class="formula">
+    <span class="label">DTFT</span>
+    <div>$$H_{\text{RS}}(\omega)\;=\;\sum_{n=0}^{N-1} e^{-j\omega n}\;=\;e^{-j\omega(N-1)/2}\cdot\frac{\sin(N\omega/2)}{\sin(\omega/2)}$$</div>
+  </div>
+
+  <p lang="en">Magnitude is the <em>Dirichlet kernel</em> $|\sin(N\omega/2)/\sin(\omega/2)|$, a periodic sinc-shaped envelope. The linear-phase factor $e^{-j\omega(N-1)/2}$ is the constant group delay $(N-1)/2$ — no phase distortion, just a delay.</p>
+  <p lang="zh">振幅是 <em>Dirichlet kernel</em> $|\sin(N\omega/2)/\sin(\omega/2)|$，一個週期 sinc 形狀的包絡。線性相位因子 $e^{-j\omega(N-1)/2}$ 代表等值群延遲 $(N-1)/2$ — 沒有相位失真，只是延遲。</p>
+
+  <h2 lang="en">Key numerical features</h2>
+  <h2 lang="zh">關鍵數值特徵</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>DC gain:</b> $H_{\text{RS}}(0) = N$. That's why we keep the scale-$N$ factor.<br>
+        <b>First spectral null:</b> $\omega = 2\pi/N$ — exactly one DFT bin.<br>
+        <b>Subsequent nulls:</b> $\omega = 2\pi k/N$ for every integer $k\ne 0$.<br>
+        <b>Side-lobe peaks:</b> midway between nulls, level $-13$&nbsp;dB (first), $-17.8$&nbsp;dB (second), decaying like $1/|\omega|$.<br>
+        <b>Main-lobe width:</b> $4\pi/N$ (null-to-null); half-power bandwidth $\approx 0.886 \cdot 2\pi/N$.<br>
+        <b>Group delay:</b> $(N-1)/2$ samples, constant.
+      </span>
+      <span lang="zh">
+        <b>直流增益：</b>$H_{\text{RS}}(0) = N$。所以我們保留倍數 $N$。<br>
+        <b>第一個零點：</b>$\omega = 2\pi/N$ — 恰好一個 DFT bin。<br>
+        <b>後續零點：</b>$\omega = 2\pi k/N$，任意非零整數 $k$。<br>
+        <b>旁波瓣峰：</b>兩零點中間，第一個 $-13$ dB、第二個 $-17.8$ dB，以 $1/|\omega|$ 速度衰減。<br>
+        <b>主波瓣寬：</b>$4\pi/N$（零到零）；半功率頻寬約 $0.886 \cdot 2\pi/N$。<br>
+        <b>群延遲：</b>$(N-1)/2$ 個樣本，固定。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">z-transform and pole–zero view</h2>
+  <h2 lang="zh">Z 轉換與極零點觀點</h2>
+
+  <div class="formula">
+    <div>$$H_{\text{RS}}(z)\;=\;\sum_{n=0}^{N-1} z^{-n}\;=\;\frac{1 - z^{-N}}{1 - z^{-1}}$$</div>
+  </div>
+
+  <p lang="en">$N$ zeros at the $N$-th roots of unity except the one at $z=1$ (which is cancelled by the denominator pole). So $N-1$ zeros are spread uniformly on the unit circle — this is the Dirichlet pattern's origin. This factored form also hints at the recursive <em>cumulative-sum</em> implementation: one multiply-free pole at $z=1$ + one unit delay at $z^{-N}$.</p>
+  <p lang="zh">$N$ 個零點在 $N$ 次單位根上，除了 $z=1$ 那個（被分母的極點抵消）。所以 $N-1$ 個零點均勻分布於單位圓 — 這就是 Dirichlet 圖樣的起源。此因式分解也暗示一個遞迴的<em>累計和</em>實作：$z=1$ 有一個免乘極點、$z^{-N}$ 有一個單位延遲。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Cheap, but leaky.</b> The running sum is the cheapest FIR LP you can build. Its $-13$&nbsp;dB side-lobes are the default penalty for "no window, just a raw DFT". Every other window in Ch 4 and Ch 10 is a way to trade that cheapness for better side-lobe suppression.</p>
+    <p lang="zh"><b>便宜，但漏。</b>累計和是你能做出的最便宜 FIR 低通。$-13$ dB 的旁波瓣是「不加窗、純做 DFT」的預設代價。Ch 4 和 Ch 10 的所有視窗都是在用「多一點計算」換「更低的旁波瓣」。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.3-dft-fb.html">◀ 10.3</a>
+    <a class="warp-pipe">10-3-1</a>
+    <a class="nes-btn nes-btn--primary" href="10.3.2-mod-complex.html">NEXT ▶ 10.3.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

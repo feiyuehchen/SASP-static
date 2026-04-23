@@ -1,13 +1,227 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.3.4 Uniform Running-Sum FB · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-3-4</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-3-4 · Uniform Running-Sum Filter Banks</span><span lang="zh">關卡 10-3-4 · 均勻累計和濾波器組</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Uniform_Running_Sum_Filter_Banks.html" target="_blank">SASP §10.3.4 ↗</a></small></h1>
-  <div class="nes-box" data-label="N CHANNELS, EQUAL SPACING">
-    <p lang="en">$N$ running-sum channels, each modulated by $e^{j2\pi k n/N}$, form a uniform filter bank. DC gains sum to $N$ and the outputs, de-modulated and summed, recover the input.</p>
-    <p lang="zh">$N$ 個累計和通道，分別以 $e^{j2\pi k n/N}$ 調變，構成均勻濾波器組。DC 增益總和 $N$；輸出反調變再相加即還原輸入。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.3.4 Uniform Running-Sum FB · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-3-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.3.3-lp-to-bp.html">◀ 10.3.3</a><a class="warp-pipe">10-3-4</a><a class="nes-btn nes-btn--primary" href="10.3.4.1-rs-diagram.html">NEXT ▶ 10.3.4.1</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-3-4 · Uniform Running-Sum Filter Banks</span>
+    <span lang="zh">關卡 10-3-4 · 均勻累計和濾波器組</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Uniform_Running_Sum_Filter_Banks.html" target="_blank">SASP §10.3.4 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">Collect the single-channel building block of §10.3.3 into an $N$-channel <em>uniform running-sum filter bank</em>: $N$ bandpass filters, all identical-shape rectangular-sinc prototypes, placed on a uniform grid $\omega_k = 2\pi k/N$. We derive its total frequency response, show it equals an unwindowed DFT, and tee up the <em>system diagram</em> in §10.3.4.1.</p>
+        <p lang="zh">把 §10.3.3 的單通道積木組成一個 $N$ 通道的<em>均勻累計和濾波器組</em>：$N$ 個帶通、同一個矩形-sinc 原型、等距排在 $\omega_k = 2\pi k/N$ 網格上。我們推導其總頻率響應、證明等價於未加窗 DFT，並為 §10.3.4.1 的<em>系統圖</em>預備。</p>
+      </div>
+
+      <h2 lang="en">The bank, written out</h2>
+      <h2 lang="zh">完整寫出這個組</h2>
+
+      <div class="formula">
+        <span class="label">CHANNEL k (k = 0..N-1)</span>
+        <div>$$h_k[n]\;=\;\underbrace{h_{\text{RS}}[n]}_{\text{rect of length }N}\cdot\;e^{j 2\pi k n / N}$$</div>
+      </div>
+
+      <div class="formula">
+        <span class="label">FREQ RESPONSE</span>
+        <div>$$H_k(\omega)\;=\;H_{\text{RS}}(\omega - \omega_k)\;=\;e^{-j(\omega-\omega_k)(N-1)/2}\,\frac{\sin\!\bigl(N(\omega-\omega_k)/2\bigr)}{\sin\!\bigl((\omega-\omega_k)/2\bigr)}$$</div>
+      </div>
+
+      <p lang="en">$N$ Dirichlet sincs on the unit circle, regularly spaced by $2\pi/N$. Each peak sits at the next channel's first null. The total response sums to a constant on the unit circle:</p>
+      <p lang="zh">$N$ 個 Dirichlet sinc 均勻分佈於單位圓，間距 $2\pi/N$。每個峰值恰落在下一個通道的第一零點。全部通道相加後在單位圓上恰為常數：</p>
+
+      <div class="formula">
+        <span class="label">SUM OF CHANNELS = CONSTANT</span>
+        <div>$$\sum_{k=0}^{N-1} H_k(\omega)\;=\;N\quad\text{(for all }\omega\in[0, 2\pi)\text{)}$$</div>
+      </div>
+
+      <p lang="en">That is why the raw DFT FB has <em>flat</em> total response: the sinc peaks and sinc nulls interlock exactly. Individual sincs leak badly, but their sum doesn't — this is the punchline of "unwindowed DFT is a FB".</p>
+      <p lang="zh">這就是未加窗 DFT FB 總響應<em>平坦</em>的原因：sinc 峰與 sinc 零完美咬合。單一 sinc 洩漏嚴重，總和卻不會 — 這正是「未加窗 DFT 是 FB」最爽快的結論。</p>
+
+      <h2 lang="en">Equivalent to an unwindowed DFT</h2>
+      <h2 lang="zh">等價於未加窗 DFT</h2>
+
+      <p lang="en">Run the bank at hop $R=1$ and you get an STFT of $x$ with a rectangular window, one output sample per input sample. The matrix of outputs is literally $X_n[k]=\sum_m x[n+m]e^{-j\omega_k m}$ — a sliding DFT. This is the tightest possible FB–DFT equivalence.</p>
+      <p lang="zh">讓此組以跳距 $R=1$ 運作，就得到矩形視窗的 STFT，每個輸入樣本對應一個輸出樣本。輸出矩陣正是 $X_n[k]=\sum_m x[n+m]e^{-j\omega_k m}$ — 一個滑動 DFT。這是 FB↔DFT 最緊的等價。</p>
+
+      <h2 lang="en">What's wrong with it (and what Ch 10 fixes)</h2>
+      <h2 lang="zh">它哪裡不好（以及 Ch 10 如何修）</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.8; text-align:left;">
+          <span lang="en">
+            <b>1. Sidelobes leak at −13&nbsp;dB.</b> Fix: replace rect with Hann/Hamming/Blackman/Kaiser (§10.4+).<br>
+            <b>2. R = 1 is maximally oversampled.</b> Fix: choose larger hop $R$, track the Nyquist constraint (§10.8).<br>
+            <b>3. Length = $N$ ties window shape to FFT size.</b> Fix: Portnoff windows with length &gt; N (§10.7).
+          </span>
+          <span lang="zh">
+            <b>1. 旁波瓣僅 −13 dB。</b>解法：把矩形換成 Hann / Hamming / Blackman / Kaiser（§10.4 起）。<br>
+            <b>2. R = 1 過度取樣。</b>解法：選較大跳距 $R$，並留意 Nyquist 限制（§10.8）。<br>
+            <b>3. 視窗長 = $N$ 把形狀綁死 FFT 大小。</b>解法：用長度 &gt; N 的 Portnoff 視窗（§10.7）。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Keep the structure, swap the prototype.</b> The <em>uniform</em> part (equal spacing $2\pi/N$) is what makes an efficient FFT implementation possible. The <em>running-sum</em> part is the weakest link; every future improvement is a choice of a better prototype $w[n]$ keeping the same equal-spacing structure.</p>
+        <p lang="zh"><b>保留結構、替換原型。</b><em>均勻</em>的部分（等距 $2\pi/N$）讓 FFT 高效實作成為可能。<em>累計和</em>的部分是最弱環節；之後所有改進都是換一個更好的原型 $w[n]$、保留同樣的等距結構。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Watch the sum of sincs go flat</h3>
+        <h3 lang="zh">實驗 · 看 sinc 相加歸零平坦</h3>
+
+        <canvas id="rsCanvas" style="height:260px;"></canvas>
+
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="4" max="16" step="1" value="8"/>
+          <span class="val" id="nVal">8</span>
+          <label>Show:</label>
+          <select id="modeSel">
+            <option value="channels" selected>All channels</option>
+            <option value="sum">Sum only</option>
+            <option value="both">Channels + Sum</option>
+          </select>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Yellow (thick): sum $\sum_k |H_k(\omega)|$ — the flat constant $N$. Blue: individual $|H_k(\omega)|$ (one per bin), stepping across the unit circle. The sincs leak and overlap wildly, but the sum is flat — the miracle of uniform modulation.</p>
+          <p lang="zh">黃（粗）：和 $\sum_k |H_k(\omega)|$ — 恰為定值 $N$。藍：各 $|H_k(\omega)|$，依序跨越單位圓。sinc 相互嚴重洩漏重疊，但相加竟然平坦 — 這就是均勻調變的奇蹟。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.3.3-lp-to-bp.html">◀ 10.3.3</a>
+    <a class="warp-pipe">10-3-4</a>
+    <a class="nes-btn nes-btn--primary" href="10.3.4.1-rs-diagram.html">NEXT ▶ 10.3.4.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 8, mode: 'channels' };
+
+  function redraw(){
+    const { N, mode } = state;
+    const c = $('rsCanvas');
+    const ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad = { l:44, r:12, t:14, b:28 };
+    const iw = W-pad.l-pad.r, ih = H-pad.t-pad.b;
+
+    const K = 720;
+    function dirichlet(omega){
+      const half = omega/2;
+      if (Math.abs(Math.sin(half)) < 1e-10) return N;
+      return Math.sin(N*half) / Math.sin(half);
+    }
+    const yMax = N * 1.15;
+    const yTo = v => pad.t + ih * (1 - v / yMax);
+    const xTo = i => pad.l + iw * i/(K-1);
+
+    ctx.strokeStyle='#262644';
+    for (let g=0; g<=12; g++){ const x = pad.l + iw*g/12; ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, H-pad.b); ctx.stroke(); }
+    for (let g=0; g<=5; g++){ const y = pad.t + ih*g/5; ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W-pad.r, y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, H-pad.b); ctx.stroke();
+
+    const yN = yTo(N);
+    ctx.strokeStyle='#ff6aa0'; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(pad.l, yN); ctx.lineTo(W-pad.r, yN); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='#ff6aa0'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('N='+N, pad.l+4, yN-4);
+
+    if (mode !== 'sum'){
+      ctx.strokeStyle='#5aa0ff'; ctx.lineWidth=1;
+      for (let kk=0; kk<N; kk++){
+        ctx.beginPath();
+        for (let i=0;i<K;i++){
+          const omega = -Math.PI + 2*Math.PI * i/(K-1);
+          const omega_k = 2*Math.PI * kk / N;
+          let diff = omega - omega_k;
+          while (diff > Math.PI) diff -= 2*Math.PI;
+          while (diff <= -Math.PI) diff += 2*Math.PI;
+          const v = Math.abs(dirichlet(diff));
+          if (i===0) ctx.moveTo(xTo(i), yTo(v)); else ctx.lineTo(xTo(i), yTo(v));
+        }
+        ctx.stroke();
+      }
+    }
+
+    if (mode !== 'channels'){
+      ctx.strokeStyle='#ffd95a'; ctx.lineWidth=2.5;
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const omega = -Math.PI + 2*Math.PI * i/(K-1);
+        let sum = 0;
+        for (let kk=0; kk<N; kk++){
+          const omega_k = 2*Math.PI * kk / N;
+          let diff = omega - omega_k;
+          while (diff > Math.PI) diff -= 2*Math.PI;
+          while (diff <= -Math.PI) diff += 2*Math.PI;
+          sum += Math.abs(dirichlet(diff));
+        }
+        if (i===0) ctx.moveTo(xTo(i), yTo(sum)); else ctx.lineTo(xTo(i), yTo(sum));
+      }
+      ctx.stroke();
+    }
+
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    const xt = [['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){
+      const i = (v + Math.PI)/(2*Math.PI) * (K-1);
+      ctx.fillText(lbl, xTo(i)-8, H-pad.b+14);
+    }
+    ctx.fillStyle='#ffd95a'; ctx.fillText('Σ |H_k(ω)|', 10, 12);
+  }
+
+  $('nSlider').addEventListener('input', e=>{ state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+  $('modeSel').addEventListener('change', e=>{ state.mode = e.target.value; redraw(); });
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+})();
+</script>
 </body></html>

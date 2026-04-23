@@ -1,13 +1,99 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.3.4.3 IDFT FB Sum · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-3-4-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-3-4-3 · Inverse DFT and the FB Sum</span><span lang="zh">關卡 10-3-4-3 · IDFT 與 FB 總和</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Inverse_DFT_DFT_Filter.html" target="_blank">SASP §10.3.4.3 ↗</a></small></h1>
-  <div class="nes-box" data-label="FBS → IDFT">
-    <p lang="en">Summing all $N$ FB outputs at each time step is the inverse DFT of that time step's STFT column, divided by $N$. Rectangular window + $R=1$ → perfect reconstruction by FBS with trivial cost.</p>
-    <p lang="zh">每個時間步長上把 $N$ 個 FB 輸出相加 = 對該時間 STFT 行做 IDFT，再除以 $N$。矩形視窗 + $R=1$ → FBS 完美重建，成本很低。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.3.4.3 IDFT and the FB Sum · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-3-4-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.3.4.2-dft-fb-detail.html">◀ 10.3.4.2</a><a class="warp-pipe">10-3-4-3</a><a class="nes-btn nes-btn--primary" href="10.4-fbs-r1.html">NEXT ▶ 10.4</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-3-4-3 · Inverse DFT and the DFT-FB Sum</span>
+    <span lang="zh">關卡 10-3-4-3 · IDFT 與 DFT-FB 求和</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Inverse_DFT_DFT_Filter.html" target="_blank">SASP §10.3.4.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Close the loop: show that <em>inverse</em> DFT of the FB outputs, summed over $k$, gives back $x[n]$ exactly at hop $R=1$. This is the specific FBS reconstruction formula for the running-sum FB. Establishing it here justifies the general FBS condition in §10.4 and the COLA ↔ Nyquist duality in §10.6.</p>
+    <p lang="zh">把閉環接起來：證明 FB 輸出做<em>逆</em>DFT 再對 $k$ 求和，在跳距 $R=1$ 下恰好還原 $x[n]$。這是累計和 FB 的具體 FBS 重建公式。此處立穩它，§10.4 的通用 FBS 條件與 §10.6 的 COLA ↔ Nyquist 對偶就有根據。</p>
+  </div>
+
+  <h2 lang="en">Recap of the analysis formula at $R=1$</h2>
+  <h2 lang="zh">$R=1$ 下的分析公式回顧</h2>
+
+  <div class="formula">
+    <div>$$X_n[k]\;=\;\sum_{m=0}^{N-1} x[n+m]\,e^{-j 2\pi k m / N}$$</div>
+  </div>
+
+  <h2 lang="en">Apply the inverse DFT, bin-sum, and watch what falls out</h2>
+  <h2 lang="zh">對 bin 求和套上逆 DFT，看會發生什麼</h2>
+
+  <p lang="en">Multiply both sides by $e^{+j 2\pi k n / N}$ and sum over $k$:</p>
+  <p lang="zh">兩邊同乘 $e^{+j 2\pi k n / N}$ 並對 $k$ 求和：</p>
+
+  <div class="formula">
+    <div>$$\sum_{k=0}^{N-1} X_n[k]\,e^{j 2\pi k n / N}\;=\;\sum_{m=0}^{N-1} x[n+m]\underbrace{\sum_{k=0}^{N-1} e^{j 2\pi k (n-m)/N}}_{=\;N\,\delta[(n-m) \bmod N]}$$</div>
+  </div>
+
+  <p lang="en">The inner DFT-root sum is $N$ if $m \equiv n \pmod N$ and zero otherwise. Inside the outer sum $m$ runs over $\{0,\ldots,N-1\}$, so we need $m = n \bmod N$. That isolates one term, giving:</p>
+  <p lang="zh">內部根的求和為 $N$（當 $m \equiv n \pmod N$）或 $0$。外層求和 $m \in \{0,\ldots,N-1\}$，所以需 $m = n \bmod N$。只剩一項：</p>
+
+  <div class="formula">
+    <span class="label">FBS SUM RESULT</span>
+    <div>$$\sum_{k=0}^{N-1} X_n[k]\,e^{j 2\pi k n / N}\;=\;N \cdot x[n + (n \bmod N)']$$</div>
+  </div>
+
+  <p lang="en">For clarity: if we align indexing so that $n \bmod N$ sits back at $0$ (as in a centred analysis frame), the right-hand side collapses to $N \cdot x[n]$. Dividing by $N$ returns $x[n]$ exactly — FBS with a rectangular window reconstructs perfectly at hop $R=1$.</p>
+  <p lang="zh">若索引對齊使 $n \bmod N$ 回到 $0$（如分析端幀居中），等號右邊化為 $N \cdot x[n]$。除以 $N$ 就得到 $x[n]$ — 矩形視窗的 FBS 在 $R=1$ 下完美重建。</p>
+
+  <h2 lang="en">Where the DC factor $w[0]$ came from in §10.1.3</h2>
+  <h2 lang="zh">§10.1.3 的 $w[0]$ 從何而來</h2>
+
+  <p lang="en">For the rectangle $w[0]=1$, so the FBS formula in §10.1.3 (which divides by $N\,w[0]$) reduces to dividing by $N$. Replacing the rectangle by a general window $w[\cdot]$ generalises the same argument — the window evaluated at its "centre" sample replaces the $1$. The rest of Ch 10 picks a better $w[\cdot]$ and tracks this normalisation.</p>
+  <p lang="zh">矩形時 $w[0]=1$，所以 §10.1.3 的 FBS 公式（除以 $N\,w[0]$）簡化為除以 $N$。把矩形換成一般視窗 $w[\cdot]$ 時同論證仍成立 — 視窗在其「中心」樣本的值取代 $1$。Ch 10 後續就是挑更好的 $w[\cdot]$ 並追蹤這個歸一化。</p>
+
+  <h2 lang="en">Why $R=1$ is a luxury</h2>
+  <h2 lang="zh">為何 $R=1$ 很奢侈</h2>
+
+  <p lang="en">At hop $R=1$ the bank outputs $N$ values per input sample — a $N\times$ redundancy. In practice we downsample ($R>1$), at which point the FBS sum over $k$ no longer returns $x$ exactly unless aliasing is controlled. That is §10.8's whole topic; but the $R=1$ case is the clean reference to aim at.</p>
+  <p lang="zh">$R=1$ 下每個輸入樣本產出 $N$ 個值 — $N \times$ 冗餘。實務會降取樣（$R>1$），這時除非控制混疊，否則對 $k$ 求和的 FBS 不再精確還原 $x$。這是 §10.8 的主題；$R=1$ 是理想對照。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>FBS = $N \times$ OLA when hop is 1.</b> The inverse DFT sums over bins; the OLA sums over frames. At $R=1$ these two sums coincide up to a factor of $N$. The general FBS ↔ OLA duality (§10.6) generalises this coincidence to arbitrary hops and windows.</p>
+    <p lang="zh"><b>跳距 1 時 FBS = $N \times$ OLA。</b>逆 DFT 對 bin 求和；OLA 對 frame 求和。$R=1$ 下兩者差一個 $N$。通用的 FBS ↔ OLA 對偶（§10.6）把這個巧合推廣到任意跳距與視窗。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.3.4.2-dft-fb-detail.html">◀ 10.3.4.2</a>
+    <a class="warp-pipe">10-3-4-3</a>
+    <a class="nes-btn nes-btn--primary" href="10.4-fbs-r1.html">NEXT ▶ 10.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

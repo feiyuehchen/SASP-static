@@ -1,13 +1,102 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.3.4.2 DFT FB Detail · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-3-4-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-3-4-2 · DFT Filter Bank Detail</span><span lang="zh">關卡 10-3-4-2 · DFT FB 細節</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/DFT_Filter_Bank_I.html" target="_blank">SASP §10.3.4.2 ↗</a></small></h1>
-  <div class="nes-box" data-label="CLEVER REORGANISATION">
-    <p lang="en">Push the modulator and running-sum together → each modulated-then-summed output becomes one DFT bin of a sliding $N$-point rectangular window. Running sum per channel → single DFT.</p>
-    <p lang="zh">把調變器與累計和合併：每個通道的「調變後再累計」剛好是滑動 $N$ 點矩形視窗的某個 DFT bin。逐通道的累計和 → 一次 DFT。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.3.4.2 DFT Filter Bank Detail · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-3-4-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.3.4.1-rs-diagram.html">◀ 10.3.4.1</a><a class="warp-pipe">10-3-4-2</a><a class="nes-btn nes-btn--primary" href="10.3.4.3-idft-fb.html">NEXT ▶ 10.3.4.3</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-3-4-2 · DFT Filter Bank Detail</span>
+    <span lang="zh">關卡 10-3-4-2 · DFT FB 細節</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/DFT_Filter_Bank_I.html" target="_blank">SASP §10.3.4.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Zoom into the bank from §10.3.4 and nail down every index convention: input/output timing, the DC-centred vs. DC-left frequency axis, circular indexing $k \bmod N$, and the polyphase-friendly time axis. These look like bookkeeping — but mistakes here are why your first FB prototype sometimes sounds shifted or mirrored.</p>
+    <p lang="zh">進一步細看 §10.3.4 的組，把索引慣例釘死：輸入/輸出時序、直流居中 vs. 直流在左的頻率軸、$k \bmod N$ 的循環索引、以及多相友善的時間軸。看起來只是記帳，但第一次實作 FB 原型常常「聽起來位移或鏡像」就是這裡出錯。</p>
+  </div>
+
+  <h2 lang="en">Index conventions we'll use</h2>
+  <h2 lang="zh">本站採用的索引慣例</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>Time $n$:</b> integer, $-\infty < n < \infty$. Output frame index $m$, with $n = mR$ (hop $R$).<br>
+        <b>Bin $k$:</b> $k \in \{0, 1, \ldots, N-1\}$. $\omega_k = 2\pi k/N$. For $k > N/2$ the frequency interpretation is <em>$-(2\pi - \omega_k)$</em> — i.e. bin $k$ really means $\omega_k$ on $[0,2\pi)$ but reads as negative frequency on $(-\pi, \pi]$.<br>
+        <b>Windowed frame:</b> $x_m[n] \triangleq x[n+mR]\,w[n]$ for $n\in\{0,\ldots,N-1\}$.<br>
+        <b>STFT entry:</b> $X_m[k] = \sum_{n=0}^{N-1} x_m[n]\,e^{-j 2\pi k n / N}$.
+      </span>
+      <span lang="zh">
+        <b>時間 $n$：</b>整數、$-\infty < n < \infty$。輸出 frame 索引 $m$、$n = mR$（跳距 $R$）。<br>
+        <b>Bin $k$：</b>$k \in \{0, 1, \ldots, N-1\}$，$\omega_k = 2\pi k/N$。$k > N/2$ 時代表頻率為 <em>$-(2\pi - \omega_k)$</em> — 即 bin $k$ 實為 $[0,2\pi)$ 上的 $\omega_k$，但對應 $(-\pi, \pi]$ 上的負頻。<br>
+        <b>加窗 frame：</b>$x_m[n] \triangleq x[n+mR]\,w[n]$，$n\in\{0,\ldots,N-1\}$。<br>
+        <b>STFT 元素：</b>$X_m[k] = \sum_{n=0}^{N-1} x_m[n]\,e^{-j 2\pi k n / N}$。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Frequency axis — DC-left vs DC-centred</h2>
+  <h2 lang="zh">頻率軸 — 直流在左 vs. 直流居中</h2>
+
+  <p lang="en">Matlab/Octave <code>fft</code> outputs bins $k=0,\ldots,N-1$ with $k=0$ at DC and $k=N/2$ at Nyquist. This is "DC-left". For plotting, we typically <code>fftshift</code> to put DC in the middle so $k\in\{-N/2,\ldots,N/2-1\}$ — this is "DC-centred" and corresponds to $\omega\in[-\pi, \pi)$. The DFT FB machinery computes the first; the eye prefers the second.</p>
+  <p lang="zh">Matlab/Octave 的 <code>fft</code> 輸出 $k=0..N-1$，$k=0$ 是直流、$k=N/2$ 是 Nyquist — 稱「直流在左」。畫圖時常 <code>fftshift</code> 把直流擺中間，使 $k\in\{-N/2,\ldots,N/2-1\}$，對應 $\omega\in[-\pi, \pi)$ — 稱「直流居中」。DFT FB 運算用前者；視覺呈現用後者。</p>
+
+  <h2 lang="en">The filter-bank form, written in matrix shape</h2>
+  <h2 lang="zh">矩陣形式的濾波器組</h2>
+
+  <div class="formula">
+    <span class="label">ONE FRAME AS MATRIX × VECTOR</span>
+    <div>$$\begin{bmatrix}X_m[0]\\X_m[1]\\\vdots\\X_m[N-1]\end{bmatrix}\;=\;\mathbf{W}_N\,\mathrm{diag}(w)\,\begin{bmatrix}x[mR]\\x[mR+1]\\\vdots\\x[mR+N-1]\end{bmatrix}$$</div>
+  </div>
+
+  <p lang="en">Here $\mathbf{W}_N$ is the standard $N\times N$ DFT matrix with entries $e^{-j 2\pi k n / N}$, and $\mathrm{diag}(w)$ is the diagonal matrix of window values. This compact form is what the FFT inside a plain <code>stft()</code> computes — exactly one matrix-vector product per frame (made cheap by the butterflies).</p>
+  <p lang="zh">其中 $\mathbf{W}_N$ 是標準 $N\times N$ DFT 矩陣，元素 $e^{-j 2\pi k n / N}$；$\mathrm{diag}(w)$ 是視窗值組成的對角陣。這個緊湊形式就是 <code>stft()</code> 內部 FFT 在每 frame 做的事 — 一次矩陣-向量乘法（透過 butterfly 變便宜）。</p>
+
+  <h2 lang="en">Why bother drawing the FB twice?</h2>
+  <h2 lang="zh">為何要把 FB 畫兩次？</h2>
+
+  <p lang="en">§10.2 showed the FB as "$N$ independent bandpass FIRs" (the pedagogical picture). §10.3.4 / §10.3.4.1 show it as "demodulate → LP → re-modulate" per channel (the algorithmic picture). They compute exactly the same $X_m[k]$. The two pictures are useful in different contexts: the first for <em>thinking</em> about what each bin captures, the second for writing efficient code and analysing polyphase / alias behaviour.</p>
+  <p lang="zh">§10.2 把 FB 畫成「$N$ 個獨立帶通 FIR」（教學版）。§10.3.4 / §10.3.4.1 畫成「每通道解調變 → LP → 再調變」（演算法版）。兩者算出完全相同的 $X_m[k]$。兩張圖在不同場合各有用：第一張用於<em>思考</em>每個 bin 擷取什麼；第二張用於寫高效程式、分析多相與混疊行為。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Detail is destiny.</b> Getting an STFT to round-trip cleanly at 1e-14 requires every index to agree: which sample is "0 of the frame", which bin is Nyquist, whether the DFT matrix uses $e^{-j...}$ or $e^{+j...}$. Spell every convention out once, code against it, and never mix conventions mid-function.</p>
+    <p lang="zh"><b>細節決定成敗。</b>讓 STFT 在 1e-14 精度來回還原，必須所有索引一致：frame 的 0 是哪個樣本、哪個 bin 是 Nyquist、DFT 矩陣用 $e^{-j...}$ 還是 $e^{+j...}$。一次寫清慣例，照著寫程式，絕不在函式中途混用慣例。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.3.4.1-rs-diagram.html">◀ 10.3.4.1</a>
+    <a class="warp-pipe">10-3-4-2</a>
+    <a class="nes-btn nes-btn--primary" href="10.3.4.3-idft-fb.html">NEXT ▶ 10.3.4.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

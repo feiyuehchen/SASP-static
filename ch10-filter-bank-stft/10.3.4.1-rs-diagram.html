@@ -1,13 +1,124 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.3.4.1 System Diagram · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-3-4-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-3-4-1 · System Diagram of the Running-Sum FB</span><span lang="zh">關卡 10-3-4-1 · 累計和 FB 系統圖</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/System_Diagram_Running_Sum_Filter.html" target="_blank">SASP §10.3.4.1 ↗</a></small></h1>
-  <div class="nes-box" data-label="THREE STAGES">
-    <p lang="en">Modulator (shift the signal to baseband by $e^{-j\omega_k n}$) → prototype lowpass (running-sum) → de-modulator (shift back to $\omega_k$). Repeated for each $k$. Share the single running-sum to save work.</p>
-    <p lang="zh">調變器（用 $e^{-j\omega_k n}$ 把訊號搬到基頻） → 原型低通（累計和） → 反調變（搬回 $\omega_k$）。每個 $k$ 一次。共用同一個累計和可省算力。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.3.4.1 Running-Sum FB · System Diagram · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-3-4-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.3.4-uniform-rs.html">◀ 10.3.4</a><a class="warp-pipe">10-3-4-1</a><a class="nes-btn nes-btn--primary" href="10.3.4.2-dft-fb-detail.html">NEXT ▶ 10.3.4.2</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-3-4-1 · System Diagram of the Running-Sum FB</span>
+    <span lang="zh">關卡 10-3-4-1 · 累計和 FB 系統圖</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/System_Diagram_Running_Sum_Filter.html" target="_blank">SASP §10.3.4.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Draw the signal-flow diagram that everyone in this chapter keeps referring to: $N$ parallel <em>demodulate-sum-modulate</em> channels. Seeing it as a picture makes the later polyphase reformulation (Ch 12) obvious.</p>
+    <p lang="zh">畫出本章不斷提到的訊號流程圖：$N$ 條平行的「解調變 → 求和 → 再調變」通道。看過這張圖，之後 Ch 12 的 polyphase 改寫就順理成章。</p>
+  </div>
+
+  <h2 lang="en">The canonical diagram</h2>
+  <h2 lang="zh">標準系統圖</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <span class="label">RUNNING-SUM FB (CHANNEL k)</span>
+    <div style="font-size:12px; line-height:1.9; text-align:left;">
+<pre style="margin:0; color:var(--nes-lime); font-family:'Press Start 2P', monospace;">
+         ┌──────────────────┐   ┌─────────────┐   ┌──────────────┐
+x[n] ──→ │ × e<sup>-j ω<sub>k</sub> n</sup>     │──→│ running sum │──→│ × e<sup>j ω<sub>k</sub> n</sup>     │──→ X<sub>n</sub>[k]
+         └──────────────────┘   └─────────────┘   └──────────────┘
+          demodulate to DC        length-N LP      re-modulate back
+</pre>
+    </div>
+  </div>
+
+  <p lang="en">One such pipeline per $k\in\{0,1,\ldots,N-1\}$, running in parallel. Together they form the uniform running-sum FB. Every other FB in this book replaces "running sum" with a shaped window; the demodulate and re-modulate blocks are identical.</p>
+  <p lang="zh">每個 $k\in\{0,1,\ldots,N-1\}$ 各一條，全部平行運作。組起來就是均勻累計和 FB。本書其他 FB 只是把中間「累計和」換成更漂亮的視窗；前後的解調變、再調變方塊都一樣。</p>
+
+  <h2 lang="en">Block-by-block</h2>
+  <h2 lang="zh">逐方塊說明</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>Demodulate ($\times e^{-j\omega_k n}$):</b> shifts band $k$ down to DC.
+        Cheap: one complex multiply per sample per channel. Can be precomputed
+        as a "twiddle" LUT.<br>
+        <b>Running sum (length $N$):</b> the length-$N$ lowpass. Cumulative
+        implementation $y[n]=y[n-1]+x[n]-x[n-N]$ costs <em>one</em> add/sub
+        per sample, independent of $N$. But note: only useful if $N$ is
+        modest; otherwise numerical drift requires periodic reset.<br>
+        <b>Re-modulate ($\times e^{+j\omega_k n}$):</b> undoes the first step,
+        puts the narrow-band signal back at its original centre. Needed if
+        we later sum all channels to reconstruct $x$.
+      </span>
+      <span lang="zh">
+        <b>解調變（$\times e^{-j\omega_k n}$）：</b>把第 $k$ 頻帶滑到直流。
+        便宜：每樣本每通道一次複乘，可事先以「twiddle」LUT 儲存。<br>
+        <b>累計和（長度 $N$）：</b>長度 $N$ 的低通。遞迴實作
+        $y[n]=y[n-1]+x[n]-x[n-N]$，每樣本只需 <em>一</em> 次加/減，與 $N$ 無關。
+        注意：$N$ 太大時浮點漂移會累積，需要週期性歸零。<br>
+        <b>再調變（$\times e^{+j\omega_k n}$）：</b>抵消第一步，
+        把窄頻訊號推回原本的中心頻率。若後面要把所有通道相加還原 $x$ 就必須。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">What this picture buys us</h2>
+  <h2 lang="zh">這張圖帶來什麼好處</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>(1)</b> Makes the FB interpretation of the DFT literal: each bin <em>is</em> a bandpass pipeline.<br>
+        <b>(2)</b> Exposes the three places Ch 10 will optimise: the LP block (§10.4–10.6 replace rect with better windows), the demodulator spacing (§10.7 Portnoff), and the hop/downsampling placement (§10.8).<br>
+        <b>(3)</b> Sets up the <em>polyphase</em> rearrangement (Ch 12) that slides the downsampler leftward of the LP for cheaper compute.
+      </span>
+      <span lang="zh">
+        <b>(1)</b> 把 DFT 的 FB 詮釋具體畫出：每個 bin <em>就是</em>一條帶通流水線。<br>
+        <b>(2)</b> 顯露 Ch 10 後面會優化的三處：LP 方塊（§10.4–10.6 把矩形換成更好的視窗）、解調變間距（§10.7 Portnoff）、降取樣位置（§10.8）。<br>
+        <b>(3)</b> 為 Ch 12 的 <em>polyphase</em> 改寫鋪路：把降取樣滑到 LP 左側以省計算。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>DFT FB = three blocks × $N$ copies.</b> Once you can draw this picture with your eyes closed, everything else in Ch 10/11/12 is "which of these three blocks am I editing, and why?"</p>
+    <p lang="zh"><b>DFT FB = 三個方塊 × $N$ 份。</b>閉眼能畫出此圖後，Ch 10/11/12 所有內容都變成「我在改這三個方塊中的哪一個？為什麼？」</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.3.4-uniform-rs.html">◀ 10.3.4</a>
+    <a class="warp-pipe">10-3-4-1</a>
+    <a class="nes-btn nes-btn--primary" href="10.3.4.2-dft-fb-detail.html">NEXT ▶ 10.3.4.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>
