@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>13.1 Summary &amp; Conclusions · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W13</a></span><span>STAGE <b>13-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 13-1 · Summary &amp; Conclusions</span><span lang="zh">關卡 13-1 · 總結與結論</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Summary_Conclusions.html" target="_blank">SASP §13 ↗</a></small></h1>
+  <div class="nes-box nes-box--green" data-label="BOOK END">
+    <p lang="en">Twelve worlds, one thread: every spectral-audio method reduces to <em>pick a basis</em> + <em>project</em> + <em>modify</em> + <em>reconstruct</em>. DFT gave us the basis; windows and overlap-add controlled resolution/leakage; FFT filter banks and multirate polyphase formalised the idea at scale; STFT, SMS, MPEG, and wavelets each tuned the basis and tiling to their signal class. The theory below all of this is <em>perfect reconstruction under a paraunitary polyphase matrix</em>.</p>
+    <p lang="zh">十二世界、一條主線：所有頻譜音訊方法都可化約為「選基底 → 投影 → 修改 → 重建」。DFT 給了基底；視窗與疊加決定解析度與洩漏；FFT 濾波器組與多取樣率把想法規模化；STFT、SMS、MPEG、小波各自為自身訊號類別調整了基底與時頻切法。底下的總理論則是「paraunitary 多相矩陣下的完美重建」。</p>
+  </div>
+  <div class="nes-box" data-label="WHAT NEXT">
+    <p lang="en">From here the appendices add depth: notation (A), continuous Fourier rigor (B), statistical-estimation foundations (C), Gaussian-window theory (D), frequency warping (E), Matlab reference (F), history (G), and the classic PARSHL sinusoidal modeller (H).</p>
+    <p lang="zh">接下來附錄補足深度：符號（A）、連續傅立葉嚴謹推導（B）、統計估計基礎（C）、高斯視窗理論（D）、頻率扭曲（E）、Matlab 參考（F）、歷史（G）、經典 PARSHL 正弦建模器（H）。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="../ch12-multirate/index.html">◀ W12</a><a class="warp-pipe">13-1</a><a class="nes-btn nes-btn--primary" href="../apx-a-notation/index.html">APPENDIX A ▶</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

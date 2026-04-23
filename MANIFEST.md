@@ -475,7 +475,7 @@ data-en-def …>` for hover tooltips.
 
 ## World 13 · Summary and Conclusions
 
-- [ ] 13.1  Summary and Conclusions                        — `ch13-summary/13.1-summary.html`
+- [~] 13.1  Summary and Conclusions                        — `ch13-summary/13.1-summary.html`
 
 ## Appendix World A · Notation  (appendix/notation/)
 
