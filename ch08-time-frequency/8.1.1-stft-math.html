@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>8.1.1 STFT Math · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W8</a></span><span>STAGE <b>8-1-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 8-1-1 · STFT Mathematical Definition</span><span lang="zh">關卡 8-1-1 · STFT 數學定義</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Mathematical_Definition_STFT.html" target="_blank">SASP §8.1.1 ↗</a></small></h1>
+  <div class="formula"><div>$$X_m(\omega)\;=\;\sum_{n=-\infty}^{\infty}x[n]\,w[n-mR]\,e^{-j\omega n}$$</div></div>
+  <p lang="en">$m$ is the frame index, $R$ the hop size, $w$ the analysis window. $X_m(\omega)$ is the DTFT of the windowed chunk centred near $n=mR$.</p>
+  <p lang="zh">$m$ 為 frame 索引，$R$ 為跳距，$w$ 為分析視窗。$X_m(\omega)$ 是中心約在 $n=mR$ 的加窗片段的 DTFT。</p>
+  <div class="pager"><a class="nes-btn" href="8.1-stft.html">◀ 8.1</a><a class="warp-pipe">8-1-1</a><a class="nes-btn nes-btn--primary" href="8.1.2-stft-practical.html">NEXT ▶ 8.1.2</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

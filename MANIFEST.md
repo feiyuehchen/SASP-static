@@ -244,29 +244,29 @@ data-en-def …>` for hover tooltips.
 
 ## World 8 · Time-Frequency Displays  (ch08-time-frequency/)
 
-- [ ] 8.1   Short-Time Fourier Transform                   — `ch08-time-frequency/8.1-stft.html`
-- [ ] 8.1.1 Mathematical Definition of the STFT            — `ch08-time-frequency/8.1.1-stft-math.html`
-- [ ] 8.1.2 Practical Computation of the STFT              — `ch08-time-frequency/8.1.2-stft-practical.html`
-- [ ] 8.1.3 Summary of STFT Computation Using FFTs         — `ch08-time-frequency/8.1.3-stft-fft-summary.html`
-- [ ] 8.1.4 Two Dual Interpretations of the STFT           — `ch08-time-frequency/8.1.4-stft-duals.html`
-- [ ] 8.1.5 STFT as a Time-Frequency Distribution          — `ch08-time-frequency/8.1.5-stft-tfd.html`
-- [ ] 8.1.6 STFT in Matlab                                 — `ch08-time-frequency/8.1.6-stft-matlab.html`
-- [ ] 8.1.6.1 Notes                                        — `ch08-time-frequency/8.1.6.1-notes.html`
-- [ ] 8.2   Classic Spectrograms                           — `ch08-time-frequency/8.2-spectrograms.html`
-- [ ] 8.2.1 Spectrogram of Speech                          — `ch08-time-frequency/8.2.1-speech-spec.html`
-- [ ] 8.3   Audio Spectrograms                             — `ch08-time-frequency/8.3-audio-spec.html`
-- [ ] 8.3.1 Auditory Filter Banks                          — `ch08-time-frequency/8.3.1-aud-fb.html`
-- [ ] 8.3.2 Loudness Spectrogram                           — `ch08-time-frequency/8.3.2-loudness.html`
-- [ ] 8.3.2.1 A Note on Hop Size                           — `ch08-time-frequency/8.3.2.1-hop.html`
-- [ ] 8.3.3 Examples                                       — `ch08-time-frequency/8.3.3-examples.html`
-- [ ] 8.3.3.1 Multiresolution STFT                         — `ch08-time-frequency/8.3.3.1-mrstft.html`
-- [ ] 8.3.3.2 Excitation Pattern                           — `ch08-time-frequency/8.3.3.2-excitation.html`
-- [ ] 8.3.3.3 Nonuniform Spectral Resampling               — `ch08-time-frequency/8.3.3.3-nonuniform.html`
-- [ ] 8.3.3.4 Auditory Filter Shapes                       — `ch08-time-frequency/8.3.3.4-aud-shapes.html`
-- [ ] 8.3.3.5 Specific Loudness                            — `ch08-time-frequency/8.3.3.5-specific-loud.html`
-- [ ] 8.3.3.6 Spectrograms Compared                        — `ch08-time-frequency/8.3.3.6-spec-compared.html`
-- [ ] 8.3.3.7 Instant / Short-Term / Long-Term Loudness    — `ch08-time-frequency/8.3.3.7-loud-timescales.html`
-- [ ] 8.4   Summary (Ch 8)                                 — `ch08-time-frequency/8.4-summary.html`
+- [~] 8.1   Short-Time Fourier Transform                   — `ch08-time-frequency/8.1-stft.html`
+- [~] 8.1.1 Mathematical Definition of the STFT            — `ch08-time-frequency/8.1.1-stft-math.html`
+- [~] 8.1.2 Practical Computation of the STFT              — `ch08-time-frequency/8.1.2-stft-practical.html`
+- [~] 8.1.3 Summary of STFT Computation Using FFTs         — `ch08-time-frequency/8.1.3-stft-fft-summary.html`
+- [~] 8.1.4 Two Dual Interpretations of the STFT           — `ch08-time-frequency/8.1.4-stft-duals.html`
+- [~] 8.1.5 STFT as a Time-Frequency Distribution          — `ch08-time-frequency/8.1.5-stft-tfd.html`
+- [~] 8.1.6 STFT in Matlab                                 — `ch08-time-frequency/8.1.6-stft-matlab.html`
+- [~] 8.1.6.1 Notes                                        — `ch08-time-frequency/8.1.6.1-notes.html`
+- [~] 8.2   Classic Spectrograms                           — `ch08-time-frequency/8.2-spectrograms.html`
+- [~] 8.2.1 Spectrogram of Speech                          — `ch08-time-frequency/8.2.1-speech-spec.html`
+- [~] 8.3   Audio Spectrograms                             — `ch08-time-frequency/8.3-audio-spec.html`
+- [~] 8.3.1 Auditory Filter Banks                          — `ch08-time-frequency/8.3.1-aud-fb.html`
+- [~] 8.3.2 Loudness Spectrogram                           — `ch08-time-frequency/8.3.2-loudness.html`
+- [~] 8.3.2.1 A Note on Hop Size                           — `ch08-time-frequency/8.3.2.1-hop.html`
+- [~] 8.3.3 Examples                                       — `ch08-time-frequency/8.3.3-examples.html`
+- [~] 8.3.3.1 Multiresolution STFT                         — `ch08-time-frequency/8.3.3.1-mrstft.html`
+- [~] 8.3.3.2 Excitation Pattern                           — `ch08-time-frequency/8.3.3.2-excitation.html`
+- [~] 8.3.3.3 Nonuniform Spectral Resampling               — `ch08-time-frequency/8.3.3.3-nonuniform.html`
+- [~] 8.3.3.4 Auditory Filter Shapes                       — `ch08-time-frequency/8.3.3.4-aud-shapes.html`
+- [~] 8.3.3.5 Specific Loudness                            — `ch08-time-frequency/8.3.3.5-specific-loud.html`
+- [~] 8.3.3.6 Spectrograms Compared                        — `ch08-time-frequency/8.3.3.6-spec-compared.html`
+- [~] 8.3.3.7 Instant / Short-Term / Long-Term Loudness    — `ch08-time-frequency/8.3.3.7-loud-timescales.html`
+- [~] 8.4   Summary (Ch 8)                                 — `ch08-time-frequency/8.4-summary.html`
 
 ## World 9 · Overlap-Add STFT Processing  (ch09-ola-stft/)
 
@@ -676,4 +676,4 @@ data-en-def …>` for hover tooltips.
 4. Every page gets a prev / next pager linking to its neighbors in the above order.
 5. No copyrighted prose from Smith's book. All explanations must be original.
 
-Current completed count: **208** / ≈ 530. Latest batch: full World 7 (27 noise-analysis pages).
+Current completed count: **232** / ≈ 530. Latest batch: full World 8 (24 time-frequency pages).

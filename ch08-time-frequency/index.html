@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>World 8 — Time-Frequency Displays · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="../index.html">◀ MAP</a></span><span>WORLD <b>8</b></span><span lang="en">T-F DISPLAYS</span><span lang="zh">時頻顯示</span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">World 8 — Time-Frequency Displays</span><span lang="zh">第 8 世界 — 時頻顯示</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Short_Time_Fourier_Transform.html" target="_blank">SASP Ch. 8 ↗</a></small></h1>
+  <div class="nes-box nes-box--green" data-label="BRIEFING">
+    <p lang="en">Turn a time-varying signal into a picture. STFT gives the raw ingredient; spectrograms (classic and perceptual) are the dishes made from it.</p>
+    <p lang="zh">把隨時間變的訊號變成一張圖。STFT 是原料；聲譜圖（傳統與感知型）是用它做出的料理。</p>
+  </div>
+  <ul class="toc-list">
+    <li><a href="8.1-stft.html"><span><span class="num">8.1</span><span lang="en">STFT</span><span lang="zh">STFT</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.1.1-stft-math.html"><span><span class="num">8.1.1</span><span lang="en">Mathematical Definition</span><span lang="zh">數學定義</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.1.2-stft-practical.html"><span><span class="num">8.1.2</span><span lang="en">Practical Computation</span><span lang="zh">實務計算</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.1.3-stft-fft-summary.html"><span><span class="num">8.1.3</span><span lang="en">FFT Computation Summary</span><span lang="zh">FFT 計算小結</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.1.4-stft-duals.html"><span><span class="num">8.1.4</span><span lang="en">Two Dual Interpretations</span><span lang="zh">兩個對偶觀點</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.1.5-stft-tfd.html"><span><span class="num">8.1.5</span><span lang="en">STFT as TF Distribution</span><span lang="zh">STFT 作為時頻分布</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.1.6-stft-matlab.html"><span><span class="num">8.1.6</span><span lang="en">STFT in Matlab</span><span lang="zh">Matlab STFT</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.1.6.1-notes.html"><span><span class="num">8.1.6.1</span><span lang="en">Notes</span><span lang="zh">注意事項</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.2-spectrograms.html"><span><span class="num">8.2</span><span lang="en">Classic Spectrograms</span><span lang="zh">經典聲譜圖</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.2.1-speech-spec.html"><span><span class="num">8.2.1</span><span lang="en">Speech Spectrogram</span><span lang="zh">語音聲譜圖</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3-audio-spec.html"><span><span class="num">8.3</span><span lang="en">Audio Spectrograms</span><span lang="zh">音訊聲譜圖</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.1-aud-fb.html"><span><span class="num">8.3.1</span><span lang="en">Auditory Filter Banks</span><span lang="zh">聽覺濾波器組</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.2-loudness.html"><span><span class="num">8.3.2</span><span lang="en">Loudness Spectrogram</span><span lang="zh">響度聲譜圖</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.2.1-hop.html"><span><span class="num">8.3.2.1</span><span lang="en">Note on Hop Size</span><span lang="zh">關於跳距</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.3-examples.html"><span><span class="num">8.3.3</span><span lang="en">Examples</span><span lang="zh">範例</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.3.1-mrstft.html"><span><span class="num">8.3.3.1</span><span lang="en">Multiresolution STFT</span><span lang="zh">多解析 STFT</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.3.2-excitation.html"><span><span class="num">8.3.3.2</span><span lang="en">Excitation Pattern</span><span lang="zh">激發圖樣</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.3.3-nonuniform.html"><span><span class="num">8.3.3.3</span><span lang="en">Nonuniform Resampling</span><span lang="zh">非均勻取樣</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.3.4-aud-shapes.html"><span><span class="num">8.3.3.4</span><span lang="en">Auditory Filter Shapes</span><span lang="zh">聽覺濾波器形狀</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.3.5-specific-loud.html"><span><span class="num">8.3.3.5</span><span lang="en">Specific Loudness</span><span lang="zh">特定響度</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.3.6-spec-compared.html"><span><span class="num">8.3.3.6</span><span lang="en">Spectrograms Compared</span><span lang="zh">聲譜圖比較</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.3.3.7-loud-timescales.html"><span><span class="num">8.3.3.7</span><span lang="en">Loudness Time Scales</span><span lang="zh">響度時間尺度</span></span><span class="dim">▶</span></a></li>
+    <li><a href="8.4-summary.html"><span><span class="num">8.4</span><span lang="en">Summary</span><span lang="zh">本章總結</span></span><span class="dim">▶</span></a></li>
+  </ul>
+  <div class="pager"><a class="nes-btn" href="../ch07-noise/index.html">◀ W7</a><a class="nes-btn nes-btn--primary" href="8.1-stft.html">START ▶</a><a class="nes-btn" href="../ch09-ola-stft/index.html">World 9 ▶</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script>
+</body></html>

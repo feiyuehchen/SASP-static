@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>8.1.4 STFT Duals · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W8</a></span><span>STAGE <b>8-1-4</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 8-1-4 · Two Dual Interpretations</span><span lang="zh">關卡 8-1-4 · 兩個對偶觀點</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Two_Dual_Interpretations_STFT.html" target="_blank">SASP §8.1.4 ↗</a></small></h1>
+  <ul>
+    <li lang="en"><b>Overlap-add</b>: each frame is a short snippet of signal re-transformed — we analyse, modify, invert, overlap-add. World 9.</li>
+    <li lang="zh"><b>重疊相加</b>：每個 frame 是訊號的短片段、分別轉換 — 分析、修改、反轉、重疊相加。見第 9 世界。</li>
+    <li lang="en"><b>Filter-bank</b>: each frequency bin output versus time is the output of a band-pass filter centred there. World 10.</li>
+    <li lang="zh"><b>濾波器組</b>：每個頻率 bin 的輸出對時間，就是該頻率中心的帶通濾波器輸出。見第 10 世界。</li>
+  </ul>
+  <div class="pager"><a class="nes-btn" href="8.1.3-stft-fft-summary.html">◀ 8.1.3</a><a class="warp-pipe">8-1-4</a><a class="nes-btn nes-btn--primary" href="8.1.5-stft-tfd.html">NEXT ▶ 8.1.5</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

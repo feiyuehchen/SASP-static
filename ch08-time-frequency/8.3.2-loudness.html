@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>8.3.2 Loudness Spectrogram · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W8</a></span><span>STAGE <b>8-3-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 8-3-2 · Loudness Spectrogram</span><span lang="zh">關卡 8-3-2 · 響度聲譜圖</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Loudness_Spectrogram.html" target="_blank">SASP §8.3.2 ↗</a></small></h1>
+  <div class="nes-box" data-label="FROM POWER TO SONES">
+    <p lang="en">Take the band energies, apply the equal-loudness contour (dB SPL → phons), then the $P^{0.3}$ power law to get sones. Display sones vs time and critical band. Now the colour scale matches what you hear, not what a meter reads.</p>
+    <p lang="zh">把頻帶能量先套等響度曲線（dB SPL → phon），再用 $P^{0.3}$ 律轉成 sone。畫 sone 對時間與臨界頻帶。色階就對應聽感，而非儀表讀數。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="8.3.1-aud-fb.html">◀ 8.3.1</a><a class="warp-pipe">8-3-2</a><a class="nes-btn nes-btn--primary" href="8.3.2.1-hop.html">NEXT ▶ 8.3.2.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>
