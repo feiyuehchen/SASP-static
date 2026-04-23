@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>7.10 Impulse vs White · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W7</a></span><span>STAGE <b>7-10</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 7-10 · Why an Impulse Is Not White Noise</span><span lang="zh">關卡 7-10 · 為何脈衝不是白雜訊</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Why_Impulse_Not_White.html" target="_blank">SASP §7.10 ↗</a></small></h1>
+  <div class="nes-box" data-label="BOTH HAVE FLAT SPECTRA, BUT...">
+    <p lang="en">A unit impulse has a flat <em>deterministic</em> spectrum. White noise has a flat <em>expected</em> spectrum. The impulse has energy in one instant and zero everywhere else — not stationary, not random, and its phase is well-defined. The two are often confused because both sound/look flat after a single DFT.</p>
+    <p lang="zh">脈衝的頻譜是平直的<em>確定性</em>頻譜；白雜訊的是<em>期望</em>平直頻譜。脈衝能量集中在一瞬、其他地方為零 — 不穩態、不隨機，相位也有定義。兩者常被混淆因為一次 DFT 都平。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="7.9-bottom-line.html">◀ 7.9</a><a class="warp-pipe">7-10</a><a class="nes-btn nes-btn--primary" href="7.11-periodogram.html">NEXT ▶ 7.11</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

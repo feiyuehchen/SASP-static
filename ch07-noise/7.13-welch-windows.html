@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>7.13 Welch with Windows · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W7</a></span><span>STAGE <b>7-13</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 7-13 · Welch with Windows</span><span lang="zh">關卡 7-13 · Welch + 視窗</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Welch_s_Method_Windows.html" target="_blank">SASP §7.13 ↗</a></small></h1>
+  <div class="nes-box" data-label="50% OVERLAP HANN IS STANDARD">
+    <p lang="en">Hann at 50% overlap is the default combination for audio noise PSD. COLA holds (no time-domain bias), and the effective number of averages is about $2K-1$ for $K$ segments.</p>
+    <p lang="zh">Hann 搭配 50% 重疊是音訊 PSD 的預設組合。滿足 COLA（無時域偏差），$K$ 段的等效獨立平均數約為 $2K-1$。</p>
+  </div>
+  <p lang="en">Normalise by the sum of squared window values if you want absolute power levels.</p>
+  <p lang="zh">想得到絕對功率時，別忘了除以視窗平方和。</p>
+  <div class="pager"><a class="nes-btn" href="7.12.2-res-vs-stab.html">◀ 7.12.2</a><a class="warp-pipe">7-13</a><a class="nes-btn nes-btn--primary" href="7.13.1-matlab-welch.html">NEXT ▶ 7.13.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

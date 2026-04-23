@@ -215,32 +215,32 @@ data-en-def …>` for hover tooltips.
 
 ## World 7 · Spectrum Analysis of Noise  (ch07-noise/)
 
-- [ ] 7.1   Introduction to Noise                          — `ch07-noise/7.1-intro.html`
-- [ ] 7.1.1 Why Analyze Noise?                             — `ch07-noise/7.1.1-why.html`
-- [ ] 7.1.2 What is Noise?                                 — `ch07-noise/7.1.2-what.html`
-- [ ] 7.2   Spectral Characteristics of Noise              — `ch07-noise/7.2-spec-chars.html`
-- [ ] 7.3   White Noise                                    — `ch07-noise/7.3-white.html`
-- [ ] 7.3.1 Testing for White Noise                        — `ch07-noise/7.3.1-testing-white.html`
-- [ ] 7.4   Sample Autocorrelation                         — `ch07-noise/7.4-sample-autocorr.html`
-- [ ] 7.5   Sample Power Spectral Density                  — `ch07-noise/7.5-sample-psd.html`
-- [ ] 7.6   Biased Sample Autocorrelation                  — `ch07-noise/7.6-biased-autocorr.html`
-- [ ] 7.7   Smoothed Power Spectral Density                — `ch07-noise/7.7-smoothed-psd.html`
-- [ ] 7.8   Cyclic Autocorrelation                         — `ch07-noise/7.8-cyclic-autocorr.html`
-- [ ] 7.9   Practical Bottom Line                          — `ch07-noise/7.9-bottom-line.html`
-- [ ] 7.10  Why an Impulse is Not White Noise              — `ch07-noise/7.10-impulse-vs-white.html`
-- [ ] 7.11  The Periodogram                                — `ch07-noise/7.11-periodogram.html`
-- [ ] 7.11.1 Matlab for the Periodogram                    — `ch07-noise/7.11.1-matlab-periodogram.html`
-- [ ] 7.12  Welch's Method                                 — `ch07-noise/7.12-welch.html`
-- [ ] 7.12.1 Welch Autocorrelation Estimate                — `ch07-noise/7.12.1-welch-autocorr.html`
-- [ ] 7.12.2 Resolution versus Stability                   — `ch07-noise/7.12.2-res-vs-stab.html`
-- [ ] 7.13  Welch's Method with Windows                    — `ch07-noise/7.13-welch-windows.html`
-- [ ] 7.13.1 Matlab for Welch's Method                     — `ch07-noise/7.13.1-matlab-welch.html`
-- [ ] 7.14  Filtered White Noise                           — `ch07-noise/7.14-filtered-white.html`
-- [ ] 7.14.1 Example: FIR-Filtered White Noise             — `ch07-noise/7.14.1-fir-white.html`
-- [ ] 7.14.2 Example: Synthesis of 1/F (Pink) Noise        — `ch07-noise/7.14.2-pink.html`
-- [ ] 7.14.3 Example: Pink Noise Analysis                  — `ch07-noise/7.14.3-pink-analysis.html`
-- [ ] 7.15  Processing Gain                                — `ch07-noise/7.15-processing-gain.html`
-- [ ] 7.16  The Panning Problem                            — `ch07-noise/7.16-panning.html`
+- [~] 7.1   Introduction to Noise                          — `ch07-noise/7.1-intro.html`
+- [~] 7.1.1 Why Analyze Noise?                             — `ch07-noise/7.1.1-why.html`
+- [~] 7.1.2 What is Noise?                                 — `ch07-noise/7.1.2-what.html`
+- [~] 7.2   Spectral Characteristics of Noise              — `ch07-noise/7.2-spec-chars.html`
+- [~] 7.3   White Noise                                    — `ch07-noise/7.3-white.html`
+- [~] 7.3.1 Testing for White Noise                        — `ch07-noise/7.3.1-testing-white.html`
+- [~] 7.4   Sample Autocorrelation                         — `ch07-noise/7.4-sample-autocorr.html`
+- [~] 7.5   Sample Power Spectral Density                  — `ch07-noise/7.5-sample-psd.html`
+- [~] 7.6   Biased Sample Autocorrelation                  — `ch07-noise/7.6-biased-autocorr.html`
+- [~] 7.7   Smoothed Power Spectral Density                — `ch07-noise/7.7-smoothed-psd.html`
+- [~] 7.8   Cyclic Autocorrelation                         — `ch07-noise/7.8-cyclic-autocorr.html`
+- [~] 7.9   Practical Bottom Line                          — `ch07-noise/7.9-bottom-line.html`
+- [~] 7.10  Why an Impulse is Not White Noise              — `ch07-noise/7.10-impulse-vs-white.html`
+- [~] 7.11  The Periodogram                                — `ch07-noise/7.11-periodogram.html`
+- [~] 7.11.1 Matlab for the Periodogram                    — `ch07-noise/7.11.1-matlab-periodogram.html`
+- [~] 7.12  Welch's Method                                 — `ch07-noise/7.12-welch.html`
+- [~] 7.12.1 Welch Autocorrelation Estimate                — `ch07-noise/7.12.1-welch-autocorr.html`
+- [~] 7.12.2 Resolution versus Stability                   — `ch07-noise/7.12.2-res-vs-stab.html`
+- [~] 7.13  Welch's Method with Windows                    — `ch07-noise/7.13-welch-windows.html`
+- [~] 7.13.1 Matlab for Welch's Method                     — `ch07-noise/7.13.1-matlab-welch.html`
+- [~] 7.14  Filtered White Noise                           — `ch07-noise/7.14-filtered-white.html`
+- [~] 7.14.1 Example: FIR-Filtered White Noise             — `ch07-noise/7.14.1-fir-white.html`
+- [~] 7.14.2 Example: Synthesis of 1/F (Pink) Noise        — `ch07-noise/7.14.2-pink.html`
+- [~] 7.14.3 Example: Pink Noise Analysis                  — `ch07-noise/7.14.3-pink-analysis.html`
+- [~] 7.15  Processing Gain                                — `ch07-noise/7.15-processing-gain.html`
+- [~] 7.16  The Panning Problem                            — `ch07-noise/7.16-panning.html`
 
 ## World 8 · Time-Frequency Displays  (ch08-time-frequency/)
 
@@ -676,4 +676,4 @@ data-en-def …>` for hover tooltips.
 4. Every page gets a prev / next pager linking to its neighbors in the above order.
 5. No copyrighted prose from Smith's book. All explanations must be original.
 
-Current completed count: **181** / ≈ 530. Latest batch: full World 6 (32 sinusoid-analysis pages).
+Current completed count: **208** / ≈ 530. Latest batch: full World 7 (27 noise-analysis pages).

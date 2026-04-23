@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>7.16 The Panning Problem · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W7</a></span><span>STAGE <b>7-16</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 7-16 · The Panning Problem</span><span lang="zh">關卡 7-16 · 聲像問題</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Panning_Problem.html" target="_blank">SASP §7.16 ↗</a></small></h1>
+  <div class="nes-box" data-label="CONSTANT-POWER PAN">
+    <p lang="en">Stereo panning multiplies an incoherent (noise-like) source by $(\cos\theta, \sin\theta)$ in the two channels. Because the two signals are uncorrelated copies, total power = $\cos^2\theta + \sin^2\theta = 1$ — constant across the pan angle. For coherent (sinusoidal) sources the two channels add in phase at the listener and the pan law changes.</p>
+    <p lang="zh">立體聲聲像把<em>非相干</em>（類雜訊）源在兩聲道乘上 $(\cos\theta,\sin\theta)$。因兩聲道不相干相加，總功率 $\cos^2\theta+\sin^2\theta=1$ — 聲像過程固定。對相干（正弦）源，兩聲道在聽者處相干疊加，聲像法則不同。</p>
+  </div>
+  <div class="nes-box nes-box--blue" data-label="NEXT WORLD">
+    <p lang="en">World 8: time-frequency representations. The STFT and spectrogram take everything from Worlds 3–7 and make it a picture.</p>
+    <p lang="zh">第 8 世界：時頻表示。STFT 與聲譜圖把第 3–7 世界的觀念變成一張圖。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="7.15-processing-gain.html">◀ 7.15</a><a class="warp-pipe">7-16</a><a class="nes-btn nes-btn--primary" href="../ch08-time-frequency/index.html">WORLD 8 ▶</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

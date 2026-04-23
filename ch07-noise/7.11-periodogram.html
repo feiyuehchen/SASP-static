@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>7.11 Periodogram · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W7</a></span><span>STAGE <b>7-11</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 7-11 · The Periodogram</span><span lang="zh">關卡 7-11 · 週期圖</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Periodogram.html" target="_blank">SASP §7.11 ↗</a></small></h1>
+  <div class="formula"><div>$$\hat P_x^{\text{peri}}(\omega_k)\;=\;\frac{1}{N}\,|X[k]|^{2}$$</div></div>
+  <p lang="en">Properties: asymptotically unbiased, but <em>inconsistent</em> — its variance does not go to zero as $N\to\infty$. Any single periodogram is a noisy estimate of the true PSD; averaging many is required.</p>
+  <p lang="zh">性質：漸近無偏，但<em>不一致</em> — 變異數不隨 $N\to\infty$ 下降。單一週期圖是真 PSD 的雜訊估計，要平均多次。</p>
+  <div class="pager"><a class="nes-btn" href="7.10-impulse-vs-white.html">◀ 7.10</a><a class="warp-pipe">7-11</a><a class="nes-btn nes-btn--primary" href="7.11.1-matlab-periodogram.html">NEXT ▶ 7.11.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

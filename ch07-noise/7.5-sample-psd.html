@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>7.5 Sample PSD · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W7</a></span><span>STAGE <b>7-5</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 7-5 · Sample Power Spectral Density</span><span lang="zh">關卡 7-5 · 樣本功率頻譜密度</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Sample_Power_Spectral_Density.html" target="_blank">SASP §7.5 ↗</a></small></h1>
+  <div class="formula"><div>$$\hat P_x(\omega)\;=\;\frac{1}{N}\bigl|\hat X(\omega)\bigr|^{2}$$</div></div>
+  <p lang="en">Known as the <em>periodogram</em>. Unbiased in expectation as $N\to\infty$ but <em>does not become less noisy</em>: variance stays equal to the true PSD regardless of $N$. Averaging multiple periodograms (Welch) is how we reduce noise.</p>
+  <p lang="zh">即<em>週期圖</em>。當 $N\to\infty$ 時期望值無偏，但<em>不變平滑</em>：變異數與真值相等，不因 $N$ 變大而減。要降變異得平均多個（Welch）。</p>
+  <div class="pager"><a class="nes-btn" href="7.4-sample-autocorr.html">◀ 7.4</a><a class="warp-pipe">7-5</a><a class="nes-btn nes-btn--primary" href="7.6-biased-autocorr.html">NEXT ▶ 7.6</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

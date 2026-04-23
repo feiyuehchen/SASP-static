@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>7.11.1 Matlab Periodogram · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W7</a></span><span>STAGE <b>7-11-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 7-11-1 · Matlab Periodogram</span><span lang="zh">關卡 7-11-1 · Matlab 週期圖</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Periodogram.html" target="_blank">SASP §7.11.1 ↗</a></small></h1>
+  <div class="nes-box nes-box--purple" data-label="CODE">
+    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
+% Matlab
+[P, f] = periodogram(x, hann(length(x)), nfft, fs);
+plot(f, 10*log10(P));
+
+% scipy
+from scipy.signal import periodogram
+f, P = periodogram(x, fs, window='hann', nfft=nfft)
+    </pre>
+  </div>
+  <p lang="zh">Matlab 的 <code>periodogram</code> 與 scipy 的同名函式提供一次性 PSD 估計。預設為單一片段，要更穩定就改用 Welch。</p>
+  <div class="pager"><a class="nes-btn" href="7.11-periodogram.html">◀ 7.11</a><a class="warp-pipe">7-11-1</a><a class="nes-btn nes-btn--primary" href="7.12-welch.html">NEXT ▶ 7.12</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

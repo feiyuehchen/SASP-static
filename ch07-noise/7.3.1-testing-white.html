@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>7.3.1 Testing for White Noise · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W7</a></span><span>STAGE <b>7-3-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 7-3-1 · Testing for White Noise</span><span lang="zh">關卡 7-3-1 · 白性檢驗</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Testing_White_Noise.html" target="_blank">SASP §7.3.1 ↗</a></small></h1>
+  <div class="nes-box" data-label="TWO TESTS">
+    <p lang="en">1) Plot the sample autocorrelation — all non-zero lags should be within a noise floor of $\pm 2/\sqrt{N}$ (95% CI). 2) Plot the periodogram — it should be flat up to statistical variation.</p>
+    <p lang="zh">1) 畫樣本自相關 — 非零滯後值應落在 $\pm 2/\sqrt{N}$ 內（95% 信賴）。2) 畫週期圖 — 應平直（允許統計變異）。</p>
+  </div>
+  <p lang="en">Formal tests: Ljung-Box, Portmanteau, Kolmogorov-Smirnov on the periodogram vs uniform. For audio work the eye-balling of these two plots is usually enough.</p>
+  <p lang="zh">正式檢定：Ljung-Box、Portmanteau、對週期圖做 KS 檢驗。音訊實務上肉眼看這兩張圖通常足夠。</p>
+  <div class="pager"><a class="nes-btn" href="7.3-white.html">◀ 7.3</a><a class="warp-pipe">7-3-1</a><a class="nes-btn nes-btn--primary" href="7.4-sample-autocorr.html">NEXT ▶ 7.4</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>7.8 Cyclic Autocorrelation · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W7</a></span><span>STAGE <b>7-8</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 7-8 · Cyclic Autocorrelation</span><span lang="zh">關卡 7-8 · 循環自相關</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Cyclic_Autocorrelation.html" target="_blank">SASP §7.8 ↗</a></small></h1>
+  <div class="nes-box" data-label="CIRCULAR VARIANT">
+    <p lang="en">Computed by IFFT of $|X|^2$ (without zero-padding). Equals the <em>cyclic</em> autocorrelation $\tilde r^{\text{circ}}_x[k]=\tfrac{1}{N}\sum_n x[n]x[(n+k)\bmod N]$. Equivalent to assuming the signal repeats periodically — another source of bias.</p>
+    <p lang="zh">用 $|X|^2$ 的 IFFT 計算（不補零）。得到<em>循環</em>自相關 $\tilde r^{\text{circ}}_x[k]=\tfrac{1}{N}\sum_n x[n]x[(n+k)\bmod N]$。等同於假設訊號週期性重複 — 另一個偏差來源。</p>
+  </div>
+  <p lang="en">Zero-pad to at least $2N$ before FFT to recover the linear autocorrelation.</p>
+  <p lang="zh">FFT 前補零至少到 $2N$ 才能還原線性自相關。</p>
+  <div class="pager"><a class="nes-btn" href="7.7-smoothed-psd.html">◀ 7.7</a><a class="warp-pipe">7-8</a><a class="nes-btn nes-btn--primary" href="7.9-bottom-line.html">NEXT ▶ 7.9</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

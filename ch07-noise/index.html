@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>World 7 — Noise Spectrum Analysis · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="../index.html">◀ MAP</a></span><span>WORLD <b>7</b></span><span lang="en">NOISE</span><span lang="zh">雜訊</span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">World 7 — Noise Spectrum Analysis</span><span lang="zh">第 7 世界 — 雜訊頻譜分析</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Introduction_Noise.html" target="_blank">SASP Ch. 7 ↗</a></small></h1>
+  <div class="nes-box nes-box--green" data-label="BRIEFING">
+    <p lang="en">Random signals have no single "true" spectrum — only an expected one. This world covers how to estimate it from a finite observation: periodograms, Welch's method, autocorrelation estimators, and their trade-offs.</p>
+    <p lang="zh">隨機訊號沒有單一「真」頻譜，只有期望值。本世界討論如何從有限觀測去估計它：週期圖、Welch 法、自相關估計器及其取捨。</p>
+  </div>
+  <ul class="toc-list">
+    <li><a href="7.1-intro.html"><span><span class="num">7.1</span><span lang="en">Introduction to Noise</span><span lang="zh">雜訊導論</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.1.1-why.html"><span><span class="num">7.1.1</span><span lang="en">Why Analyze Noise?</span><span lang="zh">為何分析雜訊？</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.1.2-what.html"><span><span class="num">7.1.2</span><span lang="en">What Is Noise?</span><span lang="zh">雜訊是什麼？</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.2-spec-chars.html"><span><span class="num">7.2</span><span lang="en">Spectral Characteristics</span><span lang="zh">頻譜特性</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.3-white.html"><span><span class="num">7.3</span><span lang="en">White Noise</span><span lang="zh">白雜訊</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.3.1-testing-white.html"><span><span class="num">7.3.1</span><span lang="en">Testing for White Noise</span><span lang="zh">白性檢驗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.4-sample-autocorr.html"><span><span class="num">7.4</span><span lang="en">Sample Autocorrelation</span><span lang="zh">樣本自相關</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.5-sample-psd.html"><span><span class="num">7.5</span><span lang="en">Sample PSD</span><span lang="zh">樣本 PSD</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.6-biased-autocorr.html"><span><span class="num">7.6</span><span lang="en">Biased Sample Autocorrelation</span><span lang="zh">偏差樣本自相關</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.7-smoothed-psd.html"><span><span class="num">7.7</span><span lang="en">Smoothed PSD</span><span lang="zh">平滑 PSD</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.8-cyclic-autocorr.html"><span><span class="num">7.8</span><span lang="en">Cyclic Autocorrelation</span><span lang="zh">循環自相關</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.9-bottom-line.html"><span><span class="num">7.9</span><span lang="en">Practical Bottom Line</span><span lang="zh">實務結論</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.10-impulse-vs-white.html"><span><span class="num">7.10</span><span lang="en">Impulse ≠ White Noise</span><span lang="zh">脈衝 ≠ 白雜訊</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.11-periodogram.html"><span><span class="num">7.11</span><span lang="en">Periodogram</span><span lang="zh">週期圖</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.11.1-matlab-periodogram.html"><span><span class="num">7.11.1</span><span lang="en">Matlab Periodogram</span><span lang="zh">週期圖 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.12-welch.html"><span><span class="num">7.12</span><span lang="en">Welch's Method</span><span lang="zh">Welch 法</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.12.1-welch-autocorr.html"><span><span class="num">7.12.1</span><span lang="en">Welch Autocorrelation</span><span lang="zh">Welch 自相關</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.12.2-res-vs-stab.html"><span><span class="num">7.12.2</span><span lang="en">Resolution vs Stability</span><span lang="zh">解析度 vs 穩定性</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.13-welch-windows.html"><span><span class="num">7.13</span><span lang="en">Welch with Windows</span><span lang="zh">Welch + 視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.13.1-matlab-welch.html"><span><span class="num">7.13.1</span><span lang="en">Matlab Welch</span><span lang="zh">Welch 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.14-filtered-white.html"><span><span class="num">7.14</span><span lang="en">Filtered White Noise</span><span lang="zh">濾波後白雜訊</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.14.1-fir-white.html"><span><span class="num">7.14.1</span><span lang="en">FIR-Filtered White</span><span lang="zh">FIR 濾波的白雜訊</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.14.2-pink.html"><span><span class="num">7.14.2</span><span lang="en">Pink Noise Synthesis</span><span lang="zh">粉紅雜訊合成</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.14.3-pink-analysis.html"><span><span class="num">7.14.3</span><span lang="en">Pink Noise Analysis</span><span lang="zh">粉紅雜訊分析</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.15-processing-gain.html"><span><span class="num">7.15</span><span lang="en">Processing Gain</span><span lang="zh">處理增益</span></span><span class="dim">▶</span></a></li>
+    <li><a href="7.16-panning.html"><span><span class="num">7.16</span><span lang="en">The Panning Problem</span><span lang="zh">聲像 (Panning) 問題</span></span><span class="dim">▶</span></a></li>
+  </ul>
+  <div class="pager"><a class="nes-btn" href="../ch06-sinusoids/index.html">◀ W6</a><a class="nes-btn nes-btn--primary" href="7.1-intro.html">START ▶</a><a class="nes-btn" href="../ch08-time-frequency/index.html">World 8 ▶</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script>
+</body></html>
