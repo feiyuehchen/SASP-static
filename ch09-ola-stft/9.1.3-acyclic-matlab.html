@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>9.1.3 Acyclic FFT Matlab · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W9</a></span><span>STAGE <b>9-1-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 9-1-3 · Acyclic FFT Convolution in Matlab</span><span lang="zh">關卡 9-1-3 · Matlab 非循環 FFT 卷積</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Acyclic_FFT_Convolution_Matlab.html" target="_blank">SASP §9.1.3 ↗</a></small></h1>
+  <div class="nes-box nes-box--purple" data-label="CODE">
+    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
+function y = fftconv(x, h)
+  L = 2^nextpow2(numel(x) + numel(h) - 1);
+  Y = fft(x, L) .* fft(h, L);
+  y = real(ifft(Y));
+  y = y(1 : numel(x) + numel(h) - 1);
+end
+    </pre>
+  </div>
+  <p lang="en">Rounding $L$ up to a power of 2 keeps the FFT fast. Trim back to the true linear-convolution length afterwards.</p>
+  <p lang="zh">把 $L$ 拉到 2 次冪讓 FFT 快。結束後裁回真實線性卷積長度。</p>
+  <div class="pager"><a class="nes-btn" href="9.1.2.2-pictorial.html">◀ 9.1.2.2</a><a class="warp-pipe">9-1-3</a><a class="nes-btn nes-btn--primary" href="9.1.4-fft-vs-direct.html">NEXT ▶ 9.1.4</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

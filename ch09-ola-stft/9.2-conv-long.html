@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>9.2 Convolving Long Signals · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W9</a></span><span>STAGE <b>9-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 9-2 · Convolving with Long Signals</span><span lang="zh">關卡 9-2 · 長訊號卷積</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Convolving_Long_Signals.html" target="_blank">SASP §9.2 ↗</a></small></h1>
+  <div class="nes-box" data-label="BLOCK-WISE">
+    <p lang="en">For a signal much longer than the filter (or processed in real-time), split into blocks and FFT-convolve each block with the filter, then stitch outputs back — that is overlap-add.</p>
+    <p lang="zh">訊號遠比濾波器長（或即時處理）時，把它切 block、對每 block 做 FFT 卷積、再拼回 — 這就是重疊相加。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="9.1.4.3-td-aliasing.html">◀ 9.1.4.3</a><a class="warp-pipe">9-2</a><a class="nes-btn nes-btn--primary" href="9.2.1-ola-decomp.html">NEXT ▶ 9.2.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

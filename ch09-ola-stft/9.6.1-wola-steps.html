@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>9.6.1 WOLA Steps · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W9</a></span><span>STAGE <b>9-6-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 9-6-1 · WOLA Processing Steps</span><span lang="zh">關卡 9-6-1 · WOLA 步驟</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/WOLA_Processing_Steps.html" target="_blank">SASP §9.6.1 ↗</a></small></h1>
+  <ol>
+    <li lang="en">Take $N$ samples; multiply by $w_a$.</li>
+    <li lang="zh">取 $N$ 樣本；乘 $w_a$。</li>
+    <li lang="en">Zero-pad if needed; FFT.</li>
+    <li lang="zh">需要時補零；FFT。</li>
+    <li lang="en">Modify $X_m[k]$.</li>
+    <li lang="zh">修改 $X_m[k]$。</li>
+    <li lang="en">IFFT.</li>
+    <li lang="zh">IFFT。</li>
+    <li lang="en">Multiply by $w_s$; overlap-add at hop $R$.</li>
+    <li lang="zh">乘 $w_s$；以跳距 $R$ 重疊相加。</li>
+  </ol>
+  <div class="pager"><a class="nes-btn" href="9.6-wola.html">◀ 9.6</a><a class="warp-pipe">9-6-1</a><a class="nes-btn nes-btn--primary" href="9.6.1.1-wola-window.html">NEXT ▶ 9.6.1.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

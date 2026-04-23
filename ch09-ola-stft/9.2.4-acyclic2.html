@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>9.2.4 Acyclic Convolution · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W9</a></span><span>STAGE <b>9-2-4</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 9-2-4 · Acyclic Convolution via OLA</span><span lang="zh">關卡 9-2-4 · 用 OLA 做非循環卷積</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Acyclic_Convolution.html" target="_blank">SASP §9.2.4 ↗</a></small></h1>
+  <div class="nes-box" data-label="THE FULL RECIPE">
+    <p lang="en">For each frame: zero-pad to $L\ge N_{\text{frame}}+N_h-1$, multiply its DFT with $H[k]$, IFFT, add to the output at the correct offset. This is the standard "fast convolution with a long signal" pipeline.</p>
+    <p lang="zh">對每個 frame：補零到 $L\ge N_{\text{frame}}+N_h-1$，DFT 乘 $H[k]$、IFFT、在正確偏移處加到輸出上。這就是「長訊號快速卷積」的標準管線。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="9.2.3-stft-cola.html">◀ 9.2.3</a><a class="warp-pipe">9-2-4</a><a class="nes-btn nes-btn--primary" href="9.2.5-ola-example.html">NEXT ▶ 9.2.5</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

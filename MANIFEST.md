@@ -270,38 +270,38 @@ data-en-def …>` for hover tooltips.
 
 ## World 9 · Overlap-Add STFT Processing  (ch09-ola-stft/)
 
-- [ ] 9.1   Convolution of Short Signals                   — `ch09-ola-stft/9.1-conv-short.html`
-- [ ] 9.1.1 Cyclic FFT Convolution                         — `ch09-ola-stft/9.1.1-cyclic.html`
-- [ ] 9.1.2 Acyclic FFT Convolution                        — `ch09-ola-stft/9.1.2-acyclic.html`
-- [ ] 9.1.2.1 Acyclic Convolution in Matlab                — `ch09-ola-stft/9.1.2.1-matlab-acyclic.html`
-- [ ] 9.1.2.2 Pictorial View of Acyclic Convolution        — `ch09-ola-stft/9.1.2.2-pictorial.html`
-- [ ] 9.1.3 Acyclic FFT Convolution in Matlab              — `ch09-ola-stft/9.1.3-acyclic-matlab.html`
-- [ ] 9.1.4 FFT versus Direct Convolution                  — `ch09-ola-stft/9.1.4-fft-vs-direct.html`
-- [ ] 9.1.4.1 Audio FIR Filters                            — `ch09-ola-stft/9.1.4.1-audio-fir.html`
-- [ ] 9.1.4.2 Example 1: LP Filtering by FFT Conv          — `ch09-ola-stft/9.1.4.2-fft-lp.html`
-- [ ] 9.1.4.3 Example 2: Time Domain Aliasing              — `ch09-ola-stft/9.1.4.3-td-aliasing.html`
-- [ ] 9.2   Convolving with Long Signals                   — `ch09-ola-stft/9.2-conv-long.html`
-- [ ] 9.2.1 Overlap-Add Decomposition                      — `ch09-ola-stft/9.2.1-ola-decomp.html`
-- [ ] 9.2.2 COLA Examples                                  — `ch09-ola-stft/9.2.2-cola-examples.html`
-- [ ] 9.2.3 STFT of COLA Decomposition                     — `ch09-ola-stft/9.2.3-stft-cola.html`
-- [ ] 9.2.4 Acyclic Convolution                            — `ch09-ola-stft/9.2.4-acyclic2.html`
-- [ ] 9.2.5 Example of Overlap-Add Convolution             — `ch09-ola-stft/9.2.5-ola-example.html`
-- [ ] 9.2.6 Summary of OLA FFT Processing                  — `ch09-ola-stft/9.2.6-ola-summary.html`
-- [ ] 9.3   Dual of Constant Overlap-Add                   — `ch09-ola-stft/9.3-cola-dual.html`
-- [ ] 9.3.1 Poisson Summation Formula                      — `ch09-ola-stft/9.3.1-psf.html`
-- [ ] 9.3.2 Frequency-Domain COLA Constraints              — `ch09-ola-stft/9.3.2-fd-cola.html`
-- [ ] 9.3.2.1 Strong COLA                                  — `ch09-ola-stft/9.3.2.1-strong-cola.html`
-- [ ] 9.3.3 PSF Dual and Graphical Equalizers              — `ch09-ola-stft/9.3.3-psf-dual-eq.html`
-- [ ] 9.3.4 PSF and Weighted Overlap Add                   — `ch09-ola-stft/9.3.4-psf-wola.html`
-- [ ] 9.3.5 Example COLA Windows for WOLA                  — `ch09-ola-stft/9.3.5-cola-wola-examples.html`
-- [ ] 9.4   Overlap-Save Method                            — `ch09-ola-stft/9.4-overlap-save.html`
-- [ ] 9.5   Time-Varying OLA Modifications                 — `ch09-ola-stft/9.5-tv-ola.html`
-- [ ] 9.5.1 Time-Varying STFT Modifications                — `ch09-ola-stft/9.5.1-tv-stft.html`
-- [ ] 9.5.2 Length L FIR Frame Filters                     — `ch09-ola-stft/9.5.2-frame-filters.html`
-- [ ] 9.6   Weighted Overlap Add                           — `ch09-ola-stft/9.6-wola.html`
-- [ ] 9.6.1 WOLA Processing Steps                          — `ch09-ola-stft/9.6.1-wola-steps.html`
-- [ ] 9.6.1.1 Choice of WOLA Window                        — `ch09-ola-stft/9.6.1.1-wola-window.html`
-- [ ] 9.7   Review of Zero Padding                         — `ch09-ola-stft/9.7-review-zp.html`
+- [~] 9.1   Convolution of Short Signals                   — `ch09-ola-stft/9.1-conv-short.html`
+- [~] 9.1.1 Cyclic FFT Convolution                         — `ch09-ola-stft/9.1.1-cyclic.html`
+- [~] 9.1.2 Acyclic FFT Convolution                        — `ch09-ola-stft/9.1.2-acyclic.html`
+- [~] 9.1.2.1 Acyclic Convolution in Matlab                — `ch09-ola-stft/9.1.2.1-matlab-acyclic.html`
+- [~] 9.1.2.2 Pictorial View of Acyclic Convolution        — `ch09-ola-stft/9.1.2.2-pictorial.html`
+- [~] 9.1.3 Acyclic FFT Convolution in Matlab              — `ch09-ola-stft/9.1.3-acyclic-matlab.html`
+- [~] 9.1.4 FFT versus Direct Convolution                  — `ch09-ola-stft/9.1.4-fft-vs-direct.html`
+- [~] 9.1.4.1 Audio FIR Filters                            — `ch09-ola-stft/9.1.4.1-audio-fir.html`
+- [~] 9.1.4.2 Example 1: LP Filtering by FFT Conv          — `ch09-ola-stft/9.1.4.2-fft-lp.html`
+- [~] 9.1.4.3 Example 2: Time Domain Aliasing              — `ch09-ola-stft/9.1.4.3-td-aliasing.html`
+- [~] 9.2   Convolving with Long Signals                   — `ch09-ola-stft/9.2-conv-long.html`
+- [~] 9.2.1 Overlap-Add Decomposition                      — `ch09-ola-stft/9.2.1-ola-decomp.html`
+- [~] 9.2.2 COLA Examples                                  — `ch09-ola-stft/9.2.2-cola-examples.html`
+- [~] 9.2.3 STFT of COLA Decomposition                     — `ch09-ola-stft/9.2.3-stft-cola.html`
+- [~] 9.2.4 Acyclic Convolution                            — `ch09-ola-stft/9.2.4-acyclic2.html`
+- [~] 9.2.5 Example of Overlap-Add Convolution             — `ch09-ola-stft/9.2.5-ola-example.html`
+- [~] 9.2.6 Summary of OLA FFT Processing                  — `ch09-ola-stft/9.2.6-ola-summary.html`
+- [~] 9.3   Dual of Constant Overlap-Add                   — `ch09-ola-stft/9.3-cola-dual.html`
+- [~] 9.3.1 Poisson Summation Formula                      — `ch09-ola-stft/9.3.1-psf.html`
+- [~] 9.3.2 Frequency-Domain COLA Constraints              — `ch09-ola-stft/9.3.2-fd-cola.html`
+- [~] 9.3.2.1 Strong COLA                                  — `ch09-ola-stft/9.3.2.1-strong-cola.html`
+- [~] 9.3.3 PSF Dual and Graphical Equalizers              — `ch09-ola-stft/9.3.3-psf-dual-eq.html`
+- [~] 9.3.4 PSF and Weighted Overlap Add                   — `ch09-ola-stft/9.3.4-psf-wola.html`
+- [~] 9.3.5 Example COLA Windows for WOLA                  — `ch09-ola-stft/9.3.5-cola-wola-examples.html`
+- [~] 9.4   Overlap-Save Method                            — `ch09-ola-stft/9.4-overlap-save.html`
+- [~] 9.5   Time-Varying OLA Modifications                 — `ch09-ola-stft/9.5-tv-ola.html`
+- [~] 9.5.1 Time-Varying STFT Modifications                — `ch09-ola-stft/9.5.1-tv-stft.html`
+- [~] 9.5.2 Length L FIR Frame Filters                     — `ch09-ola-stft/9.5.2-frame-filters.html`
+- [~] 9.6   Weighted Overlap Add                           — `ch09-ola-stft/9.6-wola.html`
+- [~] 9.6.1 WOLA Processing Steps                          — `ch09-ola-stft/9.6.1-wola-steps.html`
+- [~] 9.6.1.1 Choice of WOLA Window                        — `ch09-ola-stft/9.6.1.1-wola-window.html`
+- [~] 9.7   Review of Zero Padding                         — `ch09-ola-stft/9.7-review-zp.html`
 
 ## World 10 · Filter Bank View of the STFT  (ch10-filter-bank-stft/)
 
@@ -676,4 +676,4 @@ data-en-def …>` for hover tooltips.
 4. Every page gets a prev / next pager linking to its neighbors in the above order.
 5. No copyrighted prose from Smith's book. All explanations must be original.
 
-Current completed count: **232** / ≈ 530. Latest batch: full World 8 (24 time-frequency pages).
+Current completed count: **265** / ≈ 530. Latest batch: full World 9 (33 OLA STFT pages).

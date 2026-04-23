@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>9.3.4 PSF and WOLA · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W9</a></span><span>STAGE <b>9-3-4</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 9-3-4 · PSF and Weighted Overlap-Add</span><span lang="zh">關卡 9-3-4 · PSF 與 WOLA</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/PSF_Weighted_Overlap_Add.html" target="_blank">SASP §9.3.4 ↗</a></small></h1>
+  <div class="nes-box" data-label="SYNTHESIS WINDOW">
+    <p lang="en">Weighted OLA applies a second window on resynthesis. The product $w_a w_s$ must satisfy COLA. Using two windows leaves more design freedom to suppress frame-modification artefacts.</p>
+    <p lang="zh">加權 OLA 在再合成時再乘一個視窗。乘積 $w_a w_s$ 必須滿足 COLA。雙視窗能留更多設計空間抑制 frame 修改的 artefact。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="9.3.3-psf-dual-eq.html">◀ 9.3.3</a><a class="warp-pipe">9-3-4</a><a class="nes-btn nes-btn--primary" href="9.3.5-cola-wola-examples.html">NEXT ▶ 9.3.5</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

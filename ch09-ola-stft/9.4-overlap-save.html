@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>9.4 Overlap-Save · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W9</a></span><span>STAGE <b>9-4</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 9-4 · Overlap-Save Method</span><span lang="zh">關卡 9-4 · 重疊保留法</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Overlap_Save_Method.html" target="_blank">SASP §9.4 ↗</a></small></h1>
+  <div class="nes-box" data-label="DIFFERENT SLICING">
+    <p lang="en">Instead of zero-padding frames (OLA), overlap the <em>input</em> by $N_h-1$ between consecutive blocks and discard the first $N_h-1$ cyclic-tainted samples of each block's output. Same asymptotic cost as OLA.</p>
+    <p lang="zh">OLS 不補零：輸入重疊 $N_h-1$ 樣本，每 block 輸出頭 $N_h-1$ 個循環污染樣本丟掉。漸進計算量與 OLA 相同。</p>
+  </div>
+  <p lang="en">OLS is simpler for fixed filters; OLA is cleaner when each frame is modified because the entire output is valid.</p>
+  <p lang="zh">固定濾波器用 OLS 較簡單；逐 frame 修改用 OLA 較乾淨（整個輸出都有效）。</p>
+  <div class="pager"><a class="nes-btn" href="9.3.5-cola-wola-examples.html">◀ 9.3.5</a><a class="warp-pipe">9-4</a><a class="nes-btn nes-btn--primary" href="9.5-tv-ola.html">NEXT ▶ 9.5</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

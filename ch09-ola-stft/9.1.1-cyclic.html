@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>9.1.1 Cyclic FFT Convolution · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W9</a></span><span>STAGE <b>9-1-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 9-1-1 · Cyclic FFT Convolution</span><span lang="zh">關卡 9-1-1 · 循環 FFT 卷積</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Cyclic_FFT_Convolution.html" target="_blank">SASP §9.1.1 ↗</a></small></h1>
+  <div class="formula"><div>$$\text{IFFT}\{X[k]\cdot H[k]\}\;=\;(x\circledast h)[n]$$</div></div>
+  <p lang="en">Multiplying DFT bins gives <em>cyclic</em> convolution (indices mod $N$), not linear convolution. To recover linear you must zero-pad both inputs to at least $N_x+N_h-1$.</p>
+  <p lang="zh">DFT bin 相乘得到<em>循環</em>卷積（索引 mod $N$），不是線性卷積。要還原線性得把兩序列補零到至少 $N_x+N_h-1$。</p>
+  <div class="pager"><a class="nes-btn" href="9.1-conv-short.html">◀ 9.1</a><a class="warp-pipe">9-1-1</a><a class="nes-btn nes-btn--primary" href="9.1.2-acyclic.html">NEXT ▶ 9.1.2</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

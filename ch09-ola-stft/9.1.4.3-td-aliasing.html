@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>9.1.4.3 Time-Domain Aliasing · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W9</a></span><span>STAGE <b>9-1-4-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 9-1-4-3 · Example 2: Time-Domain Aliasing</span><span lang="zh">關卡 9-1-4-3 · 範例 2：時域混疊</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Example_2_Time_Domain.html" target="_blank">SASP §9.1.4.3 ↗</a></small></h1>
+  <div class="nes-box nes-box--yellow" data-label="CAUTION">
+    <p lang="en">If you forget to pad, the IFFT output's tail wraps onto its head — textbook "time-domain aliasing." The plot looks fine in the middle but the first and last few samples are corrupted. Always pad to at least $N_x+N_h-1$.</p>
+    <p lang="zh">忘了補零時，IFFT 輸出尾端會繞回前端 — 經典「時域混疊」。中段看起來沒事但頭尾幾個樣本壞了。補到至少 $N_x+N_h-1$。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="9.1.4.2-fft-lp.html">◀ 9.1.4.2</a><a class="warp-pipe">9-1-4-3</a><a class="nes-btn nes-btn--primary" href="9.2-conv-long.html">NEXT ▶ 9.2</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

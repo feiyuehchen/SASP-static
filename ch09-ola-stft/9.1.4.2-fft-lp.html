@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>9.1.4.2 Example: FFT LP · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W9</a></span><span>STAGE <b>9-1-4-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 9-1-4-2 · Example 1: Low-Pass by FFT Convolution</span><span lang="zh">關卡 9-1-4-2 · 範例 1：FFT 卷積做低通</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Example_1_Low_Pass_Filtering.html" target="_blank">SASP §9.1.4.2 ↗</a></small></h1>
+  <div class="nes-box" data-label="RECIPE">
+    <p lang="en">Design a window-method lowpass of length $N_h$, zero-pad both input and filter to $L=2^{\lceil\log_2 N_x+N_h-1\rceil}$, FFT-multiply-IFFT, trim.</p>
+    <p lang="zh">用視窗法設計長度 $N_h$ 的低通，輸入與濾波器都補零到 $L=2^{\lceil\log_2 N_x+N_h-1\rceil}$，FFT-相乘-IFFT-裁剪。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="9.1.4.1-audio-fir.html">◀ 9.1.4.1</a><a class="warp-pipe">9-1-4-2</a><a class="nes-btn nes-btn--primary" href="9.1.4.3-td-aliasing.html">NEXT ▶ 9.1.4.3</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

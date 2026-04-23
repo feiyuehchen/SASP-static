@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>9.2.1 OLA Decomposition · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W9</a></span><span>STAGE <b>9-2-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 9-2-1 · Overlap-Add Decomposition</span><span lang="zh">關卡 9-2-1 · OLA 分解</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Overlap_Add_Decomposition.html" target="_blank">SASP §9.2.1 ↗</a></small></h1>
+  <div class="formula"><div>$$x[n]\;=\;\sum_{m=0}^{\infty}x_m[n-mR],\quad x_m[n]=x[n+mR]\cdot w[n]$$</div></div>
+  <p lang="en">Split $x$ into windowed frames at hop $R$. If $\sum_m w[n-mR]=$ constant for all $n$ (the <span class="term" data-en="COLA" data-en-def="Constant overlap-add. A windowing / hop combination whose shifted overlapped windows sum to a constant." data-zh-def="視窗與跳距的組合使平移後重疊相加為常數的條件。">COLA</span> condition), summing the frames exactly reconstructs $x$.</p>
+  <p lang="zh">把 $x$ 在跳距 $R$ 下切成加窗 frame。若 $\sum_m w[n-mR]$ 為常數（<span class="term" data-en="COLA" data-en-def="Constant overlap-add. A windowing / hop combination whose shifted overlapped windows sum to a constant." data-zh-def="視窗與跳距的組合使平移後重疊相加為常數的條件。">COLA</span> 條件），frame 相加就是 $x$。</p>
+  <div class="pager"><a class="nes-btn" href="9.2-conv-long.html">◀ 9.2</a><a class="warp-pipe">9-2-1</a><a class="nes-btn nes-btn--primary" href="9.2.2-cola-examples.html">NEXT ▶ 9.2.2</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>
