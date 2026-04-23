@@ -1,13 +1,101 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.9 STFT with Modifications · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-9</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-9 · STFT with Modifications</span><span lang="zh">關卡 10-9 · STFT 修改</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/STFT_Modifications.html" target="_blank">SASP §10.9 ↗</a></small></h1>
-  <div class="nes-box" data-label="FBS-SIDE MODIFICATIONS">
-    <p lang="en">In the FB view, per-channel gain changes are scalar multipliers on each bandpass output. Simple and intuitive; the hard part is keeping aliasing bounded when combined with downsampling.</p>
-    <p lang="zh">FB 詮釋下，每通道增益變化就是各帶通輸出乘常數。簡單直觀；難在配合降取樣時維持混疊受控。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.9 STFT with Modifications · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-9</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.8.3.3-kaiser-ola.html">◀ 10.8.3.3</a><a class="warp-pipe">10-9</a><a class="nes-btn nes-btn--primary" href="10.9.1-fbs-fixed.html">NEXT ▶ 10.9.1</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-9 · STFT with Modifications</span>
+    <span lang="zh">關卡 10-9 · 加上修改的 STFT</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/STFT_Modifications.html" target="_blank">SASP §10.9 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">All the PR machinery up to §10.8 assumed we pass $X_m[k]$ straight through to synthesis. The point of the STFT, in audio, is to <em>modify</em> $X_m[k]$ before resynthesis — that is where equalisers, pitch shifters, harmonisers, spectral denoisers, spectral freeze, and vocoders live. This stage frames what "modification" does to PR, and splits the options into <em>fixed</em> (§10.9.1) and <em>time-varying</em> (§10.9.2).</p>
+    <p lang="zh">§10.8 之前的 PR 機制都假設 $X_m[k]$ 原封不動送去合成。STFT 在音訊上的價值恰恰是在重合成前<em>修改</em> $X_m[k]$ — 等化器、變調、harmoniser、頻譜降噪、頻譜凍結、聲碼器都在這層運作。本關界定「修改」對 PR 的影響，並把選項分為<em>固定</em>（§10.9.1）與<em>時變</em>（§10.9.2）兩類。</p>
+  </div>
+
+  <h2 lang="en">The modified pipeline</h2>
+  <h2 lang="zh">加上修改的流水線</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <span class="label">MODIFIED STFT</span>
+    <div style="font-size:13px; line-height:1.9; text-align:left;">
+<pre style="margin:0; color:var(--nes-lime); font-family:'Press Start 2P', monospace;">
+x[n] → [analysis] → X_m[k] → [MODIFY: H_m[k]] → Y_m[k] → [synthesis] → y[n]
+                                   ↑
+                         per-channel / per-frame gain
+</pre>
+    </div>
+  </div>
+
+  <p lang="en">The modification layer multiplies each STFT tensor element by a (possibly frame- and bin-dependent) factor $H_m[k]$:</p>
+  <p lang="zh">修改層把 STFT 張量每個元素乘上（可能隨 frame 與 bin 變化的）因子 $H_m[k]$：</p>
+
+  <div class="formula">
+    <div>$$Y_m[k]\;=\;H_m[k]\,\cdot\,X_m[k]$$</div>
+  </div>
+
+  <p lang="en">If $H_m[k] = H[k]$ (no dependence on $m$), the modification is <em>time-invariant</em>; the output $y[n]$ is simply $x[n]$ filtered by an LTI system whose DTFT matches $H[\cdot]$ on the DFT grid (§10.9.1). If $H_m[k]$ changes with $m$, you get time-varying filtering — powerful, but with subtle pitfalls covered in §10.9.2.</p>
+  <p lang="zh">若 $H_m[k] = H[k]$（不依 $m$），即<em>時不變</em>修改；輸出 $y[n]$ 等於 $x[n]$ 通過某 LTI 系統（其 DTFT 在 DFT 網格上等於 $H[\cdot]$）— §10.9.1。若 $H_m[k]$ 隨 $m$ 變，就是時變濾波 — 威力強，但坑多，§10.9.2 會詳述。</p>
+
+  <h2 lang="en">Three examples</h2>
+  <h2 lang="zh">三個例子</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>(1) Fixed EQ:</b> $H[k] = G_k$ — apply a per-bin gain. Same as LTI filtering; works cleanly at any PR hop.<br>
+        <b>(2) Noise gate:</b> $H_m[k] = 1$ if $|X_m[k]| > \text{threshold}$, $0$ otherwise. Frame-dependent, magnitude-only. Watch for zipper artefacts from sudden switching.<br>
+        <b>(3) Pitch shift:</b> scale frequencies per frame; needs phase vocoder phase tracking. Classic time-varying modification with subtle alias risk.
+      </span>
+      <span lang="zh">
+        <b>(1) 固定 EQ：</b>$H[k] = G_k$ — 每 bin 給一個固定增益。等同 LTI 濾波；任何 PR 跳距下都乾淨。<br>
+        <b>(2) 噪音閘：</b>$H_m[k] = 1$ 當 $|X_m[k]| >$ 門檻、否則 $0$。隨 frame 變、只看振幅。注意突變會產生 zipper 雜音。<br>
+        <b>(3) 變調：</b>每 frame 縮放頻率；需相位聲碼器追蹤相位。經典的時變修改，容易產生混疊。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>PR protects against analysis/synthesis mismatch, not against modification mistakes.</b> Even with a perfect hop/window pair, a bad modification (mid-frame jumps, unpaired bin gains, non-causal time-varying effects) will produce artefacts. The rest of §10.9 shows how to stay inside the safe region of modifications.</p>
+    <p lang="zh"><b>PR 只保護「分析/合成不匹配」，不保護「修改做錯」。</b>即使視窗與跳距完美，修改若做糟（frame 中跳變、bin 不成對增益、非因果時變效果）照樣產生失真。§10.9 其他節說明如何停留在「安全的修改區」內。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.8.3.3-kaiser-ola.html">◀ 10.8.3.3</a>
+    <a class="warp-pipe">10-9</a>
+    <a class="nes-btn nes-btn--primary" href="10.9.1-fbs-fixed.html">NEXT ▶ 10.9.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

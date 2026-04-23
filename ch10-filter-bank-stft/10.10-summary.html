@@ -1,17 +1,110 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.10 Summary · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-10</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-10 · World 10 Summary</span><span lang="zh">關卡 10-10 · 第 10 世界總結</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/STFT_Summary_Conclusions.html" target="_blank">SASP §10.10 ↗</a></small></h1>
-  <div class="nes-box nes-box--green" data-label="RECAP">
-    <p lang="en">OLA ↔ FBS are dual views of the same STFT. COLA ↔ Nyquist(N) are Fourier-dual conditions for perfect reconstruction. Pick hop, window, and DFT size so both constraints hold for the hop you need.</p>
-    <p lang="zh">OLA ↔ FBS 是同一 STFT 的對偶詮釋。COLA ↔ Nyquist(N) 是完美重建的傅立葉對偶條件。選跳距、視窗、DFT 長度時，使雙方同時滿足所需跳距。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.10 World 10 Summary · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-10</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="nes-box nes-box--blue" data-label="NEXT WORLD">
-    <p lang="en">World 11 puts all this to work in real applications: pitch tracking, cross-synthesis, SMS, time-scale modification, chirplets, and octave filter banks.</p>
-    <p lang="zh">第 11 世界應用這些到真實情境：基頻追蹤、交叉合成、SMS、時間尺度變化、chirplet、八度濾波器組。</p>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.9.2.1-notes.html">◀ 10.9.2.1</a><a class="warp-pipe">10-10</a><a class="nes-btn nes-btn--primary" href="../ch11-stft-apps/index.html">WORLD 11 ▶</a></div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-10 · World 10 Summary &amp; Conclusions</span>
+    <span lang="zh">關卡 10-10 · 第 10 世界總結與結論</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/STFT_Summary_Conclusions.html" target="_blank">SASP §10.10 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="WHAT YOU LEARNED">
+    <p lang="en">The STFT matrix has <em>two</em> equivalent interpretations: rows = short-time spectra (OLA), columns = band-pass filter outputs (FBS). Perfect reconstruction in either interpretation is governed by <em>one</em> Poisson-summation-dual pair of conditions: COLA for OLA, Nyquist($N$) for FBS. Modifications inserted between analysis and synthesis must respect window bandwidth and frame-rate bounds or produce artefacts.</p>
+    <p lang="zh">STFT 矩陣有<em>兩種</em>等價詮釋：列 = 短時頻譜（OLA）；行 = 帶通濾波器輸出（FBS）。任一詮釋下的完美重建皆受<em>同一對</em> Poisson 求和對偶條件支配：OLA 要 COLA、FBS 要 Nyquist($N$)。在分析與合成間插入的修改必須尊重視窗頻寬與幀速率，否則產生失真。</p>
+  </div>
+
+  <h2 lang="en">The big picture, one diagram</h2>
+  <h2 lang="zh">整體架構一張圖</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:13px; line-height:1.9; text-align:left;">
+<pre style="margin:0; color:var(--nes-lime); font-family:'Press Start 2P', monospace;">
+                    time ─────────→               freq ─────────→
+x[n] → ANALYSIS → ┌────────────────┐            ┌────────────────┐
+                   │  X<sub>m</sub>[k] matrix  │            │  X<sub>m</sub>[k] matrix  │
+                   │  (row = frame) │            │  (col = band)  │
+                   └────────────────┘            └────────────────┘
+                         ↓                              ↓
+                   [OLA interpretation]         [FBS interpretation]
+                   PR ⇔ COLA on w               PR ⇔ Nyquist(N) on w
+                         ↕ Poisson summation dual ↕
+                   MODIFY  →  SYNTHESIS  → y[n]
+                   (per-bin and/or per-frame mask H<sub>m</sub>[k])
+</pre>
+    </div>
+  </div>
+
+  <h2 lang="en">Design decision tree</h2>
+  <h2 lang="zh">設計決策樹</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>Need time-varying effect?</b> If no: use LTI FIR; skip STFT. If yes: continue.<br>
+        <b>Target side-lobe level?</b> $-32$ dB → Hann, $-58$ dB → Blackman, $-74$ dB → Kaiser $\beta=8$ or Portnoff.<br>
+        <b>Latency budget?</b> Small → minimise window length $M$; large → Portnoff long window + short FFT.<br>
+        <b>Hop $R$?</b> Match to window's COLA family; typical $R=M/2$ (Hann) or $R=M/4$ (Kaiser).<br>
+        <b>WOLA or OLA?</b> WOLA ($w_s=\sqrt{v}, w=\sqrt{v}$) for effect quality; OLA ($w_s=1$) for minimum CPU when modifications are gentle.<br>
+        <b>Mod rate?</b> Keep $H_m[k]$ changes band-limited below half the frame rate $1/(2R)$.
+      </span>
+      <span lang="zh">
+        <b>需要時變效果嗎？</b>否：用 LTI FIR 即可，略過 STFT。是：繼續。<br>
+        <b>目標旁波瓣位階？</b>$-32$ dB → Hann、$-58$ dB → Blackman、$-74$ dB → Kaiser $\beta=8$ 或 Portnoff。<br>
+        <b>延遲預算？</b>小 → 最小化視窗長度 $M$；大 → Portnoff 長視窗 + 短 FFT。<br>
+        <b>跳距 $R$？</b>配合視窗的 COLA 家族；常見 $R=M/2$（Hann）或 $R=M/4$（Kaiser）。<br>
+        <b>WOLA 或 OLA？</b>WOLA（$w_s=\sqrt{v}, w=\sqrt{v}$）給較好效果品質；OLA（$w_s=1$）在修改平滑時節省 CPU。<br>
+        <b>修改變化率？</b>讓 $H_m[k]$ 變化頻寬低於幀速率一半 $1/(2R)$。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">What's next — World 11 &amp; World 12</h2>
+  <h2 lang="zh">接下來 — 第 11 與 12 世界</h2>
+
+  <p lang="en">Ch 10 built the STFT filter-bank <em>machinery</em>. Ch 11 applies it to real audio problems (F0 tracking, cross-synthesis, spectral envelopes, SMS, time-scale mod, chirplets, audio EQ banks). Ch 12 re-derives everything through the polyphase / wavelet lens and shows why MPEG, MDCT, and wavelet filter banks are all special cases of the uniform FB story told here.</p>
+  <p lang="zh">Ch 10 建立 STFT 濾波器組的<em>機制</em>。Ch 11 把它應用到實際音訊問題（F0 追蹤、交叉合成、頻譜包絡、SMS、時間伸縮、chirplet、音訊 EQ 組）。Ch 12 從 polyphase / wavelet 角度重新推導，並說明 MPEG、MDCT、小波濾波器組皆為本章均勻 FB 故事的特例。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>STFT FB = DFT + window + hop.</b> Everything else in Worlds 10–12 is a re-parametrisation of those three choices. Learn the three well; the rest follows.</p>
+    <p lang="zh"><b>STFT FB = DFT + 視窗 + 跳距。</b>第 10–12 世界其他內容都是這三個選擇的重參數化。把這三件事學好，其他自然落位。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.9.2.1-notes.html">◀ 10.9.2.1</a>
+    <a class="warp-pipe">10-10</a>
+    <a class="nes-btn nes-btn--primary" href="../ch11-stft-apps/index.html">WORLD 11 ▶</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

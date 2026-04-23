@@ -1,13 +1,104 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.9.1 FBS Fixed Mods · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-9-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-9-1 · FBS Fixed Modifications</span><span lang="zh">關卡 10-9-1 · FBS 固定修改</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/FBS_Fixed_Modifications.html" target="_blank">SASP §10.9.1 ↗</a></small></h1>
-  <div class="nes-box" data-label="FIXED CHANNEL GAINS">
-    <p lang="en">If gains per channel are constant in time, the overall system is LTI — a standard graphic EQ. Perfect reconstruction requires the band gains to sum to a flat response (FBS COLA dual).</p>
-    <p lang="zh">若通道增益不隨時間變，整體為 LTI — 即標準圖形 EQ。完美重建條件：頻帶增益總和為平直（FBS COLA 對偶）。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.9.1 FBS Fixed Modifications · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-9-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.9-stft-mods.html">◀ 10.9</a><a class="warp-pipe">10-9-1</a><a class="nes-btn nes-btn--primary" href="10.9.2-fbs-tv.html">NEXT ▶ 10.9.2</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-9-1 · FBS Fixed (Time-Invariant) Modifications</span>
+    <span lang="zh">關卡 10-9-1 · FBS 固定（時不變）修改</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/FBS_Fixed_Modifications.html" target="_blank">SASP §10.9.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">When the modification mask $H[k]$ doesn't change across frames, analysis-mod-synthesis collapses into ordinary LTI filtering. Prove it, note which filters are expressible this way, and note the limitation.</p>
+    <p lang="zh">當修改遮罩 $H[k]$ 不隨 frame 變，「分析 → 修改 → 合成」會塌縮成普通 LTI 濾波。本節證明、列出可表示的濾波器種類、並指出限制。</p>
+  </div>
+
+  <h2 lang="en">Equivalence with LTI filtering</h2>
+  <h2 lang="zh">與 LTI 濾波的等價</h2>
+
+  <p lang="en">Let $H_m[k] = H[k]$ (no $m$-dependence). Multiply the STFT pointwise by $H[k]$ and synthesise:</p>
+  <p lang="zh">令 $H_m[k] = H[k]$（不依 $m$）。逐點乘上 STFT 後合成：</p>
+
+  <div class="formula">
+    <div>$$y[n]\;=\;\text{ISTFT}\{H[k]\,X_m[k]\}\;=\;(x \ast h)[n]$$</div>
+  </div>
+
+  <p lang="en">where $h[n]$ is the length-$N$ IDFT of $H[k]$. So applying fixed $H[k]$ is the same as convolving $x$ with a length-$N$ FIR filter whose DTFT samples match $H[k]$ on the DFT grid.</p>
+  <p lang="zh">其中 $h[n]$ 為 $H[k]$ 的長度 $N$ IDFT。所以套固定 $H[k]$ 等同於把 $x$ 與「DTFT 在 DFT 網格與 $H[k]$ 相符、長度 $N$」的 FIR 濾波器卷積。</p>
+
+  <h2 lang="en">When fixed mods are the right choice</h2>
+  <h2 lang="zh">何時選固定修改</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>Fixed EQ / LP / HP / BP / notch:</b> the mask is a fixed magnitude shape; phase is usually forced to be linear or zero.<br>
+        <b>Comb-filter / chorus (fixed):</b> $H[k]$ is a periodic mask in $k$.<br>
+        <b>Spectral whitening (fixed):</b> $H[k] = 1/|W(\omega_k)|$ where $|W|$ is a long-term spectrum.<br>
+        <b>Fixed dereverberation (RIR inverse):</b> $H[k]$ approximates the inverse of a measured room impulse response's DFT.
+      </span>
+      <span lang="zh">
+        <b>固定 EQ / LP / HP / BP / notch：</b>遮罩是固定振幅形狀；相位通常取線性或零。<br>
+        <b>梳狀濾波 / 合唱（固定版）：</b>$H[k]$ 是 $k$ 的週期遮罩。<br>
+        <b>頻譜白化（固定版）：</b>$H[k] = 1/|W(\omega_k)|$，$|W|$ 為長期頻譜。<br>
+        <b>固定去混響（RIR 反轉）：</b>$H[k]$ 近似某測得房間脈衝響應 DFT 的反轉。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">The "$N$-tap" limitation</h2>
+  <h2 lang="zh">「$N$-tap」限制</h2>
+
+  <p lang="en">Fixed $H[k]$ as a DFT mask gives you an LTI FIR filter of length $\le N$. Longer filters need a larger DFT (bigger $N$) or a structural change (polyphase, Portnoff). If your EQ needs sharper transitions than $4\pi/N$ rad/sample allows, go bigger on $N$ or move to the time-varying domain (§10.9.2) with some trade-offs.</p>
+  <p lang="zh">固定 $H[k]$ 作為 DFT 遮罩，等同於長度 $\le N$ 的 LTI FIR。要更長得加大 $N$ 或改結構（polyphase、Portnoff）。若 EQ 轉折需要比 $4\pi/N$ rad/sample 更銳利，就需拉大 $N$ 或改走時變（§10.9.2）並承擔取捨。</p>
+
+  <h2 lang="en">Circular vs linear convolution</h2>
+  <h2 lang="zh">循環卷積 vs 線性卷積</h2>
+
+  <p lang="en">Within a single frame, the DFT gives <em>circular</em> convolution. To make the effective operation <em>linear</em> (which is what we want for real filters), zero-pad the frame to length $\ge M + \text{filter-length} - 1$. Missing this pad is the classic "filter ringing at frame edges" bug.</p>
+  <p lang="zh">單 frame 內 DFT 對應<em>循環</em>卷積。欲讓實際運算為<em>線性</em>（實濾波器需要），必須將 frame 零填充至長度 $\ge M + \text{濾波器長度} - 1$。沒填補就是經典的「frame 邊緣 ringing」bug。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Fixed modification = LTI filter.</b> If your effect is time-invariant, implement it as a direct FIR convolution rather than via STFT — it's cheaper, has no frame boundary issues, and doesn't require PR. Use STFT modification only when you actually need frame-rate control (time-varying, per-frame analysis).</p>
+    <p lang="zh"><b>固定修改 = LTI 濾波。</b>若效果時不變，直接用 FIR 卷積實作，比 STFT 便宜、無 frame 邊界問題、不需 PR。只在真的需要 frame 速率控制（時變、逐 frame 分析）時才用 STFT 修改。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.9-stft-mods.html">◀ 10.9</a>
+    <a class="warp-pipe">10-9-1</a>
+    <a class="nes-btn nes-btn--primary" href="10.9.2-fbs-tv.html">NEXT ▶ 10.9.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

@@ -1,17 +1,95 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.9.2.1 Points to Note · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-9-2-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-9-2-1 · Points to Note</span><span lang="zh">關卡 10-9-2-1 · 注意事項</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Points_Note.html" target="_blank">SASP §10.9.2.1 ↗</a></small></h1>
-  <ul>
-    <li lang="en">Smooth gain trajectories — abrupt changes cause audible clicks.</li>
-    <li lang="zh">增益軌跡要平滑 — 突變會 click 出聲。</li>
-    <li lang="en">Pick hop small enough that gain barely changes within one frame.</li>
-    <li lang="zh">跳距要夠小，讓單 frame 內增益變化不大。</li>
-    <li lang="en">Where possible, update gains only at frame boundaries.</li>
-    <li lang="zh">可能時只在 frame 邊界更新增益。</li>
-  </ul>
-  <div class="pager"><a class="nes-btn" href="10.9.2-fbs-tv.html">◀ 10.9.2</a><a class="warp-pipe">10-9-2-1</a><a class="nes-btn nes-btn--primary" href="10.10-summary.html">NEXT ▶ 10.10</a></div>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.9.2.1 Points to Note · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-9-2-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-9-2-1 · Points to Note on Time-Varying Modifications</span>
+    <span lang="zh">關卡 10-9-2-1 · 時變修改的注意事項</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Points_Note.html" target="_blank">SASP §10.9.2.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Six practical reminders when shipping an STFT-based effect. Consider this the engineering checklist you run before calling an effect "done".</p>
+    <p lang="zh">六條實務提醒 — 準備讓一個 STFT 效果「出貨」前該跑一遍的工程檢查表。</p>
+  </div>
+
+  <h2 lang="en">1. Use WOLA unless you have a reason not to</h2>
+  <h2 lang="zh">1. 沒特別理由就用 WOLA</h2>
+
+  <p lang="en">Analysis-only windowing (OLA with $w_s = 1$) is cheaper but amplifies modification artefacts: modifications in one frame leak fully into the output with no synthesis-side smoothing. Symmetric WOLA ($w_s = w$ or $w = w_s = \sqrt{v}$) halves the artefact amplitude at minimal extra cost.</p>
+  <p lang="zh">純分析加窗（OLA、$w_s = 1$）較便宜但會放大修改失真：某 frame 的修改會原封不動洩漏至輸出，合成端沒有平滑。對稱 WOLA（$w_s = w$ 或 $w = w_s = \sqrt{v}$）以極低額外成本把失真振幅對半砍。</p>
+
+  <h2 lang="en">2. Zero-pad each frame</h2>
+  <h2 lang="zh">2. 每 frame 零填充</h2>
+
+  <p lang="en">Circular convolution artefacts at frame edges can be eliminated by zero-padding each frame by the length of the longest expected time-domain kernel of your modification. For typical EQ / compressor / pitch-shifter the kernel is $\le 10$ ms; zero-pad by that much (about 441 samples at 44.1 kHz).</p>
+  <p lang="zh">每 frame 零填充「修改所對應的時域核心最長長度」可消除循環卷積邊界瑕疵。一般 EQ / 壓縮器 / 變調的核心 $\le 10$ ms；44.1 kHz 下補約 441 樣本。</p>
+
+  <h2 lang="en">3. Symmetric modifications for real output</h2>
+  <h2 lang="zh">3. 實值輸出需對稱修改</h2>
+
+  <p lang="en">For real-valued output $y[n]$, the modification mask must obey the conjugate-symmetry rule $H_m[N-k] = H_m^*[k]$. Otherwise the ISTFT produces complex-valued $y$ (audible as DC offset after discarding the imaginary part, or as ultrasonic tones). Don't forget the Nyquist bin: $H_m[N/2]$ must be real.</p>
+  <p lang="zh">實值輸出 $y[n]$ 需修改遮罩滿足共軛對稱 $H_m[N-k] = H_m^*[k]$。否則 ISTFT 會產生複值 $y$（丟虛部後聽起來像 DC 偏移或超音波）。別忘了 Nyquist bin：$H_m[N/2]$ 須為實數。</p>
+
+  <h2 lang="en">4. Normalise before, de-normalise after</h2>
+  <h2 lang="zh">4. 前歸一、後反歸一</h2>
+
+  <p lang="en">FBS reconstruction requires dividing by $N\,w[0]$ (§10.1.3). Some libraries bake this into the <code>istft</code>; others expect you to do it. Test with an unmodified round-trip: $x[n] \to$ STFT $\to$ (no mod) $\to$ ISTFT $\to$ should give $x[n]$ within machine epsilon. If it gives $x[n]/N$ or $N\,x[n]$, fix the normalisation.</p>
+  <p lang="zh">FBS 重建需除以 $N\,w[0]$（§10.1.3）。有些函式庫已內建於 <code>istft</code>；有些要你自己做。用未修改來回測試：$x[n] \to$ STFT $\to$（不修改）$\to$ ISTFT $\to$ 應在機器 epsilon 內等於 $x[n]$。若結果是 $x[n]/N$ 或 $N\,x[n]$，就是歸一化沒處理。</p>
+
+  <h2 lang="en">5. Phase needs its own attention</h2>
+  <h2 lang="zh">5. 相位要獨立處理</h2>
+
+  <p lang="en">Magnitude-only modifications (reset phase to analysis phase) produce intelligible but "phasey" output. For critical work — pitch shifting, time-stretch, morphing — use a phase vocoder that tracks phase across frames (§11.5). The PR machinery in §§10.1–10.8 is blind to phase coherence; that's a separate problem.</p>
+  <p lang="zh">純振幅修改（相位重設為分析相位）可理解但「phasey」。關鍵任務（變調、時間伸縮、morphing）需用跨 frame 追蹤相位的相位聲碼器（§11.5）。§10.1–10.8 的 PR 機制對相位一致性無感；這是另一層問題。</p>
+
+  <h2 lang="en">6. Validate on a sine sweep</h2>
+  <h2 lang="zh">6. 用掃頻正弦驗證</h2>
+
+  <p lang="en">Before shipping: run a logarithmic sine sweep (20 Hz–20 kHz, 10 s) through the effect with modification <em>off</em>, check round-trip error is white / below $-100$ dB. Then turn modification <em>on</em> with a known target (e.g. $+6$ dB above 1 kHz) and verify the output spectrum matches. Catches most implementation bugs before users do.</p>
+  <p lang="zh">出貨前：跑對數掃頻正弦（20 Hz – 20 kHz，10 秒），修改<em>關閉</em>時驗證來回誤差為白噪音且低於 $-100$ dB。再<em>開啟</em>修改並給已知目標（如 1 kHz 以上增益 $+6$ dB），檢查輸出頻譜是否吻合。多數實作 bug 會被這關抓到。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Ship with tests.</b> Round-trip and sweep tests catch 90% of STFT mistakes. Automate them into CI; don't trust an ear alone.</p>
+    <p lang="zh"><b>測試隨發布。</b>來回測試與掃頻測試能抓 90% 的 STFT bug。納入 CI，別只信自己的耳朵。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.9.2-fbs-tv.html">◀ 10.9.2</a>
+    <a class="warp-pipe">10-9-2-1</a>
+    <a class="nes-btn nes-btn--primary" href="10.10-summary.html">NEXT ▶ 10.10</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

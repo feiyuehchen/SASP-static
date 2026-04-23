@@ -1,13 +1,117 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.8 Downsampled STFT FBs · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-8</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-8 · Downsampled STFT Filter Banks</span><span lang="zh">關卡 10-8 · 降取樣 STFT 濾波器組</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Downsampled_STFT_Filter_Banks.html" target="_blank">SASP §10.8 ↗</a></small></h1>
-  <div class="nes-box" data-label="HOP > 1">
-    <p lang="en">Hops $R>1$ downsample each channel's output by $R$, introducing aliasing unless the channel filter is narrow enough. Nyquist(N) / COLA conditions earn their keep here.</p>
-    <p lang="zh">跳距 $R>1$ 相當於每通道降 $R$ 倍取樣；除非通道濾波器夠窄否則會產生混疊。Nyquist(N) / COLA 條件就是用於此。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.8 Downsampled STFT Filter Banks · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-8</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.7-portnoff.html">◀ 10.7</a><a class="warp-pipe">10-8</a><a class="nes-btn nes-btn--primary" href="10.8.1-ds-stft-fb.html">NEXT ▶ 10.8.1</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-8 · Downsampled STFT Filter Banks</span>
+    <span lang="zh">關卡 10-8 · 降取樣 STFT 濾波器組</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Downsampled_STFT_Filter_Banks.html" target="_blank">SASP §10.8 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">So far our STFT FB ran at hop $R=1$ — one output per input sample, $N\times$ redundant. Real systems run at $R>1$ (typical: $R=N/2, N/4, N/8$). This introduces <em>aliasing</em> in each channel. This stage derives the conditions under which reconstruction still works with hop-wise downsampling, and names the new term: "downsampled STFT filter bank".</p>
+    <p lang="zh">目前為止我們的 STFT FB 跑 $R=1$ — 每輸入樣本一個輸出、$N$ 倍冗餘。實務系統用 $R>1$（常見：$R=N/2, N/4, N/8$）。這會在每個通道引入<em>混疊</em>。本關推導 hop-wise 降取樣下仍可重建的條件，並正式命名：「降取樣 STFT 濾波器組」。</p>
+  </div>
+
+  <h2 lang="en">What downsampling does per channel</h2>
+  <h2 lang="zh">每通道降取樣的效果</h2>
+
+  <p lang="en">From §10.1.2, channel $k$'s pre-hop output is $(x * h_k)[n]$. Sampling this at times $n = mR$ is a downsample by $R$. Standard multirate: downsampling by $R$ produces aliased copies of the channel's spectrum spaced by $2\pi/R$:</p>
+  <p lang="zh">§10.1.2 指出，第 $k$ 通道的未降取樣輸出為 $(x * h_k)[n]$。對 $n = mR$ 取樣就是降 $R$。標準多速率結果：以 $R$ 降取樣會產生間距 $2\pi/R$ 的混疊副本：</p>
+
+  <div class="formula">
+    <div>$$Y_k(\omega)\;=\;\frac{1}{R}\sum_{\ell=0}^{R-1} H_k\!\left(\tfrac{\omega - 2\pi\ell}{R}\right)\,X\!\left(\tfrac{\omega - 2\pi\ell}{R}\right)$$</div>
+  </div>
+
+  <p lang="en">Each channel, taken in isolation, <em>does</em> alias. But channel-by-channel aliasing is allowed to happen as long as the <em>sum</em> over all $k$ cancels it out — that's how FBS with $R>1$ keeps PR.</p>
+  <p lang="zh">孤立看每個通道<em>確實</em>有混疊。但通道層級的混疊是被允許的，只要對所有 $k$ 求和後相消 — FBS 在 $R>1$ 下保 PR 就是靠這個。</p>
+
+  <h2 lang="en">Hop choice: Nyquist rate of a channel</h2>
+  <h2 lang="zh">跳距選擇：每通道的 Nyquist 速率</h2>
+
+  <p lang="en">Each channel has <em>bandwidth</em> roughly $2\pi/N$ (main-lobe width of the prototype window). Sampling at hop $R$ corresponds to a rate of $1/R$, which supports bandwidth up to $2\pi/R$. Lossless requires $2\pi/R \ge 2\pi/N$, i.e. $R \le N$ — the "maximally decimated" regime sits at $R=N$. Most audio engineering prefers $R \le N/2$ for comfort (oversampled).</p>
+  <p lang="zh">每通道<em>頻寬</em>約 $2\pi/N$（原型視窗主波瓣寬）。以跳距 $R$ 取樣對應速率 $1/R$，可支撐頻寬 $2\pi/R$。無損要求 $2\pi/R \ge 2\pi/N$，即 $R \le N$；$R=N$ 為「最大降取樣」。音訊工程多選 $R \le N/2$（過取樣）圖方便。</p>
+
+  <h2 lang="en">What changes in the condition table</h2>
+  <h2 lang="zh">條件表會變什麼</h2>
+
+  <p lang="en">With hop $R$:</p>
+  <p lang="zh">取跳距 $R$ 時：</p>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>OLA side:</b> need COLA at hop $R$ (window sum over frames is constant) — unchanged.<br>
+        <b>FBS side:</b> need Nyquist at rate $R$ on the window's spectrum, i.e. $W(2\pi k/R)=0$ for $k\ne 0$.<br>
+        <b>Extra constraint:</b> the channel bandwidth $\sim 2\pi/N$ must fit inside a $2\pi/R$ sub-band — so $R\le N$. Violating this means aliasing doesn't cancel.
+      </span>
+      <span lang="zh">
+        <b>OLA 側：</b>要求跳距 $R$ 的 COLA（視窗對 frame 求和為定值）— 不變。<br>
+        <b>FBS 側：</b>要求視窗頻譜速率 $R$ 的 Nyquist，即 $W(2\pi k/R)=0$、$k\ne 0$。<br>
+        <b>額外約束：</b>通道頻寬約 $2\pi/N$ 必須落在 $2\pi/R$ 子頻段內 — 故 $R\le N$。違反即混疊不相消。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Preview of §10.8.1–10.8.3</h2>
+  <h2 lang="zh">§10.8.1–10.8.3 預覽</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>10.8.1</b> Formal downsampled-STFT-FB definition + the reconstruction formula.<br>
+        <b>10.8.2</b> Anti-aliasing: when the window's side-lobes aren't tight enough, alias cancellation fails. Windows designed for specific $R$.<br>
+        <b>10.8.3</b> COLA cases at $R>1$: Hamming, periodic-Hamming (via PSF), Kaiser.
+      </span>
+      <span lang="zh">
+        <b>10.8.1</b> 正式定義降取樣 STFT FB 與重建公式。<br>
+        <b>10.8.2</b> 抗混疊：視窗旁波瓣不夠緊時混疊相消失敗。針對特定 $R$ 設計的視窗。<br>
+        <b>10.8.3</b> $R>1$ 的 COLA 案例：Hamming、週期 Hamming（靠 PSF 導出）、Kaiser。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Hop = decimation per channel.</b> The STFT hop is a per-channel downsampler; each channel aliases; alias cancellation across $N$ channels is what gives PR at $R>1$. Pick $R\le N$ (usually $R=N/2$) and a window whose side-lobes don't break the cancellation.</p>
+    <p lang="zh"><b>跳距 = 每通道降取樣。</b>STFT 跳距等同每通道降取樣；每通道各自混疊；$N$ 個通道間的混疊相消才給出 $R>1$ 的 PR。取 $R\le N$（常 $R=N/2$）並選旁波瓣不破壞相消的視窗。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.7-portnoff.html">◀ 10.7</a>
+    <a class="warp-pipe">10-8</a>
+    <a class="nes-btn nes-btn--primary" href="10.8.1-ds-stft-fb.html">NEXT ▶ 10.8.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

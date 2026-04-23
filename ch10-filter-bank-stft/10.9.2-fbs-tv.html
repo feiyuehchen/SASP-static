@@ -1,13 +1,124 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.9.2 FBS Time-Varying Mods · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-9-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-9-2 · Time-Varying Modifications in FBS</span><span lang="zh">關卡 10-9-2 · FBS 時變修改</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Time_Varying_Modifications_FBS.html" target="_blank">SASP §10.9.2 ↗</a></small></h1>
-  <div class="nes-box" data-label="WHEN GAINS MOVE">
-    <p lang="en">Time-varying gains create cross-terms between channels. Audibility depends on gain-change rate and channel-filter width.</p>
-    <p lang="zh">時變增益會產生通道間交叉項。是否可聽，取決於增益變化速度與通道濾波器窄度。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.9.2 FBS Time-Varying Modifications · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-9-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.9.1-fbs-fixed.html">◀ 10.9.1</a><a class="warp-pipe">10-9-2</a><a class="nes-btn nes-btn--primary" href="10.9.2.1-notes.html">NEXT ▶ 10.9.2.1</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-9-2 · FBS Time-Varying Modifications</span>
+    <span lang="zh">關卡 10-9-2 · FBS 時變修改</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Time_Varying_Modifications_FBS.html" target="_blank">SASP §10.9.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">When $H_m[k]$ depends on $m$, the STFT pipeline implements a <em>time-varying filter bank</em>. Powerful — and risky: you can break PR, create aliasing, or generate "zipper noise" if modifications change too fast. This stage derives the safe-change rate and lists which effects respect it.</p>
+    <p lang="zh">當 $H_m[k]$ 隨 $m$ 變，STFT 流水線成為<em>時變濾波器組</em>。威力強 — 但風險大：可能破壞 PR、產生混疊、或若修改變化太快就生成「zipper 雜音」。本節推導安全變化率並列出哪些效果守規矩。</p>
+  </div>
+
+  <h2 lang="en">Why time variation is dangerous</h2>
+  <h2 lang="zh">為何時變很危險</h2>
+
+  <p lang="en">If $H_m[k]$ changes between frames $m$ and $m+1$, the windowed segments at those times are filtered differently. Overlap-add then combines mismatched pieces of the signal. Three failure modes:</p>
+  <p lang="zh">若 $H_m[k]$ 在 frame $m$ 與 $m+1$ 間變化，兩時段加窗片段被以不同方式濾波，OLA 再把不匹配的段落疊起來。三種失敗模式：</p>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>Zipper noise:</b> audible stepping when gains change discretely across frames. Fix: interpolate $H_m[k]$ smoothly (linear between frames, or crossfade in time).<br>
+        <b>Alias injection:</b> frame boundaries in the modification create spectral images at multiples of the frame rate $f_s/R$. Fix: ensure the modification's own spectral bandwidth is $\ll f_s/R$.<br>
+        <b>PR loss:</b> a sudden change in $H_m[k]$ at hop $m$ means the reconstruction no longer integrates to the input at that locality. Fix: crossfade $H$ over multiple frames.
+      </span>
+      <span lang="zh">
+        <b>Zipper 雜音：</b>增益跨 frame 離散變化可聽出階梯。解法：平滑內插 $H_m[k]$（frame 間線性、或時域 crossfade）。<br>
+        <b>混疊注入：</b>修改本身的 frame 邊界產生「幀速率 $f_s/R$ 倍數」的頻譜影像。解法：確保修改的頻寬遠小於 $f_s/R$。<br>
+        <b>PR 喪失：</b>$H_m[k]$ 在跳距 $m$ 突變，該處重建不再還原輸入。解法：在多個 frame 上 crossfade $H$。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">The safe change rate</h2>
+  <h2 lang="zh">安全變化率</h2>
+
+  <p lang="en">Rule of thumb: $H_m[k]$ should vary no faster than half the frame rate. If your hop is $R=N/2$, the frame rate is $2 f_s/N$, so the <em>modification</em> shouldn't change with bandwidth above $f_s/N$. For $f_s = 44100$, $N = 1024$: keep modification changes under $\sim 43$ Hz. Anything faster needs finer hop.</p>
+  <p lang="zh">經驗法則：$H_m[k]$ 變化速率不應快過幀速率的一半。跳距 $R=N/2$ 時幀速率 $2 f_s/N$，故<em>修改</em>頻寬不得超過 $f_s/N$。以 $f_s = 44100$、$N = 1024$ 為例：修改變化須低於約 43 Hz；更快需要更小跳距。</p>
+
+  <h2 lang="en">Examples that respect the rule</h2>
+  <h2 lang="zh">守規矩的範例</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>Auto-tune / pitch shift:</b> pitch tracking runs frame-by-frame; the modification is correctly band-limited.<br>
+        <b>Spectral de-noiser:</b> noise estimate updates slowly (multi-frame moving average); safe.<br>
+        <b>Gated compressor:</b> gain envelope is smoothed with a $\sim 10$ ms attack; safe when hop is $\le 5$ ms.<br>
+        <b>Reverb tail extension:</b> a spectral mask that decays smoothly over many frames; safe.
+      </span>
+      <span lang="zh">
+        <b>Auto-tune / 變調：</b>音高追蹤逐 frame 執行；修改帶寬受限。<br>
+        <b>頻譜降噪：</b>噪音估計緩慢更新（跨多 frame 移動平均）；安全。<br>
+        <b>門式壓縮器：</b>增益包絡以 $\sim 10$ ms 起音平滑；跳距 $\le 5$ ms 時安全。<br>
+        <b>殘響尾延伸：</b>頻譜遮罩跨多 frame 平滑衰減；安全。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Examples that violate the rule</h2>
+  <h2 lang="zh">違規範例</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>Per-frame transient gate (hard switch):</b> instant $1 \to 0$ change produces artefacts. Fix: crossfade.<br>
+        <b>Frame-level pitch quantisation (hard snap):</b> discrete pitch shifts per frame → zipper. Fix: target-pitch interpolation.<br>
+        <b>Spectral freeze with hard on/off:</b> freezing one frame's spectrum and pasting it forward forever is audible if the transition is sudden. Fix: fade-in over several frames.
+      </span>
+      <span lang="zh">
+        <b>逐 frame 瞬態閘（硬開關）：</b>$1 \to 0$ 瞬變產生瑕疵。解法：crossfade。<br>
+        <b>Frame 級音高量化（硬 snap）：</b>逐 frame 離散變調 → zipper。解法：目標音高內插。<br>
+        <b>硬開/關頻譜凍結：</b>凍結單 frame 頻譜並永遠貼上，若轉換突然會被聽出。解法：跨多 frame 淡入。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Keep modification bandwidth below half the frame rate.</b> This is the DSP equivalent of "make your control signal continuous". Fast mod = small hop; slow mod = any hop. Design the mod shape and the STFT hop together.</p>
+    <p lang="zh"><b>修改頻寬要低於幀速率的一半。</b>這是 DSP 版的「讓控制訊號連續」。快修改需小跳距；慢修改任意跳距皆可。修改形狀與 STFT 跳距要一起設計。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.9.1-fbs-fixed.html">◀ 10.9.1</a>
+    <a class="warp-pipe">10-9-2</a>
+    <a class="nes-btn nes-btn--primary" href="10.9.2.1-notes.html">NEXT ▶ 10.9.2.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

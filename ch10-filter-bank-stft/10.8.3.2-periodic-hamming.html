@@ -1,13 +1,115 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.8.3.2 Periodic-Hamming OLA PSF · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-8-3-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-8-3-2 · Periodic-Hamming OLA from PSF</span><span lang="zh">關卡 10-8-3-2 · 由 PSF 導出週期 Hamming OLA</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Periodic_Hamming_OLA_Poisson_Summation.html" target="_blank">SASP §10.8.3.2 ↗</a></small></h1>
-  <div class="nes-box" data-label="APPLY PSF">
-    <p lang="en">$\sum_m w[n-mR]=\tfrac{1}{R}\sum_k W(2\pi k/R)\,e^{j2\pi k n/R}$. For periodic Hamming the second sum has only a few non-zero terms and reduces to a clean constant — giving COLA.</p>
-    <p lang="zh">$\sum_m w[n-mR]=\tfrac{1}{R}\sum_k W(2\pi k/R)e^{j2\pi k n/R}$。週期 Hamming 下右邊只剩少數非零項，可化成常數，即 COLA。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.8.3.2 Periodic-Hamming OLA from PSF · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-8-3-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.8.3.1-hamming-ola.html">◀ 10.8.3.1</a><a class="warp-pipe">10-8-3-2</a><a class="nes-btn nes-btn--primary" href="10.8.3.3-kaiser-ola.html">NEXT ▶ 10.8.3.3</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-8-3-2 · Periodic-Hamming OLA via Poisson Summation</span>
+    <span lang="zh">關卡 10-8-3-2 · 以 Poisson 求和導出週期 Hamming OLA</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Periodic_Hamming_OLA_Poisson_Summation.html" target="_blank">SASP §10.8.3.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Re-prove Hamming COLA by Poisson summation instead of brute-force algebra. The PSF route turns a time-domain infinite sum into a frequency-domain sample check — often cleaner and always generalisable.</p>
+    <p lang="zh">用 Poisson 求和重證 Hamming COLA，取代暴力代數。PSF 路徑把時域無限求和變成頻域取樣檢查，通常更乾淨、且可推廣。</p>
+  </div>
+
+  <h2 lang="en">Periodic Hamming</h2>
+  <h2 lang="zh">週期 Hamming</h2>
+
+  <div class="formula">
+    <div>$$w[n]\;=\;0.54\,-\,0.46\cos\!\left(\tfrac{2\pi n}{M}\right)$$</div>
+  </div>
+
+  <p lang="en">Its DTFT is three impulses on $[-\pi, \pi]$: at $\omega=0$ (weight $0.54$) and at $\omega=\pm 2\pi/M$ (weight $-0.23$ each). Compactly:</p>
+  <p lang="zh">其 DTFT 是 $[-\pi, \pi]$ 上三個脈衝：$\omega=0$（權重 $0.54$）與 $\omega=\pm 2\pi/M$（各 $-0.23$）。緊湊寫法：</p>
+
+  <div class="formula">
+    <span class="label">W(ω) · PERIODIC HAMMING</span>
+    <div>$$W(\omega)\;=\;0.54\,\delta(\omega)\,-\,0.23\bigl[\delta(\omega - \tfrac{2\pi}{M}) + \delta(\omega + \tfrac{2\pi}{M})\bigr]$$</div>
+  </div>
+
+  <h2 lang="en">Apply PSF with hop $R = M/2$</h2>
+  <h2 lang="zh">套 PSF（跳距 $R = M/2$）</h2>
+
+  <div class="formula">
+    <div>$$\sum_m w[n - mR]\;=\;\frac{1}{R}\sum_k W\!\left(\tfrac{2\pi k}{R}\right)\,e^{j 2\pi k n/R}$$</div>
+  </div>
+
+  <p lang="en">At $R = M/2$, the sampling grid is $\omega = 2\pi k /(M/2) = 4\pi k/M$. Evaluate $W$ at these:</p>
+  <p lang="zh">$R = M/2$ 時，取樣網格 $\omega = 2\pi k /(M/2) = 4\pi k/M$。在此代入 $W$：</p>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>$k=0$:</b> $W(0) = 0.54$ (DC term).<br>
+        <b>$k = \pm 1$:</b> $W(\pm 4\pi/M)$ — but the window's impulses sit at $\omega = \pm 2\pi/M$, not $\pm 4\pi/M$. So $W(\pm 4\pi/M) = 0$.<br>
+        <b>$k = \pm 2, \pm 3, \ldots$:</b> Also zero — the window's spectrum is zero everywhere outside the three impulses.
+      </span>
+      <span lang="zh">
+        <b>$k=0$：</b>$W(0) = 0.54$（直流項）。<br>
+        <b>$k = \pm 1$：</b>$W(\pm 4\pi/M)$ — 但視窗脈衝在 $\omega = \pm 2\pi/M$，非 $\pm 4\pi/M$。故 $W(\pm 4\pi/M) = 0$。<br>
+        <b>$k = \pm 2, \pm 3, \ldots$：</b>也為零 — 視窗頻譜除三個脈衝外處處為零。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Result</h2>
+  <h2 lang="zh">結果</h2>
+
+  <div class="formula">
+    <div>$$\sum_m w[n - mR]\;=\;\frac{1}{R}\cdot 0.54\;=\;\frac{2}{M}\cdot 0.54\quad(\text{const})$$</div>
+  </div>
+
+  <p lang="en">Constant — COLA exactly. No ripple. The PSF frame nailed what bare-hands algebra only approximated.</p>
+  <p lang="zh">定值 — 嚴格 COLA、零漣波。PSF 框架把暴力算只能近似的結果釘死。</p>
+
+  <h2 lang="en">Generalisation</h2>
+  <h2 lang="zh">推廣</h2>
+
+  <p lang="en">This proof works for any window whose DTFT is a finite set of impulses at $\pm 2\pi p/M$ for small integer $p$ — i.e. the generalised Hamming family (including Hann, with impulses at $0, \pm 2\pi/M$, weights $0.5, -0.25, -0.25$). COLA at $R = M/2, M/4, M/6, \ldots$ holds whenever the sampling grid $4\pi k/M, 8\pi k/M, \ldots$ misses all the impulses except the DC one.</p>
+  <p lang="zh">此證明適用於 DTFT 為 $\pm 2\pi p/M$（$p$ 為小整數）有限脈衝集合的任意視窗 — 即廣義 Hamming 家族（含 Hann，脈衝在 $0, \pm 2\pi/M$、權重 $0.5, -0.25, -0.25$）。當取樣網格 $4\pi k/M, 8\pi k/M, \ldots$ 錯過除直流外的所有脈衝時，COLA 在 $R = M/2, M/4, M/6, \ldots$ 成立。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>PSF converts "sum over frames" into "sample spectrum at grid".</b> Whenever both sides of Poisson summation are easy to evaluate, PSF is the fastest route to a COLA proof. Memorise this pattern.</p>
+    <p lang="zh"><b>PSF 把「對 frame 求和」轉成「在網格上取頻譜樣本」。</b>當 Poisson 求和兩邊都好求時，PSF 是 COLA 證明的最快路徑。這個套路背起來。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.8.3.1-hamming-ola.html">◀ 10.8.3.1</a>
+    <a class="warp-pipe">10-8-3-2</a>
+    <a class="nes-btn nes-btn--primary" href="10.8.3.3-kaiser-ola.html">NEXT ▶ 10.8.3.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

@@ -1,13 +1,131 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.7 Portnoff Windows · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-7</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-7 · Portnoff Windows</span><span lang="zh">關卡 10-7 · Portnoff 視窗</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Portnoff_Windows.html" target="_blank">SASP §10.7 ↗</a></small></h1>
-  <div class="nes-box" data-label="LONGER THAN FFT">
-    <p lang="en">Portnoff showed that if the window length is a <em>multiple</em> of the DFT size $N$, FBS perfect reconstruction still works — with extra design freedom and tighter main lobes. Cost: each FFT frame aliases the long window into $N$ samples.</p>
-    <p lang="zh">Portnoff 證明：視窗長度若為 DFT 長度 $N$ 的<em>整數倍</em>，FBS 仍可完美重建 — 設計自由度更大、主瓣更窄。代價：每個 FFT frame 要把長視窗折疊回 $N$ 樣本。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.7 Portnoff Windows · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-7</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.6.2-nyquist-unit.html">◀ 10.6.2</a><a class="warp-pipe">10-7</a><a class="nes-btn nes-btn--primary" href="10.8-downsampled.html">NEXT ▶ 10.8</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-7 · Portnoff Windows</span>
+    <span lang="zh">關卡 10-7 · Portnoff 視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Portnoff_Windows.html" target="_blank">SASP §10.7 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Design windows <em>longer</em> than the DFT size $N$ that still satisfy Nyquist($N$). Credit to Portnoff (1976, 1981) — these are the windows that let the STFT FB use a long, low-side-lobe analysis window without growing the FFT size. Underpins modern SMS, phase vocoder, and speech coding work.</p>
+    <p lang="zh">設計長度超過 DFT 大小 $N$、但仍滿足 Nyquist($N$) 的視窗。歸功於 Portnoff（1976, 1981）— 這類視窗讓 STFT FB 能用長、低旁波瓣的分析視窗而不必擴大 FFT。現代 SMS、相位聲碼器、語音編碼都以此為基礎。</p>
+  </div>
+
+  <h2 lang="en">Why go longer than $N$?</h2>
+  <h2 lang="zh">為何要比 $N$ 長？</h2>
+
+  <p lang="en">Two pressures point the same way:</p>
+  <p lang="zh">兩股壓力指向同一個方向：</p>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>1. Side-lobe level drops with window length.</b> For a Kaiser with $\beta=10$, $-74$ dB needs roughly $M\ge 120$ samples — but typical FFT sizes $N$ for audio STFT are $512$ or $1024$. If we force $M=N$, we're under-sampled in the low-side-lobe regime.<br>
+        <b>2. FFT cost grows with $N\log N$.</b> Doubling $N$ to accommodate a longer window doubles memory and nearly doubles CPU. Better to keep $N$ small and let $M > N$.
+      </span>
+      <span lang="zh">
+        <b>1. 旁波瓣隨視窗長度下降。</b>Kaiser $\beta=10$ 達 $-74$ dB 大致需 $M\ge 120$ — 但音訊 STFT 常用 $N = 512$ 或 $1024$。若硬要 $M=N$，低旁波瓣區反而取樣不足。<br>
+        <b>2. FFT 成本隨 $N\log N$ 增長。</b>把 $N$ 加倍以容納長視窗會讓記憶體加倍、CPU 近乎加倍。保持 $N$ 小、讓 $M > N$ 比較划算。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Portnoff's construction</h2>
+  <h2 lang="zh">Portnoff 的構造</h2>
+
+  <p lang="en">Start with any smooth, low-side-lobe window $g[n]$ of length $M = L N$ (integer $L\ge 2$). Force the Nyquist($N$) condition by periodic summation:</p>
+  <p lang="zh">從任意平滑、低旁波瓣的視窗 $g[n]$（長度 $M = L N$，整數 $L\ge 2$）出發。透過週期疊加強制 Nyquist($N$) 條件：</p>
+
+  <div class="formula">
+    <span class="label">PORTNOFF RECIPE</span>
+    <div>$$w[n]\;=\;g[n]\,-\,\bigl(g[n] * \delta_{N}[n] - g[0]\delta[n]\bigr)$$</div>
+  </div>
+
+  <p lang="en">In practice the cleanest form is: write $g$ as a sum $g[n]=\sum_p a_p \phi[n - pN]$ where $\phi$ is any Nyquist($N$) template (e.g. the length-$N$ rect). Picking $a_p = g[pN]$ and enforcing $a_p=\delta[p]$ by subtracting a shifted impulse train gives a $w$ that vanishes at every non-zero multiple of $N$ — Nyquist($N$) by construction, with length $LN$ and the side-lobes inherited from $g$.</p>
+  <p lang="zh">實務上最乾淨的形式：把 $g$ 寫成 $g[n]=\sum_p a_p \phi[n - pN]$，$\phi$ 為任意 Nyquist($N$) 模板（如長度 $N$ 矩形）。取 $a_p = g[pN]$ 並減去位移脈衝串讓 $a_p=\delta[p]$，就得到 $N$ 的每個非零倍數處為零、長度 $LN$ 的 $w$ — 設計出來即滿足 Nyquist($N$)，旁波瓣則承襲 $g$。</p>
+
+  <h2 lang="en">Analysis / synthesis with Portnoff windows</h2>
+  <h2 lang="zh">用 Portnoff 視窗做分析/合成</h2>
+
+  <div class="formula">
+    <span class="label">ANALYSIS</span>
+    <div>$$X_m[k]\;=\;\sum_{n} x[n]\,w[n - mR]\,e^{-j 2\pi k n/N}$$</div>
+  </div>
+
+  <p lang="en">Every term involving the window is evaluated modulo the $N$-point DFT — but since $w$ is length $LN$, each analysis frame folds $L$ time-aliased copies into the $N$-point FFT buffer:</p>
+  <p lang="zh">視窗相關的每一項都在 $N$ 點 DFT 下計算 — 由於 $w$ 長度為 $LN$，每個分析 frame 會在 $N$ 點 FFT 緩衝區摺疊 $L$ 份時域混疊副本：</p>
+
+  <div class="formula">
+    <span class="label">TIME-ALIASED FRAME (FOLD)</span>
+    <div>$$\tilde x_m[n]\;=\;\sum_{\ell=0}^{L-1} x[n + mR + \ell N]\,w[n + \ell N]\quad(n=0,\ldots,N-1)$$</div>
+  </div>
+
+  <p lang="en">Now do an $N$-point FFT on $\tilde x_m[n]$. The Nyquist($N$) property ensures the fold is PR-consistent: summing over channels $k$ (FBS) or over frame positions (OLA) recovers $x[n]$ exactly. The $L$-fold time-aliasing is not a loss — it's how the long window is encoded into the short FFT.</p>
+  <p lang="zh">再對 $\tilde x_m[n]$ 做 $N$ 點 FFT。Nyquist($N$) 保證折疊與 PR 相容：對 $k$ 求和（FBS）或對 frame 位置求和（OLA）都能精確還原 $x[n]$。$L$ 倍時域混疊不是損失 — 而是「長視窗編碼進短 FFT」的方式。</p>
+
+  <h2 lang="en">Practical trade-off</h2>
+  <h2 lang="zh">實務取捨</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>+</b> Side-lobes decouple from FFT size — use a 1024-pt FFT with a length-4096 Kaiser at $\beta=10$ for $-74$ dB leakage.<br>
+        <b>+</b> Frequency resolution improves: main-lobe width scales as $1/M$, not $1/N$.<br>
+        <b>−</b> Extra memory to hold the longer window and its past $L$ frames.<br>
+        <b>−</b> Analysis buffering introduces $M/2$ extra latency, not $N/2$. Real-time systems must budget for this.
+      </span>
+      <span lang="zh">
+        <b>+</b> 旁波瓣與 FFT 大小解耦 — 1024 點 FFT 可配長度 4096 的 $\beta=10$ Kaiser，洩漏壓到 $-74$ dB。<br>
+        <b>+</b> 頻率解析度提升：主波瓣寬度 $1/M$、不是 $1/N$。<br>
+        <b>−</b> 要多存長視窗與過去 $L$ 份 frame。<br>
+        <b>−</b> 分析緩衝造成 $M/2$ 延遲（非 $N/2$）。即時系統需預留此預算。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Portnoff = long window, short FFT, still PR.</b> The Nyquist($N$) condition is what makes time-aliasing <em>benign</em>: the fold that would normally destroy the signal instead encodes it losslessly. This is the mathematical trick underneath every modern phase-vocoder / SMS analysis stage.</p>
+    <p lang="zh"><b>Portnoff = 長視窗 + 短 FFT，仍 PR。</b>Nyquist($N$) 讓時域混疊<em>變無害</em>：原本會毀掉訊號的折疊，改為無損編碼。這就是現代相位聲碼器 / SMS 分析階段背後的數學技巧。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.6.2-nyquist-unit.html">◀ 10.6.2</a>
+    <a class="warp-pipe">10-7</a>
+    <a class="nes-btn nes-btn--primary" href="10.8-downsampled.html">NEXT ▶ 10.8</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

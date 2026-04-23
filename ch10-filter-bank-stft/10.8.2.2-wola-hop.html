@@ -1,13 +1,96 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.8.2.2 WOLA Hop Sizes · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-8-2-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-8-2-2 · Hop Sizes for WOLA</span><span lang="zh">關卡 10-8-2-2 · WOLA 跳距</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Hop_Sizes_WOLA.html" target="_blank">SASP §10.8.2.2 ↗</a></small></h1>
-  <div class="nes-box" data-label="PICK R BY WINDOW">
-    <p lang="en">Hop $R$ must divide $N$ and be smaller than $N/K$, where $K$ is the window's "number of non-trivial main-lobe widths per period." Rectangular: $R\le N$. Hann: $R\le N/2$. Blackman: $R\le N/3$. Kaiser $\beta=14$: $R\le N/4$.</p>
-    <p lang="zh">跳距 $R$ 須整除 $N$ 且 $R<N/K$，$K$ 為視窗「每週期非平凡主瓣寬度個數」。矩形：$R\le N$。Hann：$R\le N/2$。Blackman：$R\le N/3$。Kaiser $\beta=14$：$R\le N/4$。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.8.2.2 Hop Sizes for WOLA · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-8-2-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.8.2.1-window-anti-aliasing.html">◀ 10.8.2.1</a><a class="warp-pipe">10-8-2-2</a><a class="nes-btn nes-btn--primary" href="10.8.3-cola-cases.html">NEXT ▶ 10.8.3</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-8-2-2 · Hop Sizes for WOLA</span>
+    <span lang="zh">關卡 10-8-2-2 · WOLA 的跳距選擇</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Hop_Sizes_WOLA.html" target="_blank">SASP §10.8.2.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">WOLA (weighted overlap-add) uses both an analysis <em>and</em> a synthesis window. The PR condition (§10.8.1) is now on the <em>product</em> $w \cdot w_s$. Work out hop sizes $R$ for common analysis/synthesis pairs — this is what lets modern codecs use $\sqrt{\text{Hann}}$ + $\sqrt{\text{Hann}}$ = Hann at $R=N/2$.</p>
+    <p lang="zh">WOLA（加權重疊相加）同時用分析<em>與</em>合成視窗。§10.8.1 的 PR 條件現在作用在<em>乘積</em> $w \cdot w_s$。本節推導常見分析/合成視窗對的跳距 $R$ — 這就是現代編解碼採用 $\sqrt{\text{Hann}}$ + $\sqrt{\text{Hann}}$ = Hann 在 $R=N/2$ 的理由。</p>
+  </div>
+
+  <h2 lang="en">WOLA PR condition, restated</h2>
+  <h2 lang="zh">重申 WOLA PR 條件</h2>
+
+  <div class="formula">
+    <span class="label">PRODUCT-COLA</span>
+    <div>$$\sum_m w[n - mR]\,w_s[n - mR]\;=\;A\quad\text{(const in }n\text{)}$$</div>
+  </div>
+
+  <p lang="en">$w$ and $w_s$ can be different shapes. PR only demands their product be COLA at hop $R$. Common patterns:</p>
+  <p lang="zh">$w$ 與 $w_s$ 形狀可不同。PR 只要求兩者乘積在跳距 $R$ 下為 COLA。常見組合：</p>
+
+  <h2 lang="en">Four practical WOLA patterns</h2>
+  <h2 lang="zh">四種實用 WOLA 配法</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>1. OLA:</b> $w_s = 1$. Product = $w$. Need COLA-on-$w$. Pure analysis windowing — synthesis is free.<br>
+        <b>2. Same window:</b> $w_s = w$. Product = $w^2$. Need COLA-on-$w^2$. For Hann, $w^2$ has the same period as $w$ ⇒ $R=M/2$ works.<br>
+        <b>3. Square-root:</b> $w = w_s = \sqrt{v}$ for some target COLA window $v$. Product = $v$ which is COLA by design. MP3/AAC/Vorbis use $\sqrt{\sin}$ windows this way.<br>
+        <b>4. Asymmetric (dual):</b> $w_s[n] = c/\sum_m w[n-mR]$ — the canonical "dual" window. Always gives PR regardless of $w$. Useful when $w$ is fixed (e.g. by analysis requirements) and synthesis must follow.
+      </span>
+      <span lang="zh">
+        <b>1. OLA：</b>$w_s = 1$。乘積 $= w$。需 $w$ 滿足 COLA。純分析加窗，合成不受限。<br>
+        <b>2. 同視窗：</b>$w_s = w$。乘積 $= w^2$。需 $w^2$ 滿足 COLA。以 Hann 為例，$w^2$ 與 $w$ 同週期 ⇒ $R=M/2$ 可用。<br>
+        <b>3. 開根號：</b>$w = w_s = \sqrt{v}$，$v$ 為目標 COLA 視窗。乘積 $= v$ 天然 COLA。MP3/AAC/Vorbis 以 $\sqrt{\sin}$ 視窗實作。<br>
+        <b>4. 非對稱（對偶）：</b>$w_s[n] = c/\sum_m w[n-mR]$ — 標準「對偶」視窗。任意 $w$ 都能 PR。適合 $w$ 已被分析端釘死、合成只能配合的場合。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Latency and real-time implications</h2>
+  <h2 lang="zh">延遲與即時應用的影響</h2>
+
+  <p lang="en">In real-time systems, the WOLA pipeline adds $M - R$ samples of output buffer delay (you need the next $M-R$ samples of overlap before you can release the first frame's contribution). Smaller hop $R$ → more overlap → more latency. Choose the largest $R$ that still anti-aliases within your noise budget.</p>
+  <p lang="zh">即時系統中，WOLA 流水線增加 $M - R$ 樣本的輸出緩衝延遲（必須等到下 $M-R$ 個重疊樣本到齊才能釋放首 frame 的貢獻）。$R$ 越小 → 重疊越多 → 延遲越多。選能在噪音預算內抗混疊的最大 $R$。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Product-COLA gives you two degrees of freedom.</b> Analysis window controls what you see; synthesis window controls what you render. Their product controls reconstruction. Design around this triangle.</p>
+    <p lang="zh"><b>Product-COLA 提供兩個自由度。</b>分析視窗決定「你看到什麼」；合成視窗決定「你輸出什麼」。兩者乘積決定「能否還原」。圍繞這個三角形做設計。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.8.2.1-window-anti-aliasing.html">◀ 10.8.2.1</a>
+    <a class="warp-pipe">10-8-2-2</a>
+    <a class="nes-btn nes-btn--primary" href="10.8.3-cola-cases.html">NEXT ▶ 10.8.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

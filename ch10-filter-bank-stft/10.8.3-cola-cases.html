@@ -1,13 +1,98 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.8.3 COLA Cases · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-8-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-8-3 · Constant-Overlap-Add Cases</span><span lang="zh">關卡 10-8-3 · COLA 案例</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Constant_Overlap_Add_COLA_Cases.html" target="_blank">SASP §10.8.3 ↗</a></small></h1>
-  <div class="nes-box" data-label="THREE WORKED EXAMPLES">
-    <p lang="en">Next three pages walk through Hamming OLA, periodic-Hamming OLA justified by the Poisson summation formula, and Kaiser OLA — the window + hop combos most often seen in STFT practice.</p>
-    <p lang="zh">接下來三頁介紹 Hamming OLA、由 Poisson 求和公式證明的週期 Hamming OLA、Kaiser OLA — 實務 STFT 最常見的組合。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.8.3 COLA Cases · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-8-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.8.2.2-wola-hop.html">◀ 10.8.2.2</a><a class="warp-pipe">10-8-3</a><a class="nes-btn nes-btn--primary" href="10.8.3.1-hamming-ola.html">NEXT ▶ 10.8.3.1</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-8-3 · Constant-Overlap-Add (COLA) Cases</span>
+    <span lang="zh">關卡 10-8-3 · COLA 案例</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Constant_Overlap_Add_COLA_Cases.html" target="_blank">SASP §10.8.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Three concrete worked examples — Hamming, periodic-Hamming via Poisson summation, and Kaiser — showing how to verify COLA at hop $R$ by hand. Pick the one matching your needs from §§10.8.3.1–10.8.3.3.</p>
+    <p lang="zh">三個具體範例 — Hamming、以 Poisson 求和導出的週期 Hamming、Kaiser — 展示如何手算驗證跳距 $R$ 的 COLA。§10.8.3.1–10.8.3.3 三小節各走一種。</p>
+  </div>
+
+  <h2 lang="en">The three cases at a glance</h2>
+  <h2 lang="zh">三個案例概覽</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>§10.8.3.1 Hamming OLA.</b> Directly sum $\sum_m \text{Hamming}[n - mR]$ at $R=M/2$; show the result is $0.54 M/2$ plus a $\sim 1\%$ ripple. Quantify the ripple and discuss when it's audible.<br>
+        <b>§10.8.3.2 Periodic-Hamming OLA from PSF.</b> Use Poisson summation to convert the time-domain sum into a frequency-domain sampling check: only the DC Fourier coefficient is non-zero for the periodic Hamming. Cleanest proof in the book.<br>
+        <b>§10.8.3.3 Kaiser OLA.</b> Kaiser's COLA is approximate; compute the ripple as a function of $\beta$ and $R/M$ and pick a hop that keeps it below your tolerance.
+      </span>
+      <span lang="zh">
+        <b>§10.8.3.1 Hamming OLA。</b>直接求 $\sum_m \text{Hamming}[n - mR]$，取 $R=M/2$；結果為 $0.54 M/2$ 加 $\sim 1\%$ 漣波。量化漣波並討論何時可聽。<br>
+        <b>§10.8.3.2 由 PSF 導出週期 Hamming OLA。</b>用 Poisson 求和把時域總和轉為頻域取樣檢查：週期 Hamming 只有直流 Fourier 係數非零。本書最乾淨的證明。<br>
+        <b>§10.8.3.3 Kaiser OLA。</b>Kaiser 的 COLA 為近似；以 $\beta$ 與 $R/M$ 計算漣波，挑選能低於容忍度的跳距。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Why three cases, not one?</h2>
+  <h2 lang="zh">為何要講三個而非一個？</h2>
+
+  <p lang="en">Each case illustrates a different proof technique that generalises beyond the specific window:</p>
+  <p lang="zh">每個案例示範一種可推廣的證明技巧：</p>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>Direct sum (Hamming):</b> works for any <em>finite-support</em> window where $R$ divides $M$ — brute algebra, no cleverness. Use when you have a specific window and want to quantify the residual ripple.<br>
+        <b>PSF (Periodic Hamming):</b> works for any <em>periodic</em> window. Converts time-domain sum → frequency-domain samples. Most theoretical.<br>
+        <b>Kaiser (approximate):</b> demonstrates how to handle windows where strict COLA is impossible but ripple is acceptably small — the template for "engineering COLA" in modern codecs.
+      </span>
+      <span lang="zh">
+        <b>直接求和（Hamming）：</b>適用於任何<em>有限支撐</em>視窗且 $R$ 整除 $M$ — 純代數暴力，無巧勁。用於特定視窗要量化殘漣波時。<br>
+        <b>PSF（週期 Hamming）：</b>適用於任何<em>週期</em>視窗。把時域總和轉為頻域取樣。最具理論深度。<br>
+        <b>Kaiser（近似）：</b>展示嚴格 COLA 不可行、但漣波可接受的情境 — 現代編解碼「工程版 COLA」的模板。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>COLA is rarely exact, almost always good enough.</b> Read §10.8.3.1 for bare-hands work, §10.8.3.2 for the elegant PSF framing, §10.8.3.3 for engineering trade-offs. All three return the same conclusion: at $R=M/2$, Hamming / Kaiser / Blackman-Harris give ripple well below audible.</p>
+    <p lang="zh"><b>COLA 很少嚴格成立，幾乎總是「夠好」。</b>§10.8.3.1 看暴力算；§10.8.3.2 看優雅 PSF；§10.8.3.3 看工程取捨。三者殊途同歸：$R=M/2$ 下 Hamming / Kaiser / Blackman-Harris 的漣波遠低於可聽閾值。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.8.2.2-wola-hop.html">◀ 10.8.2.2</a>
+    <a class="warp-pipe">10-8-3</a>
+    <a class="nes-btn nes-btn--primary" href="10.8.3.1-hamming-ola.html">NEXT ▶ 10.8.3.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

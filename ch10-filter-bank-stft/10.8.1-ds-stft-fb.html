@@ -1,13 +1,107 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.8.1 Downsampled STFT FB · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-8-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-8-1 · Downsampled STFT FB</span><span lang="zh">關卡 10-8-1 · 降取樣 STFT FB</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Downsampled_STFT_Filter_Bank.html" target="_blank">SASP §10.8.1 ↗</a></small></h1>
-  <div class="nes-box" data-label="CHANNEL DECIMATION">
-    <p lang="en">Each channel is a bandpass filter whose output is decimated by $R$. The combination is mathematically identical to hop-$R$ OLA STFT — same bits, different arrangement.</p>
-    <p lang="zh">每個通道是帶通濾波器，輸出以 $R$ 降取樣。整體在數學上就是跳距 $R$ 的 OLA STFT — 相同資料、不同排法。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.8.1 Downsampled STFT Filter Bank · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-8-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.8-downsampled.html">◀ 10.8</a><a class="warp-pipe">10-8-1</a><a class="nes-btn nes-btn--primary" href="10.8.1.1-fb-recon.html">NEXT ▶ 10.8.1.1</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-8-1 · Downsampled STFT Filter Bank (formal)</span>
+    <span lang="zh">關卡 10-8-1 · 降取樣 STFT 濾波器組（正式定義）</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Downsampled_STFT_Filter_Bank.html" target="_blank">SASP §10.8.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Write out the analysis and synthesis equations for the hop-$R$ STFT FB, nail the indexing conventions, and state the perfect-reconstruction condition in one box. This is the form you'll see in any modern codec spec (Vorbis, Opus, AAC).</p>
+    <p lang="zh">把跳距 $R$ STFT FB 的分析與合成公式寫出來、固定索引慣例，並把完美重建條件濃縮成一個方框。所有現代編解碼規格（Vorbis、Opus、AAC）都採這個形式。</p>
+  </div>
+
+  <h2 lang="en">Analysis at hop $R$</h2>
+  <h2 lang="zh">跳距 $R$ 的分析</h2>
+
+  <div class="formula">
+    <span class="label">STFT (DOWNSAMPLED)</span>
+    <div>$$X_m[k]\;=\;\sum_{n=0}^{M-1} w[n]\,x[n + mR]\,e^{-j 2\pi k n/N}$$</div>
+  </div>
+
+  <p lang="en">$m$ is frame index, $R$ is hop (samples between frames), $M$ is window length, $N$ is DFT length (usually $\ge M$; if Portnoff, $N < M$). Output is a 2-D tensor $\{X_m[k]\}$ with time axis indexed by $m$ (rate $1/R$) and frequency axis indexed by $k$.</p>
+  <p lang="zh">$m$ 為 frame 索引，$R$ 跳距（frame 間樣本數），$M$ 視窗長度，$N$ DFT 長度（通常 $\ge M$；若 Portnoff 則 $N < M$）。輸出為二維張量 $\{X_m[k]\}$，時間軸以 $m$（速率 $1/R$）、頻率軸以 $k$ 索引。</p>
+
+  <h2 lang="en">Synthesis (WOLA / FBS)</h2>
+  <h2 lang="zh">合成（WOLA / FBS）</h2>
+
+  <div class="formula">
+    <span class="label">WOLA INVERSE</span>
+    <div>$$\hat x[n]\;=\;\frac{1}{A}\sum_m w_s[n - mR]\,\cdot\,\underbrace{\frac{1}{N}\sum_{k=0}^{N-1} X_m[k]\,e^{j 2\pi k (n-mR)/N}}_{\text{IDFT of frame } m}$$</div>
+  </div>
+
+  <p lang="en">$w_s$ is the <em>synthesis</em> window (possibly equal to the analysis window $w$); $A$ is a normalisation constant. Read this as: for each frame, take the IDFT to get a time-domain snippet, multiply by $w_s$, overlap-add into the output. "WOLA" = <em>weighted overlap-add</em>.</p>
+  <p lang="zh">$w_s$ 為<em>合成</em>視窗（可能等於分析視窗 $w$）；$A$ 為歸一常數。讀法：每 frame 取 IDFT 得時域小段、乘 $w_s$、疊加至輸出。"WOLA" = <em>加權重疊相加</em>。</p>
+
+  <h2 lang="en">PR condition in one box</h2>
+  <h2 lang="zh">完美重建條件一方框</h2>
+
+  <div class="formula">
+    <span class="label">PR AT HOP R (ANY WINDOWS w, w_s)</span>
+    <div>$$\sum_m w_s[n - mR]\,w[n - mR]\;=\;A\quad\text{(const in }n\text{)}$$</div>
+  </div>
+
+  <p lang="en">This is the "COLA-on-product" condition. Special cases:</p>
+  <p lang="zh">即「COLA 作用於乘積」條件。特例：</p>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.8; text-align:left;">
+      <span lang="en">
+        <b>OLA (FBS-free):</b> $w_s = 1$, so condition reduces to COLA-on-$w$.<br>
+        <b>WOLA with same window:</b> $w_s = w$, condition becomes COLA-on-$w^2$ (square!). E.g. $\sqrt{\text{Hann}}$ on both sides is the classic "ola" in <code>scipy.signal.stft</code>.<br>
+        <b>Biorthogonal:</b> pick $w_s$ as the dual of $w$ under COLA — always exists, always gives PR. Useful when $w$ is prescribed and you need to find the matching $w_s$.
+      </span>
+      <span lang="zh">
+        <b>OLA（無 FBS）：</b>$w_s = 1$，化為 $w$ 上的 COLA。<br>
+        <b>同視窗 WOLA：</b>$w_s = w$，變成 $w^2$ 上的 COLA（平方！）。例如 <code>scipy.signal.stft</code> 預設兩側都是 $\sqrt{\text{Hann}}$。<br>
+        <b>雙正交：</b>把 $w_s$ 選作 $w$ 在 COLA 下的對偶 — 永遠存在、永遠 PR。用於 $w$ 已給定、要找對應 $w_s$ 的場合。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Analysis / synthesis windows can be different.</b> PR only needs their <em>product</em> to satisfy COLA at hop $R$. This 2-window freedom is what lets modern codecs (MDCT, Vorbis, Opus) use different windows on the two sides and trade analysis bandwidth for synthesis time-resolution.</p>
+    <p lang="zh"><b>分析與合成視窗可以不同。</b>PR 只要兩者<em>乘積</em>在跳距 $R$ 下滿足 COLA 即可。現代編解碼（MDCT、Vorbis、Opus）靠這個兩視窗自由度換取「分析頻寬」與「合成時間解析度」。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.8-downsampled.html">◀ 10.8</a>
+    <a class="warp-pipe">10-8-1</a>
+    <a class="nes-btn nes-btn--primary" href="10.8.1.1-fb-recon.html">NEXT ▶ 10.8.1.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

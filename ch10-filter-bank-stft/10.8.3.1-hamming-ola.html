@@ -1,13 +1,103 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.8.3.1 Hamming OLA · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-8-3-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-8-3-1 · Hamming Overlap-Add Example</span><span lang="zh">關卡 10-8-3-1 · Hamming OLA 範例</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Hamming_Overlap_Add_Example.html" target="_blank">SASP §10.8.3.1 ↗</a></small></h1>
-  <div class="nes-box" data-label="COLA NEAR 1.08">
-    <p lang="en">Standard Hamming at 50% overlap sums to $\approx 1.08$ (a small constant offset). Divide by that constant and perfect reconstruction is exact.</p>
-    <p lang="zh">標準 Hamming 50% 重疊的和約為 $1.08$（小常數偏移）。除以此常數即得精確重建。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.8.3.1 Hamming OLA Example · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-8-3-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.8.3-cola-cases.html">◀ 10.8.3</a><a class="warp-pipe">10-8-3-1</a><a class="nes-btn nes-btn--primary" href="10.8.3.2-periodic-hamming.html">NEXT ▶ 10.8.3.2</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-8-3-1 · Hamming OLA Example</span>
+    <span lang="zh">關卡 10-8-3-1 · Hamming OLA 範例</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Hamming_Overlap_Add_Example.html" target="_blank">SASP §10.8.3.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Compute $\sum_m w_{\text{Hamming}}[n - mR]$ by direct algebra at $R = M/2$, quantify the residual ripple, and show why practitioners still call this "COLA" despite it not being exact.</p>
+    <p lang="zh">直接代數計算 $\sum_m w_{\text{Hamming}}[n - mR]$（取 $R = M/2$），量化殘漣波，並說明為何實務仍稱之為「COLA」即使它非嚴格成立。</p>
+  </div>
+
+  <h2 lang="en">Hamming window</h2>
+  <h2 lang="zh">Hamming 視窗</h2>
+
+  <div class="formula">
+    <div>$$w_{\text{Hamming}}[n]\;=\;0.54\,-\,0.46\cos\!\left(\tfrac{2\pi n}{M}\right),\quad 0\le n < M$$</div>
+  </div>
+
+  <p lang="en">Split into DC and cosine parts:</p>
+  <p lang="zh">拆成直流與餘弦部分：</p>
+
+  <div class="formula">
+    <div>$$w_{\text{Hamming}}[n]\;=\;0.54\,\mathrm{rect}_M[n]\,-\,0.46\,\mathrm{rect}_M[n]\cos\!\left(\tfrac{2\pi n}{M}\right)$$</div>
+  </div>
+
+  <h2 lang="en">OLA at $R = M/2$</h2>
+  <h2 lang="zh">$R = M/2$ 的 OLA</h2>
+
+  <p lang="en">The $0.54\,\mathrm{rect}_M$ part at $R=M/2$ is rectangular overlap-add — $0.54 \cdot 2 = 1.08$ everywhere after two adjacent windows add. The cosine part has period $M$, and at hop $M/2$ adjacent frames' cosines are offset by $\pi$ — so they destructively interfere. After adding:</p>
+  <p lang="zh">$0.54\,\mathrm{rect}_M$ 在 $R=M/2$ 時為矩形 OLA — 兩相鄰視窗相加後每點 $0.54 \cdot 2 = 1.08$。餘弦部分週期 $M$；跳距 $M/2$ 時相鄰 frame 餘弦差 $\pi$，干涉後相消。加總：</p>
+
+  <div class="formula">
+    <span class="label">SUM at R = M/2</span>
+    <div>$$\sum_m w_{\text{Hamming}}[n - mR]\;=\;1.08\,-\,0.92\cos\!\left(\tfrac{2\pi n}{M}\right)\cdot\underbrace{\delta_{\text{sum}}}_{\to 0\text{ ideally}}$$</div>
+  </div>
+
+  <p lang="en">Ideal cancellation gives constant $1.08$. Due to Hamming's non-zero endpoints ($0.08$ each), the cosine sum doesn't cancel perfectly at the join. Numerically the residual ripple is:</p>
+  <p lang="zh">理想相消給定值 $1.08$。由於 Hamming 端點非零（各為 $0.08$），餘弦求和在接合處不完全相消。數值殘漣波為：</p>
+
+  <div class="formula">
+    <div>$$\text{ripple}\;\approx\;\pm\,0.01\,\text{around }1.08\;\approx\;-40\text{ dB peak-to-peak}$$</div>
+  </div>
+
+  <h2 lang="en">Is $-40$ dB audible?</h2>
+  <h2 lang="zh">$-40$ dB 可聽嗎？</h2>
+
+  <p lang="en">Not for music content. A $-40$ dB modulation at the hop rate (which is $f_s/R$ Hz, i.e. ~87 Hz for $f_s=44.1$ kHz and $R=512$) would manifest as a faint AM-like artefact — masked by any audio with content louder than the noise floor by $40$+ dB, which covers essentially all musical material.</p>
+  <p lang="zh">對音樂內容不會。$-40$ dB 的「跳距速率」調變（$f_s/R$ Hz，如 $f_s=44.1$ kHz、$R=512$ 時約 87 Hz）會以隱約 AM 噪音形式出現，但任何比雜訊底高 $40$ dB 以上的音訊都會把它遮蔽掉，幾乎所有音樂都是。</p>
+
+  <h2 lang="en">Fix: periodic Hamming</h2>
+  <h2 lang="zh">修正：週期 Hamming</h2>
+
+  <p lang="en">Extend Hamming to periodic by dividing by $M$ instead of $M-1$ in the cosine argument: $w[n] = 0.54 - 0.46\cos(2\pi n/M)$ with endpoints exactly aligned. Then the cosine parts cancel exactly at $R=M/2$ and COLA holds with no ripple. This is the topic of §10.8.3.2.</p>
+  <p lang="zh">修正：將 Hamming 改為週期版，餘弦中除以 $M$ 而非 $M-1$：$w[n] = 0.54 - 0.46\cos(2\pi n/M)$，端點恰齊。此時 $R=M/2$ 下餘弦部分嚴格相消，COLA 零漣波。§10.8.3.2 會詳述。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Standard Hamming is "COLA to within $1\%$".</b> Good enough for audio; use periodic Hamming if you need mathematical exactness (e.g. for a round-trip test at machine epsilon).</p>
+    <p lang="zh"><b>標準 Hamming 是「$1\%$ 精度的 COLA」。</b>對音訊夠用；需要數學嚴格（如機器 epsilon 的往返測試）請改用週期 Hamming。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.8.3-cola-cases.html">◀ 10.8.3</a>
+    <a class="warp-pipe">10-8-3-1</a>
+    <a class="nes-btn nes-btn--primary" href="10.8.3.2-periodic-hamming.html">NEXT ▶ 10.8.3.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

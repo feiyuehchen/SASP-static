@@ -1,13 +1,98 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.8.2 DS Anti-Aliasing · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-8-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-8-2 · Downsampling with Anti-Aliasing</span><span lang="zh">關卡 10-8-2 · 抗混疊的降取樣</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Downsampling_Anti_Aliasing.html" target="_blank">SASP §10.8.2 ↗</a></small></h1>
-  <div class="nes-box" data-label="CHANNEL BW ≤ 2π/R">
-    <p lang="en">For alias-free decimation by $R$, each channel's bandpass must be narrower than $2\pi/R$. Longer / more-tapered windows give narrower channels but fatter main lobes.</p>
-    <p lang="zh">要 $R$ 倍降取樣無混疊，每通道帶通需窄於 $2\pi/R$。更長、更收斂的視窗 → 通道更窄，但主瓣更寬。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.8.2 Downsampling with Anti-Aliasing · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-8-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.8.1.1-fb-recon.html">◀ 10.8.1.1</a><a class="warp-pipe">10-8-2</a><a class="nes-btn nes-btn--primary" href="10.8.2.1-window-anti-aliasing.html">NEXT ▶ 10.8.2.1</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-8-2 · Downsampling with Anti-Aliasing</span>
+    <span lang="zh">關卡 10-8-2 · 抗混疊的降取樣</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Downsampling_Anti_Aliasing.html" target="_blank">SASP §10.8.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Make the per-channel aliasing harmless by ensuring each channel's bandwidth is $\le 2\pi/R$. In the STFT FB this is a <em>window shape</em> requirement: the main-lobe width must not exceed $2\pi/R$. Practical windows for each hop are listed below.</p>
+    <p lang="zh">讓每通道混疊無害的做法：保證每通道頻寬 $\le 2\pi/R$。在 STFT FB 中這是<em>視窗形狀</em>的要求：主波瓣寬不得超過 $2\pi/R$。以下列出各跳距對應的實用視窗。</p>
+  </div>
+
+  <h2 lang="en">The requirement</h2>
+  <h2 lang="zh">要求</h2>
+
+  <div class="formula">
+    <span class="label">ANTI-ALIAS CONDITION</span>
+    <div>$$|W(\omega)|\;\le\;\epsilon\quad\text{for }|\omega|\;\ge\;\pi/R$$</div>
+  </div>
+
+  <p lang="en">$\epsilon$ is your tolerance — the alias energy budget. For audible leak below $-60$ dB take $\epsilon = 10^{-3}$. Equivalently, side-lobe level must drop below $-60$ dB within the first $\pi/R$ of frequency. Combined with the need for some main lobe, this dictates the window length.</p>
+  <p lang="zh">$\epsilon$ 是容忍度 — 混疊能量預算。若可聽閾值為 $-60$ dB，取 $\epsilon = 10^{-3}$。等價地，旁波瓣需在頻率 $\pi/R$ 內降至 $-60$ dB 以下。配合主波瓣需求，視窗長度就被決定。</p>
+
+  <h2 lang="en">Mapping hop $R$ to a reasonable window</h2>
+  <h2 lang="zh">跳距 $R$ 對應合理視窗的映射</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>$R = N$ (critically sampled):</b> Running-sum rectangle. Sidelobe $-13$ dB inside $\pi/R=\pi/N$ — <em>not</em> enough for audible work. Good only for low-rate control-signal FBs.<br>
+        <b>$R = N/2$ (50% overlap):</b> Hann or Hamming. Sidelobe $-32$ to $-43$ dB. The "default" for audio.<br>
+        <b>$R = N/3$:</b> Blackman, $-58$ dB — pro-quality.<br>
+        <b>$R = N/4$:</b> Blackman-Harris or Kaiser $\beta=8$, $-74$ to $-92$ dB — broadcast/forensic-grade.<br>
+        <b>$R \le N/8$:</b> Extreme over-sampling, for pitch shifting that needs fine phase tracking.
+      </span>
+      <span lang="zh">
+        <b>$R = N$（臨界取樣）：</b>矩形累計和。旁波瓣 $-13$ dB（$\pi/R=\pi/N$ 範圍內），<em>不夠</em>應付可聽需求；只適合低速率控制訊號 FB。<br>
+        <b>$R = N/2$（50% 重疊）：</b>Hann 或 Hamming。$-32$ 至 $-43$ dB。音訊「預設」。<br>
+        <b>$R = N/3$：</b>Blackman，$-58$ dB — 專業品質。<br>
+        <b>$R = N/4$：</b>Blackman-Harris 或 Kaiser $\beta=8$，$-74$ 至 $-92$ dB — 廣播/鑑識等級。<br>
+        <b>$R \le N/8$：</b>極度過取樣，適合需要精細相位追蹤的變調。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Why not just filter harder?</h2>
+  <h2 lang="zh">為何不「濾更猛」就好？</h2>
+
+  <p lang="en">A classical multirate decimator would put an anti-alias lowpass <em>before</em> the downsampler. In the STFT FB, the "anti-alias filter" is the analysis window itself — so making side-lobes lower means making the window longer (§10.7 Portnoff) or sharper-decaying (Blackman-Harris, Kaiser). There's no way to decouple the anti-alias job from the window; they are the same block.</p>
+  <p lang="zh">古典多速率抽取器會在降取樣前放抗混疊低通。STFT FB 中「抗混疊濾波器」就是分析視窗 — 想讓旁波瓣更低就得把視窗拉長（§10.7 Portnoff）或衰減更快（Blackman-Harris、Kaiser）。無法把抗混疊與視窗分開；它們是同一塊。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Choose window to match hop.</b> The hop sets the anti-alias margin; the window's side-lobes must cover that margin. Pairing a tight hop with a leaky window gives aliased artefacts you can actually hear.</p>
+    <p lang="zh"><b>選視窗要配合跳距。</b>跳距決定抗混疊預算；視窗旁波瓣必須蓋住這個預算。小跳距配漏視窗會產生真能聽到的混疊失真。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.8.1.1-fb-recon.html">◀ 10.8.1.1</a>
+    <a class="warp-pipe">10-8-2</a>
+    <a class="nes-btn nes-btn--primary" href="10.8.2.1-window-anti-aliasing.html">NEXT ▶ 10.8.2.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>
