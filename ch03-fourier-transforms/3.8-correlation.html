@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.8 Correlation Theorem · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-8</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-8 · Correlation Theorem</span>
+    <span lang="zh">關卡 3-8 · 相關定理</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Correlation_Theorem_DTFT.html" target="_blank">SASP §3.8 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THEOREM">
+        <p lang="en">Cross-correlation in time becomes one spectrum conjugated and multiplied by the other.</p>
+        <p lang="zh">時域的互相關 ↔ 一個頻譜共軛後乘上另一個頻譜。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">CROSS-CORRELATION</span>
+        <div>$$r_{xy}[k]\;=\;\sum_{n=-\infty}^{\infty} x[n]\,y[n+k]$$</div>
+        <span class="label">THEOREM</span>
+        <div>$$r_{xy}[k]\;\longleftrightarrow\;X^{*}(\omega)\,Y(\omega)$$</div>
+      </div>
+
+      <p lang="en">
+        Cross-correlation is like convolution but without flipping the
+        second signal. Its spectrum differs from the convolution spectrum
+        by one complex conjugate — at DC (and for real signals) the two
+        are often indistinguishable in magnitude. This is why correlation
+        is used as a
+        <span class="term" data-en="Matched filter"
+          data-en-def="The cross-correlator that maximizes SNR when detecting a known template in noise."
+          data-zh-def="在雜訊中偵測已知模板時能最大化 SNR 的交叉相關器。">matched filter</span>
+        for pattern-matching.
+      </p>
+      <p lang="zh">
+        互相關 = 不翻轉的卷積。它的頻譜和卷積頻譜只差一個複共軛 —
+        在 DC（或實訊號）上振幅往往看不出差別。這就是為什麼相關法常被拿來當
+        <span class="term" data-en="Matched filter"
+          data-en-def="The cross-correlator that maximizes SNR when detecting a known template in noise."
+          data-zh-def="在雜訊中偵測已知模板時能最大化 SNR 的交叉相關器。">匹配濾波器</span>，
+        用來偵測已知訊號模板。
+      </p>
+
+      <h2 lang="en">Sanity check — two special cases</h2>
+      <h2 lang="zh">健全性檢查 — 兩個特例</h2>
+
+      <ul>
+        <li lang="en">If $y=x$, $r_{xx}$ is autocorrelation (next page) and its DTFT is $|X(\omega)|^2$ — a non-negative real spectrum.</li>
+        <li lang="zh">若 $y=x$，$r_{xx}$ 是自相關（下一頁），DTFT 為 $|X(\omega)|^2$ — 處處非負的實頻譜。</li>
+        <li lang="en">If $y$ is an uncorrelated signal, $r_{xy}[k]$ stays close to zero for all lags; $|X^{*}Y|$ is close to zero on average.</li>
+        <li lang="zh">若 $y$ 與 $x$ 無相關，$r_{xy}[k]$ 對所有位移 $k$ 都接近 0；$|X^{*}Y|$ 平均也接近 0。</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Find a template in noisy audio</h3>
+        <h3 lang="zh">實驗 · 在雜訊中找目標片段</h3>
+        <canvas id="yCanvas" style="height:130px;"></canvas>
+        <canvas id="rCanvas" style="height:130px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>NOISE</label>
+          <input type="range" id="snrSlider" min="0" max="1" step="0.05" value="0.6"/>
+          <span class="val" id="snrVal">0.60</span>
+
+          <label>TEMPLATE AT</label>
+          <input type="range" id="tSlider" min="40" max="180" step="5" value="120"/>
+          <span class="val" id="tVal">120</span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--blue" data-label="READ-OUT">
+        <p lang="en">Top: a noisy signal with a hidden copy of the template at a chosen position. Bottom: $r_{xy}[k]$. The correlation has its highest peak exactly at the template's location — that is the matched filter in action.</p>
+        <p lang="zh">上圖：含雜訊的訊號，裡面某個位置藏著模板。下圖：$r_{xy}[k]$。相關函數的最高峰正好落在模板位置 — 這就是匹配濾波器。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> How does the matched filter's peak change if you double the template's length (signal stays the same)?</p>
+        <p lang="zh"><b>問：</b>模板長度變 2 倍（訊號不變），匹配濾波器的主峰會怎麼變？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Peak grows (more samples sum constructively), SNR improves.</button>
+          <button data-correct="1" lang="zh">主峰變高（更多樣本建設性相加），SNR 變好。</button>
+          <button data-correct="0" lang="en">Peak drops (more noise is averaged in).</button>
+          <button data-correct="0" lang="zh">主峰變低（雜訊被多平均進去）。</button>
+          <button data-correct="0" lang="en">Peak is unchanged.</button>
+          <button data-correct="0" lang="zh">主峰不變。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.7-convolution.html">◀ 3.7</a>
+    <a class="warp-pipe">3-8</a>
+    <a class="nes-btn nes-btn--primary" href="3.9-autocorrelation.html">NEXT ▶ 3.9</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 256, M = 24;  // signal length, template length
+  const state = { snr: 0.6, pos: 120 };
+
+  // template: a short damped sinusoid
+  function template() {
+    const t = new Float32Array(M);
+    for (let n = 0; n < M; n++) t[n] = Math.exp(-n/12) * Math.cos(2*Math.PI*0.17*n);
+    return t;
+  }
+
+  function buildSignal() {
+    const y = new Float32Array(N);
+    const t = template();
+    const p = state.pos;
+    for (let n = 0; n < N; n++) y[n] = state.snr * (2*Math.random() - 1);
+    for (let n = 0; n < M && p + n < N; n++) y[p + n] += t[n];
+    return y;
+  }
+
+  function xcorr(y, t) {
+    const out = new Float32Array(N - M);
+    for (let k = 0; k < out.length; k++) {
+      let s = 0;
+      for (let n = 0; n < M; n++) s += y[k + n] * t[n];
+      out[k] = s;
+    }
+    return out;
+  }
+
+  function redraw() {
+    const y = buildSignal(), t = template();
+    const r = xcorr(y, t);
+    Viz.line($('yCanvas'), y, { xLabel:'n', yLabel:'y[n]', title:'NOISY SIGNAL', yMin:-1.3, yMax:1.8 });
+    Viz.line($('rCanvas'), r, { xLabel:'k (lag)', yLabel:'r_xy[k]', title:'CROSS-CORRELATION', color:'#F83800' });
+  }
+
+  $('snrSlider').addEventListener('input', () => { state.snr = parseFloat($('snrSlider').value); $('snrVal').textContent = state.snr.toFixed(2); redraw(); });
+  $('tSlider').addEventListener('input',   () => { state.pos = parseInt($('tSlider').value,10); $('tVal').textContent = state.pos; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Signal sums coherently (scales as M), noise adds incoherently (√M) → SNR grows as √M.</span><span lang="zh">🪙 金幣 +1！訊號相關地相加（隨 M 線性成長），雜訊不相關地加（隨 √M 成長），所以 SNR 成長 √M。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ The matched filter gains SNR as the square root of template length.</span><span lang="zh">✗ 匹配濾波器的 SNR 會隨模板長度的平方根成長。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

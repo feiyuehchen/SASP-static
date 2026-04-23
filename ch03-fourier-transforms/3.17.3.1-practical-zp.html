@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17.3.1 Practical Zero Padding · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17-3-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17-3-1 · Practical Zero Padding</span>
+    <span lang="zh">關卡 3-17-3-1 · 實務補零</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Practical_Zero_Padding.html" target="_blank">SASP §3.17.3.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="POINTS TO WATCH">
+    <p lang="en">Zero padding is routine — a few tiny pitfalls to keep in mind.</p>
+    <p lang="zh">補零很日常，但有幾個小陷阱要避開。</p>
+  </div>
+
+  <ul>
+    <li lang="en"><b>Pad <em>after</em> windowing</b>, not before. Windowing a zero-padded signal can taper the zeros, which ruins the spectrum.</li>
+    <li lang="zh"><b>先加視窗，再補零</b>，不能反過來。先補零再加窗會把補上的零也弄成斜坡，毀掉頻譜。</li>
+
+    <li lang="en"><b>Match the zero sample values to the DC assumption</b>. If your signal has a non-zero DC component, padding with zeros introduces an edge. Subtract the mean first if you care.</li>
+    <li lang="zh"><b>補零值要與 DC 假設一致</b>。訊號有非零平均值時補零會產生邊緣。在意的話就先扣平均。</li>
+
+    <li lang="en"><b>Amplitude scaling depends on convention</b>. Some libraries scale the FFT output by $1/M$, others by $1/\sqrt{M}$, others not at all. Padding does not change the scaling, but check what your tool does.</li>
+    <li lang="zh"><b>振幅縮放要看函式庫約定</b>。有的 FFT 輸出除以 $M$、有的除以 $\sqrt{M}$、有的不除。補零不改變縮放，但先查清楚你用的工具。</li>
+
+    <li lang="en"><b>Padding hides leakage, not eliminates it</b>. The leakage shape is set by your window, not by the FFT length.</li>
+    <li lang="zh"><b>補零只是把洩漏畫得清楚，不會消除洩漏</b>。洩漏形狀由視窗決定，與 FFT 長度無關。</li>
+  </ul>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> You take a length-512 Hann-windowed frame, zero-pad to 4096, then FFT. The Hann window's main-lobe width in the spectrum is:</p>
+    <p lang="zh"><b>問：</b>長度 512 的 Hann 加窗片段，補零到 4096 後 FFT。Hann 視窗在頻譜中的主瓣寬度是：</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Still set by $N=512$ (≈ $8\pi/512$ wide).</button>
+      <button data-correct="1" lang="zh">仍由 $N=512$ 決定（約 $8\pi/512$ 寬）。</button>
+      <button data-correct="0" lang="en">Now 8× narrower, because the FFT is 8× longer.</button>
+      <button data-correct="0" lang="zh">變窄 8 倍，因為 FFT 長 8 倍。</button>
+      <button data-correct="0" lang="en">Zero — padding removes leakage.</button>
+      <button data-correct="0" lang="zh">是零 — 補零消除洩漏。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17.3-zero-pad.html">◀ 3.17.3</a>
+    <a class="warp-pipe">3-17-3-1</a>
+    <a class="nes-btn nes-btn--primary" href="3.17.3.2-zp-pow2.html">NEXT ▶ 3.17.3.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Main-lobe width is a property of the window, not of the FFT length.</span><span lang="zh">🪙 金幣 +1！主瓣寬度是視窗的屬性，與 FFT 長度無關。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Padding changes sampling density, not the shape of the main lobe.</span><span lang="zh">✗ 補零只改變取樣密度，不改變主瓣形狀。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

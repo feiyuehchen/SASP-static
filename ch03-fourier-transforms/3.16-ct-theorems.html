@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.16 Continuous-Time Fourier Theorems · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-16</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-16 · Continuous-Time Fourier Theorems</span>
+    <span lang="zh">關卡 3-16 · 連續時間傅立葉定理</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Continuous_Time_Fourier_Theorems.html" target="_blank">SASP §3.16 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="BRIEFING">
+    <p lang="en">The continuous-time (CT) cousins of the theorems you just saw. Appendix B has the full catalogue; here we visit two that are most useful for understanding the discrete side: scaling and spectral roll-off.</p>
+    <p lang="zh">剛學完的定理的連續時間 (CT) 對應版。附錄 B 有完整列表；這裡先停靠兩站，對理解離散版最有幫助 — 縮放與頻譜滾降。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">CONTINUOUS-TIME FOURIER TRANSFORM</span>
+    <div>$$X(j\Omega)=\int_{-\infty}^{\infty}x(t)e^{-j\Omega t}\,dt$$</div>
+  </div>
+
+  <h2 lang="en">Two stops</h2>
+  <h2 lang="zh">兩站</h2>
+
+  <ul>
+    <li lang="en"><a href="3.16.1-scaling.html"><b>3.16.1 Scaling theorem</b></a>: $x(at)\leftrightarrow\tfrac{1}{|a|}X(j\Omega/a)$. Squeezing in time stretches in frequency (and vice versa).</li>
+    <li lang="zh"><a href="3.16.1-scaling.html"><b>3.16.1 縮放定理</b></a>：$x(at)\leftrightarrow\tfrac{1}{|a|}X(j\Omega/a)$。
+      時域壓窄 → 頻域拉開（反之亦然）。</li>
+    <li lang="en"><a href="3.16.2-rolloff.html"><b>3.16.2 Spectral roll-off</b></a>: the smoother a signal, the faster its spectrum decays. Discontinuities → $1/\Omega$ roll-off; kinks → $1/\Omega^2$; and so on.</li>
+    <li lang="zh"><a href="3.16.2-rolloff.html"><b>3.16.2 頻譜滾降</b></a>：訊號越平滑，頻譜衰減越快。不連續 → $1/\Omega$；折點 → $1/\Omega^2$；依此類推。</li>
+  </ul>
+
+  <div class="nes-box nes-box--purple" data-label="WHY HERE?">
+    <p lang="en">Audio sampling, anti-aliasing and resampling all live inside a continuous-time signal model that gets sampled. Mastering these two CT results is enough to interpret the rest of the discrete theory later.</p>
+    <p lang="zh">音訊的取樣、抗混疊、重新取樣其實都在一個連續時間模型中發生，再被取樣成離散。
+      只要先搞懂這兩條 CT 結果，之後的離散理論就很好理解。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.15-diff-dual.html">◀ 3.15</a>
+    <a class="warp-pipe">3-16</a>
+    <a class="nes-btn nes-btn--primary" href="3.16.1-scaling.html">NEXT ▶ 3.16.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

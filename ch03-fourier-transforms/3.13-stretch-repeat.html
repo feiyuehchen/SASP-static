@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.13 Stretch/Repeat (Scaling) Theorem · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-13</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-13 · Stretch / Repeat (Scaling) Theorem</span>
+    <span lang="zh">關卡 3-13 · 拉伸/重複 (縮放) 定理</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Stretch_Repeat_Scaling_Theorem.html" target="_blank">SASP §3.13 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="ONE LINE">
+    <p lang="en">Stretching in time = repeating in frequency. And vice versa.</p>
+    <p lang="zh">時域拉伸 = 頻域重複。反之亦然。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">SCALING THEOREM (DTFT)</span>
+    <div>$$\operatorname{Stretch}_L\{x\}[n]\;\longleftrightarrow\;\operatorname{Repeat}_L\{X\}(\omega)$$</div>
+  </div>
+
+  <p lang="en">
+    Combine the two previous pages: stretching by $L$ compresses the
+    spectrum by $L$, but because the spectrum is already $2\pi$-periodic,
+    the compressed version repeats $L$ times across the original period.
+    Writing the same fact in the "repeat" language gives the theorem
+    above.
+  </p>
+  <p lang="zh">
+    把前兩頁合起來：時域拉伸 $L$ 倍 → 頻譜被壓縮 $L$ 倍，但頻譜本就有 $2\pi$ 週期，
+    壓縮後自然在原本的週期內重複 $L$ 次。把這事實用「重複」的語言寫出來，就是上面的定理。
+  </p>
+
+  <div class="nes-box nes-box--yellow" data-label="PRACTICAL USE">
+    <p lang="en">This theorem is why digital upsampling by $L$ needs an anti-imaging low-pass filter after zero insertion — to kill the $L-1$ unwanted spectral copies.</p>
+    <p lang="zh">這條定理解釋了為什麼數位升取樣 $L$ 倍後要接一個抗鏡像低通濾波器 — 用來壓掉多出來的 $L-1$ 份頻譜。</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> You zero-insert between every sample of an audio file (stretch by 2). What is the cleanest way to finish upsampling to a 2× sample rate?</p>
+    <p lang="zh"><b>問：</b>你在某音訊的每個樣本間插入一個 0（拉伸 2 倍）。要真正升到 2× 取樣率、聲音最乾淨，該怎麼做？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Follow with a sharp low-pass at $\pi/2$ to kill the image.</button>
+      <button data-correct="1" lang="zh">接一個截止頻率在 $\pi/2$ 的銳利低通濾波器，把鏡像壓掉。</button>
+      <button data-correct="0" lang="en">Multiply the output by 2.</button>
+      <button data-correct="0" lang="zh">把輸出乘 2。</button>
+      <button data-correct="0" lang="en">Nothing — zero insertion already upsamples cleanly.</button>
+      <button data-correct="0" lang="zh">不用做任何事 — 插零就已經乾淨地升取樣了。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.12-repeat.html">◀ 3.12</a>
+    <a class="warp-pipe">3-13</a>
+    <a class="nes-btn nes-btn--primary" href="3.14-downsampling-aliasing.html">NEXT ▶ 3.14</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Zero insertion = stretch → image. The anti-imaging LP keeps only the baseband copy.</span><span lang="zh">🪙 金幣 +1！插零 = 拉伸 → 產生鏡像。抗鏡像 LP 只保留基頻那一份。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ The stretch theorem creates unwanted images; you have to remove them.</span><span lang="zh">✗ 拉伸定理會製造多餘的鏡像，要把它們拿掉。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

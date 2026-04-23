@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17.3.2 Zero-Pad to Next Power of 2 · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17-3-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17-3-2 · Zero-Pad to Next Power of 2</span>
+    <span lang="zh">關卡 3-17-3-2 · 補零至下個 2 的冪</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Zero_Padding_Next_Higher_Power.html" target="_blank">SASP §3.17.3.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="WHY THE NEXT POWER OF 2?</div>">
+    <p lang="en">Radix-2 FFTs run in $O(M\log M)$ only when $M$ is a power of 2. Picking the next power of 2 above $N$ is the cheapest way to get fast spectra.</p>
+    <p lang="zh">Radix-2 FFT 只有在 $M$ 是 2 的冪次時才達到 $O(M\log M)$。把 $M$ 取在 $N$ 之上、最接近的 2 次冪，就能最便宜地得到快速頻譜。</p>
+  </div>
+
+  <p lang="en">
+    Modern FFT libraries (FFTW, PocketFFT, cuFFT, etc.) handle
+    arbitrary composite sizes efficiently — for them, a power of 2 is not
+    mandatory, but powers of 2 (or "5-smooth" numbers) are usually still
+    the fastest. If you are writing your own radix-2 from scratch,
+    padding to a power of 2 is essentially required.
+  </p>
+  <p lang="zh">
+    現代 FFT 函式庫（FFTW、PocketFFT、cuFFT 等）對任意合數長度都很快 — 並不強制 2 的冪次，
+    但 2 次冪（或只有質因數 2、3、5 的數）通常還是最快。
+    若你自己實作 radix-2，補到 2 次冪幾乎是硬性要求。
+  </p>
+
+  <div class="formula">
+    <span class="label">PICK M</span>
+    <div>$$M\;=\;2^{\lceil\log_2 N\rceil}$$</div>
+  </div>
+
+  <p lang="en">
+    If you also want smoother spectral displays, use $M=2^{\lceil\log_2 N\rceil + k}$
+    with $k\in\{1,2,3\}$ for $2\times$, $4\times$, $8\times$ interpolation.
+  </p>
+  <p lang="zh">
+    如果想讓頻譜圖更平滑，取 $M=2^{\lceil\log_2 N\rceil + k}$，$k\in\{1,2,3\}$ 分別對應 $2\times$、$4\times$、$8\times$ 內插。
+  </p>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> A window of 1000 samples. Smallest power-of-2 FFT length?</p>
+    <p lang="zh"><b>問：</b>視窗長 1000 樣本。最小的 2 次冪 FFT 長度是？</p>
+    <div class="choices">
+      <button data-correct="0" lang="en">512</button>
+      <button data-correct="0" lang="zh">512</button>
+      <button data-correct="1" lang="en">1024</button>
+      <button data-correct="1" lang="zh">1024</button>
+      <button data-correct="0" lang="en">2000</button>
+      <button data-correct="0" lang="zh">2000</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17.3.1-practical-zp.html">◀ 3.17.3.1</a>
+    <a class="warp-pipe">3-17-3-2</a>
+    <a class="nes-btn nes-btn--primary" href="3.17.3.3-zp-display.html">NEXT ▶ 3.17.3.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! $2^{10}=1024$, the smallest power of 2 that holds 1000 samples.</span><span lang="zh">🪙 金幣 +1！$2^{10}=1024$，能裝下 1000 個樣本的最小 2 次冪。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ $2^{10}=1024$; 512 is too small, 2000 is not a power of 2.</span><span lang="zh">✗ $2^{10}=1024$；512 太小，2000 不是 2 次冪。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

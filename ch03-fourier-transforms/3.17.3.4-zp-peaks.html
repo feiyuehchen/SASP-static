@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17.3.4 Zero-Pad for Spectral Peaks · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17-3-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17-3-4 · ZP for Spectral Peaks</span>
+    <span lang="zh">關卡 3-17-3-4 · 以補零內插頻譜波峰</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Zero_Padding_Interpolating_Spectral_Peaks.html" target="_blank">SASP §3.17.3.4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="USE CASE">
+    <p lang="en">Zero-padding is the cheapest way to squeeze accurate peak locations out of a finite FFT. The ZP factor controls how close to the true peak frequency we can land.</p>
+    <p lang="zh">想從有限長 FFT 擠出精準的波峰位置，補零是最便宜的做法。補零倍率決定我們能逼近真實峰值頻率到什麼程度。</p>
+  </div>
+
+  <h2 lang="en">How accurate?</h2>
+  <h2 lang="zh">能多準？</h2>
+
+  <p lang="en">
+    If you stop at the peak bin of a ZP-by-$L$ FFT, your peak-frequency
+    accuracy is about $\pi / (LN)$ rad/sample (half a bin width). If you
+    further fit a parabola through the three samples around the peak
+    (the "quadratic interpolation" trick from Chapter 6), accuracy
+    improves to about $\pi/(LN\cdot Q)$ where $Q$ grows with
+    window quality — typically good enough that $L=4$ or $L=8$ is plenty.
+  </p>
+  <p lang="zh">
+    直接取 ZP-$L$ 後的 FFT 峰 bin，精度約為 $\pi/(LN)$ rad/sample（半個 bin 寬）。
+    再用「波峰附近三點拋物線內插」（第 6 章的 quadratic interpolation），
+    精度進一步變成 $\pi/(LN\cdot Q)$，其中 $Q$ 隨視窗品質提升 —
+    通常 $L=4$ 或 $L=8$ 就已經非常精準。
+  </p>
+
+  <div class="nes-box nes-box--blue" data-label="PIPELINE">
+    <p lang="en">1. Window. 2. Zero-pad to $L\cdot N$. 3. FFT. 4. Find bin of max magnitude. 5. Parabolic fit with the two neighbours. This is the standard pitch/partial tracker recipe used in spectral modeling synthesis.</p>
+    <p lang="zh">1. 加窗。2. 補零到 $L\cdot N$。3. FFT。4. 找振幅最大 bin。5. 與左右鄰居做拋物線擬合。
+      這就是頻譜建模合成（SMS）裡標準的基頻 / partial 追蹤管線。</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> You have a 2048-sample window. How much peak-frequency accuracy do you gain going from $L=1$ (no padding) to $L=4$?</p>
+    <p lang="zh"><b>問：</b>2048 樣本視窗。從 $L=1$（不補零）改用 $L=4$，峰頻精度大約能提升多少？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">About 4× (bin spacing shrinks by 4).</button>
+      <button data-correct="1" lang="zh">約 4 倍（bin 間距縮小 4 倍）。</button>
+      <button data-correct="0" lang="en">No change — ZP is just cosmetic.</button>
+      <button data-correct="0" lang="zh">沒變 — 補零只是裝飾。</button>
+      <button data-correct="0" lang="en">$4^2=16\times$.</button>
+      <button data-correct="0" lang="zh">$4^2=16$ 倍。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17.3.3-zp-display.html">◀ 3.17.3.3</a>
+    <a class="warp-pipe">3-17-3-4</a>
+    <a class="nes-btn nes-btn--primary" href="3.17.4-zero-phase-zp.html">NEXT ▶ 3.17.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Before interpolation, accuracy is bin spacing = $2\\pi/(L N)$. So L=4 gives 4× improvement.</span><span lang="zh">🪙 金幣 +1！不做內插時，精度 = bin 間距 = $2\\pi/(LN)$。L=4 提升 4 倍。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ More bins per unit frequency means more choices for a peak.</span><span lang="zh">✗ 每單位頻率有更多 bin，就能更接近真峰。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

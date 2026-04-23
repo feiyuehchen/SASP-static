@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17.4.1 fftshift · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17-4-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17-4-1 · Matlab/Octave fftshift</span>
+    <span lang="zh">關卡 3-17-4-1 · Matlab/Octave 的 fftshift</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Octave_fftshift_utility.html" target="_blank">SASP §3.17.4.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="WHAT IT DOES">
+    <p lang="en">Swaps the two halves of an array. Converts between "centred" and "causal" indexing for both signals and spectra.</p>
+    <p lang="zh">把一個陣列前後兩半對調。在「中心化」與「因果」索引之間切換 — 訊號、頻譜都通用。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">FOR EVEN LENGTH M</span>
+    <div>$$\texttt{fftshift}(x)\;=\;\bigl[\,x[M/2],\,x[M/2+1],\,\ldots,\,x[M-1],\,x[0],\,x[1],\,\ldots,\,x[M/2-1]\,\bigr]$$</div>
+  </div>
+
+  <h2 lang="en">Typical uses</h2>
+  <h2 lang="zh">常見用法</h2>
+
+  <ul>
+    <li lang="en"><b>Plot a DFT centred at 0:</b> <code>plot(omega, fftshift(abs(X)))</code> puts DC in the middle.</li>
+    <li lang="zh"><b>以 0 為中心畫 DFT：</b><code>plot(omega, fftshift(abs(X)))</code>，DC 放中間。</li>
+
+    <li lang="en"><b>Prepare a centered signal for zero-phase analysis:</b> <code>x_zp = fftshift( [centered_data; zeros(M-N,1)] )</code>.</li>
+    <li lang="zh"><b>為零相位分析準備中心化訊號：</b><code>x_zp = fftshift( [centered_data; zeros(M-N,1)] )</code>。</li>
+
+    <li lang="en"><code>ifftshift</code> is the inverse and equals <code>fftshift</code> for even $M$ but differs for odd $M$. Use whichever matches the direction you need.</li>
+    <li lang="zh"><code>ifftshift</code> 是反向操作，對偶數 $M$ 和 <code>fftshift</code> 一樣；奇數 $M$ 時不同。請挑對方向使用。</li>
+  </ul>
+
+  <div class="nes-box nes-box--purple" data-label="JS EQUIVALENT">
+    <p lang="en">In the browser: <code>const y = [...x.slice(M/2), ...x.slice(0, M/2)]</code>. That is all the utility really does.</p>
+    <p lang="zh">在瀏覽器裡：<code>const y = [...x.slice(M/2), ...x.slice(0, M/2)]</code>。其實就是這樣。</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> You have $M=8$ FFT output. Applying <code>fftshift</code> puts bin 0 (DC) at what index?</p>
+    <p lang="zh"><b>問：</b>$M=8$ 的 FFT 輸出，套 <code>fftshift</code> 後 bin 0（DC）跑到哪個索引？</p>
+    <div class="choices">
+      <button data-correct="0" lang="en">0</button>
+      <button data-correct="0" lang="zh">0</button>
+      <button data-correct="1" lang="en">4</button>
+      <button data-correct="1" lang="zh">4</button>
+      <button data-correct="0" lang="en">7</button>
+      <button data-correct="0" lang="zh">7</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17.4-zero-phase-zp.html">◀ 3.17.4</a>
+    <a class="warp-pipe">3-17-4-1</a>
+    <a class="nes-btn nes-btn--primary" href="3.17.4.2-zphase-idx.html">NEXT ▶ 3.17.4.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! fftshift swaps halves, so index 0 → M/2 = 4.</span><span lang="zh">🪙 金幣 +1！fftshift 交換兩半，索引 0 → M/2 = 4。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Half-swap → old index 0 lands at new index M/2.</span><span lang="zh">✗ 對半換 → 舊索引 0 落在新索引 M/2。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

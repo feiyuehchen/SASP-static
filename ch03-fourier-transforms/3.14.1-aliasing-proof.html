@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.14.1 Proof of the Aliasing Theorem · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-14-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-14-1 · Proof of the Aliasing Theorem</span>
+    <span lang="zh">關卡 3-14-1 · 混疊定理的證明</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Proof_Aliasing_Theorem.html" target="_blank">SASP §3.14.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Derive $Y(\omega)=\tfrac{1}{M}\sum_{m=0}^{M-1} X((\omega-2\pi m)/M)$ from the definition $y[n]=x[nM]$.</p>
+    <p lang="zh">從定義 $y[n]=x[nM]$ 出發，推出 $Y(\omega)=\tfrac{1}{M}\sum_{m=0}^{M-1} X((\omega-2\pi m)/M)$。</p>
+  </div>
+
+  <h2 lang="en">Step 1 — Insert a sampling comb</h2>
+  <h2 lang="zh">第 1 步 — 插入取樣梳狀</h2>
+
+  <p lang="en">
+    Define $\tilde{x}[n]=x[n]\cdot p[n]$ where $p[n]=1$ when $n$ is a
+    multiple of $M$, else $0$. Downsampling is the same as keeping the
+    non-zero samples of $\tilde{x}$ and re-indexing at $M\to 1$.
+  </p>
+  <p lang="zh">
+    定義 $\tilde{x}[n]=x[n]\cdot p[n]$，其中 $p[n]=1$ 當 $n$ 為 $M$ 的倍數，否則 $0$。
+    降取樣就是取出 $\tilde{x}$ 的非零樣本，再把索引 $M\to 1$ 縮回去。
+  </p>
+
+  <h2 lang="en">Step 2 — DTFT of the comb</h2>
+  <h2 lang="zh">第 2 步 — 梳狀的 DTFT</h2>
+
+  <p lang="en">
+    $p[n]$ can be written as $\tfrac{1}{M}\sum_{m=0}^{M-1} e^{j 2\pi m n/M}$
+    (discrete Fourier series of an impulse train). Each term is a complex
+    sinusoid, whose DTFT is a delta at its frequency.
+  </p>
+  <p lang="zh">
+    $p[n]$ 可以寫成 $\tfrac{1}{M}\sum_{m=0}^{M-1} e^{j 2\pi m n/M}$（脈衝列的離散 Fourier 級數）。
+    每一項是一個複正弦，DTFT 是對應頻率上的 delta。
+  </p>
+
+  <h2 lang="en">Step 3 — Multiplication ↔ convolution</h2>
+  <h2 lang="zh">第 3 步 — 乘法 ↔ 卷積</h2>
+
+  <p lang="en">
+    Multiplying $x[n]$ by $p[n]$ convolves $X(\omega)$ with the comb of
+    deltas. Each delta lives at $\omega=2\pi m/M$, so the convolution
+    produces a sum of $X(\omega-2\pi m/M)$ terms, each scaled by $1/M$.
+  </p>
+  <p lang="zh">
+    $x[n]\cdot p[n]$ 在頻域是 $X(\omega)$ 與「delta 梳狀」卷積。delta 在 $\omega=2\pi m/M$，
+    所以卷積結果是一堆 $X(\omega-2\pi m/M)$ 相加、每項乘 $1/M$。
+  </p>
+
+  <h2 lang="en">Step 4 — Rescale for the new sample grid</h2>
+  <h2 lang="zh">第 4 步 — 縮放回新的樣本格</h2>
+
+  <p lang="en">
+    Finally, changing the time index from $n$ (old rate) to $n'=n/M$ (new
+    rate) stretches the frequency axis by $M$: every $\omega_\text{old}$
+    becomes $\omega_\text{new}/M$. Substituting, we get the final
+    aliasing formula.
+  </p>
+  <p lang="zh">
+    最後把時間索引從 $n$（舊率）改成 $n'=n/M$（新率），頻率軸會被拉伸 $M$ 倍：
+    $\omega_\text{old}=\omega_\text{new}/M$。代回去就是混疊定理的最終形式。
+  </p>
+
+  <div class="formula">
+    <span class="label">RESULT</span>
+    <div>$$Y(\omega)\;=\;\frac{1}{M}\sum_{m=0}^{M-1} X\!\left(\frac{\omega-2\pi m}{M}\right)\qquad\square$$</div>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> Which step first introduces the $M-1$ extra copies that cause aliasing?</p>
+    <p lang="zh"><b>問：</b>證明的哪一步首先引入造成混疊的 $M-1$ 份多餘副本？</p>
+    <div class="choices">
+      <button data-correct="0" lang="en">Step 1 — inserting the comb.</button>
+      <button data-correct="0" lang="zh">第 1 步 — 插入梳狀。</button>
+      <button data-correct="1" lang="en">Step 2/3 — Fourier series of the comb has $M$ complex-exponential terms.</button>
+      <button data-correct="1" lang="zh">第 2/3 步 — 梳狀的 Fourier 級數有 $M$ 個複指數項。</button>
+      <button data-correct="0" lang="en">Step 4 — rescaling the axis.</button>
+      <button data-correct="0" lang="zh">第 4 步 — 軸的縮放。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.14-downsampling-aliasing.html">◀ 3.14</a>
+    <a class="warp-pipe">3-14-1</a>
+    <a class="nes-btn nes-btn--primary" href="3.15-diff-dual.html">NEXT ▶ 3.15</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! The comb has M delta terms in frequency; each contributes one shifted copy of X(ω).</span><span lang="zh">🪙 金幣 +1！梳狀在頻域有 M 個 delta；每個貢獻一份位移的 X(ω)。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ The extra copies come from the Fourier expansion of the sampling comb.</span><span lang="zh">✗ 多出來的副本來自於取樣梳狀的 Fourier 展開。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

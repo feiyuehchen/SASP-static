@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17.1 Ideal Spectral Interpolation · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17-1 · Ideal Spectral Interpolation</span>
+    <span lang="zh">關卡 3-17-1 · 理想頻譜內插</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Ideal_Spectral_Interpolation.html" target="_blank">SASP §3.17.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="CORE IDEA">
+    <p lang="en">A length-$N$ sequence has a spectrum that is periodic and band-limited on the unit circle. The <span class="term" data-en="Dirichlet kernel"
+      data-en-def="sin(Nω/2)/(N sin(ω/2)) — the periodic sinc that interpolates uniformly-spaced DTFT samples of a length-N sequence."
+      data-zh-def="sin(Nω/2)/(N sin(ω/2)) — 用於內插長度 N 序列 DTFT 等距樣本的周期 sinc。">Dirichlet kernel</span> (periodic sinc) is the unique interpolator that recovers the whole DTFT from $N$ uniform samples.</p>
+    <p lang="zh">長度 $N$ 的序列，其頻譜在單位圓上是週期且帶限的。<span class="term" data-en="Dirichlet kernel"
+      data-en-def="sin(Nω/2)/(N sin(ω/2)) — the periodic sinc that interpolates uniformly-spaced DTFT samples of a length-N sequence."
+      data-zh-def="sin(Nω/2)/(N sin(ω/2)) — 用於內插長度 N 序列 DTFT 等距樣本的周期 sinc。">Dirichlet 核</span>（週期 sinc）是從 $N$ 個均勻樣本精確還原整條 DTFT 的唯一內插器。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">DIRICHLET KERNEL</span>
+    <div>$$D_N(\omega)\;=\;\frac{\sin(N\omega/2)}{N\,\sin(\omega/2)}$$</div>
+    <span class="label">INTERPOLATION</span>
+    <div>$$X(\omega)\;=\;\sum_{k=0}^{N-1}X[k]\,D_N\!\left(\omega-\tfrac{2\pi k}{N}\right)\,e^{-j(N-1)(\omega-2\pi k/N)/2}$$</div>
+  </div>
+
+  <p lang="en">
+    At bin centres $\omega=2\pi k/N$, $D_N$ is 1 at its own centre and 0
+    at every other centre, so interpolation is consistent with the
+    samples. Between bins it blends them exactly.
+  </p>
+  <p lang="zh">
+    在 bin 中心 $\omega=2\pi k/N$，$D_N$ 對自己中心為 1、其它中心都為 0，所以內插在樣本點處一致。
+    兩個 bin 之間就精確地混合它們。
+  </p>
+
+  <div class="nes-box nes-box--blue" data-label="COMPUTATIONAL NOTE">
+    <p lang="en">In practice we rarely evaluate Dirichlet kernels directly — zero padding (§3.17.3) achieves the same result via one FFT on the padded sequence.</p>
+    <p lang="zh">實務上很少直接算 Dirichlet 核 — 補零（§3.17.3）對同一條 DTFT 可用一次 FFT 得到相同結果。</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> How wide is the main lobe of $D_N(\omega)$ (first zero on each side)?</p>
+    <p lang="zh"><b>問：</b>$D_N(\omega)$ 的主瓣寬度（左右第一個零點之間）是多少？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">$4\pi/N$.</button>
+      <button data-correct="1" lang="zh">$4\pi/N$。</button>
+      <button data-correct="0" lang="en">$\pi$.</button>
+      <button data-correct="0" lang="zh">$\pi$。</button>
+      <button data-correct="0" lang="en">$1/N$.</button>
+      <button data-correct="0" lang="zh">$1/N$。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17-spectral-interpolation.html">◀ 3.17</a>
+    <a class="warp-pipe">3-17-1</a>
+    <a class="nes-btn nes-btn--primary" href="3.17.2-interp-dft.html">NEXT ▶ 3.17.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! First zero at ω = ±2π/N → full main-lobe width 4π/N.</span><span lang="zh">🪙 金幣 +1！第一個零在 ω = ±2π/N，主瓣寬度 4π/N。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Solve sin(Nω/2)=0 for the smallest non-zero ω.</span><span lang="zh">✗ 解 sin(Nω/2)=0 的最小非零 ω。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

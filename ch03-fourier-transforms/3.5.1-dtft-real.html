@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.5.1 DTFT of Real Signals · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-5-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-5-1 · DTFT of Real Signals</span>
+    <span lang="zh">關卡 3-5-1 · 實訊號的 DTFT</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/DTFT_Real_Signals.html" target="_blank">SASP §3.5.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="DECOMPOSITION">
+    <p lang="en">A real signal's DTFT splits into an even real part plus an odd imaginary part. The split mirrors how the signal splits into an even and an odd component.</p>
+    <p lang="zh">實訊號的 DTFT 可以拆成「實部（偶）+ 虛部（奇）」。這個拆法剛好對應訊號本身的偶 + 奇分解。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">EVEN/ODD TIME ↔ EVEN/ODD FREQ</span>
+    <div>$$x_{\text{even}}[n]=\tfrac{1}{2}(x[n]+x[-n])\;\longleftrightarrow\;\operatorname{Re}\{X(\omega)\}$$</div>
+    <div>$$x_{\text{odd}}[n]=\tfrac{1}{2}(x[n]-x[-n])\;\longleftrightarrow\;j\,\operatorname{Im}\{X(\omega)\}$$</div>
+  </div>
+
+  <p lang="en">
+    Because $X^*(\omega)=X(-\omega)$ for real $x[n]$, the real part of
+    $X(\omega)$ must be even in $\omega$ and the imaginary part must be
+    odd. Reading it backwards: the even part of the signal produces the
+    real part of the spectrum, the odd part produces the imaginary part.
+  </p>
+  <p lang="zh">
+    因為實 $x[n]$ 滿足 $X^*(\omega)=X(-\omega)$，$\operatorname{Re}X$ 必須是 $\omega$ 的偶函數、
+    $\operatorname{Im}X$ 必須是奇函數。反過來看：訊號的偶部分產生頻譜實部、奇部分產生頻譜虛部。
+  </p>
+
+  <div class="nes-box nes-box--blue" data-label="WHY IT MATTERS">
+    <p lang="en">If you only care about the magnitude spectrum of real audio, you can throw away the sign of the imaginary part with no loss — and you can store or transmit only half the DFT bins.</p>
+    <p lang="zh">如果你只在意實音訊的振幅頻譜，虛部的符號可以丟掉都沒差 — 而且 DFT bin 也只要存一半就夠了。</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> A real signal has $\operatorname{Im}\{X(\omega_0)\}=+0.7$. What is $\operatorname{Im}\{X(-\omega_0)\}$?</p>
+    <p lang="zh"><b>問：</b>某實訊號滿足 $\operatorname{Im}\{X(\omega_0)\}=+0.7$，那 $\operatorname{Im}\{X(-\omega_0)\}$ 是多少？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">$-0.7$ (imaginary part is odd)</button>
+      <button data-correct="1" lang="zh">$-0.7$（虛部為奇）</button>
+      <button data-correct="0" lang="en">$+0.7$ (imaginary part is even)</button>
+      <button data-correct="0" lang="zh">$+0.7$（虛部為偶）</button>
+      <button data-correct="0" lang="en">$0$ always.</button>
+      <button data-correct="0" lang="zh">永遠是 $0$。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.5-symmetry.html">◀ 3.5</a>
+    <a class="warp-pipe">3-5-1</a>
+    <a class="nes-btn nes-btn--primary" href="3.5.2-real-even-odd.html">NEXT ▶ 3.5.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Odd means flipping the argument flips the sign.</span><span lang="zh">🪙 金幣 +1！奇函數，自變數變號 → 函數值變號。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Real signals have odd imaginary spectra.</span><span lang="zh">✗ 實訊號的頻譜虛部是奇函數。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

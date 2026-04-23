@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17.3 Zero Padding · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17-3 · Zero Padding in the Time Domain</span>
+    <span lang="zh">關卡 3-17-3 · 時域補零</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Zero_Padding_Time_Domain.html" target="_blank">SASP §3.17.3 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THE TRICK">
+        <p lang="en">Append zeros to a length-$N$ sequence and do a length-$M$ FFT with $M\gg N$. Result: the same DTFT, sampled on a finer frequency grid.</p>
+        <p lang="zh">在長度 $N$ 的序列後面補零、做長度 $M$（$M\gg N$）的 FFT。
+          得到的就是同一條 DTFT，但取樣更密。</p>
+      </div>
+
+      <h2 lang="en">Why it works</h2>
+      <h2 lang="zh">為什麼行得通</h2>
+
+      <p lang="en">
+        Zero padding does not add new time information. The DTFT of a
+        length-$N$ signal is completely determined by those $N$ samples.
+        But the $M$-point DFT evaluates the DTFT at $M$ equally-spaced
+        frequencies $2\pi k/M$ — more $M$, more sample points, denser
+        plot.
+      </p>
+      <p lang="zh">
+        補零不會增加時間資訊 — 長度 $N$ 訊號的 DTFT 早被那 $N$ 個樣本決定。
+        但長度 $M$ 的 DFT 是在 $M$ 個均勻頻率 $2\pi k/M$ 上取樣 —
+        $M$ 越大、樣本點越多、頻譜圖越密。
+      </p>
+
+      <h2 lang="en">What it does NOT do</h2>
+      <h2 lang="zh">它<b>不會</b>做的事</h2>
+
+      <ul>
+        <li lang="en"><b>It does not improve resolution.</b> The ability to separate two close sinusoids is set by the signal length $N$, not by $M$. Zero padding just makes the interpolation smoother.</li>
+        <li lang="zh"><b>不會提高解析度。</b>能分離兩個相近正弦波的能力，由原訊號長度 $N$ 決定，與 $M$ 無關。補零只是讓內插更平滑。</li>
+        <li lang="en"><b>It does not add information</b> — zero samples contain nothing.</li>
+        <li lang="zh"><b>不會多出資訊</b> — 零樣本本身沒資訊。</li>
+      </ul>
+
+      <div class="nes-box nes-box--yellow" data-label="COMMON CONFUSION">
+        <p lang="en">"Zero padding increases frequency resolution" is wrong. It increases <em>bin density</em>, which is what you need to read the shape of the main lobe and pick out peaks with better accuracy.</p>
+        <p lang="zh">「補零會提高頻率解析度」是誤解。它提高的是<em>bin 密度</em>，用來看清主瓣形狀、提高波峰定位精度。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Pad, observe, understand</h3>
+        <h3 lang="zh">實驗 · 補零、觀察、理解</h3>
+        <canvas id="fCanvas" style="height:220px;"></canvas>
+        <div class="controls">
+          <label>N (signal)</label>
+          <input type="range" id="nSlider" min="8" max="64" step="8" value="16"/>
+          <span class="val" id="nVal">16</span>
+
+          <label>M (FFT)</label>
+          <input type="range" id="mSlider" min="16" max="1024" step="16" value="128"/>
+          <span class="val" id="mVal">128</span>
+
+          <label>f (bin)</label>
+          <input type="range" id="fSlider" min="1" max="30" step="0.1" value="3.7"/>
+          <span class="val" id="fVal">3.7</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Two sinusoids are 1 Hz apart and your sample rate is $f_s$. You have $N$ samples. Zero-pad to $10N$ and FFT. Can you resolve them better than without padding?</p>
+        <p lang="zh"><b>問：</b>兩個正弦波相差 1 Hz，取樣率 $f_s$、取 $N$ 個樣本。補零到 $10N$ 再 FFT，分辨力會比不補時好嗎？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">Yes — 10× more bins means 10× better resolution.</button>
+          <button data-correct="0" lang="zh">會 — 10 倍 bin 數代表 10 倍解析度。</button>
+          <button data-correct="1" lang="en">No — resolution is fixed by $f_s/N$; padding just smooths the display.</button>
+          <button data-correct="1" lang="zh">不會 — 解析度由 $f_s/N$ 決定；補零只是把圖像變平滑。</button>
+          <button data-correct="0" lang="en">Only if the padding is zero-phase.</button>
+          <button data-correct="0" lang="zh">要看是不是零相位補零。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17.2-interp-dft.html">◀ 3.17.2</a>
+    <a class="warp-pipe">3-17-3</a>
+    <a class="nes-btn nes-btn--primary" href="3.17.3.1-practical-zp.html">NEXT ▶ 3.17.3.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 16, M: 128, f: 3.7 };
+
+  function redraw() {
+    const x = new Float32Array(state.N);
+    for (let n = 0; n < state.N; n++) x[n] = Math.cos(2 * Math.PI * state.f * n / state.N);
+    // zero-pad to M
+    const y = new Float32Array(state.M);
+    y.set(x);
+    const re = new Float32Array(state.M), im = new Float32Array(state.M);
+    re.set(y);
+    DSP.fft(re, im);
+    const half = state.M >> 1;
+    const mag = new Float32Array(half + 1);
+    for (let k = 0; k <= half; k++) mag[k] = Math.hypot(re[k], im[k]);
+    Viz.line($('fCanvas'), mag, { xValues: Array.from({length:half+1},(_,k)=>k/half), xMin:0, xMax:1, yMin:0, xLabel:'ω / π', yLabel:`|DFT_{${state.M}}|`, title:`N=${state.N} signal, padded to M=${state.M}` });
+  }
+
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+  $('mSlider').addEventListener('input', () => { state.M = parseInt($('mSlider').value,10); $('mVal').textContent = state.M; redraw(); });
+  $('fSlider').addEventListener('input', () => { state.f = parseFloat($('fSlider').value); $('fVal').textContent = state.f.toFixed(1); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Classic pitfall. Resolution = 1/(N·Ts) = fs/N. Padding just paints the curve more finely.</span><span lang="zh">🪙 金幣 +1！經典陷阱。解析度 = 1/(N·Ts) = fs/N。補零只是把曲線畫更細。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ If the main lobes already overlap, drawing them on a finer grid does not separate them.</span><span lang="zh">✗ 如果主瓣本來就重疊，用更密的格子畫也不會把它們分開。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

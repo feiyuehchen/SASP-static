@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.10 Power Theorem (Parseval) · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-10</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-10 · Power Theorem (Parseval)</span>
+    <span lang="zh">關卡 3-10 · 功率定理 (Parseval)</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Power_Theorem.html" target="_blank">SASP §3.10 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THEOREM">
+        <p lang="en">Energy is conserved between the time and frequency domains. Nothing goes missing when you transform.</p>
+        <p lang="zh">能量在時域與頻域之間守恆。轉換來轉換去，能量不會憑空消失或多出來。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">PARSEVAL / POWER THEOREM</span>
+        <div>$$\sum_{n=-\infty}^{\infty}|x[n]|^{2}\;=\;\frac{1}{2\pi}\int_{-\pi}^{\pi}|X(\omega)|^{2}\,d\omega$$</div>
+      </div>
+
+      <p lang="en">
+        Proof uses the correlation theorem: set $y=x$ and evaluate
+        $r_{xx}[0]$. Left side is $\sum|x[n]|^2$. Right side is the inverse
+        DTFT of $|X(\omega)|^2$ at $k=0$, i.e. the integral above.
+      </p>
+      <p lang="zh">
+        證明用到相關定理：令 $y=x$ 並取 $r_{xx}[0]$。左邊就是 $\sum|x[n]|^2$；
+        右邊是 $|X(\omega)|^2$ 的反 DTFT 在 $k=0$ 處取值，也就是上面的積分。
+      </p>
+
+      <h2 lang="en">Why it is a big deal</h2>
+      <h2 lang="zh">為什麼是大事</h2>
+
+      <ul>
+        <li lang="en">It justifies measuring energy in either domain — use whichever is cheaper.</li>
+        <li lang="zh">它保證不管在哪一邊量能量都相等 — 哪邊便宜用哪邊。</li>
+        <li lang="en">It proves the DTFT is a <em>unitary</em> map (up to the $2\pi$ factor); distances in $\ell^2$ match distances in $L^2$.</li>
+        <li lang="zh">它證明 DTFT 是<em>單位</em>映射（差一個 $2\pi$ 因子），$\ell^2$ 距離 = $L^2$ 距離。</li>
+        <li lang="en">It is the reason MSE in time equals integrated squared error in frequency — essential for filter design and approximation theory.</li>
+        <li lang="zh">它讓時域的均方誤差 = 頻域的平方誤差積分 — 是濾波器設計與近似理論的地基。</li>
+      </ul>
+
+      <div class="nes-box nes-box--purple" data-label="DISCRETE VERSION">
+        <p lang="en">For a finite sequence of length $N$, the DFT satisfies $\sum_{n=0}^{N-1}|x[n]|^2=\frac{1}{N}\sum_{k=0}^{N-1}|X[k]|^2$. The lab checks this numerically.</p>
+        <p lang="zh">對長度 $N$ 的有限序列，DFT 滿足 $\sum_{n=0}^{N-1}|x[n]|^2=\frac{1}{N}\sum_{k=0}^{N-1}|X[k]|^2$。Lab 數值上驗證這條。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Energy check</h3>
+        <h3 lang="zh">實驗 · 能量守恆檢查</h3>
+        <canvas id="xCanvas" style="height:140px;"></canvas>
+        <div class="controls">
+          <label>SIGNAL</label>
+          <select id="sigSel">
+            <option value="sine" selected>Sinusoid</option>
+            <option value="pulse">Short pulse</option>
+            <option value="noise">White noise</option>
+            <option value="chirp">Chirp</option>
+          </select>
+          <span class="val" id="sigName">SINE</span>
+        </div>
+        <div class="nes-box nes-box--green" data-label="NUMERIC" style="margin-top:10px;">
+          <div style="font-family:'Press Start 2P',monospace; font-size:11px; line-height:1.9; color:var(--nes-white);">
+            <div>TIME   Σ|x[n]|²    = <span id="eTime" style="color:var(--nes-lime)">0</span></div>
+            <div>FREQ   (1/N)Σ|X[k]|² = <span id="eFreq" style="color:var(--nes-lime)">0</span></div>
+            <div>Δ                 = <span id="eDiff" style="color:var(--nes-yellow)">0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You rotate all DFT phases by random angles but keep the magnitudes $|X[k]|$ unchanged. How does $\sum|x[n]|^2$ change?</p>
+        <p lang="zh"><b>問：</b>你把所有 DFT 相位隨機旋轉，但保留振幅 $|X[k]|$ 不變。$\sum|x[n]|^2$ 會怎麼變？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">It stays exactly the same — Parseval only uses $|X|$.</button>
+          <button data-correct="1" lang="zh">完全不變 — Parseval 只用到 $|X|$。</button>
+          <button data-correct="0" lang="en">It doubles.</button>
+          <button data-correct="0" lang="zh">會變兩倍。</button>
+          <button data-correct="0" lang="en">It drops to zero.</button>
+          <button data-correct="0" lang="zh">會降到零。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.9-autocorrelation.html">◀ 3.9</a>
+    <a class="warp-pipe">3-10</a>
+    <a class="nes-btn nes-btn--primary" href="3.11-stretch.html">NEXT ▶ 3.11</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 128;
+  const state = { sig: 'sine' };
+
+  function makeSig() {
+    const x = new Float32Array(N);
+    if (state.sig === 'sine') for (let n = 0; n < N; n++) x[n] = Math.cos(2*Math.PI*6*n/N);
+    else if (state.sig === 'pulse') { for (let n = 50; n < 78; n++) x[n] = 1; }
+    else if (state.sig === 'noise') for (let n = 0; n < N; n++) x[n] = 2*Math.random()-1;
+    else { for (let n = 0; n < N; n++) x[n] = Math.cos(2*Math.PI*(2 + 8*n/N)*n/N); }
+    return x;
+  }
+
+  function redraw() {
+    const x = makeSig();
+    Viz.stem($('xCanvas'), x, { yMin:-1.5, yMax:1.5, xLabel:'n', yLabel:'x[n]', title:'x[n]' });
+    let eT = 0; for (let n = 0; n < N; n++) eT += x[n]*x[n];
+    const re = new Float32Array(N), im = new Float32Array(N);
+    re.set(x); DSP.fft(re, im);
+    let eF = 0; for (let k = 0; k < N; k++) eF += (re[k]*re[k] + im[k]*im[k]);
+    eF /= N;
+    $('eTime').textContent = eT.toFixed(4);
+    $('eFreq').textContent = eF.toFixed(4);
+    $('eDiff').textContent = (eT - eF).toExponential(2);
+  }
+
+  $('sigSel').addEventListener('change', () => { state.sig = $('sigSel').value; $('sigName').textContent = state.sig.toUpperCase(); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Parseval only involves magnitudes; rotating phases never moves energy. The time-domain waveform changes, but the energy does not.</span><span lang="zh">🪙 金幣 +1！Parseval 只用振幅；相位旋轉不搬動能量。時域波形會變，但能量不變。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Look at the formula — only $|X[k]|^2$ appears.</span><span lang="zh">✗ 公式裡只有 $|X[k]|^2$。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.11 Stretch Operator · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-11</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-11 · Stretch Operator</span>
+    <span lang="zh">關卡 3-11 · 拉伸算子</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Stretch_Operator.html" target="_blank">SASP §3.11 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="DEFINITION">
+        <p lang="en">Stretching means inserting zeros between samples — the digital equivalent of holding each sample $L$ times as long.</p>
+        <p lang="zh">拉伸 = 在樣本之間插零 — 相當於把每個樣本在時間上撐 $L$ 倍長。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">STRETCH BY L</span>
+        <div>$$\operatorname{Stretch}_L\{x\}[n]\;=\;\begin{cases}x[n/L],& n/L\in\mathbb{Z}\\ 0, & \text{otherwise}\end{cases}$$</div>
+      </div>
+
+      <p lang="en">
+        The effect on the spectrum: the DTFT of the stretched signal is
+        just the original DTFT compressed by $L$ along $\omega$. A copy of
+        the original spectrum now tiles the $2\pi$-periodic circle $L$
+        times — those extra copies are
+        <span class="term" data-en="Spectral image"
+          data-en-def="An unwanted replica of a signal's spectrum introduced by upsampling (zero insertion) without anti-imaging filtering."
+          data-zh-def="升取樣（插零）後未經抗鏡像濾波而產生的、原頻譜的副本。">spectral images</span>.
+      </p>
+      <p lang="zh">
+        頻譜端的效果：拉伸後訊號的 DTFT 就是原 DTFT 沿 $\omega$ 壓縮 $L$ 倍。
+        於是 $2\pi$ 周期的圓上就同時出現 $L$ 份原頻譜 — 多出來的幾份就叫
+        <span class="term" data-en="Spectral image"
+          data-en-def="An unwanted replica of a signal's spectrum introduced by upsampling (zero insertion) without anti-imaging filtering."
+          data-zh-def="升取樣（插零）後未經抗鏡像濾波而產生的、原頻譜的副本。">頻譜鏡像</span>。
+      </p>
+
+      <div class="formula">
+        <span class="label">STRETCH ↔ FREQUENCY COMPRESSION</span>
+        <div>$$\operatorname{Stretch}_L\{x\}\;\longleftrightarrow\;X(L\omega)$$</div>
+      </div>
+
+      <p lang="en">This is the first half of the DSP upsampling process. The second half (kill the images with a low-pass filter) lives in World 12.</p>
+      <p lang="zh">這是升取樣的前半段。後半段（用低通濾波器把鏡像壓掉）在第 12 世界會處理。</p>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Stretch by L</h3>
+        <h3 lang="zh">實驗 · 拉伸 L 倍</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:160px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>L</label>
+          <input type="range" id="lSlider" min="1" max="5" step="1" value="3"/>
+          <span class="val" id="lVal">3</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You stretch a signal by $L=4$. How many copies of the original spectrum appear on $(-\pi,\pi]$?</p>
+        <p lang="zh"><b>問：</b>拉伸 $L=4$ 後，在 $(-\pi,\pi]$ 上會出現幾份原頻譜？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">1</button>
+          <button data-correct="0" lang="zh">1 份</button>
+          <button data-correct="0" lang="en">2</button>
+          <button data-correct="0" lang="zh">2 份</button>
+          <button data-correct="1" lang="en">4</button>
+          <button data-correct="1" lang="zh">4 份</button>
+          <button data-correct="0" lang="en">8</button>
+          <button data-correct="0" lang="zh">8 份</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.10-power.html">◀ 3.10</a>
+    <a class="warp-pipe">3-11</a>
+    <a class="nes-btn nes-btn--primary" href="3.12-repeat.html">NEXT ▶ 3.12</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { L: 3 };
+
+  function base() {
+    // short Gaussian-cos prototype
+    const M = 24;
+    const x = new Float32Array(M);
+    for (let n = 0; n < M; n++) { const d = n - M/2; x[n] = Math.exp(-d*d/18) * Math.cos(0.6*d); }
+    return x;
+  }
+
+  function stretch(x, L) {
+    const y = new Float32Array(x.length * L);
+    for (let n = 0; n < x.length; n++) y[n * L] = x[n];
+    return y;
+  }
+
+  function redraw() {
+    const x = base();
+    const y = stretch(x, state.L);
+    Viz.stem($('tCanvas'), y, { yMin:-1.2, yMax:1.2, xLabel:'n', yLabel:'y[n]', title:`STRETCHED (L=${state.L}): zero between samples` });
+    const K = 500;
+    const om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(y, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), mag, { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:0, xLabel:'ω', yLabel:'|Y(ω)|', title:`${state.L} spectral images`, xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+
+  $('lSlider').addEventListener('input', () => { state.L = parseInt($('lSlider').value,10); $('lVal').textContent = state.L; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! X(Lω) has L copies on one period of ω.</span><span lang="zh">🪙 金幣 +1！X(Lω) 在一個 ω 週期上有 L 份。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Stretch by L ⇒ L images of the spectrum.</span><span lang="zh">✗ 拉伸 L 倍 ⇒ L 份頻譜鏡像。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17.3.3 Zero-Pad for Spectral Displays · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17-3-3</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17-3-3 · ZP for Spectral Displays</span>
+    <span lang="zh">關卡 3-17-3-3 · 以補零改善頻譜顯示</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Zero_Padding_Interpolating_Spectral_Displays.html" target="_blank">SASP §3.17.3.3 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="RULE OF THUMB">
+    <p lang="en">For a plot you can read with the eye, zero-pad so the FFT is 4× to 8× the window length.</p>
+    <p lang="zh">要畫出眼睛看得清楚的頻譜圖，補零讓 FFT 長度是視窗的 4× 到 8×。</p>
+  </div>
+
+  <p lang="en">
+    Without padding, the FFT samples are spaced at $2\pi/N$ — roughly the
+    Hann window's main-lobe <em>half</em>-width. You only get two samples
+    across a lobe, so every peak looks like a jagged zigzag. Padding to
+    $M=4N$ or $8N$ lays down 4 or 8 samples inside the same lobe and the
+    curve becomes smooth enough to read.
+  </p>
+  <p lang="zh">
+    不補零時，FFT 樣本間距是 $2\pi/N$ — 大約是 Hann 視窗主瓣<em>半</em>寬。
+    一個主瓣只有兩個樣本，每個峰都像鋸齒。
+    補零到 $M=4N$ 或 $8N$，同一個主瓣內有 4 或 8 個樣本，曲線就能一眼讀懂。
+  </p>
+
+  <div class="nes-box nes-box--yellow" data-label="COST-BENEFIT">
+    <p lang="en">FFT cost scales as $M\log M$. Going from $N$ to $8N$ multiplies the work by about 11×, which is usually fine for plots but might hurt real-time applications. Use the minimum $M$ you need for the decision you are making (display, peak picking, etc.).</p>
+    <p lang="zh">FFT 計算量是 $M\log M$。從 $N$ 變 $8N$ 大約變 11 倍，畫圖通常沒差；即時應用要注意。
+      依使用目的（顯示、找波峰…）挑剛好夠用的 $M$。</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> You render a spectrogram of a 48 kHz recording with 1024-sample Hann frames, 75% overlap, and no zero padding. Frame-to-frame the plot looks jagged. What is the cheapest fix?</p>
+    <p lang="zh"><b>問：</b>48 kHz 錄音、1024 樣本 Hann frame、75% 重疊、不補零。頻譜圖看起來有鋸齒。最省工的修法？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Zero-pad each frame to 4096 before the FFT.</button>
+      <button data-correct="1" lang="zh">每個 frame 補零到 4096 再 FFT。</button>
+      <button data-correct="0" lang="en">Use a 4× longer window.</button>
+      <button data-correct="0" lang="zh">用 4 倍長的視窗。</button>
+      <button data-correct="0" lang="en">Raise the sample rate to 192 kHz.</button>
+      <button data-correct="0" lang="zh">把取樣率升到 192 kHz。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17.3.2-zp-pow2.html">◀ 3.17.3.2</a>
+    <a class="warp-pipe">3-17-3-3</a>
+    <a class="nes-btn nes-btn--primary" href="3.17.3.4-zp-peaks.html">NEXT ▶ 3.17.3.4</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! A longer window would change resolution; raising fs does not help. Padding is the cheap display fix.</span><span lang="zh">🪙 金幣 +1！更長的視窗會改變解析度；升取樣率也沒用。補零才是便宜的顯示修法。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ You want a smoother curve, not more time-domain data.</span><span lang="zh">✗ 你要的是曲線更平滑，不是更多時域資料。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.15 Differentiation Theorem Dual · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-15</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-15 · Differentiation Theorem Dual</span>
+    <span lang="zh">關卡 3-15 · 微分定理對偶</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Differentiation_Theorem_Dual.html" target="_blank">SASP §3.15 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="THEOREM">
+    <p lang="en">Multiplying a signal by $n$ (weighting by time) corresponds in frequency to differentiating.</p>
+    <p lang="zh">訊號乘上 $n$（以時間加權）對應到頻域的微分。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">MULTIPLY-BY-n ↔ d/dω</span>
+    <div>$$n\,x[n]\;\longleftrightarrow\;j\,\frac{d X(\omega)}{d\omega}$$</div>
+  </div>
+
+  <p lang="en">
+    Proof: differentiate $X(\omega)=\sum x[n]\,e^{-j\omega n}$ with respect
+    to $\omega$. Each term picks up a factor $-j n$. Rearranging gives the
+    stated pair. This is the <em>dual</em> of the continuous-time
+    differentiation theorem (differentiating $x(t)$ multiplies the
+    spectrum by $j\Omega$).
+  </p>
+  <p lang="zh">
+    證明：對 $X(\omega)=\sum x[n]\,e^{-j\omega n}$ 逐項對 $\omega$ 微分，每項多出 $-jn$。重排一下就得上式。
+    這是連續時間「時域微分 ↔ 頻域乘 $j\Omega$」的<em>對偶</em>版。
+  </p>
+
+  <h2 lang="en">Uses</h2>
+  <h2 lang="zh">應用</h2>
+  <ul>
+    <li lang="en">Computing moments of a distribution from derivatives of its characteristic function.</li>
+    <li lang="zh">用特徵函數的導數計算分布的動差（統計訊號處理常用）。</li>
+    <li lang="en">Cepstral analysis — taking log of $X(\omega)$ and differentiating lets you estimate group delay and formant locations.</li>
+    <li lang="zh">倒頻譜分析 — 對 log $X(\omega)$ 微分可估計群延遲與共振峰位置。</li>
+    <li lang="en">Phase-vocoder algorithms often use this dual to interpolate frame phases.</li>
+    <li lang="zh">相位 vocoder 常藉由此對偶來內插 frame 的相位。</li>
+  </ul>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> $X(\omega)$ is perfectly flat (constant). What does $n\cdot x[n]$ transform to?</p>
+    <p lang="zh"><b>問：</b>若 $X(\omega)$ 是常數（平直頻譜），$n\cdot x[n]$ 的 DTFT 是？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Zero everywhere (derivative of a constant is zero).</button>
+      <button data-correct="1" lang="zh">處處為零（常數的導數為零）。</button>
+      <button data-correct="0" lang="en">Another constant.</button>
+      <button data-correct="0" lang="zh">另一個常數。</button>
+      <button data-correct="0" lang="en">A pure impulse at $\omega=0$.</button>
+      <button data-correct="0" lang="zh">在 $\omega=0$ 的純脈衝。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.14.1-aliasing-proof.html">◀ 3.14.1</a>
+    <a class="warp-pipe">3-15</a>
+    <a class="nes-btn nes-btn--primary" href="3.16-ct-theorems.html">NEXT ▶ 3.16</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Flat spectrum ↔ unit impulse in time. Multiplying that impulse by n gives zero. d/dω of a constant = 0. Consistent.</span><span lang="zh">🪙 金幣 +1！平直頻譜 ↔ 時域脈衝。脈衝乘 n 是零；常數對 ω 微分也是零。一致。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Apply the theorem literally: d(constant)/dω = 0.</span><span lang="zh">✗ 直接套定理：d(常數)/dω = 0。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

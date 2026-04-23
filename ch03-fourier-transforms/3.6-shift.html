@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.6 Shift Theorem · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-6</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-6 · Shift Theorem</span>
+    <span lang="zh">關卡 3-6 · 位移定理</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Shift_Theorem.html" target="_blank">SASP §3.6 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THEOREM">
+        <p lang="en">Shifting a signal in time multiplies its spectrum by a linear-phase exponential. Magnitude is unchanged.</p>
+        <p lang="zh">時間軸上平移訊號 → 頻譜乘上一個線性相位指數。振幅不變。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">SHIFT THEOREM</span>
+        <div>$$x[n-n_0]\;\longleftrightarrow\;e^{-j\omega n_0}\,X(\omega)$$</div>
+      </div>
+
+      <p lang="en">
+        Proof: substitute $m=n-n_0$ in the DTFT sum. The extra factor
+        $e^{-j\omega n_0}$ pops out and the rest is just $X(\omega)$.
+      </p>
+      <p lang="zh">
+        證明：在 DTFT 求和式中換元 $m=n-n_0$，額外冒出 $e^{-j\omega n_0}$，剩下就是 $X(\omega)$。
+      </p>
+
+      <h2 lang="en">What it means physically</h2>
+      <h2 lang="zh">物理意義</h2>
+
+      <ul>
+        <li lang="en">Magnitude spectrum $|X(\omega)|$ is translation-invariant — the "fingerprint" of a sound doesn't care when it started.</li>
+        <li lang="zh">振幅頻譜 $|X(\omega)|$ 不受時間平移影響 — 聲音的「頻譜指紋」跟何時開始播放無關。</li>
+        <li lang="en">Phase picks up a linear term: $\angle Y(\omega)=\angle X(\omega)-\omega n_0$. That linear phase slope <em>is</em> the time delay.</li>
+        <li lang="zh">相位多一條線：$\angle Y(\omega)=\angle X(\omega)-\omega n_0$。這條斜率就是<b>時間延遲</b>。</li>
+        <li lang="en">This is why a group delay of $n_0$ samples looks like a slope $-n_0$ line on the phase plot.</li>
+        <li lang="zh">這就是為什麼「
+          <span class="term" data-en="Group delay"
+            data-en-def="The negative derivative of phase with respect to frequency; the delay experienced by a narrow-band group at that frequency."
+            data-zh-def="相位對頻率的負導數；某頻率附近窄頻群體所受的延遲。">群延遲</span>
+          $n_0$ 樣本」在相位圖上是一條斜率 $-n_0$ 的直線。</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Shift the pulse, watch the phase tilt</h3>
+        <h3 lang="zh">實驗 · 平移脈衝，看相位傾斜</h3>
+        <canvas id="tCanvas" style="height:120px;"></canvas>
+        <canvas id="magCanvas" style="height:130px; margin-top:6px;"></canvas>
+        <canvas id="phCanvas"  style="height:130px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>n₀ (shift)</label>
+          <input type="range" id="n0Slider" min="-16" max="16" step="1" value="4"/>
+          <span class="val" id="n0Val">4</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> The magnitude spectrum of a clap stays the same whether it was 1 second or 2 seconds into the recording. Why?</p>
+        <p lang="zh"><b>問：</b>不管拍手聲出現在錄音的第 1 秒還是第 2 秒，振幅頻譜都一樣。為什麼？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Shifts add only a linear phase; $|e^{-j\omega n_0}|=1$.</button>
+          <button data-correct="1" lang="zh">時間平移只加線性相位；$|e^{-j\omega n_0}|=1$。</button>
+          <button data-correct="0" lang="en">The DTFT ignores the start time on purpose.</button>
+          <button data-correct="0" lang="zh">DTFT 設計上就忽略起始時間。</button>
+          <button data-correct="0" lang="en">Claps have zero phase.</button>
+          <button data-correct="0" lang="zh">拍手聲相位本來就是零。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.5.2-real-even-odd.html">◀ 3.5.2</a>
+    <a class="warp-pipe">3-6</a>
+    <a class="nes-btn nes-btn--primary" href="3.7-convolution.html">NEXT ▶ 3.7</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 64;
+  const state = { n0: 4 };
+
+  function makeSig() {
+    const x = new Float32Array(N);
+    const c = (N>>1) + state.n0;
+    // Gaussian pulse
+    for (let n = 0; n < N; n++) {
+      const d = n - c;
+      x[n] = Math.exp(-d*d/18) * Math.cos(0.6 * d);
+    }
+    return x;
+  }
+
+  function redraw() {
+    const x = makeSig();
+    Viz.stem($('tCanvas'), x, { yMin:-1.2, yMax:1.2, xLabel:'n', yLabel:'x[n]', title: 'SHIFTED GAUSSIAN-COS PULSE' });
+    const K = 400;
+    const om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(x, om);
+    const mag = new Float32Array(K), ph = new Float32Array(K);
+    for (let i = 0; i < K; i++) { mag[i] = Math.hypot(re[i], im[i]); ph[i] = Math.atan2(im[i], re[i]); }
+    Viz.line($('magCanvas'), mag, { xValues:Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:0, xLabel:'ω', yLabel:'|X(ω)|', title:'|X(ω)| — invariant', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+    Viz.line($('phCanvas'),  ph,  { xValues:Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-Math.PI, yMax:Math.PI, xLabel:'ω', yLabel:'∠X(ω)', title:'phase — slope equals the shift', color:'#F8B800', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+
+  $('n0Slider').addEventListener('input', () => { state.n0 = parseInt($('n0Slider').value,10); $('n0Val').textContent = state.n0; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Multiplying by a unit-magnitude exponential cannot change the magnitude.</span><span lang="zh">🪙 金幣 +1！乘上一個單位振幅的指數函數不會影響振幅。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Shift Theorem says only the phase is affected.</span><span lang="zh">✗ 位移定理說：只有相位受影響。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

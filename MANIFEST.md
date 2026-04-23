@@ -38,36 +38,36 @@ data-en-def …>` for hover tooltips.
 - [~] 3.1   Discrete Time Fourier Transform                — `ch03-fourier-transforms/3.1-dtft.html`
 - [~] 3.2   Fourier Transform (FT) and Inverse · Existence — `ch03-fourier-transforms/3.2-ft-and-inverse.html`
 - [~] 3.3   Linearity of the DTFT                          — `ch03-fourier-transforms/3.3-linearity.html`
-- [ ] 3.4   Time Reversal                                  — `ch03-fourier-transforms/3.4-time-reversal.html`
-- [ ] 3.5   Symmetry of the DTFT for Real Signals          — `ch03-fourier-transforms/3.5-symmetry.html`
-- [ ] 3.5.1 DTFT of Real Signals                           — `ch03-fourier-transforms/3.5.1-dtft-real.html`
-- [ ] 3.5.2 Real Even (or Odd) Signals                     — `ch03-fourier-transforms/3.5.2-real-even-odd.html`
-- [ ] 3.6   Shift Theorem                                  — `ch03-fourier-transforms/3.6-shift.html`
-- [ ] 3.7   Convolution Theorem                            — `ch03-fourier-transforms/3.7-convolution.html`
-- [ ] 3.8   Correlation Theorem                            — `ch03-fourier-transforms/3.8-correlation.html`
-- [ ] 3.9   Autocorrelation                                — `ch03-fourier-transforms/3.9-autocorrelation.html`
-- [ ] 3.10  Power Theorem (Parseval)                       — `ch03-fourier-transforms/3.10-power.html`
-- [ ] 3.11  Stretch Operator                               — `ch03-fourier-transforms/3.11-stretch.html`
-- [ ] 3.12  Repeat (Scaling) Operator                      — `ch03-fourier-transforms/3.12-repeat.html`
-- [ ] 3.13  Stretch/Repeat (Scaling) Theorem               — `ch03-fourier-transforms/3.13-stretch-repeat.html`
-- [ ] 3.14  Downsampling and Aliasing                      — `ch03-fourier-transforms/3.14-downsampling-aliasing.html`
-- [ ] 3.14.1 Proof of Aliasing Theorem                     — `ch03-fourier-transforms/3.14.1-aliasing-proof.html`
-- [ ] 3.15  Differentiation Theorem Dual                   — `ch03-fourier-transforms/3.15-diff-dual.html`
-- [ ] 3.16  Continuous-Time Fourier Theorems               — `ch03-fourier-transforms/3.16-ct-theorems.html`
-- [ ] 3.16.1 Scaling Theorem                               — `ch03-fourier-transforms/3.16.1-scaling.html`
-- [ ] 3.16.2 Spectral Roll-Off                             — `ch03-fourier-transforms/3.16.2-rolloff.html`
-- [ ] 3.17  Spectral Interpolation                         — `ch03-fourier-transforms/3.17-spectral-interpolation.html`
-- [ ] 3.17.1 Ideal Spectral Interpolation                  — `ch03-fourier-transforms/3.17.1-ideal-interp.html`
-- [ ] 3.17.2 Interpolating a DFT                           — `ch03-fourier-transforms/3.17.2-interp-dft.html`
-- [ ] 3.17.3 Zero Padding in the Time Domain               — `ch03-fourier-transforms/3.17.3-zero-pad.html`
-- [ ] 3.17.3.1 Practical Zero Padding                      — `ch03-fourier-transforms/3.17.3.1-practical-zp.html`
-- [ ] 3.17.3.2 Zero-Padding to Next Power of 2             — `ch03-fourier-transforms/3.17.3.2-zp-pow2.html`
-- [ ] 3.17.3.3 ZP for Interpolating Spectral Displays      — `ch03-fourier-transforms/3.17.3.3-zp-display.html`
-- [ ] 3.17.3.4 ZP for Interpolating Spectral Peaks         — `ch03-fourier-transforms/3.17.3.4-zp-peaks.html`
-- [ ] 3.17.4 Zero-Phase Zero Padding                       — `ch03-fourier-transforms/3.17.4-zero-phase-zp.html`
-- [ ] 3.17.4.1 Matlab/Octave fftshift utility              — `ch03-fourier-transforms/3.17.4.1-fftshift.html`
-- [ ] 3.17.4.2 Index Ranges for Zero-Phase ZP              — `ch03-fourier-transforms/3.17.4.2-zphase-idx.html`
-- [ ] 3.18  Summary                                        — `ch03-fourier-transforms/3.18-summary.html`
+- [~] 3.4   Time Reversal                                  — `ch03-fourier-transforms/3.4-time-reversal.html`
+- [~] 3.5   Symmetry of the DTFT for Real Signals          — `ch03-fourier-transforms/3.5-symmetry.html`
+- [~] 3.5.1 DTFT of Real Signals                           — `ch03-fourier-transforms/3.5.1-dtft-real.html`
+- [~] 3.5.2 Real Even (or Odd) Signals                     — `ch03-fourier-transforms/3.5.2-real-even-odd.html`
+- [~] 3.6   Shift Theorem                                  — `ch03-fourier-transforms/3.6-shift.html`
+- [~] 3.7   Convolution Theorem                            — `ch03-fourier-transforms/3.7-convolution.html`
+- [~] 3.8   Correlation Theorem                            — `ch03-fourier-transforms/3.8-correlation.html`
+- [~] 3.9   Autocorrelation                                — `ch03-fourier-transforms/3.9-autocorrelation.html`
+- [~] 3.10  Power Theorem (Parseval)                       — `ch03-fourier-transforms/3.10-power.html`
+- [~] 3.11  Stretch Operator                               — `ch03-fourier-transforms/3.11-stretch.html`
+- [~] 3.12  Repeat (Scaling) Operator                      — `ch03-fourier-transforms/3.12-repeat.html`
+- [~] 3.13  Stretch/Repeat (Scaling) Theorem               — `ch03-fourier-transforms/3.13-stretch-repeat.html`
+- [~] 3.14  Downsampling and Aliasing                      — `ch03-fourier-transforms/3.14-downsampling-aliasing.html`
+- [~] 3.14.1 Proof of Aliasing Theorem                     — `ch03-fourier-transforms/3.14.1-aliasing-proof.html`
+- [~] 3.15  Differentiation Theorem Dual                   — `ch03-fourier-transforms/3.15-diff-dual.html`
+- [~] 3.16  Continuous-Time Fourier Theorems               — `ch03-fourier-transforms/3.16-ct-theorems.html`
+- [~] 3.16.1 Scaling Theorem                               — `ch03-fourier-transforms/3.16.1-scaling.html`
+- [~] 3.16.2 Spectral Roll-Off                             — `ch03-fourier-transforms/3.16.2-rolloff.html`
+- [~] 3.17  Spectral Interpolation                         — `ch03-fourier-transforms/3.17-spectral-interpolation.html`
+- [~] 3.17.1 Ideal Spectral Interpolation                  — `ch03-fourier-transforms/3.17.1-ideal-interp.html`
+- [~] 3.17.2 Interpolating a DFT                           — `ch03-fourier-transforms/3.17.2-interp-dft.html`
+- [~] 3.17.3 Zero Padding in the Time Domain               — `ch03-fourier-transforms/3.17.3-zero-pad.html`
+- [~] 3.17.3.1 Practical Zero Padding                      — `ch03-fourier-transforms/3.17.3.1-practical-zp.html`
+- [~] 3.17.3.2 Zero-Padding to Next Power of 2             — `ch03-fourier-transforms/3.17.3.2-zp-pow2.html`
+- [~] 3.17.3.3 ZP for Interpolating Spectral Displays      — `ch03-fourier-transforms/3.17.3.3-zp-display.html`
+- [~] 3.17.3.4 ZP for Interpolating Spectral Peaks         — `ch03-fourier-transforms/3.17.3.4-zp-peaks.html`
+- [~] 3.17.4 Zero-Phase Zero Padding                       — `ch03-fourier-transforms/3.17.4-zero-phase-zp.html`
+- [~] 3.17.4.1 Matlab/Octave fftshift utility              — `ch03-fourier-transforms/3.17.4.1-fftshift.html`
+- [~] 3.17.4.2 Index Ranges for Zero-Phase ZP              — `ch03-fourier-transforms/3.17.4.2-zphase-idx.html`
+- [~] 3.18  Summary                                        — `ch03-fourier-transforms/3.18-summary.html`
 
 ## World 4 · Spectrum Analysis Windows  (ch04-windows/)
 
@@ -676,4 +676,4 @@ data-en-def …>` for hover tooltips.
 4. Every page gets a prev / next pager linking to its neighbors in the above order.
 5. No copyrighted prose from Smith's book. All explanations must be original.
 
-Current completed count: **11** / ≈ 530. Latest batch: full World 2 (8 pages) + 3.2, 3.3.
+Current completed count: **41** / ≈ 530. Latest batch: full World 3 (30 more pages).

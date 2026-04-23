@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17.4 Zero-Phase Zero Padding · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17-4 · Zero-Phase Zero Padding</span>
+    <span lang="zh">關卡 3-17-4 · 零相位補零</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Zero_Phase_Zero_Padding.html" target="_blank">SASP §3.17.4 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="PROBLEM">
+    <p lang="en">Appending zeros shifts the window's centre of energy by $N/2$. This produces a huge linear phase slope in the FFT even when the underlying signal is symmetric. Zero-phase padding keeps the centre at index 0.</p>
+    <p lang="zh">把零加在後面會讓視窗能量中心位移 $N/2$，即使訊號是對稱的，FFT 也會冒出一條巨大的線性相位斜率。
+      零相位補零把能量中心維持在索引 0。</p>
+  </div>
+
+  <h2 lang="en">The layout</h2>
+  <h2 lang="zh">排法</h2>
+
+  <ol>
+    <li lang="en">Centre the windowed data at index 0 by placing the left half at positive indices $0\ldots N/2-1$ and the right half at $M-N/2\ldots M-1$ (Matlab calls this layout <code>fftshift</code>).</li>
+    <li lang="zh">把加窗後資料中心放在索引 0 — 左半放在正索引 $0\ldots N/2-1$、右半放在 $M-N/2\ldots M-1$（Matlab 叫 <code>fftshift</code>）。</li>
+    <li lang="en">Fill the middle with zeros.</li>
+    <li lang="zh">中間填零。</li>
+    <li lang="en">FFT as usual.</li>
+    <li lang="zh">照常 FFT。</li>
+  </ol>
+
+  <p lang="en">
+    Result: the resulting DFT is <em>real</em> if the input was
+    symmetric about $n=0$. No linear phase. This is what you want for
+    tracking phase changes of sinusoids across time — otherwise the
+    fixed linear phase dominates any actual motion.
+  </p>
+  <p lang="zh">
+    結果：如果原資料對 $n=0$ 對稱，輸出 DFT 為<em>純實數</em>，沒有線性相位。
+    這才是跨 frame 追蹤正弦波相位變化時你要的 — 否則固定的線性相位會壓過真正的相位運動。
+  </p>
+
+  <div class="formula">
+    <span class="label">LAYOUT IN M-POINT BUFFER (N ODD)</span>
+    <div>$$y[m]=\begin{cases}x[m],& 0\le m<\tfrac{N-1}{2}\\ 0,& \tfrac{N-1}{2}\le m<M-\tfrac{N-1}{2}\\ x[m-M],& M-\tfrac{N-1}{2}\le m<M\end{cases}$$</div>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> A window symmetric about its centre yields what kind of DFT, after zero-phase padding?</p>
+    <p lang="zh"><b>問：</b>對中心對稱的視窗，做零相位補零後 DFT 會是？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Real-valued (zero phase).</button>
+      <button data-correct="1" lang="zh">純實數（零相位）。</button>
+      <button data-correct="0" lang="en">Pure imaginary.</button>
+      <button data-correct="0" lang="zh">純虛數。</button>
+      <button data-correct="0" lang="en">Random complex numbers.</button>
+      <button data-correct="0" lang="zh">任意複數。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17.3.4-zp-peaks.html">◀ 3.17.3.4</a>
+    <a class="warp-pipe">3-17-4</a>
+    <a class="nes-btn nes-btn--primary" href="3.17.4.1-fftshift.html">NEXT ▶ 3.17.4.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Real & even input ↔ real & even DFT — the whole point of the zero-phase layout.</span><span lang="zh">🪙 金幣 +1！實偶輸入 ↔ 實偶 DFT，就是零相位排法的目的。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Even real signal ↔ even real spectrum (see 3.5.2).</span><span lang="zh">✗ 實偶訊號 ↔ 實偶頻譜（§3.5.2）。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

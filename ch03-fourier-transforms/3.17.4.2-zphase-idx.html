@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17.4.2 Index Ranges for Zero-Phase ZP · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17-4-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17-4-2 · Index Ranges for Zero-Phase ZP</span>
+    <span lang="zh">關卡 3-17-4-2 · 零相位補零的索引範圍</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Index_Ranges_Zero_Phase_Zero_Padding.html" target="_blank">SASP §3.17.4.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="THE BOOK-KEEPING">
+    <p lang="en">Odd and even window lengths need slightly different splits. Here is a cheat sheet that always works.</p>
+    <p lang="zh">奇數與偶數視窗長度的拆法略有不同。這頁是永遠正確的速查表。</p>
+  </div>
+
+  <h2 lang="en">Even window length $N$</h2>
+  <h2 lang="zh">偶數長度 $N$</h2>
+
+  <p lang="en">Assume the centred window is indexed $n\in\{-N/2,\ldots,N/2-1\}$.</p>
+  <p lang="zh">假設中心化視窗索引為 $n\in\{-N/2,\ldots,N/2-1\}$。</p>
+
+  <ul>
+    <li lang="en">$w[0\ldots N/2-1]$ → buffer positions $0\ldots N/2-1$.</li>
+    <li lang="zh">$w[0\ldots N/2-1]$ → buffer 位置 $0\ldots N/2-1$。</li>
+    <li lang="en">$w[-N/2\ldots-1]$ → buffer positions $M-N/2\ldots M-1$.</li>
+    <li lang="zh">$w[-N/2\ldots-1]$ → buffer 位置 $M-N/2\ldots M-1$。</li>
+    <li lang="en">Zeros fill the gap $N/2\ldots M-N/2-1$.</li>
+    <li lang="zh">零填入 $N/2\ldots M-N/2-1$。</li>
+  </ul>
+
+  <h2 lang="en">Odd window length $N$</h2>
+  <h2 lang="zh">奇數長度 $N$</h2>
+
+  <p lang="en">Centred indexing $n\in\{-(N-1)/2,\ldots,(N-1)/2\}$.</p>
+  <p lang="zh">中心化索引 $n\in\{-(N-1)/2,\ldots,(N-1)/2\}$。</p>
+
+  <ul>
+    <li lang="en">$w[0\ldots (N-1)/2]$ → buffer $0\ldots(N-1)/2$.</li>
+    <li lang="zh">$w[0\ldots(N-1)/2]$ → buffer $0\ldots(N-1)/2$。</li>
+    <li lang="en">$w[-(N-1)/2\ldots-1]$ → buffer $M-(N-1)/2\ldots M-1$.</li>
+    <li lang="zh">$w[-(N-1)/2\ldots-1]$ → buffer $M-(N-1)/2\ldots M-1$。</li>
+    <li lang="en">Zeros fill $((N-1)/2)+1\ldots M-(N-1)/2-1$.</li>
+    <li lang="zh">零填入 $((N-1)/2)+1\ldots M-(N-1)/2-1$。</li>
+  </ul>
+
+  <div class="nes-box nes-box--yellow" data-label="RULE OF THUMB">
+    <p lang="en">If you are unsure, test with a known symmetric signal (e.g. a Hann window). The FFT output should be real (imag part ≈ 0 to machine precision).</p>
+    <p lang="zh">不確定時，用已知對稱訊號（例如 Hann 視窗）測試。FFT 輸出應該是實數（虛部 ≈ 機器精度）。</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> After correct zero-phase padding of a symmetric real window, what should $\max_k|\operatorname{Im}X[k]|$ be?</p>
+    <p lang="zh"><b>問：</b>正確完成對稱實視窗的零相位補零後，$\max_k|\operatorname{Im}X[k]|$ 應該是？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Essentially machine epsilon (≈ 1e-15 in double precision).</button>
+      <button data-correct="1" lang="zh">大約機器誤差（雙精度 ≈ 1e-15）。</button>
+      <button data-correct="0" lang="en">About half the maximum magnitude.</button>
+      <button data-correct="0" lang="zh">約為最大振幅的一半。</button>
+      <button data-correct="0" lang="en">Growing with $M$.</button>
+      <button data-correct="0" lang="zh">隨 $M$ 變大。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17.4.1-fftshift.html">◀ 3.17.4.1</a>
+    <a class="warp-pipe">3-17-4-2</a>
+    <a class="nes-btn nes-btn--primary" href="3.18-summary.html">NEXT ▶ 3.18</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! That is the acid test — real-even input should give numerically real output.</span><span lang="zh">🪙 金幣 +1！這是判斷對錯的標準 — 實偶輸入應給出在數值意義下的實輸出。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ The imaginary part should collapse to floating-point noise.</span><span lang="zh">✗ 虛部應該只剩浮點數誤差。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

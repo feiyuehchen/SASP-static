@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.14 Downsampling and Aliasing · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-14</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-14 · Downsampling &amp; Aliasing</span>
+    <span lang="zh">關卡 3-14 · 降取樣與混疊</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Downsampling_Aliasing.html" target="_blank">SASP §3.14 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box nes-box--red" data-label="THE HAZARD">
+        <p lang="en">Keep every $M$-th sample and throw the rest away. If the spectrum has energy above $\pi/M$, that energy folds back down into the remaining band — aliasing.</p>
+        <p lang="zh">每 $M$ 個樣本留一個。如果頻譜在 $\pi/M$ 以上還有能量，這些能量會折回低頻段 — 就是混疊。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">DOWNSAMPLE BY M</span>
+        <div>$$y[n]\;=\;x[nM]$$</div>
+        <span class="label">ALIASING THEOREM</span>
+        <div>$$Y(\omega)\;=\;\frac{1}{M}\sum_{m=0}^{M-1} X\!\left(\frac{\omega-2\pi m}{M}\right)$$</div>
+      </div>
+
+      <p lang="en">
+        The sum collects $M$ shifted, stretched copies of the spectrum and
+        adds them. If the original $X(\omega)$ is zero outside
+        $|\omega|\le\pi/M$, the copies do not overlap and reconstruction
+        is perfect. Otherwise they interfere — that interference is what
+        we hear as a "chipmunk" effect or see as moiré on an image.
+      </p>
+      <p lang="zh">
+        和式把 $M$ 份被位移與拉伸過的頻譜疊起來。若原本 $X(\omega)$ 在 $|\omega|>\pi/M$ 為零，
+        這些份不會重疊，還可完美還原。否則重疊部分就是混疊 —
+        聽起來像「花栗鼠」音色、看起來像圖片上的摩爾紋。
+      </p>
+
+      <h2 lang="en">How to avoid it</h2>
+      <h2 lang="zh">如何避免</h2>
+
+      <ul>
+        <li lang="en">Low-pass filter the signal to $|\omega|\le\pi/M$ <b>before</b> discarding samples. This is the <span class="term" data-en="Decimation filter"
+          data-en-def="A low-pass filter applied prior to downsampling to prevent aliasing."
+          data-zh-def="降取樣前套用的低通濾波器，用來防止混疊。">decimation filter</span>.</li>
+        <li lang="zh">在丟棄樣本<b>前</b>，先把訊號低通到 $|\omega|\le\pi/M$ — 這個濾波器叫
+          <span class="term" data-en="Decimation filter"
+          data-en-def="A low-pass filter applied prior to downsampling to prevent aliasing."
+          data-zh-def="降取樣前套用的低通濾波器，用來防止混疊。">降取樣（抗混疊）濾波器</span>。</li>
+
+        <li lang="en">The proof that the aliasing sum formula is correct lives on the next page (3.14.1).</li>
+        <li lang="zh">為什麼混疊公式會是這個加總形式，下一頁（3.14.1）證明。</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Hear the fold-back</h3>
+        <h3 lang="zh">實驗 · 聽混疊折返</h3>
+        <canvas id="fCanvas" style="height:180px;"></canvas>
+        <div class="controls">
+          <label>M</label>
+          <input type="range" id="mSlider" min="1" max="6" step="1" value="3"/>
+          <span class="val" id="mVal">3</span>
+
+          <label>f (Hz)</label>
+          <input type="range" id="fSlider" min="200" max="3800" step="20" value="1800"/>
+          <span class="val" id="fVal">1800</span>
+
+          <label>ANTI-ALIAS</label>
+          <select id="aaSel">
+            <option value="off" selected>Off (aliased)</option>
+            <option value="on">On (low-pass)</option>
+          </select>
+          <span class="val" id="aaName">OFF</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="nes-btn nes-btn--blue"  id="playIn"   lang="en">▶ ORIGINAL</button>
+          <button class="nes-btn nes-btn--blue"  id="playIn2"  lang="zh">▶ 原始</button>
+          <button class="nes-btn nes-btn--green" id="playOut"  lang="en">▶ DOWNSAMPLED</button>
+          <button class="nes-btn nes-btn--green" id="playOut2" lang="zh">▶ 降取樣後</button>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> A 7000 Hz tone is captured at $f_s=16000$ and you downsample by $M=2$. Without an anti-aliasing filter, what frequency does it fold to?</p>
+        <p lang="zh"><b>問：</b>$f_s=16000$ 下錄到 7000 Hz 的音，$M=2$ 降取樣、不加抗混疊濾波器，會折到哪個頻率？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">1000 Hz (folded about the new Nyquist of 4000 Hz).</button>
+          <button data-correct="1" lang="zh">1000 Hz（以新 Nyquist 4000 Hz 為鏡面折疊）。</button>
+          <button data-correct="0" lang="en">3500 Hz.</button>
+          <button data-correct="0" lang="zh">3500 Hz。</button>
+          <button data-correct="0" lang="en">7000 Hz still.</button>
+          <button data-correct="0" lang="zh">還是 7000 Hz。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.13-stretch-repeat.html">◀ 3.13</a>
+    <a class="warp-pipe">3-14</a>
+    <a class="nes-btn nes-btn--primary" href="3.14.1-aliasing-proof.html">NEXT ▶ 3.14.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const fs = 16000, dur = 0.5, N = Math.floor(fs*dur);
+  const state = { M: 3, f: 1800, aa: 'off' };
+
+  function makeX() {
+    const x = new Float32Array(N);
+    for (let n = 0; n < N; n++) x[n] = 0.6 * Math.sin(2*Math.PI*state.f*n/fs);
+    return x;
+  }
+
+  function lp(x, cutOmega) {
+    // quick FIR LP via windowed sinc
+    const M = 63, mid = (M-1)/2, w = DSP.WINDOWS.hamming(M);
+    const h = new Float32Array(M);
+    for (let n = 0; n < M; n++) {
+      const k = n - mid;
+      h[n] = (k === 0 ? cutOmega/Math.PI : Math.sin(cutOmega*k)/(Math.PI*k)) * w[n];
+    }
+    return DSP.convolveFft(x, h).slice(0, x.length);
+  }
+
+  function downsample(x, M) {
+    const y = new Float32Array(Math.floor(x.length / M));
+    for (let n = 0; n < y.length; n++) y[n] = x[n*M];
+    return y;
+  }
+
+  function redraw() {
+    const x = makeX();
+    const pre = state.aa === 'on' ? lp(x, Math.PI/state.M) : x;
+    const y = downsample(pre, state.M);
+    const K = 400;
+    const om = DSP.linspace(0, Math.PI, K);
+    const mag = arr => {
+      const { re, im } = DSP.dtft(arr.slice(0, 1024), om);
+      const m = new Float32Array(K); for (let i = 0; i < K; i++) m[i] = Math.hypot(re[i], im[i]);
+      return DSP.toDb(m, -60);
+    };
+    Viz.multiLine($('fCanvas'), [
+      { y: Array.from(mag(x)), color:'#3CBCFC', label:'|X|' },
+      { y: Array.from(mag(y)), color:'#F83800', label:'|Y|' },
+    ], { xValues: Array.from(om), xMin:0, xMax:Math.PI, yMin:-60, xLabel:'ω (input-rate normalized)', yLabel:'dB', title:`|X|, |Y| after M=${state.M} downsample`, xTicks:[{v:0,label:'0'},{v:Math.PI/2,label:'π/2'},{v:Math.PI,label:'π'}] });
+    window._x = x; window._y = y;
+  }
+
+  $('mSlider').addEventListener('input',  () => { state.M = parseInt($('mSlider').value,10); $('mVal').textContent = state.M; redraw(); });
+  $('fSlider').addEventListener('input',  () => { state.f = parseInt($('fSlider').value,10); $('fVal').textContent = state.f; redraw(); });
+  $('aaSel').addEventListener('change',   () => { state.aa = $('aaSel').value; $('aaName').textContent = state.aa.toUpperCase(); redraw(); });
+  const pIn  = () => AudioKit.playBuffer(window._x, fs, 1);
+  const pOut = () => AudioKit.playBuffer(window._y, fs/state.M, 1);
+  $('playIn').addEventListener('click', pIn); $('playIn2').addEventListener('click', pIn);
+  $('playOut').addEventListener('click', pOut); $('playOut2').addEventListener('click', pOut);
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! |2·4000 − 7000| = 1000 — the fold formula for aliasing.</span><span lang="zh">🪙 金幣 +1！|2·4000 − 7000| = 1000 — 混疊折疊公式。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Fold about the new Nyquist (4000 Hz) — reflect 7000 back to 1000.</span><span lang="zh">✗ 以新 Nyquist 4000 Hz 為對稱軸，把 7000 折回 1000。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

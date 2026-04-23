@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.5.2 Real Even / Odd Signals · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-5-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-5-2 · Real Even / Odd Signals</span>
+    <span lang="zh">關卡 3-5-2 · 實偶 / 實奇訊號</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Real_Even_or_Odd.html" target="_blank">SASP §3.5.2 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="TWO SPECIAL CASES">
+        <p lang="en">Real-even time → real-even spectrum. Real-odd time → purely imaginary odd spectrum.</p>
+        <p lang="zh">實偶時訊號 → 實偶頻譜。實奇時訊號 → 純虛奇頻譜。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">REAL EVEN SIGNAL</span>
+        <div>$$x[-n]=x[n]\in\mathbb{R}\;\;\Rightarrow\;\;X(\omega)\in\mathbb{R},\;\;X(-\omega)=X(\omega)$$</div>
+        <span class="label">REAL ODD SIGNAL</span>
+        <div>$$x[-n]=-x[n]\in\mathbb{R}\;\;\Rightarrow\;\;X(\omega)\in j\mathbb{R},\;\;X(-\omega)=-X(\omega)$$</div>
+      </div>
+
+      <p lang="en">
+        The neat consequence: a purely even waveform (a cosine burst,
+        centred rectangular pulse, Gaussian) has zero phase. A purely odd
+        waveform (sine burst, anti-symmetric ramp) has phase fixed at
+        $\pm\pi/2$. That is why cosine-windowed signals are often called
+        "zero-phase" and sine windows "quadrature".
+      </p>
+      <p lang="zh">
+        漂亮的結論：純偶波形（餘弦波包、中心化矩形脈衝、高斯）相位全是零。
+        純奇波形（正弦波包、反對稱斜坡）相位固定在 $\pm\pi/2$。
+        這就是為什麼餘弦加窗訊號常被叫「零相位」、正弦加窗是「
+        <span class="term" data-en="Quadrature (phase)"
+          data-en-def="A signal's 90° phase-shifted counterpart; cosine and sine are a quadrature pair."
+          data-zh-def="一個訊號相位差 90° 的對應訊號；餘弦與正弦互為此關係。">正交相位</span>」。
+      </p>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Toggle even vs odd</h3>
+        <h3 lang="zh">實驗 · 偶訊號 ↔ 奇訊號切換</h3>
+        <canvas id="tCanvas" style="height:120px;"></canvas>
+        <canvas id="reCanvas" style="height:110px; margin-top:6px;"></canvas>
+        <canvas id="imCanvas" style="height:110px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>PARITY</label>
+          <select id="pSel">
+            <option value="even" selected>Even (cosine)</option>
+            <option value="odd">Odd (sine)</option>
+          </select>
+          <span class="val" id="pName">EVEN</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> A centred symmetric rectangular pulse is flipped about $n=0$ and subtracted from itself: $y[n]=x[n]-x[-n]$. What is $Y(\omega)$?</p>
+        <p lang="zh"><b>問：</b>中心對稱的矩形脈衝 $x[n]$，作 $y[n]=x[n]-x[-n]$，那 $Y(\omega)$ 是什麼？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Zero — $x[n]$ is even, so $y[n]\equiv 0$.</button>
+          <button data-correct="1" lang="zh">是 0 — $x[n]$ 偶，$y[n]\equiv 0$。</button>
+          <button data-correct="0" lang="en">Pure imaginary and odd in $\omega$.</button>
+          <button data-correct="0" lang="zh">純虛且 $\omega$ 為奇函數。</button>
+          <button data-correct="0" lang="en">Twice the DTFT of the pulse.</button>
+          <button data-correct="0" lang="zh">脈衝 DTFT 的兩倍。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.5.1-dtft-real.html">◀ 3.5.1</a>
+    <a class="warp-pipe">3-5-2</a>
+    <a class="nes-btn nes-btn--primary" href="3.6-shift.html">NEXT ▶ 3.6</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 64, C = N/2;
+  const state = { parity: 'even' };
+
+  function makeSig() {
+    const x = new Float32Array(N);
+    // Use a short triangular bump, centred at C; sin-like vs cos-like.
+    for (let k = -10; k <= 10; k++) {
+      const n = C + k;
+      if (n < 0 || n >= N) continue;
+      const env = 1 - Math.abs(k) / 10;
+      x[n] = env * (state.parity === 'even' ? Math.cos(0.7 * k) : Math.sin(0.7 * k));
+    }
+    return x;
+  }
+
+  function redraw() {
+    const x = makeSig();
+    Viz.stem($('tCanvas'), x, { yMin:-1.2, yMax:1.2, xLabel:'n', yLabel:'x[n]', title: state.parity === 'even' ? 'EVEN SIGNAL' : 'ODD SIGNAL' });
+    const K = 400;
+    const om = DSP.linspace(-Math.PI, Math.PI, K);
+    // DTFT centered: shift index so symmetry shows around ω=0 without a linear phase
+    const { re, im } = DSP.dtft(x.map((v,i)=>v), om.map(w=>w)); // no shift trick here; just compute
+    // Compensate the centre shift by multiplying by e^{jωC}
+    const reA = new Float32Array(K), imA = new Float32Array(K);
+    for (let i = 0; i < K; i++) {
+      const w = om[i], c = Math.cos(w*C), s = Math.sin(w*C);
+      reA[i] = re[i]*c - im[i]*s;
+      imA[i] = re[i]*s + im[i]*c;
+    }
+    Viz.line($('reCanvas'), reA, { xValues:Array.from(om), xMin:-Math.PI, xMax:Math.PI, xLabel:'ω', yLabel:'Re X̂(ω)', title:'Re  (should be zero for ODD signals)', color:'#00B800', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+    Viz.line($('imCanvas'), imA, { xValues:Array.from(om), xMin:-Math.PI, xMax:Math.PI, xLabel:'ω', yLabel:'Im X̂(ω)', title:'Im  (should be zero for EVEN signals)', color:'#F83800', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+
+  $('pSel').addEventListener('change', () => { state.parity = $('pSel').value; $('pName').textContent = state.parity.toUpperCase(); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! An even signal minus its flip is identically zero.</span><span lang="zh">🪙 金幣 +1！偶函數減去它的翻轉，恆等於 0。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ If x is even, x[n] = x[-n], so the difference is the zero signal.</span><span lang="zh">✗ 如果 x 是偶函數，x[n]=x[-n]，差就是零訊號。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.7 Convolution Theorem · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-7</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-7 · Convolution Theorem</span>
+    <span lang="zh">關卡 3-7 · 卷積定理</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Convolution_Theorem.html" target="_blank">SASP §3.7 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box nes-box--purple" data-label="WORKHORSE THEOREM">
+        <p lang="en">Convolution in time becomes multiplication in frequency. This single fact underwrites digital filtering, echo effects, FFT convolution, and almost everything in this book.</p>
+        <p lang="zh">時域卷積 ↔ 頻域相乘。這一條就撐起了數位濾波、回音效果、FFT 卷積，幾乎這整本書都站在它上面。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">TIME-DOMAIN CONVOLUTION</span>
+        <div>$$(x * h)[n]\;=\;\sum_{m=-\infty}^{\infty} x[m]\,h[n-m]$$</div>
+        <span class="label">THEOREM</span>
+        <div>$$x * h\;\longleftrightarrow\;X(\omega)\,H(\omega)$$</div>
+      </div>
+
+      <p lang="en">
+        For an LTI filter $h$, the output spectrum is just the input
+        spectrum multiplied by the filter's
+        <span class="term" data-en="Frequency response"
+          data-en-def="H(ω) — the DTFT of the impulse response; tells you how each frequency is scaled and phase-shifted."
+          data-zh-def="H(ω) — 脈衝響應的 DTFT；告訴你每個頻率被放大多少、相位被移多少。">frequency response</span>
+        $H(\omega)$. Designing filters becomes: design the shape of
+        $H(\omega)$ and compute $h[n]$ via an inverse transform.
+      </p>
+      <p lang="zh">
+        對 LTI 濾波器 $h$，輸出頻譜就是輸入頻譜乘上該濾波器的
+        <span class="term" data-en="Frequency response"
+          data-en-def="H(ω) — the DTFT of the impulse response; tells you how each frequency is scaled and phase-shifted."
+          data-zh-def="H(ω) — 脈衝響應的 DTFT；告訴你每個頻率被放大多少、相位被移多少。">頻率響應</span>
+        $H(\omega)$。設計濾波器 = 畫出 $H(\omega)$ 的形狀，再反 FT 算出 $h[n]$。
+      </p>
+
+      <h2 lang="en">Dual statement</h2>
+      <h2 lang="zh">對偶版本</h2>
+
+      <div class="formula">
+        <span class="label">MULTIPLICATION IN TIME</span>
+        <div>$$x[n]\,w[n]\;\longleftrightarrow\;\frac{1}{2\pi}\bigl(X * W\bigr)(\omega)$$</div>
+      </div>
+      <p lang="en">This dual is how windowing causes spectral leakage: multiplying by a window $w$ convolves the spectrum with $W(\omega)$.</p>
+      <p lang="zh">這個對偶就是「視窗造成頻譜洩漏」的原因 — 時域乘上視窗 $w$，等於頻域卷積上 $W(\omega)$。</p>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Pick filter, see spectrum multiplied</h3>
+        <h3 lang="zh">實驗 · 選濾波器，看頻譜相乘</h3>
+        <canvas id="xCanvas" style="height:120px;"></canvas>
+        <canvas id="yCanvas" style="height:120px; margin-top:6px;"></canvas>
+        <canvas id="fCanvas" style="height:150px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>FILTER</label>
+          <select id="hSel">
+            <option value="lp" selected>Low-pass (cutoff 0.25π)</option>
+            <option value="hp">High-pass (cutoff 0.25π)</option>
+            <option value="bp">Band-pass (0.2π–0.4π)</option>
+          </select>
+          <span class="val" id="hName">LP</span>
+
+          <label>INPUT</label>
+          <select id="xSel">
+            <option value="two" selected>Two tones (0.1π, 0.5π)</option>
+            <option value="noise">White noise</option>
+          </select>
+          <span class="val" id="xName">TWO</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="nes-btn nes-btn--blue"  id="playIn"   lang="en">▶ IN</button>
+          <button class="nes-btn nes-btn--blue"  id="playIn2"  lang="zh">▶ 原始</button>
+          <button class="nes-btn nes-btn--green" id="playOut"  lang="en">▶ OUT</button>
+          <button class="nes-btn nes-btn--green" id="playOut2" lang="zh">▶ 輸出</button>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Two LTI filters $h_1$ and $h_2$ are connected in series (cascade). Its frequency response is:</p>
+        <p lang="zh"><b>問：</b>兩個 LTI 濾波器 $h_1$、$h_2$ 串接，整體頻率響應為？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">$H_1(\omega)\cdot H_2(\omega)$.</button>
+          <button data-correct="1" lang="zh">$H_1(\omega)\cdot H_2(\omega)$。</button>
+          <button data-correct="0" lang="en">$H_1(\omega)+H_2(\omega)$.</button>
+          <button data-correct="0" lang="zh">$H_1(\omega)+H_2(\omega)$。</button>
+          <button data-correct="0" lang="en">$H_1(\omega)*H_2(\omega)$ (convolution in $\omega$).</button>
+          <button data-correct="0" lang="zh">$H_1(\omega)*H_2(\omega)$（$\omega$ 上卷積）。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.6-shift.html">◀ 3.6</a>
+    <a class="warp-pipe">3-7</a>
+    <a class="nes-btn nes-btn--primary" href="3.8-correlation.html">NEXT ▶ 3.8</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const fs = 8000, dur = 0.5, N = Math.floor(fs * dur);
+  const state = { h: 'lp', x: 'two' };
+
+  function makeX() {
+    const x = new Float32Array(N);
+    if (state.x === 'two') {
+      for (let n = 0; n < N; n++) {
+        const t = n / fs;
+        x[n] = 0.4 * (Math.sin(2*Math.PI*200*t) + Math.sin(2*Math.PI*1500*t));
+      }
+    } else {
+      for (let n = 0; n < N; n++) x[n] = 0.3 * (2*Math.random() - 1);
+    }
+    return x;
+  }
+
+  function makeH() {
+    // Design a simple 63-tap linear-phase FIR by windowed sinc.
+    const M = 63, mid = (M-1)/2, w = DSP.WINDOWS.hamming(M);
+    const cut = 0.25 * Math.PI;
+    const h = new Float32Array(M);
+    if (state.h === 'lp') {
+      for (let n = 0; n < M; n++) {
+        const k = n - mid;
+        h[n] = (k === 0 ? cut/Math.PI : Math.sin(cut*k)/(Math.PI*k)) * w[n];
+      }
+    } else if (state.h === 'hp') {
+      for (let n = 0; n < M; n++) {
+        const k = n - mid;
+        const lp = (k === 0 ? cut/Math.PI : Math.sin(cut*k)/(Math.PI*k));
+        const all = (k === 0 ? 1 : 0);
+        h[n] = (all - lp) * w[n];
+      }
+    } else { // bandpass
+      const lo = 0.2*Math.PI, hi = 0.4*Math.PI;
+      for (let n = 0; n < M; n++) {
+        const k = n - mid;
+        const bp = (k === 0 ? (hi-lo)/Math.PI : (Math.sin(hi*k) - Math.sin(lo*k))/(Math.PI*k));
+        h[n] = bp * w[n];
+      }
+    }
+    return h;
+  }
+
+  function redraw() {
+    const x = makeX(), h = makeH();
+    const y = DSP.convolveFft(x, h).slice(0, N);
+    Viz.line($('xCanvas'), x.slice(0, 400), { xLabel:'n', yLabel:'x[n]', title:'INPUT (first 400 samples)', yMin:-1.2, yMax:1.2 });
+    Viz.line($('yCanvas'), y.slice(0, 400), { xLabel:'n', yLabel:'y[n]', title:'OUTPUT', yMin:-1.2, yMax:1.2, color: '#00B800' });
+
+    const K = 400;
+    const om = DSP.linspace(0, Math.PI, K);
+    const mag = (arr) => {
+      const { re, im } = DSP.dtft(arr.slice(0, 1024), om);
+      const m = new Float32Array(K);
+      for (let i = 0; i < K; i++) m[i] = Math.hypot(re[i], im[i]);
+      return m;
+    };
+    Viz.multiLine($('fCanvas'), [
+      { y: Array.from(DSP.toDb(mag(x), -60)), color:'#3CBCFC', label:'|X|' },
+      { y: Array.from(DSP.toDb(mag(y), -60)), color:'#00B800', label:'|Y|' },
+    ], { xValues: Array.from(om), xMin:0, xMax:Math.PI, yMin:-60, xLabel:'ω', yLabel:'dB', title:'|Y(ω)| = |X(ω)| · |H(ω)|', xTicks:[{v:0,label:'0'},{v:Math.PI/2,label:'π/2'},{v:Math.PI,label:'π'}] });
+
+    window._x = x; window._y = y;
+  }
+
+  $('hSel').addEventListener('change', () => { state.h = $('hSel').value; $('hName').textContent = state.h.toUpperCase(); redraw(); });
+  $('xSel').addEventListener('change', () => { state.x = $('xSel').value; $('xName').textContent = state.x.toUpperCase(); redraw(); });
+  const pIn  = () => AudioKit.playBuffer(window._x, fs, 1);
+  const pOut = () => AudioKit.playBuffer(window._y, fs, 1);
+  $('playIn').addEventListener('click', pIn); $('playIn2').addEventListener('click', pIn);
+  $('playOut').addEventListener('click', pOut); $('playOut2').addEventListener('click', pOut);
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Cascaded LTI filters convolve their impulse responses → multiply their frequency responses.</span><span lang="zh">🪙 金幣 +1！LTI 串接在時域是脈衝響應卷積，等於頻率響應相乘。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Cascade is convolution in time = multiplication in frequency.</span><span lang="zh">✗ 串接在時域是卷積，在頻域是相乘。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

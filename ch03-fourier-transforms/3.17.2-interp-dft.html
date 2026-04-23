@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17.2 Interpolating a DFT · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17-2 · Interpolating a DFT</span>
+    <span lang="zh">關卡 3-17-2 · DFT 的內插</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Interpolating_DFT.html" target="_blank">SASP §3.17.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Give me $X[k]$ for $k=0,\ldots,N-1$. I want the DTFT value at an arbitrary $\omega$.</p>
+    <p lang="zh">給我 $X[k]$（$k=0,\ldots,N-1$）。我要任意 $\omega$ 處的 DTFT 值。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">WEIGHTED SUM OF BINS</span>
+    <div>$$X(\omega)\;=\;\sum_{k=0}^{N-1} X[k]\,g_k(\omega)$$</div>
+  </div>
+
+  <p lang="en">
+    The weights $g_k(\omega)$ are shifted Dirichlet kernels centred at
+    each bin, with a linear-phase correction that accounts for the
+    mismatch between "centred" and "causal" indexing conventions. The
+    important takeaway is that the interpolation is <em>exact</em> — no
+    information is lost going from the $N$ DFT samples to any
+    intermediate frequency, as long as the original sequence was indeed
+    length $N$.
+  </p>
+  <p lang="zh">
+    權重 $g_k(\omega)$ 是以每個 bin 為中心的 Dirichlet 核，再加上一個線性相位修正項
+    （對應「中心化」與「因果」兩種索引慣例的差別）。重點是：內插是<em>精確的</em> —
+    只要原序列真的是長度 $N$，從 $N$ 個 DFT 樣本到任何中間頻率都不會丟資訊。
+  </p>
+
+  <h2 lang="en">In practice</h2>
+  <h2 lang="zh">實務作法</h2>
+  <p lang="en">Two common shortcuts avoid computing Dirichlet kernels by hand:</p>
+  <p lang="zh">兩種常見捷徑可以免手算 Dirichlet 核：</p>
+
+  <ul>
+    <li lang="en"><b>Zero pad</b> in time → FFT at size $M\gg N$ → the new bins already lie between the old ones.</li>
+    <li lang="zh"><b>時域補零</b> → 在長度 $M\gg N$ 做 FFT → 新 bin 就落在舊 bin 之間。</li>
+    <li lang="en"><b>Chirp-z transform</b> (or Goertzel) — evaluate $X(\omega)$ directly at a handful of chosen frequencies without gridding the whole circle.</li>
+    <li lang="zh"><b>Chirp-z 轉換</b>（或 Goertzel）— 直接在若干選定頻率算 $X(\omega)$，不必把整個圓都計算。</li>
+  </ul>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> You have a length-256 recording and want the DTFT value at 100 specific frequencies only. Cheapest method?</p>
+    <p lang="zh"><b>問：</b>一段長 256 的錄音，只要算 100 個指定頻率上的 DTFT 值。最省算力的方法？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Goertzel or chirp-z at those 100 frequencies (no full FFT).</button>
+      <button data-correct="1" lang="zh">在那 100 個頻率用 Goertzel / chirp-z（不做完整 FFT）。</button>
+      <button data-correct="0" lang="en">Zero-pad to length $2^{20}$ then FFT.</button>
+      <button data-correct="0" lang="zh">補零到 $2^{20}$ 再做 FFT。</button>
+      <button data-correct="0" lang="en">Impossible — DFT only gives integer bins.</button>
+      <button data-correct="0" lang="zh">做不到 — DFT 只能給整數 bin。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17.1-ideal-interp.html">◀ 3.17.1</a>
+    <a class="warp-pipe">3-17-2</a>
+    <a class="nes-btn nes-btn--primary" href="3.17.3-zero-pad.html">NEXT ▶ 3.17.3</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! For a small number of arbitrary frequencies, per-point evaluation (Goertzel/chirp-z) beats a huge padded FFT.</span><span lang="zh">🪙 金幣 +1！要算「少量任意頻率」時，逐點估算（Goertzel / chirp-z）比巨大補零 FFT 便宜。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Zero padding samples ALL frequencies densely, which is overkill here.</span><span lang="zh">✗ 補零會把所有頻率都密集取樣，這題用不到那麼多。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

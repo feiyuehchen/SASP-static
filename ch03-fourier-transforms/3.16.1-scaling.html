@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.16.1 CT Scaling Theorem · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-16-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-16-1 · CT Scaling Theorem</span>
+    <span lang="zh">關卡 3-16-1 · 連續時間縮放定理</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Scaling_Theorem.html" target="_blank">SASP §3.16.1 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THEOREM">
+        <p lang="en">Squeeze in time ↔ stretch in frequency, and the total area (energy) stays the same.</p>
+        <p lang="zh">時域壓窄 ↔ 頻域拉開，總面積（能量）不變。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">CT SCALING</span>
+        <div>$$x(at)\;\longleftrightarrow\;\frac{1}{|a|}\,X\!\left(\frac{j\Omega}{a}\right)\qquad a\ne 0$$</div>
+      </div>
+
+      <p lang="en">
+        If $a>1$, time is compressed by $a$ and frequency is dilated by
+        $a$ — a short event has a wide spectrum. If $a<1$, time is
+        dilated and frequency compresses — a long slow signal has a
+        narrow spectrum. The $1/|a|$ prefactor keeps total energy the same.
+      </p>
+      <p lang="zh">
+        $a>1$：時間被壓 $a$ 倍、頻率被放 $a$ 倍 — 短事件有寬頻譜。
+        $a<1$：時間被放、頻率被壓 — 長慢訊號有窄頻譜。前面的 $1/|a|$ 保證能量不變。
+      </p>
+
+      <h2 lang="en">This is the uncertainty principle</h2>
+      <h2 lang="zh">這就是不確定性原理</h2>
+
+      <p lang="en">
+        The scaling theorem is the mathematical reason time and frequency
+        resolution trade off. A pulse of width $T$ always has a spectrum of
+        width $\sim 1/T$. You cannot cheat this — the Gaussian pulse hits
+        the theoretical minimum. (Full proof: Appendix B.17 and D.)
+      </p>
+      <p lang="zh">
+        縮放定理正是「時頻解析度互相取捨」的數學根源。寬度 $T$ 的脈衝，頻譜寬度永遠是 $\sim 1/T$ 等級。
+        無法鑽漏洞 — 只有高斯脈衝能達到理論下限。（完整證明見附錄 B.17 與 D。）
+      </p>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Squeeze a Gaussian</h3>
+        <h3 lang="zh">實驗 · 壓縮一個高斯</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:150px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>a (scale)</label>
+          <input type="range" id="aSlider" min="0.3" max="3" step="0.1" value="1"/>
+          <span class="val" id="aVal">1.0</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> A drum hit 5 ms long has a spectrum spread of roughly:</p>
+        <p lang="zh"><b>問：</b>一個長 5 毫秒的鼓擊，其頻譜約有多寬？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">~200 Hz (≈ 1/5 ms).</button>
+          <button data-correct="1" lang="zh">~200 Hz（≈ 1 / 5 毫秒）。</button>
+          <button data-correct="0" lang="en">~5 Hz.</button>
+          <button data-correct="0" lang="zh">~5 Hz。</button>
+          <button data-correct="0" lang="en">Exactly zero — drums are tonal.</button>
+          <button data-correct="0" lang="zh">是 0 — 鼓是音色清晰的。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.16-ct-theorems.html">◀ 3.16</a>
+    <a class="warp-pipe">3-16-1</a>
+    <a class="nes-btn nes-btn--primary" href="3.16.2-rolloff.html">NEXT ▶ 3.16.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { a: 1 };
+  const N = 512, T = 8; // physical time half-range
+
+  function redraw() {
+    const x = new Float32Array(N);
+    const sigma = 1.0 / state.a;
+    const dt = 2 * T / N;
+    for (let i = 0; i < N; i++) {
+      const t = -T + i * dt;
+      x[i] = Math.exp(-0.5 * (t / sigma) ** 2);
+    }
+    const xTicks = [{v:-T,label:'-T'},{v:0,label:'0'},{v:T,label:'T'}];
+    Viz.line($('tCanvas'), x, { xValues: Array.from({length:N},(_,i)=>-T+i*dt), xMin:-T, xMax:T, yMin:0, xLabel:'t', yLabel:'x(at)', title:`Gaussian pulse, σ = ${sigma.toFixed(2)}`, xTicks });
+    // Spectrum of Gaussian: another Gaussian of width 1/sigma (approx)
+    const X = new Float32Array(N);
+    const W = 8, dw = 2 * W / N;
+    for (let i = 0; i < N; i++) {
+      const w = -W + i * dw;
+      X[i] = sigma * Math.exp(-0.5 * (w * sigma) ** 2);
+    }
+    const xwTicks = [{v:-W,label:'-Ω'},{v:0,label:'0'},{v:W,label:'Ω'}];
+    Viz.line($('fCanvas'), X, { xValues: Array.from({length:N},(_,i)=>-W+i*dw), xMin:-W, xMax:W, yMin:0, xLabel:'Ω', yLabel:'|X(jΩ)|', title:`Spectrum — width scales as 1/σ`, color:'#F8B800', xTicks: xwTicks });
+  }
+
+  $('aSlider').addEventListener('input', () => { state.a = parseFloat($('aSlider').value); $('aVal').textContent = state.a.toFixed(1); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! 5 ms in time ↔ ~200 Hz in frequency — the uncertainty reciprocal.</span><span lang="zh">🪙 金幣 +1！5 毫秒 ↔ 約 200 Hz，就是不確定性反比關係。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Width in time × width in frequency ≈ 1.</span><span lang="zh">✗ 時域寬度 × 頻域寬度 ≈ 1。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

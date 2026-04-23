@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.17 Spectral Interpolation · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-17</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-17 · Spectral Interpolation</span>
+    <span lang="zh">關卡 3-17 · 頻譜內插</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Spectral_Interpolation.html" target="_blank">SASP §3.17 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="BRIEFING">
+    <p lang="en">A DFT samples the spectrum at $N$ uniform points. Sometimes that is not enough — we need the value at a frequency between two bins. Good news: with a finite-length signal, the full DTFT is completely determined, and interpolation is exact.</p>
+    <p lang="zh">DFT 在 $N$ 個均勻頻率點上對頻譜取樣。有時不夠用 — 我們要兩個 bin 之間某個頻率的值。好消息：有限長訊號的整條 DTFT 完全可被那 $N$ 個樣本決定，內插是精確的。</p>
+  </div>
+
+  <h2 lang="en">Three ways</h2>
+  <h2 lang="zh">三種作法</h2>
+
+  <ul>
+    <li lang="en"><a href="3.17.1-ideal-interp.html"><b>Ideal (Dirichlet kernel)</b></a>: the theoretically exact interpolator for a finite-length sequence.</li>
+    <li lang="zh"><a href="3.17.1-ideal-interp.html"><b>理想內插（Dirichlet 核）</b></a>：有限長序列對應的精確內插器。</li>
+    <li lang="en"><a href="3.17.2-interp-dft.html"><b>Interpolating a DFT</b></a> — write the continuous DTFT as a sum over DFT values.</li>
+    <li lang="zh"><a href="3.17.2-interp-dft.html"><b>DFT 內插</b></a> — 把連續 DTFT 寫成 DFT 值的求和。</li>
+    <li lang="en"><a href="3.17.3-zero-pad.html"><b>Zero padding</b></a> — the lazy but excellent way: pad zeros in time, FFT, read denser bins.</li>
+    <li lang="zh"><a href="3.17.3-zero-pad.html"><b>補零</b></a> — 懶但好用：時域補零、FFT、讀更密的 bin。</li>
+    <li lang="en"><a href="3.17.4-zero-phase-zp.html"><b>Zero-phase zero padding</b></a> — do the above without introducing an artificial phase slope.</li>
+    <li lang="zh"><a href="3.17.4-zero-phase-zp.html"><b>零相位補零</b></a> — 做補零但不引入假的線性相位。</li>
+  </ul>
+
+  <div class="nes-box nes-box--purple" data-label="WHY IT MATTERS">
+    <p lang="en">Frequency-domain peaks rarely sit exactly on a DFT bin. To measure the actual peak frequency of a sinusoid (and therefore its pitch) we <em>must</em> interpolate between bins. Peak-interpolation accuracy governs how good a pitch detector, a vocoder, or a spectral modeling system can get.</p>
+    <p lang="zh">頻峰幾乎不會剛好落在 DFT bin 上。要量出正弦波真正的峰值頻率（也就是音高），一定得在 bin 之間內插。
+      內插精度決定了基頻偵測器、vocoder、頻譜建模系統的上限。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.16.2-rolloff.html">◀ 3.16.2</a>
+    <a class="warp-pipe">3-17</a>
+    <a class="nes-btn nes-btn--primary" href="3.17.1-ideal-interp.html">NEXT ▶ 3.17.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

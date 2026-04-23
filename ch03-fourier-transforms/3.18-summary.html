@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.18 Summary · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-18</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-18 · Summary (World 3)</span>
+    <span lang="zh">關卡 3-18 · 本世界總結</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Summary_I.html" target="_blank">SASP §3.18 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="YOU NOW KNOW">
+    <p lang="en">The complete toolbox of DTFT theorems — enough to manipulate spectra with confidence.</p>
+    <p lang="zh">DTFT 定理的完整工具箱 — 足以自信地在頻域上動手動腳。</p>
+  </div>
+
+  <h2 lang="en">Cheat sheet</h2>
+  <h2 lang="zh">速查表</h2>
+
+  <div class="formula">
+    <span class="label">ALL THE PAIRS IN ONE PLACE</span>
+    <div>
+      $$\begin{array}{rcl}
+      \alpha x+\beta y &\leftrightarrow& \alpha X+\beta Y \\
+      x[-n] &\leftrightarrow& X(-\omega) \\
+      x[n-n_0] &\leftrightarrow& e^{-j\omega n_0} X(\omega) \\
+      x*h &\leftrightarrow& X\cdot H \\
+      r_{xy}[k]=x\star y &\leftrightarrow& X^*(\omega) Y(\omega) \\
+      \sum|x|^2 &=& \tfrac{1}{2\pi}\int|X|^2 d\omega \\
+      \operatorname{Stretch}_L x &\leftrightarrow& X(L\omega) \\
+      x[nM] &\leftrightarrow& \tfrac{1}{M}\sum_m X\!\left(\tfrac{\omega-2\pi m}{M}\right)
+      \end{array}$$
+    </div>
+  </div>
+
+  <h2 lang="en">Concepts to keep</h2>
+  <h2 lang="zh">要帶走的觀念</h2>
+  <ul>
+    <li lang="en">Real signals have Hermitian-symmetric spectra; magnitude is even, phase is odd.</li>
+    <li lang="zh">實訊號頻譜 Hermitian 對稱：振幅偶、相位奇。</li>
+    <li lang="en">Shift adds linear phase; scaling in time scales frequency inversely.</li>
+    <li lang="zh">位移 = 加線性相位；時間縮放 = 頻率反向縮放。</li>
+    <li lang="en">Convolution in one domain is multiplication in the other. This one fact runs the rest of the book.</li>
+    <li lang="zh">一邊卷積 = 另一邊相乘。這條走遍全書。</li>
+    <li lang="en">Downsampling folds; always low-pass first.</li>
+    <li lang="zh">降取樣會折疊；先低通。</li>
+    <li lang="en">Zero padding interpolates the display but does not improve resolution.</li>
+    <li lang="zh">補零讓顯示變密但解析度不變。</li>
+  </ul>
+
+  <div class="nes-box nes-box--blue" data-label="NEXT WORLD">
+    <p lang="en">World 4 dives into window functions: every window you will ever use, its shape, its transform, its main-lobe width, its side-lobe level, its trade-offs — and how to design new ones by linear programming.</p>
+    <p lang="zh">第 4 世界深入視窗函數：你會用到的所有視窗、形狀、轉換、主瓣寬、旁瓣高度、取捨 —
+      以及如何用線性規劃設計新視窗。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.17.4.2-zphase-idx.html">◀ 3.17.4.2</a>
+    <a class="warp-pipe">3-18</a>
+    <a class="nes-btn nes-btn--primary" href="../ch04-windows/index.html">WORLD 4 ▶</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+</body>
+</html>

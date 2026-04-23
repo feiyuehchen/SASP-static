@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.5 Symmetry of the DTFT for Real Signals · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-5</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-5 · Symmetry for Real Signals</span>
+    <span lang="zh">關卡 3-5 · 實訊號的對稱性</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Symmetry_DTFT_Real_Signals.html" target="_blank">SASP §3.5 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="KEY FACT">
+        <p lang="en">Every real-valued signal has a spectrum with Hermitian (conjugate) symmetry. That is why we only ever plot the positive half.</p>
+        <p lang="zh">每個實值訊號的頻譜都具有 Hermitian（共軛）對稱性 — 這就是為什麼我們只畫正半頻率就夠了。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">HERMITIAN SYMMETRY</span>
+        <div>$$x[n]\in\mathbb{R}\;\;\Longrightarrow\;\;X(-\omega)\;=\;X^{*}(\omega)$$</div>
+      </div>
+
+      <p lang="en">
+        The proof is again one line. If $x[n]$ is real, then in the DTFT
+        $X(\omega)=\sum x[n] e^{-j\omega n}$, taking the conjugate flips the
+        sign of $\omega$. So $X^*(\omega)=\sum x[n] e^{j\omega n}=X(-\omega)$.
+      </p>
+      <p lang="zh">
+        證明也只有一行。$x[n]$ 為實時，$X(\omega)=\sum x[n]e^{-j\omega n}$ 取共軛只是把 $\omega$ 的符號翻掉。
+        所以 $X^*(\omega)=\sum x[n]e^{j\omega n}=X(-\omega)$。
+      </p>
+
+      <h2 lang="en">Three equivalent statements</h2>
+      <h2 lang="zh">三種等價說法</h2>
+
+      <ul>
+        <li lang="en"><b>Magnitude is even:</b> $|X(-\omega)|=|X(\omega)|$.</li>
+        <li lang="zh"><b>振幅為偶函數：</b>$|X(-\omega)|=|X(\omega)|$。</li>
+        <li lang="en"><b>Phase is odd:</b> $\angle X(-\omega)=-\angle X(\omega)$.</li>
+        <li lang="zh"><b>相位為奇函數：</b>$\angle X(-\omega)=-\angle X(\omega)$。</li>
+        <li lang="en"><b>Real part is even, imaginary part is odd.</b></li>
+        <li lang="zh"><b>實部為偶、虛部為奇。</b></li>
+      </ul>
+
+      <p lang="en">
+        Practical consequence: one side of the spectrum carries all the
+        information. DFT spectrum plots of audio always show
+        $\omega\in[0,\pi]$, not $[-\pi,\pi]$ — the negative half is just the
+        mirror image.
+      </p>
+      <p lang="zh">
+        實務後果：頻譜一邊就夠了。音訊 DFT 頻譜圖都只畫 $\omega\in[0,\pi]$，
+        不畫 $[-\pi,\pi]$ — 負半頻譜就是鏡像，沒新資訊。
+      </p>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Real part even, imaginary part odd</h3>
+        <h3 lang="zh">實驗 · 實部偶、虛部奇</h3>
+        <canvas id="tCanvas" style="height:120px;"></canvas>
+        <canvas id="reCanvas" style="height:120px; margin-top:6px;"></canvas>
+        <canvas id="imCanvas" style="height:120px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>SIGNAL</label>
+          <select id="sigSel">
+            <option value="rectShift" selected>Rect (shifted)</option>
+            <option value="expDecay">Exp decay (one-sided)</option>
+            <option value="random">Random real</option>
+          </select>
+          <span class="val" id="sigName">RECT</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You are given $X(\omega_0)=3-j\cdot 2$ for some real signal. What is $X(-\omega_0)$?</p>
+        <p lang="zh"><b>問：</b>對某個實訊號你得到 $X(\omega_0)=3-j\cdot 2$，那麼 $X(-\omega_0)$ 是多少？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">$3+j\cdot 2$</button>
+          <button data-correct="1" lang="zh">$3+j\cdot 2$</button>
+          <button data-correct="0" lang="en">$-3-j\cdot 2$</button>
+          <button data-correct="0" lang="zh">$-3-j\cdot 2$</button>
+          <button data-correct="0" lang="en">$3-j\cdot 2$ (same)</button>
+          <button data-correct="0" lang="zh">$3-j\cdot 2$（相同）</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.4-time-reversal.html">◀ 3.4</a>
+    <a class="warp-pipe">3-5</a>
+    <a class="nes-btn nes-btn--primary" href="3.5.1-dtft-real.html">NEXT ▶ 3.5.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 64;
+  const state = { sig: 'rectShift' };
+
+  function makeSig() {
+    const x = new Float32Array(N);
+    if (state.sig === 'rectShift') {
+      for (let n = 28; n < 40; n++) x[n] = 1;
+    } else if (state.sig === 'expDecay') {
+      for (let n = N/2; n < N; n++) x[n] = Math.pow(0.9, n - N/2);
+    } else {
+      for (let n = 0; n < N; n++) x[n] = (Math.sin(n*2.17) + Math.cos(n*1.33)) * 0.5;
+    }
+    return x;
+  }
+
+  function redraw() {
+    const x = makeSig();
+    Viz.stem($('tCanvas'), x, { yMin:-1, yMax:1.2, xLabel:'n', yLabel:'x[n]', title: 'REAL SIGNAL x[n]' });
+    const K = 400;
+    const om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(x, om);
+    Viz.line($('reCanvas'), re, {
+      xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI,
+      xLabel:'ω', yLabel:'Re X(ω)', title:'Re {X(ω)}  — should be EVEN about ω=0',
+      xTicks: [{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}], color: '#00B800',
+    });
+    Viz.line($('imCanvas'), im, {
+      xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI,
+      xLabel:'ω', yLabel:'Im X(ω)', title:'Im {X(ω)}  — should be ODD about ω=0',
+      xTicks: [{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}], color: '#F83800',
+    });
+  }
+
+  $('sigSel').addEventListener('change', () => { state.sig = $('sigSel').value; $('sigName').textContent = $('sigSel').value.slice(0,4).toUpperCase(); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! X(-ω) = X*(ω) means the sign of the imaginary part flips.</span><span lang="zh">🪙 金幣 +1！X(-ω) = X*(ω) 就是把虛部變號。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ It is the complex conjugate — flip the sign of the imaginary part only.</span><span lang="zh">✗ 答案是共軛 — 只把虛部變號，實部不動。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

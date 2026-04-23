@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.4 Time Reversal · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-4</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-4 · Time Reversal</span>
+    <span lang="zh">關卡 3-4 · 時間反轉</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Time_Reversal.html" target="_blank">SASP §3.4 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THEOREM">
+        <p lang="en">Flip the time axis → flip the frequency axis.</p>
+        <p lang="zh">時間軸翻轉 → 頻率軸跟著翻轉。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">TIME REVERSAL</span>
+        <div>$$x[-n]\;\longleftrightarrow\;X(-\omega)$$</div>
+      </div>
+
+      <p lang="en">
+        Proof in one line: substitute $m = -n$ in the DTFT sum of $x[-n]$,
+        $\sum_n x[-n]e^{-j\omega n} = \sum_m x[m]e^{j\omega m} = X(-\omega)$.
+        Done.
+      </p>
+      <p lang="zh">
+        一行證明：在 $x[-n]$ 的 DTFT 求和式中換元 $m=-n$，
+        $\sum_n x[-n]e^{-j\omega n}=\sum_m x[m]e^{j\omega m}=X(-\omega)$。結束。
+      </p>
+
+      <h2 lang="en">What that looks like</h2>
+      <h2 lang="zh">視覺上是什麼樣</h2>
+
+      <p lang="en">
+        A right-going exponential decay $a^n u[n]$ has a DTFT whose
+        magnitude leans one way. The left-going version $a^{-n}u[-n]$ has a
+        DTFT that leans the other way — the magnitude is flipped around
+        $\omega=0$. For a complex $X(\omega)$ the phase also flips sign.
+      </p>
+      <p lang="zh">
+        向右衰減的 $a^n u[n]$ 的 DTFT 振幅會傾向一邊；把它在時間上反轉變
+        $a^{-n}u[-n]$，DTFT 振幅就倒向另一邊，在 $\omega=0$ 兩側翻面。
+        若 $X(\omega)$ 複數的話，相位也會跟著變號。
+      </p>
+
+      <div class="nes-box nes-box--purple" data-label="SPECIAL CASE">
+        <p lang="en">If $x[n]$ is <b>real and even</b> ($x[-n]=x[n]$), then time reversal leaves the signal unchanged, so $X(\omega)=X(-\omega)$: the spectrum is even, and therefore purely real.</p>
+        <p lang="zh">若 $x[n]$ 是<b>實偶訊號</b>（$x[-n]=x[n]$），時間反轉後訊號不變，所以 $X(\omega)=X(-\omega)$：頻譜也是偶函數，而且一定是純實數。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Flip and watch the spectrum flip</h3>
+        <h3 lang="zh">實驗 · 時間翻轉、看頻譜跟著翻</h3>
+        <canvas id="tCanvas" style="height:140px;"></canvas>
+        <canvas id="fCanvas" style="height:160px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>DECAY a</label>
+          <input type="range" id="aSlider" min="0.6" max="0.98" step="0.01" value="0.88"/>
+          <span class="val" id="aVal">0.88</span>
+
+          <label>MODE</label>
+          <select id="mSel">
+            <option value="forward" selected>x[n] (forward)</option>
+            <option value="reverse">x[-n] (reversed)</option>
+          </select>
+          <span class="val" id="mVal">FWD</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> A signal $y[n]=x[-n]$ is played backwards. What happens to the spectrum magnitude $|Y(\omega)|$ if $x[n]$ is real?</p>
+        <p lang="zh"><b>問：</b>訊號 $y[n]=x[-n]$ 倒著播放。若 $x[n]$ 是實訊號，頻譜振幅 $|Y(\omega)|$ 會怎麼變？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Unchanged — $|Y(\omega)|=|X(\omega)|$.</button>
+          <button data-correct="1" lang="zh">不變 — $|Y(\omega)|=|X(\omega)|$。</button>
+          <button data-correct="0" lang="en">Shifted in frequency.</button>
+          <button data-correct="0" lang="zh">在頻率上位移。</button>
+          <button data-correct="0" lang="en">Zero everywhere.</button>
+          <button data-correct="0" lang="zh">處處為零。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.3-linearity.html">◀ 3.3</a>
+    <a class="warp-pipe">3-4</a>
+    <a class="nes-btn nes-btn--primary" href="3.5-symmetry.html">NEXT ▶ 3.5</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { a: 0.88, mode: 'forward' };
+  const N = 64;
+
+  function makeSig() {
+    const x = new Float32Array(N);
+    const centre = N >> 1;
+    if (state.mode === 'forward') {
+      for (let n = centre; n < N; n++) x[n] = Math.pow(state.a, n - centre);
+    } else {
+      for (let n = 0; n <= centre; n++) x[n] = Math.pow(state.a, centre - n);
+    }
+    return x;
+  }
+
+  function redraw() {
+    const x = makeSig();
+    Viz.stem($('tCanvas'), x, { yMin:-0.2, yMax:1.2, xLabel:'n', yLabel:'x[n]', title: 'TIME DOMAIN' });
+    const K = 400;
+    const om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(x, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), mag, {
+      xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:0,
+      xLabel:'ω', yLabel:'|X(ω)|', title:'FREQUENCY DOMAIN',
+      xTicks: [{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}],
+    });
+  }
+
+  $('aSlider').addEventListener('input', () => { state.a = parseFloat($('aSlider').value); $('aVal').textContent = state.a.toFixed(2); redraw(); });
+  $('mSel').addEventListener('change', () => { state.mode = $('mSel').value; $('mVal').textContent = state.mode === 'forward' ? 'FWD' : 'REV'; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! For real signals, |X(-ω)| = |X(ω)| (Hermitian symmetry), so flipping time leaves magnitude unchanged.</span><span lang="zh">🪙 金幣 +1！對實訊號，|X(-ω)| = |X(ω)|（Hermitian 對稱），時間反轉不動振幅。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Think about the magnitude-symmetry of spectra of real signals.</span><span lang="zh">✗ 想想實訊號頻譜的振幅對稱性。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

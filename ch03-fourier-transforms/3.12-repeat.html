@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.12 Repeat (Scaling) Operator · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-12</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-12 · Repeat (Scaling) Operator</span>
+    <span lang="zh">關卡 3-12 · 重複 (縮放) 算子</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Repeat_Scaling_Operator.html" target="_blank">SASP §3.12 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="DEFINITION">
+    <p lang="en">Repeating means tiling copies of a function along its own axis. It is the dual of stretching.</p>
+    <p lang="zh">重複 = 沿軸把函數一份一份鋪開，是拉伸的對偶操作。</p>
+  </div>
+
+  <div class="formula">
+    <span class="label">REPEAT BY L (TIME)</span>
+    <div>$$\operatorname{Repeat}_L\{x\}[n]\;=\;\sum_{m=-\infty}^{\infty} x[n-m L']$$</div>
+  </div>
+
+  <p lang="en">
+    In the frequency domain the same operator tiles $L$ copies of
+    $X(\omega)$ along the frequency axis every $2\pi/L$. Since $X(\omega)$
+    is already $2\pi$-periodic, this just collapses it down to a sampled
+    version on $\omega=\tfrac{2\pi}{L}k$ — giving us the DFT.
+  </p>
+  <p lang="zh">
+    在頻率域上，同一個算子把 $X(\omega)$ 每 $2\pi/L$ 就鋪一份，總共 $L$ 份。
+    由於 $X(\omega)$ 本來就是 $2\pi$-週期，重複之後就塌成在 $\omega=\tfrac{2\pi}{L}k$ 上取樣的版本 — 那正是 DFT。
+  </p>
+
+  <div class="nes-box nes-box--purple" data-label="DUALITY">
+    <p lang="en">Sampling in one domain is repeating in the other. A train of impulses in time has a train of impulses in frequency — this is the Poisson summation formula, which shows up in Chapter 9.</p>
+    <p lang="zh">一邊取樣 = 另一邊重複。時域的脈衝列對應頻域的脈衝列 — 這就是 Poisson 求和公式，第 9 世界會用到。</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> Repeating a signal $L$ times in the time domain corresponds in frequency to:</p>
+    <p lang="zh"><b>問：</b>在時域上重複 $L$ 次，頻域上對應？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Sampling the spectrum at multiples of $2\pi/L$.</button>
+      <button data-correct="1" lang="zh">把頻譜在 $2\pi/L$ 的整數倍處取樣。</button>
+      <button data-correct="0" lang="en">Shifting the spectrum by $2\pi/L$.</button>
+      <button data-correct="0" lang="zh">把頻譜位移 $2\pi/L$。</button>
+      <button data-correct="0" lang="en">Scaling the spectrum magnitudes by $L$.</button>
+      <button data-correct="0" lang="zh">把頻譜振幅乘 $L$。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.11-stretch.html">◀ 3.11</a>
+    <a class="warp-pipe">3-12</a>
+    <a class="nes-btn nes-btn--primary" href="3.13-stretch-repeat.html">NEXT ▶ 3.13</a>
+  </div>
+</div>
+
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Repeat ↔ sample — that is the basic time-frequency duality.</span><span lang="zh">🪙 金幣 +1！重複 ↔ 取樣，是時頻的基本對偶。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ A repeated time signal has a period; its Fourier series lives on a discrete frequency grid.</span><span lang="zh">✗ 重複時訊號有週期，對應的 Fourier 級數會在一個離散頻率格點上。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+})();
+</script>
+</body>
+</html>

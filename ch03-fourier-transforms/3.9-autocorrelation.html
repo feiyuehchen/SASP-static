@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.9 Autocorrelation · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-9</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-9 · Autocorrelation</span>
+    <span lang="zh">關卡 3-9 · 自相關</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Autocorrelation.html" target="_blank">SASP §3.9 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="DEFINITION">
+        <p lang="en">Autocorrelation is cross-correlation of a signal with itself. Its DTFT is the power spectrum.</p>
+        <p lang="zh">自相關就是訊號與自己做互相關。它的 DTFT 就是功率頻譜。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">AUTOCORRELATION</span>
+        <div>$$r_{xx}[k]\;=\;\sum_{n} x[n]\,x[n+k]$$</div>
+        <span class="label">↔</span>
+        <div>$$r_{xx}[k]\;\longleftrightarrow\;|X(\omega)|^{2}\;\triangleq\;S_{xx}(\omega)$$</div>
+      </div>
+
+      <p lang="en">
+        $|X(\omega)|^2$ is the
+        <span class="term" data-en="Power spectrum (energy-spectral density)"
+          data-en-def="|X(ω)|² — how signal energy is distributed over frequency."
+          data-zh-def="|X(ω)|² — 訊號能量在頻率上的分布。">power spectrum</span>.
+        Three consequences:
+      </p>
+      <p lang="zh">$|X(\omega)|^2$ 就是<span class="term" data-en="Power spectrum (energy-spectral density)"
+        data-en-def="|X(ω)|² — how signal energy is distributed over frequency."
+        data-zh-def="|X(ω)|² — 訊號能量在頻率上的分布。">功率頻譜</span>。三個直接後果：</p>
+
+      <ul>
+        <li lang="en">$r_{xx}[0]=\sum|x[n]|^2$ = total energy.</li>
+        <li lang="zh">$r_{xx}[0]=\sum|x[n]|^2$ = 總能量。</li>
+        <li lang="en">$r_{xx}$ is even and has its maximum at $k=0$ (Schwarz inequality).</li>
+        <li lang="zh">$r_{xx}$ 是偶函數，且最大值在 $k=0$（Schwarz 不等式）。</li>
+        <li lang="en">$S_{xx}(\omega)\ge 0$ everywhere — power spectra cannot go negative.</li>
+        <li lang="zh">$S_{xx}(\omega)\ge 0$ 處處成立 — 功率頻譜不會為負。</li>
+      </ul>
+
+      <h2 lang="en">Why it is useful</h2>
+      <h2 lang="zh">為什麼好用</h2>
+
+      <p lang="en">
+        Autocorrelation is <em>blind to phase</em>. Two signals with the
+        same $|X|$ and arbitrary phase have the same $r_{xx}$. This is why
+        we use power spectra to describe random signals: phase is
+        meaningless for noise. It also makes autocorrelation a natural
+        tool for pitch estimation — periodicities in $x$ show up as peaks
+        in $r_{xx}$.
+      </p>
+      <p lang="zh">
+        自相關<em>無視相位</em>。兩個 $|X|$ 相同但相位任意的訊號，$r_{xx}$ 完全一樣。
+        這就是為什麼描述隨機訊號都用功率頻譜 — 雜訊的相位沒有意義。
+        也因此自相關天生適合做基頻估計：$x$ 中的週期性在 $r_{xx}$ 上形成尖峰。
+      </p>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Autocorrelation of a periodic signal</h3>
+        <h3 lang="zh">實驗 · 週期訊號的自相關</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="rCanvas" style="height:130px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>f (Hz)</label>
+          <input type="range" id="fSlider" min="100" max="900" step="10" value="250"/>
+          <span class="val" id="fVal">250</span>
+
+          <label>NOISE</label>
+          <input type="range" id="nSlider" min="0" max="1" step="0.05" value="0.3"/>
+          <span class="val" id="nVal">0.30</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <button class="nes-btn nes-btn--blue" id="playBtn"  lang="en">▶ PLAY</button>
+          <button class="nes-btn nes-btn--blue" id="playBtn2" lang="zh">▶ 播放</button>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> A signal is strongly periodic at 440 Hz (period ≈ 2.27 ms). What will its autocorrelation look like around $k=$ 2.27 ms?</p>
+        <p lang="zh"><b>問：</b>某訊號在 440 Hz 上有強週期性（週期 ≈ 2.27 ms）。$r_{xx}[k]$ 在 $k≈$ 2.27 ms 附近會怎樣？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Secondary peak at $k=2.27$ ms and its multiples.</button>
+          <button data-correct="1" lang="zh">在 $k=2.27$ ms 及其整數倍出現次高峰。</button>
+          <button data-correct="0" lang="en">Zero — autocorrelation is only nonzero at $k=0$.</button>
+          <button data-correct="0" lang="zh">0 — 自相關只在 $k=0$ 非零。</button>
+          <button data-correct="0" lang="en">A linear ramp.</button>
+          <button data-correct="0" lang="zh">一條斜坡。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.8-correlation.html">◀ 3.8</a>
+    <a class="warp-pipe">3-9</a>
+    <a class="nes-btn nes-btn--primary" href="3.10-power.html">NEXT ▶ 3.10</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const fs = 8000, dur = 0.25, N = Math.floor(fs * dur);
+  const state = { f: 250, noise: 0.3 };
+
+  function makeX() {
+    const x = new Float32Array(N);
+    for (let n = 0; n < N; n++) x[n] = 0.7 * Math.sin(2*Math.PI*state.f*n/fs) + state.noise * (2*Math.random()-1);
+    return x;
+  }
+
+  function acorr(x, Kmax) {
+    const out = new Float32Array(Kmax);
+    for (let k = 0; k < Kmax; k++) {
+      let s = 0;
+      for (let n = 0; n + k < x.length; n++) s += x[n] * x[n+k];
+      out[k] = s;
+    }
+    return out;
+  }
+
+  function redraw() {
+    const x = makeX();
+    const r = acorr(x, 500);
+    Viz.line($('tCanvas'), x.slice(0, 400), { xLabel:'n', yLabel:'x[n]', title:'SIGNAL (first 400 samples)' });
+    Viz.line($('rCanvas'), r, { xLabel:'k (lag samples)', yLabel:'r_xx[k]', title:'AUTOCORRELATION', color:'#F8B800' });
+    window._x = x;
+  }
+
+  $('fSlider').addEventListener('input', () => { state.f = parseInt($('fSlider').value,10); $('fVal').textContent = state.f; redraw(); });
+  $('nSlider').addEventListener('input', () => { state.noise = parseFloat($('nSlider').value); $('nVal').textContent = state.noise.toFixed(2); redraw(); });
+  const p = () => AudioKit.playBuffer(window._x, fs, 1);
+  $('playBtn').addEventListener('click', p); $('playBtn2').addEventListener('click', p);
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Periodicities translate to autocorrelation peaks at the period (and its multiples). This is the basis of autocorrelation-based pitch detectors.</span><span lang="zh">🪙 金幣 +1！週期性 → 自相關在該週期與其倍數出現尖峰。基於自相關的基頻偵測器就是用這條。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Periodic signals repeat themselves after a period — so $r_{xx}$ has peaks at multiples of that period.</span><span lang="zh">✗ 週期訊號自己複製自己，所以 $r_{xx}$ 在週期整數倍有尖峰。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>

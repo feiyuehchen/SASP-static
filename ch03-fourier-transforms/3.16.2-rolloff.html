@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3.16.2 Spectral Roll-Off · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W3</a></span>
+    <span>STAGE <b>3-16-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">Stage 3-16-2 · Spectral Roll-Off</span>
+    <span lang="zh">關卡 3-16-2 · 頻譜滾降</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Spectral_Roll_Off.html" target="_blank">SASP §3.16.2 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="RULE OF THUMB">
+        <p lang="en">How quickly a spectrum falls at high frequencies tells you how smooth the signal is in time.</p>
+        <p lang="zh">頻譜在高頻衰減得多快，直接對應訊號在時域有多平滑。</p>
+      </div>
+
+      <h2 lang="en">The rule</h2>
+      <h2 lang="zh">規則</h2>
+
+      <ul>
+        <li lang="en">Signal with a <b>jump</b> discontinuity → $|X|\sim 1/|\Omega|$ (e.g. a rectangle pulse).</li>
+        <li lang="zh">訊號有<b>跳變</b>不連續 → $|X|\sim 1/|\Omega|$（例如矩形脈衝）。</li>
+        <li lang="en">Signal continuous but has <b>kinks</b> (1st derivative jumps) → $|X|\sim 1/|\Omega|^2$ (triangular pulse).</li>
+        <li lang="zh">訊號連續但一階導有跳變（<b>折點</b>）→ $|X|\sim 1/|\Omega|^2$（三角脈衝）。</li>
+        <li lang="en">Signal has $k$ continuous derivatives and the $k+1$-th is finite → $|X|\sim 1/|\Omega|^{k+2}$.</li>
+        <li lang="zh">訊號到第 $k$ 階導都連續、第 $k+1$ 階有界 → $|X|\sim 1/|\Omega|^{k+2}$。</li>
+        <li lang="en">Infinitely smooth (e.g. Gaussian) → decay faster than any polynomial (exponential roll-off).</li>
+        <li lang="zh">無限平滑（例如高斯）→ 比任何多項式還快（指數衰減）。</li>
+      </ul>
+
+      <p lang="en">
+        Consequence for audio: hard clipping creates jumps → audible
+        broadband distortion. Soft limiting smooths the edges →
+        distortion harmonics fall faster → sounds less harsh.
+      </p>
+      <p lang="zh">
+        對音訊的後果：硬截波（hard clip）製造跳變 → 全頻帶可聽失真。
+        軟限幅（soft limit）把邊緣磨平 → 失真諧波衰減更快 → 聽起來比較不刺耳。
+      </p>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Compare three test signals</h3>
+        <h3 lang="zh">實驗 · 比較三種測試訊號</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:180px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>SIGNAL</label>
+          <select id="sigSel">
+            <option value="rect" selected>Rectangle (jump)</option>
+            <option value="tri">Triangle (kink)</option>
+            <option value="gauss">Gaussian (smooth)</option>
+          </select>
+          <span class="val" id="sigName">RECT</span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> On a dB plot (20 log |X| vs log Ω), what slope do you expect from a rectangular pulse at high frequency?</p>
+        <p lang="zh"><b>問：</b>在 dB 圖（20 log |X| vs log Ω）上，矩形脈衝在高頻的斜率會是？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">$-20$ dB/decade.</button>
+          <button data-correct="1" lang="zh">$-20$ dB/decade。</button>
+          <button data-correct="0" lang="en">$-40$ dB/decade.</button>
+          <button data-correct="0" lang="zh">$-40$ dB/decade。</button>
+          <button data-correct="0" lang="en">Flat (0 dB/decade).</button>
+          <button data-correct="0" lang="zh">水平（0 dB/decade）。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="3.16.1-scaling.html">◀ 3.16.1</a>
+    <a class="warp-pipe">3-16-2</a>
+    <a class="nes-btn nes-btn--primary" href="3.17-spectral-interpolation.html">NEXT ▶ 3.17</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 256;
+  const state = { sig: 'rect' };
+
+  function makeX() {
+    const x = new Float32Array(N);
+    const c = N/2;
+    if (state.sig === 'rect') {
+      for (let n = c-16; n < c+16; n++) if (n>=0&&n<N) x[n] = 1;
+    } else if (state.sig === 'tri') {
+      for (let n = c-16; n < c+16; n++) if (n>=0&&n<N) x[n] = 1 - Math.abs(n-c)/16;
+    } else {
+      for (let n = 0; n < N; n++) x[n] = Math.exp(-((n-c)/8)**2);
+    }
+    return x;
+  }
+
+  function redraw() {
+    const x = makeX();
+    Viz.stem($('tCanvas'), x, { yMin:-0.1, yMax:1.2, xLabel:'n', yLabel:'x[n]', title:'TIME-DOMAIN SHAPE' });
+    const K = 400;
+    const om = DSP.linspace(0, Math.PI, K);
+    const { re, im } = DSP.dtft(x, om);
+    const mag = new Float32Array(K);
+    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
+    const db = DSP.toDb(mag, -80);
+    Viz.line($('fCanvas'), db, { xValues: Array.from(om), xMin:0, xMax:Math.PI, yMin:-80, xLabel:'ω (0..π)', yLabel:'20 log |X|', title:'SPECTRUM IN dB', color:'#F8B800', xTicks:[{v:0,label:'0'},{v:Math.PI/2,label:'π/2'},{v:Math.PI,label:'π'}] });
+  }
+
+  $('sigSel').addEventListener('change', () => { state.sig = $('sigSel').value; $('sigName').textContent = state.sig.toUpperCase(); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! |X| ~ 1/Ω → 20 log gives -20 dB per decade. Triangle would be -40, Gaussian much faster.</span><span lang="zh">🪙 金幣 +1！|X| ~ 1/Ω → 20 log 就是 -20 dB/decade。三角形是 -40，高斯還快很多。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ A 1/Ω decay plots to -20 dB/decade.</span><span lang="zh">✗ 1/Ω 衰減在 dB 圖上是 -20 dB/decade。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  redraw();
+})();
+</script>
+</body>
+</html>
