@@ -609,47 +609,47 @@ data-en-def …>` for hover tooltips.
 
 ## Appendix World G · Spectral Audio Modeling History  (appendix/history/)
 
-- [ ] G.1   Daniel Bernoulli's Modal Decomposition         — `appendix/history/G.1-bernoulli.html`
-- [ ] G.2   The Telharmonium                               — `appendix/history/G.2-telharmonium.html`
-- [ ] G.3   Early Additive Synthesis in Film Making        — `appendix/history/G.3-early-additive.html`
-- [ ] G.4   The Hammond Organ                              — `appendix/history/G.4-hammond.html`
-- [ ] G.5   Dudley's Channel Vocoder                       — `appendix/history/G.5-dudley.html`
-- [ ] G.5.1 Speech Synthesis Examples                      — `appendix/history/G.5.1-speech-ex.html`
-- [ ] G.6   Voder                                          — `appendix/history/G.6-voder.html`
-- [ ] G.7   Phase Vocoder                                  — `appendix/history/G.7-phase-voc.html`
-- [ ] G.7.1 FFT Implementation of the Phase Vocoder        — `appendix/history/G.7.1-pv-fft.html`
-- [ ] G.8   Additive Synthesis                             — `appendix/history/G.8-additive.html`
-- [ ] G.8.1 Inverse FFT Synthesis                          — `appendix/history/G.8.1-ifft-synth.html`
-- [ ] G.8.2 Chirplet Synthesis                             — `appendix/history/G.8.2-chirplet-synth.html`
-- [ ] G.8.3 Nonparametric Spectral Peak Modeling           — `appendix/history/G.8.3-nonpar-peak.html`
-- [ ] G.8.4 Efficient Specialized Methods                  — `appendix/history/G.8.4-efficient.html`
-- [ ] G.8.4.1 Wavetable Synthesis                          — `appendix/history/G.8.4.1-wavetable.html`
-- [ ] G.8.4.2 Group-Additive Synthesis                     — `appendix/history/G.8.4.2-group-add.html`
-- [ ] G.8.5 Further Reading, Additive Synthesis            — `appendix/history/G.8.5-add-reading.html`
-- [ ] G.9   Frequency Modulation (FM) Synthesis            — `appendix/history/G.9-fm.html`
-- [ ] G.9.1 FM Harmonic Amplitudes                         — `appendix/history/G.9.1-fm-harmonics.html`
-- [ ] G.9.2 FM Brass                                       — `appendix/history/G.9.2-fm-brass.html`
-- [ ] G.9.3 FM Voice                                       — `appendix/history/G.9.3-fm-voice.html`
-- [ ] G.9.3.1 Further Reading about FM Synthesis           — `appendix/history/G.9.3.1-fm-reading.html`
-- [ ] G.10  Phase Vocoder Sinusoidal Modeling              — `appendix/history/G.10-pv-sin.html`
-- [ ] G.10.1 Computing Vocoder Parameters                  — `appendix/history/G.10.1-vp.html`
-- [ ] G.10.1.1 Frequency Envelopes                         — `appendix/history/G.10.1.1-freq-env.html`
-- [ ] G.10.1.2 Envelope Compression                        — `appendix/history/G.10.1.2-env-comp.html`
-- [ ] G.10.1.3 Vocoder-Based AS Limitations                — `appendix/history/G.10.1.3-limits.html`
-- [ ] G.10.2 Further Reading on Vocoders                   — `appendix/history/G.10.2-voc-reading.html`
-- [ ] G.11  Spectral Modeling Synthesis (History)          — `appendix/history/G.11-sms.html`
-- [ ] G.11.1 STFT Analysis/Mod/Resynth                     — `appendix/history/G.11.1-stft-amrs.html`
-- [ ] G.11.2 Sinusoidal Modeling Systems                   — `appendix/history/G.11.2-sms-systems.html`
-- [ ] G.11.3 Inverse FFT Synthesis (History)               — `appendix/history/G.11.3-ifft-hist.html`
-- [ ] G.11.4 Sines+Noise Synthesis (History)               — `appendix/history/G.11.4-sn-hist.html`
-- [ ] G.11.5 Multiresolution Sinusoidal Modeling           — `appendix/history/G.11.5-mrsm.html`
-- [ ] G.11.6 Transient Models                              — `appendix/history/G.11.6-transient.html`
-- [ ] G.11.7 Time-Frequency Reassignment                   — `appendix/history/G.11.7-reassign.html`
-- [ ] G.11.8 Perceptual Audio Compression                  — `appendix/history/G.11.8-perceptual.html`
-- [ ] G.11.9 Further Reading                               — `appendix/history/G.11.9-sms-reading.html`
-- [ ] G.12  Perceptual Audio Coding                        — `appendix/history/G.12-perc-coding.html`
-- [ ] G.13  Future Prospects                               — `appendix/history/G.13-future.html`
-- [ ] G.14  Summary                                        — `appendix/history/G.14-summary.html`
+- [~] G.1   Daniel Bernoulli's Modal Decomposition         — `appendix/history/G.1-bernoulli.html`
+- [~] G.2   The Telharmonium                               — `appendix/history/G.2-telharmonium.html`
+- [~] G.3   Early Additive Synthesis in Film Making        — `appendix/history/G.3-early-additive.html`
+- [~] G.4   The Hammond Organ                              — `appendix/history/G.4-hammond.html`
+- [~] G.5   Dudley's Channel Vocoder                       — `appendix/history/G.5-dudley.html`
+- [~] G.5.1 Speech Synthesis Examples                      — `appendix/history/G.5.1-speech-ex.html`
+- [~] G.6   Voder                                          — `appendix/history/G.6-voder.html`
+- [~] G.7   Phase Vocoder                                  — `appendix/history/G.7-phase-voc.html`
+- [~] G.7.1 FFT Implementation of the Phase Vocoder        — `appendix/history/G.7.1-pv-fft.html`
+- [~] G.8   Additive Synthesis                             — `appendix/history/G.8-additive.html`
+- [~] G.8.1 Inverse FFT Synthesis                          — `appendix/history/G.8.1-ifft-synth.html`
+- [~] G.8.2 Chirplet Synthesis                             — `appendix/history/G.8.2-chirplet-synth.html`
+- [~] G.8.3 Nonparametric Spectral Peak Modeling           — `appendix/history/G.8.3-nonpar-peak.html`
+- [~] G.8.4 Efficient Specialized Methods                  — `appendix/history/G.8.4-efficient.html`
+- [~] G.8.4.1 Wavetable Synthesis                          — `appendix/history/G.8.4.1-wavetable.html`
+- [~] G.8.4.2 Group-Additive Synthesis                     — `appendix/history/G.8.4.2-group-add.html`
+- [~] G.8.5 Further Reading, Additive Synthesis            — `appendix/history/G.8.5-add-reading.html`
+- [~] G.9   Frequency Modulation (FM) Synthesis            — `appendix/history/G.9-fm.html`
+- [~] G.9.1 FM Harmonic Amplitudes                         — `appendix/history/G.9.1-fm-harmonics.html`
+- [~] G.9.2 FM Brass                                       — `appendix/history/G.9.2-fm-brass.html`
+- [~] G.9.3 FM Voice                                       — `appendix/history/G.9.3-fm-voice.html`
+- [~] G.9.3.1 Further Reading about FM Synthesis           — `appendix/history/G.9.3.1-fm-reading.html`
+- [~] G.10  Phase Vocoder Sinusoidal Modeling              — `appendix/history/G.10-pv-sin.html`
+- [~] G.10.1 Computing Vocoder Parameters                  — `appendix/history/G.10.1-vp.html`
+- [~] G.10.1.1 Frequency Envelopes                         — `appendix/history/G.10.1.1-freq-env.html`
+- [~] G.10.1.2 Envelope Compression                        — `appendix/history/G.10.1.2-env-comp.html`
+- [~] G.10.1.3 Vocoder-Based AS Limitations                — `appendix/history/G.10.1.3-limits.html`
+- [~] G.10.2 Further Reading on Vocoders                   — `appendix/history/G.10.2-voc-reading.html`
+- [~] G.11  Spectral Modeling Synthesis (History)          — `appendix/history/G.11-sms.html`
+- [~] G.11.1 STFT Analysis/Mod/Resynth                     — `appendix/history/G.11.1-stft-amrs.html`
+- [~] G.11.2 Sinusoidal Modeling Systems                   — `appendix/history/G.11.2-sms-systems.html`
+- [~] G.11.3 Inverse FFT Synthesis (History)               — `appendix/history/G.11.3-ifft-hist.html`
+- [~] G.11.4 Sines+Noise Synthesis (History)               — `appendix/history/G.11.4-sn-hist.html`
+- [~] G.11.5 Multiresolution Sinusoidal Modeling           — `appendix/history/G.11.5-mrsm.html`
+- [~] G.11.6 Transient Models                              — `appendix/history/G.11.6-transient.html`
+- [~] G.11.7 Time-Frequency Reassignment                   — `appendix/history/G.11.7-reassign.html`
+- [~] G.11.8 Perceptual Audio Compression                  — `appendix/history/G.11.8-perceptual.html`
+- [~] G.11.9 Further Reading                               — `appendix/history/G.11.9-sms-reading.html`
+- [~] G.12  Perceptual Audio Coding                        — `appendix/history/G.12-perc-coding.html`
+- [~] G.13  Future Prospects                               — `appendix/history/G.13-future.html`
+- [~] G.14  Summary                                        — `appendix/history/G.14-summary.html`
 
 ## Appendix World H · The PARSHL Program  (appendix/parshl/)
 

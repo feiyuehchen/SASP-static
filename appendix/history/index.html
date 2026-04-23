@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Appendix G · History of Spectral Audio · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="../../index.html">◀ HOME</a></span><span>APX <b>G</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Appendix G · History of Spectral Audio Signal Processing</span><span lang="zh">附錄 G · 頻譜音訊訊號處理歷史</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/History_Spectral_Audio_Signal.html" target="_blank">SASP Appendix G ↗</a></small></h1>
+  <div class="nes-box nes-box--blue" data-label="APPENDIX BRIEF">
+    <p lang="en">From Bernoulli's 1753 modal decomposition through Telharmonium, Hammond, Dudley's Vocoder, the phase vocoder, FM synthesis, SMS, perceptual coding, and contemporary neural audio. A chronological tour of every tool the book builds on.</p>
+    <p lang="zh">從 1753 白努利模態分解一路到 Telharmonium、Hammond、Dudley 聲碼器、相位聲碼器、FM 合成、SMS、感知編碼、當代神經音訊。本書所有工具的年代誌之旅。</p>
+  </div>
+  <div class="stage-grid">
+    <a class="stage-tile" href="G.1-bernoulli.html"><b>G.1</b><span lang="en">Bernoulli's Modal Decomposition</span><span lang="zh">白努利的模態分解</span></a>
+    <a class="stage-tile" href="G.2-telharmonium.html"><b>G.2</b><span lang="en">The Telharmonium</span><span lang="zh">Telharmonium</span></a>
+    <a class="stage-tile" href="G.3-early-additive.html"><b>G.3</b><span lang="en">Early Additive Synthesis in Film</span><span lang="zh">早期電影中的加法合成</span></a>
+    <a class="stage-tile" href="G.4-hammond.html"><b>G.4</b><span lang="en">The Hammond Organ</span><span lang="zh">Hammond 管風琴</span></a>
+    <a class="stage-tile" href="G.5-dudley.html"><b>G.5</b><span lang="en">Dudley's Channel Vocoder</span><span lang="zh">Dudley 的頻道聲碼器</span></a>
+    <a class="stage-tile" href="G.5.1-speech-ex.html"><b>G.5.1</b><span lang="en">Speech Synthesis Examples</span><span lang="zh">語音合成範例</span></a>
+    <a class="stage-tile" href="G.6-voder.html"><b>G.6</b><span lang="en">The Voder</span><span lang="zh">Voder</span></a>
+    <a class="stage-tile" href="G.7-phase-voc.html"><b>G.7</b><span lang="en">Phase Vocoder</span><span lang="zh">相位聲碼器</span></a>
+    <a class="stage-tile" href="G.7.1-pv-fft.html"><b>G.7.1</b><span lang="en">FFT Implementation of Phase Vocoder</span><span lang="zh">相位聲碼器的 FFT 實作</span></a>
+    <a class="stage-tile" href="G.8-additive.html"><b>G.8</b><span lang="en">Additive Synthesis (Analysis Framework)</span><span lang="zh">加法合成（分析架構）</span></a>
+    <a class="stage-tile" href="G.8.1-ifft-synth.html"><b>G.8.1</b><span lang="en">Inverse FFT Synthesis</span><span lang="zh">IFFT 合成</span></a>
+    <a class="stage-tile" href="G.8.2-chirplet-synth.html"><b>G.8.2</b><span lang="en">Chirplet Synthesis</span><span lang="zh">Chirplet 合成</span></a>
+    <a class="stage-tile" href="G.8.3-nonpar-peak.html"><b>G.8.3</b><span lang="en">Nonparametric Spectral Peak Modeling</span><span lang="zh">非參數頻譜峰值建模</span></a>
+    <a class="stage-tile" href="G.8.4-efficient.html"><b>G.8.4</b><span lang="en">Efficient Specialised Methods</span><span lang="zh">高效特殊方法</span></a>
+    <a class="stage-tile" href="G.8.4.1-wavetable.html"><b>G.8.4.1</b><span lang="en">Wavetable Synthesis</span><span lang="zh">波形表合成</span></a>
+    <a class="stage-tile" href="G.8.4.2-group-add.html"><b>G.8.4.2</b><span lang="en">Group-Additive Synthesis</span><span lang="zh">群組加法合成</span></a>
+    <a class="stage-tile" href="G.8.5-add-reading.html"><b>G.8.5</b><span lang="en">Further Reading · Additive Synthesis</span><span lang="zh">延伸閱讀 · 加法合成</span></a>
+    <a class="stage-tile" href="G.9-fm.html"><b>G.9</b><span lang="en">FM Synthesis</span><span lang="zh">FM 合成</span></a>
+    <a class="stage-tile" href="G.9.1-fm-harmonics.html"><b>G.9.1</b><span lang="en">FM Harmonic Amplitudes</span><span lang="zh">FM 諧波振幅</span></a>
+    <a class="stage-tile" href="G.9.2-fm-brass.html"><b>G.9.2</b><span lang="en">FM Brass</span><span lang="zh">FM 銅管</span></a>
+    <a class="stage-tile" href="G.9.3-fm-voice.html"><b>G.9.3</b><span lang="en">FM Voice</span><span lang="zh">FM 人聲</span></a>
+    <a class="stage-tile" href="G.9.3.1-fm-reading.html"><b>G.9.3.1</b><span lang="en">Further Reading · FM</span><span lang="zh">延伸閱讀 · FM</span></a>
+    <a class="stage-tile" href="G.10-pv-sin.html"><b>G.10</b><span lang="en">Phase-Vocoder Sinusoidal Modeling</span><span lang="zh">相位聲碼器式正弦建模</span></a>
+    <a class="stage-tile" href="G.10.1-vp.html"><b>G.10.1</b><span lang="en">Computing Vocoder Parameters</span><span lang="zh">計算聲碼器參數</span></a>
+    <a class="stage-tile" href="G.10.1.1-freq-env.html"><b>G.10.1.1</b><span lang="en">Frequency Envelopes</span><span lang="zh">頻率包絡</span></a>
+    <a class="stage-tile" href="G.10.1.2-env-comp.html"><b>G.10.1.2</b><span lang="en">Envelope Compression</span><span lang="zh">包絡壓縮</span></a>
+    <a class="stage-tile" href="G.10.1.3-limits.html"><b>G.10.1.3</b><span lang="en">Vocoder-Based AS Limitations</span><span lang="zh">聲碼器式加法合成的限制</span></a>
+    <a class="stage-tile" href="G.10.2-voc-reading.html"><b>G.10.2</b><span lang="en">Further Reading · Vocoders</span><span lang="zh">延伸閱讀 · 聲碼器</span></a>
+    <a class="stage-tile" href="G.11-sms.html"><b>G.11</b><span lang="en">Spectral Modeling Synthesis (History)</span><span lang="zh">頻譜建模合成（歷史）</span></a>
+    <a class="stage-tile" href="G.11.1-stft-amrs.html"><b>G.11.1</b><span lang="en">STFT Analysis / Modification / Resynth</span><span lang="zh">STFT 分析/修改/重合成</span></a>
+    <a class="stage-tile" href="G.11.2-sms-systems.html"><b>G.11.2</b><span lang="en">Sinusoidal Modeling Systems</span><span lang="zh">正弦建模系統</span></a>
+    <a class="stage-tile" href="G.11.3-ifft-hist.html"><b>G.11.3</b><span lang="en">Inverse FFT Synthesis (History)</span><span lang="zh">IFFT 合成（歷史）</span></a>
+    <a class="stage-tile" href="G.11.4-sn-hist.html"><b>G.11.4</b><span lang="en">Sines + Noise Synthesis (History)</span><span lang="zh">正弦 + 雜訊合成（歷史）</span></a>
+    <a class="stage-tile" href="G.11.5-mrsm.html"><b>G.11.5</b><span lang="en">Multiresolution Sinusoidal Modeling</span><span lang="zh">多解析度正弦建模</span></a>
+    <a class="stage-tile" href="G.11.6-transient.html"><b>G.11.6</b><span lang="en">Transient Models</span><span lang="zh">瞬態模型</span></a>
+    <a class="stage-tile" href="G.11.7-reassign.html"><b>G.11.7</b><span lang="en">Time-Frequency Reassignment</span><span lang="zh">時頻重分配</span></a>
+    <a class="stage-tile" href="G.11.8-perceptual.html"><b>G.11.8</b><span lang="en">Perceptual Audio Compression</span><span lang="zh">感知音訊壓縮</span></a>
+    <a class="stage-tile" href="G.11.9-sms-reading.html"><b>G.11.9</b><span lang="en">Further Reading · SMS</span><span lang="zh">延伸閱讀 · SMS</span></a>
+    <a class="stage-tile" href="G.12-perc-coding.html"><b>G.12</b><span lang="en">Perceptual Audio Coding</span><span lang="zh">感知音訊編碼</span></a>
+    <a class="stage-tile" href="G.13-future.html"><b>G.13</b><span lang="en">Future Prospects</span><span lang="zh">未來展望</span></a>
+    <a class="stage-tile" href="G.14-summary.html"><b>G.14</b><span lang="en">Summary</span><span lang="zh">歷史總結</span></a>
+  </div>
+  <div class="pager"><a class="nes-btn" href="../matlab/index.html">◀ APPENDIX F</a><a class="warp-pipe">G</a><a class="nes-btn nes-btn--primary" href="../parshl/index.html">APPENDIX H ▶</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

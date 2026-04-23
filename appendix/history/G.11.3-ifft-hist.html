@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>G.11.3 Inverse FFT Synthesis (History) · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ APX G</a></span><span>STAGE <b>G-11-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage G-11-3 · Inverse FFT Synthesis (History)</span><span lang="zh">關卡 G-11-3 · IFFT 合成（歷史）</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Inverse_FFT_Synthesis_I.html" target="_blank">SASP §G.11.3 ↗</a></small></h1>
+  <div class="nes-box" data-label="FAST MANY-PARTIAL">
+    <p lang="en">IFFT-based synthesis proposed by Rodet-Depalle 1992: build every partial's spectrum in one buffer, IFFT once. Crucial when computing hundreds of partials per frame on period-appropriate CPUs.</p>
+    <p lang="zh">Rodet-Depalle 1992 年提出的 IFFT 合成：把每個分音的頻譜填進同一個緩衝區，再做一次 IFFT。在當時 CPU 條件下，每 frame 數百分音才能跑得動。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="G.11.2-sms-systems.html">◀ G.11.2</a><a class="warp-pipe">G-11-3</a><a class="nes-btn nes-btn--primary" href="G.11.4-sn-hist.html">NEXT ▶ G.11.4</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>
