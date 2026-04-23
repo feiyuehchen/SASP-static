@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>12.7 MPEG Filter Banks · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W12</a></span><span>STAGE <b>12-7</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 12-7 · MPEG Filter Banks</span><span lang="zh">關卡 12-7 · MPEG 濾波器組</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/MPEG_Filter_Banks.html" target="_blank">SASP §12.7 ↗</a></small></h1>
+  <div class="nes-box" data-label="AUDIO CODEC FB">
+    <p lang="en">MPEG-1/2 Layer I/II use a 32-band pseudo-QMF cosine-modulated FB; Layer III (mp3) cascades with an MDCT for finer resolution; AAC uses a 1024/128 MDCT directly. FB choice trades latency, resolution, and alias leakage.</p>
+    <p lang="zh">MPEG-1/2 Layer I/II 用 32 頻帶 pseudo-QMF 餘弦調變組；Layer III（mp3）再串接 MDCT 提高解析度；AAC 直接用 1024/128 MDCT。組的選擇是在延遲、解析度、混疊洩漏之間取捨。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="12.6.1-portnoff-pp.html">◀ 12.6.1</a><a class="warp-pipe">12-7</a><a class="nes-btn nes-btn--primary" href="12.7.1-pseudo-qmf.html">NEXT ▶ 12.7.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

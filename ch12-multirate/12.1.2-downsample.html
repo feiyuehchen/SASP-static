@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>12.1.2 Downsampling (Decimation) Operator · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W12</a></span><span>STAGE <b>12-1-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 12-1-2 · Downsampling (Decimation) Operator</span><span lang="zh">關卡 12-1-2 · 降取樣（抽取）算子</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Downsampling_Decimation_Operator.html" target="_blank">SASP §12.1.2 ↗</a></small></h1>
+  <div class="nes-box" data-label="M-FOLD SHRINK">
+    <p lang="en">Downsample by M keeps every M-th sample: $y[n]=x[nM]$. Spectrum: sum of M stretched aliases $\tfrac{1}{M}\sum_{k=0}^{M-1} X(e^{j(\omega-2\pi k)/M})$. Without an anti-alias filter, frequencies above $\pi/M$ fold back and destroy information.</p>
+    <p lang="zh">降取樣 $\downarrow M$：只保留每第 M 個樣本 $y[n]=x[nM]$。頻譜為 M 個伸縮混疊之和 $\tfrac{1}{M}\sum_{k=0}^{M-1} X(e^{j(\omega-2\pi k)/M})$。若沒有抗混疊濾波，$\pi/M$ 以上的頻率會折回來毀掉訊號。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="12.1.1-upsample.html">◀ 12.1.1</a><a class="warp-pipe">12-1-2</a><a class="nes-btn nes-btn--primary" href="12.1.2.1-ds-by-2.html">NEXT ▶ 12.1.2.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

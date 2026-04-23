@@ -409,69 +409,69 @@ data-en-def …>` for hover tooltips.
 
 ## World 12 · Multirate Filter Banks  (ch12-multirate/)
 
-- [ ] 12.1  Upsampling and Downsampling                    — `ch12-multirate/12.1-up-down.html`
-- [ ] 12.1.1 Upsampling (Stretch) Operator                 — `ch12-multirate/12.1.1-upsample.html`
-- [ ] 12.1.2 Downsampling (Decimation) Operator            — `ch12-multirate/12.1.2-downsample.html`
-- [ ] 12.1.2.1 Example: Downsampling by 2                  — `ch12-multirate/12.1.2.1-ds-by-2.html`
-- [ ] 12.1.2.2 Example: Upsampling by 2                    — `ch12-multirate/12.1.2.2-us-by-2.html`
-- [ ] 12.1.3 Filtering and Downsampling                    — `ch12-multirate/12.1.3-filter-ds.html`
-- [ ] 12.2  Polyphase Decomposition                        — `ch12-multirate/12.2-polyphase.html`
-- [ ] 12.2.1 Two-Channel Case                              — `ch12-multirate/12.2.1-two-channel.html`
-- [ ] 12.2.2 N-Channel Polyphase Decomposition             — `ch12-multirate/12.2.2-n-channel.html`
-- [ ] 12.2.3 Type II Polyphase Decomposition               — `ch12-multirate/12.2.3-type2.html`
-- [ ] 12.2.4 Filtering and Downsampling, Revisited         — `ch12-multirate/12.2.4-filter-ds2.html`
-- [ ] 12.2.5 Multirate Noble Identities                    — `ch12-multirate/12.2.5-noble.html`
-- [ ] 12.3  Critically Sampled PR Filter Banks             — `ch12-multirate/12.3-cs-pr.html`
-- [ ] 12.3.1 Two-Channel Critically Sampled FB             — `ch12-multirate/12.3.1-2ch-cs.html`
-- [ ] 12.3.2 Amplitude-Complementary 2-Channel FB          — `ch12-multirate/12.3.2-amp-comp.html`
-- [ ] 12.3.3 Haar Example                                  — `ch12-multirate/12.3.3-haar.html`
-- [ ] 12.3.4 Polyphase Decomp of Haar Example              — `ch12-multirate/12.3.4-haar-polyphase.html`
-- [ ] 12.3.5 Quadrature Mirror Filters (QMF)               — `ch12-multirate/12.3.5-qmf.html`
-- [ ] 12.3.6 Linear Phase QMF Banks                        — `ch12-multirate/12.3.6-linphase-qmf.html`
-- [ ] 12.3.7 Conjugate Quadrature Filters (CQF)            — `ch12-multirate/12.3.7-cqf.html`
-- [ ] 12.3.8 Orthogonal Two-Channel Filter Banks           — `ch12-multirate/12.3.8-ortho-2ch.html`
-- [ ] 12.4  Perfect Reconstruction Filter Banks            — `ch12-multirate/12.4-pr-fb.html`
-- [ ] 12.4.1 Simple Examples of PR                         — `ch12-multirate/12.4.1-simple-pr.html`
-- [ ] 12.4.2 Sliding Polyphase Filter Bank                 — `ch12-multirate/12.4.2-sliding-pp.html`
-- [ ] 12.4.3 Hopping Polyphase Filter Bank                 — `ch12-multirate/12.4.3-hopping-pp.html`
-- [ ] 12.4.4 Sufficient Condition for PR                   — `ch12-multirate/12.4.4-suff-pr.html`
-- [ ] 12.4.5 Necessary & Sufficient Conditions for PR      — `ch12-multirate/12.4.5-ns-pr.html`
-- [ ] 12.4.6 Polyphase View of the STFT                    — `ch12-multirate/12.4.6-pp-stft.html`
-- [ ] 12.4.7 Polyphase View of OLA-STFT                    — `ch12-multirate/12.4.7-pp-ola.html`
-- [ ] 12.4.8 Polyphase View of WOLA-STFT                   — `ch12-multirate/12.4.8-pp-wola.html`
-- [ ] 12.5  Paraunitary Filter Banks                       — `ch12-multirate/12.5-paraunitary.html`
-- [ ] 12.5.1 Lossless Filters                              — `ch12-multirate/12.5.1-lossless.html`
-- [ ] 12.5.2 Lossless Filter Examples                      — `ch12-multirate/12.5.2-lossless-ex.html`
-- [ ] 12.5.3 Properties of Paraunitary FBs                 — `ch12-multirate/12.5.3-para-props.html`
-- [ ] 12.5.4 Examples (Paraunitary)                        — `ch12-multirate/12.5.4-para-ex.html`
-- [ ] 12.6  Filter Banks Equivalent to STFTs               — `ch12-multirate/12.6-fb-eq-stft.html`
-- [ ] 12.6.1 Polyphase Analysis of Portnoff STFT           — `ch12-multirate/12.6.1-portnoff-pp.html`
-- [ ] 12.7  MPEG Filter Banks                              — `ch12-multirate/12.7-mpeg.html`
-- [ ] 12.7.1 Pseudo-QMF Cosine Mod Filter Bank             — `ch12-multirate/12.7.1-pseudo-qmf.html`
-- [ ] 12.7.2 PR Cosine Modulated Filter Banks              — `ch12-multirate/12.7.2-pr-cos.html`
-- [ ] 12.7.3 MPEG Layer III Filter Bank                    — `ch12-multirate/12.7.3-mp3-fb.html`
-- [ ] 12.8  Review of STFT Filterbanks                     — `ch12-multirate/12.8-review-stft-fb.html`
-- [ ] 12.8.1 STFT, Rect, No Overlap                        — `ch12-multirate/12.8.1-rect-no-ol.html`
-- [ ] 12.8.2 STFT, Rect, 50% Overlap                       — `ch12-multirate/12.8.2-rect-50.html`
-- [ ] 12.8.3 STFT, Triangular, 50% Overlap                 — `ch12-multirate/12.8.3-tri-50.html`
-- [ ] 12.8.4 STFT, Hamming, 75% Overlap                    — `ch12-multirate/12.8.4-hamming-75.html`
-- [ ] 12.8.5 STFT, Kaiser β=10, 90% Overlap                — `ch12-multirate/12.8.5-kaiser-90.html`
-- [ ] 12.8.6 Sliding FFT, Zero-Padded                      — `ch12-multirate/12.8.6-sliding-zp.html`
-- [ ] 12.9  Wavelet Filter Banks                           — `ch12-multirate/12.9-wavelet-fb.html`
-- [ ] 12.9.1 Geometric Signal Theory                       — `ch12-multirate/12.9.1-geom-sig.html`
-- [ ] 12.9.1.1 Natural Basis                               — `ch12-multirate/12.9.1.1-nat-basis.html`
-- [ ] 12.9.1.2 Normalized DFT Basis for C^N                — `ch12-multirate/12.9.1.2-dft-basis.html`
-- [ ] 12.9.1.3 Normalized Fourier Basis                    — `ch12-multirate/12.9.1.3-ft-basis.html`
-- [ ] 12.9.1.4 Normalized DTFT Basis                       — `ch12-multirate/12.9.1.4-dtft-basis.html`
-- [ ] 12.9.1.5 Normalized STFT Basis                       — `ch12-multirate/12.9.1.5-stft-basis.html`
-- [ ] 12.9.1.6 Continuous Wavelet Transform                — `ch12-multirate/12.9.1.6-cwt.html`
-- [ ] 12.9.1.7 Discrete Wavelet Transform                  — `ch12-multirate/12.9.1.7-dwt.html`
-- [ ] 12.9.1.8 Discrete Wavelet Filterbank                 — `ch12-multirate/12.9.1.8-dwt-fb.html`
-- [ ] 12.9.1.9 Dyadic Filter Banks                         — `ch12-multirate/12.9.1.9-dyadic.html`
-- [ ] 12.9.1.10 Dyadic Filter Bank Design                  — `ch12-multirate/12.9.1.10-dyadic-design.html`
-- [ ] 12.9.1.11 Generalized STFT                           — `ch12-multirate/12.9.1.11-gen-stft.html`
-- [ ] 12.10 Further Reading                                — `ch12-multirate/12.10-further.html`
-- [ ] 12.11 Conclusions                                    — `ch12-multirate/12.11-conclusions.html`
+- [~] 12.1  Upsampling and Downsampling                    — `ch12-multirate/12.1-up-down.html`
+- [~] 12.1.1 Upsampling (Stretch) Operator                 — `ch12-multirate/12.1.1-upsample.html`
+- [~] 12.1.2 Downsampling (Decimation) Operator            — `ch12-multirate/12.1.2-downsample.html`
+- [~] 12.1.2.1 Example: Downsampling by 2                  — `ch12-multirate/12.1.2.1-ds-by-2.html`
+- [~] 12.1.2.2 Example: Upsampling by 2                    — `ch12-multirate/12.1.2.2-us-by-2.html`
+- [~] 12.1.3 Filtering and Downsampling                    — `ch12-multirate/12.1.3-filter-ds.html`
+- [~] 12.2  Polyphase Decomposition                        — `ch12-multirate/12.2-polyphase.html`
+- [~] 12.2.1 Two-Channel Case                              — `ch12-multirate/12.2.1-two-channel.html`
+- [~] 12.2.2 N-Channel Polyphase Decomposition             — `ch12-multirate/12.2.2-n-channel.html`
+- [~] 12.2.3 Type II Polyphase Decomposition               — `ch12-multirate/12.2.3-type2.html`
+- [~] 12.2.4 Filtering and Downsampling, Revisited         — `ch12-multirate/12.2.4-filter-ds2.html`
+- [~] 12.2.5 Multirate Noble Identities                    — `ch12-multirate/12.2.5-noble.html`
+- [~] 12.3  Critically Sampled PR Filter Banks             — `ch12-multirate/12.3-cs-pr.html`
+- [~] 12.3.1 Two-Channel Critically Sampled FB             — `ch12-multirate/12.3.1-2ch-cs.html`
+- [~] 12.3.2 Amplitude-Complementary 2-Channel FB          — `ch12-multirate/12.3.2-amp-comp.html`
+- [~] 12.3.3 Haar Example                                  — `ch12-multirate/12.3.3-haar.html`
+- [~] 12.3.4 Polyphase Decomp of Haar Example              — `ch12-multirate/12.3.4-haar-polyphase.html`
+- [~] 12.3.5 Quadrature Mirror Filters (QMF)               — `ch12-multirate/12.3.5-qmf.html`
+- [~] 12.3.6 Linear Phase QMF Banks                        — `ch12-multirate/12.3.6-linphase-qmf.html`
+- [~] 12.3.7 Conjugate Quadrature Filters (CQF)            — `ch12-multirate/12.3.7-cqf.html`
+- [~] 12.3.8 Orthogonal Two-Channel Filter Banks           — `ch12-multirate/12.3.8-ortho-2ch.html`
+- [~] 12.4  Perfect Reconstruction Filter Banks            — `ch12-multirate/12.4-pr-fb.html`
+- [~] 12.4.1 Simple Examples of PR                         — `ch12-multirate/12.4.1-simple-pr.html`
+- [~] 12.4.2 Sliding Polyphase Filter Bank                 — `ch12-multirate/12.4.2-sliding-pp.html`
+- [~] 12.4.3 Hopping Polyphase Filter Bank                 — `ch12-multirate/12.4.3-hopping-pp.html`
+- [~] 12.4.4 Sufficient Condition for PR                   — `ch12-multirate/12.4.4-suff-pr.html`
+- [~] 12.4.5 Necessary & Sufficient Conditions for PR      — `ch12-multirate/12.4.5-ns-pr.html`
+- [~] 12.4.6 Polyphase View of the STFT                    — `ch12-multirate/12.4.6-pp-stft.html`
+- [~] 12.4.7 Polyphase View of OLA-STFT                    — `ch12-multirate/12.4.7-pp-ola.html`
+- [~] 12.4.8 Polyphase View of WOLA-STFT                   — `ch12-multirate/12.4.8-pp-wola.html`
+- [~] 12.5  Paraunitary Filter Banks                       — `ch12-multirate/12.5-paraunitary.html`
+- [~] 12.5.1 Lossless Filters                              — `ch12-multirate/12.5.1-lossless.html`
+- [~] 12.5.2 Lossless Filter Examples                      — `ch12-multirate/12.5.2-lossless-ex.html`
+- [~] 12.5.3 Properties of Paraunitary FBs                 — `ch12-multirate/12.5.3-para-props.html`
+- [~] 12.5.4 Examples (Paraunitary)                        — `ch12-multirate/12.5.4-para-ex.html`
+- [~] 12.6  Filter Banks Equivalent to STFTs               — `ch12-multirate/12.6-fb-eq-stft.html`
+- [~] 12.6.1 Polyphase Analysis of Portnoff STFT           — `ch12-multirate/12.6.1-portnoff-pp.html`
+- [~] 12.7  MPEG Filter Banks                              — `ch12-multirate/12.7-mpeg.html`
+- [~] 12.7.1 Pseudo-QMF Cosine Mod Filter Bank             — `ch12-multirate/12.7.1-pseudo-qmf.html`
+- [~] 12.7.2 PR Cosine Modulated Filter Banks              — `ch12-multirate/12.7.2-pr-cos.html`
+- [~] 12.7.3 MPEG Layer III Filter Bank                    — `ch12-multirate/12.7.3-mp3-fb.html`
+- [~] 12.8  Review of STFT Filterbanks                     — `ch12-multirate/12.8-review-stft-fb.html`
+- [~] 12.8.1 STFT, Rect, No Overlap                        — `ch12-multirate/12.8.1-rect-no-ol.html`
+- [~] 12.8.2 STFT, Rect, 50% Overlap                       — `ch12-multirate/12.8.2-rect-50.html`
+- [~] 12.8.3 STFT, Triangular, 50% Overlap                 — `ch12-multirate/12.8.3-tri-50.html`
+- [~] 12.8.4 STFT, Hamming, 75% Overlap                    — `ch12-multirate/12.8.4-hamming-75.html`
+- [~] 12.8.5 STFT, Kaiser β=10, 90% Overlap                — `ch12-multirate/12.8.5-kaiser-90.html`
+- [~] 12.8.6 Sliding FFT, Zero-Padded                      — `ch12-multirate/12.8.6-sliding-zp.html`
+- [~] 12.9  Wavelet Filter Banks                           — `ch12-multirate/12.9-wavelet-fb.html`
+- [~] 12.9.1 Geometric Signal Theory                       — `ch12-multirate/12.9.1-geom-sig.html`
+- [~] 12.9.1.1 Natural Basis                               — `ch12-multirate/12.9.1.1-nat-basis.html`
+- [~] 12.9.1.2 Normalized DFT Basis for C^N                — `ch12-multirate/12.9.1.2-dft-basis.html`
+- [~] 12.9.1.3 Normalized Fourier Basis                    — `ch12-multirate/12.9.1.3-ft-basis.html`
+- [~] 12.9.1.4 Normalized DTFT Basis                       — `ch12-multirate/12.9.1.4-dtft-basis.html`
+- [~] 12.9.1.5 Normalized STFT Basis                       — `ch12-multirate/12.9.1.5-stft-basis.html`
+- [~] 12.9.1.6 Continuous Wavelet Transform                — `ch12-multirate/12.9.1.6-cwt.html`
+- [~] 12.9.1.7 Discrete Wavelet Transform                  — `ch12-multirate/12.9.1.7-dwt.html`
+- [~] 12.9.1.8 Discrete Wavelet Filterbank                 — `ch12-multirate/12.9.1.8-dwt-fb.html`
+- [~] 12.9.1.9 Dyadic Filter Banks                         — `ch12-multirate/12.9.1.9-dyadic.html`
+- [~] 12.9.1.10 Dyadic Filter Bank Design                  — `ch12-multirate/12.9.1.10-dyadic-design.html`
+- [~] 12.9.1.11 Generalized STFT                           — `ch12-multirate/12.9.1.11-gen-stft.html`
+- [~] 12.10 Further Reading                                — `ch12-multirate/12.10-further.html`
+- [~] 12.11 Conclusions                                    — `ch12-multirate/12.11-conclusions.html`
 
 ## World 13 · Summary and Conclusions
 

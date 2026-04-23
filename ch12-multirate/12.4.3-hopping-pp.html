@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>12.4.3 Hopping Polyphase Filter Bank · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W12</a></span><span>STAGE <b>12-4-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 12-4-3 · Hopping Polyphase Filter Bank</span><span lang="zh">關卡 12-4-3 · 跳躍多相組</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Hopping_Polyphase_Filter_Bank.html" target="_blank">SASP §12.4.3 ↗</a></small></h1>
+  <div class="nes-box" data-label="HOP > 1">
+    <p lang="en">Hop > 1 reduces redundancy and CPU. Pick hop $R\le N$: $R=N$ is critical sampling (no overlap); $R=N/2$ matches the common 50% OLA window. PR conditions depend on both filter shape and hop.</p>
+    <p lang="zh">跳距 > 1 降低冗餘與計算量。選跳距 $R\le N$：$R=N$ 為臨界取樣（無重疊）；$R=N/2$ 對應常見 50% OLA。完美重建條件同時取決於濾波器形狀與跳距。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="12.4.2-sliding-pp.html">◀ 12.4.2</a><a class="warp-pipe">12-4-3</a><a class="nes-btn nes-btn--primary" href="12.4.4-suff-pr.html">NEXT ▶ 12.4.4</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

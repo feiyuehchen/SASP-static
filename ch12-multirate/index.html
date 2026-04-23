@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>World 12 · Multirate Filter Banks · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="../index.html">◀ HOME</a></span><span>WORLD <b>12</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">World 12 · Multirate Filter Banks</span><span lang="zh">第 12 世界 · 多取樣率濾波器組</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Multirate_Filter_Banks.html" target="_blank">SASP Ch 12 ↗</a></small></h1>
+  <div class="nes-box nes-box--green" data-label="WORLD BRIEF">
+    <p lang="en">Multirate processing is the theoretical ground under every analysis bank we've seen: STFT, MPEG codecs, wavelets — they're all special cases of polyphase perfect-reconstruction filter banks. This world builds up the up/down-sampler algebra, polyphase matrices, paraunitary banks, and ends with wavelets as a dyadic specialisation.</p>
+    <p lang="zh">多取樣率處理是前面所有分析組的理論基礎：STFT、MPEG 編解碼、小波 — 都是多相完美重建濾波器組的特例。本世界從升/降取樣代數、多相矩陣、paraunitary 組一路建起，最後以小波作為二元特例收尾。</p>
+  </div>
+  <div class="stage-grid">
+    <a class="stage-tile" href="12.1-up-down.html"><b>12.1</b><span lang="en">Upsampling and Downsampling</span><span lang="zh">升取樣與降取樣</span></a>
+    <a class="stage-tile" href="12.1.1-upsample.html"><b>12.1.1</b><span lang="en">Upsampling (Stretch) Operator</span><span lang="zh">升取樣（拉伸）算子</span></a>
+    <a class="stage-tile" href="12.1.2-downsample.html"><b>12.1.2</b><span lang="en">Downsampling (Decimation) Operator</span><span lang="zh">降取樣（抽取）算子</span></a>
+    <a class="stage-tile" href="12.1.2.1-ds-by-2.html"><b>12.1.2.1</b><span lang="en">Example: Downsampling by 2</span><span lang="zh">範例：降取樣 2</span></a>
+    <a class="stage-tile" href="12.1.2.2-us-by-2.html"><b>12.1.2.2</b><span lang="en">Example: Upsampling by 2</span><span lang="zh">範例：升取樣 2</span></a>
+    <a class="stage-tile" href="12.1.3-filter-ds.html"><b>12.1.3</b><span lang="en">Filtering and Downsampling</span><span lang="zh">先濾波再降取樣</span></a>
+    <a class="stage-tile" href="12.2-polyphase.html"><b>12.2</b><span lang="en">Polyphase Decomposition</span><span lang="zh">多相分解</span></a>
+    <a class="stage-tile" href="12.2.1-two-channel.html"><b>12.2.1</b><span lang="en">Two-Channel Polyphase Case</span><span lang="zh">兩通道多相分解</span></a>
+    <a class="stage-tile" href="12.2.2-n-channel.html"><b>12.2.2</b><span lang="en">N-Channel Polyphase Decomposition</span><span lang="zh">N 通道多相分解</span></a>
+    <a class="stage-tile" href="12.2.3-type2.html"><b>12.2.3</b><span lang="en">Type II Polyphase Decomposition</span><span lang="zh">第二型多相分解</span></a>
+    <a class="stage-tile" href="12.2.4-filter-ds2.html"><b>12.2.4</b><span lang="en">Filter-then-Downsample (Revisited)</span><span lang="zh">再訪「先濾波再降取樣」</span></a>
+    <a class="stage-tile" href="12.2.5-noble.html"><b>12.2.5</b><span lang="en">Multirate Noble Identities</span><span lang="zh">多取樣率 Noble 恆等式</span></a>
+    <a class="stage-tile" href="12.3-cs-pr.html"><b>12.3</b><span lang="en">Critically Sampled PR Filter Banks</span><span lang="zh">臨界取樣完美重建組</span></a>
+    <a class="stage-tile" href="12.3.1-2ch-cs.html"><b>12.3.1</b><span lang="en">Two-Channel Critically Sampled FB</span><span lang="zh">兩通道臨界取樣組</span></a>
+    <a class="stage-tile" href="12.3.2-amp-comp.html"><b>12.3.2</b><span lang="en">Amplitude-Complementary 2-Ch FB</span><span lang="zh">振幅互補兩通道組</span></a>
+    <a class="stage-tile" href="12.3.3-haar.html"><b>12.3.3</b><span lang="en">Haar Example</span><span lang="zh">Haar 範例</span></a>
+    <a class="stage-tile" href="12.3.4-haar-polyphase.html"><b>12.3.4</b><span lang="en">Polyphase Decomposition of Haar</span><span lang="zh">Haar 的多相分解</span></a>
+    <a class="stage-tile" href="12.3.5-qmf.html"><b>12.3.5</b><span lang="en">Quadrature Mirror Filters (QMF)</span><span lang="zh">正交鏡像濾波器</span></a>
+    <a class="stage-tile" href="12.3.6-linphase-qmf.html"><b>12.3.6</b><span lang="en">Linear-Phase QMF Banks</span><span lang="zh">線性相位 QMF 組</span></a>
+    <a class="stage-tile" href="12.3.7-cqf.html"><b>12.3.7</b><span lang="en">Conjugate Quadrature Filters (CQF)</span><span lang="zh">共軛正交濾波器</span></a>
+    <a class="stage-tile" href="12.3.8-ortho-2ch.html"><b>12.3.8</b><span lang="en">Orthogonal 2-Channel Filter Banks</span><span lang="zh">正交兩通道組</span></a>
+    <a class="stage-tile" href="12.4-pr-fb.html"><b>12.4</b><span lang="en">Perfect Reconstruction Filter Banks</span><span lang="zh">完美重建濾波器組</span></a>
+    <a class="stage-tile" href="12.4.1-simple-pr.html"><b>12.4.1</b><span lang="en">Simple Examples of PR</span><span lang="zh">完美重建簡單範例</span></a>
+    <a class="stage-tile" href="12.4.2-sliding-pp.html"><b>12.4.2</b><span lang="en">Sliding Polyphase Filter Bank</span><span lang="zh">滑動多相組</span></a>
+    <a class="stage-tile" href="12.4.3-hopping-pp.html"><b>12.4.3</b><span lang="en">Hopping Polyphase Filter Bank</span><span lang="zh">跳躍多相組</span></a>
+    <a class="stage-tile" href="12.4.4-suff-pr.html"><b>12.4.4</b><span lang="en">Sufficient Condition for PR</span><span lang="zh">完美重建的充分條件</span></a>
+    <a class="stage-tile" href="12.4.5-ns-pr.html"><b>12.4.5</b><span lang="en">Necessary & Sufficient PR Conditions</span><span lang="zh">完美重建充要條件</span></a>
+    <a class="stage-tile" href="12.4.6-pp-stft.html"><b>12.4.6</b><span lang="en">Polyphase View of the STFT</span><span lang="zh">STFT 的多相觀點</span></a>
+    <a class="stage-tile" href="12.4.7-pp-ola.html"><b>12.4.7</b><span lang="en">Polyphase View of OLA-STFT</span><span lang="zh">OLA-STFT 的多相觀點</span></a>
+    <a class="stage-tile" href="12.4.8-pp-wola.html"><b>12.4.8</b><span lang="en">Polyphase View of WOLA-STFT</span><span lang="zh">WOLA-STFT 的多相觀點</span></a>
+    <a class="stage-tile" href="12.5-paraunitary.html"><b>12.5</b><span lang="en">Paraunitary Filter Banks</span><span lang="zh">Paraunitary 濾波器組</span></a>
+    <a class="stage-tile" href="12.5.1-lossless.html"><b>12.5.1</b><span lang="en">Lossless Filters</span><span lang="zh">無損濾波器</span></a>
+    <a class="stage-tile" href="12.5.2-lossless-ex.html"><b>12.5.2</b><span lang="en">Lossless Filter Examples</span><span lang="zh">無損濾波器範例</span></a>
+    <a class="stage-tile" href="12.5.3-para-props.html"><b>12.5.3</b><span lang="en">Properties of Paraunitary FBs</span><span lang="zh">Paraunitary 組的性質</span></a>
+    <a class="stage-tile" href="12.5.4-para-ex.html"><b>12.5.4</b><span lang="en">Paraunitary Examples</span><span lang="zh">Paraunitary 實例</span></a>
+    <a class="stage-tile" href="12.6-fb-eq-stft.html"><b>12.6</b><span lang="en">Filter Banks Equivalent to STFTs</span><span lang="zh">等價於 STFT 的濾波器組</span></a>
+    <a class="stage-tile" href="12.6.1-portnoff-pp.html"><b>12.6.1</b><span lang="en">Polyphase Analysis of Portnoff STFT</span><span lang="zh">Portnoff STFT 的多相分析</span></a>
+    <a class="stage-tile" href="12.7-mpeg.html"><b>12.7</b><span lang="en">MPEG Filter Banks</span><span lang="zh">MPEG 濾波器組</span></a>
+    <a class="stage-tile" href="12.7.1-pseudo-qmf.html"><b>12.7.1</b><span lang="en">Pseudo-QMF Cosine-Modulated FB</span><span lang="zh">Pseudo-QMF 餘弦調變組</span></a>
+    <a class="stage-tile" href="12.7.2-pr-cos.html"><b>12.7.2</b><span lang="en">PR Cosine-Modulated FBs</span><span lang="zh">完美重建餘弦調變組</span></a>
+    <a class="stage-tile" href="12.7.3-mp3-fb.html"><b>12.7.3</b><span lang="en">MPEG Layer III (mp3) Filter Bank</span><span lang="zh">MPEG Layer III (mp3) 濾波器組</span></a>
+    <a class="stage-tile" href="12.8-review-stft-fb.html"><b>12.8</b><span lang="en">Review of STFT Filterbanks</span><span lang="zh">STFT 濾波器組回顧</span></a>
+    <a class="stage-tile" href="12.8.1-rect-no-ol.html"><b>12.8.1</b><span lang="en">Rect Window, No Overlap</span><span lang="zh">矩形視窗、無重疊</span></a>
+    <a class="stage-tile" href="12.8.2-rect-50.html"><b>12.8.2</b><span lang="en">Rect Window, 50% Overlap</span><span lang="zh">矩形視窗、50% 重疊</span></a>
+    <a class="stage-tile" href="12.8.3-tri-50.html"><b>12.8.3</b><span lang="en">Triangular Window, 50% Overlap</span><span lang="zh">三角視窗、50% 重疊</span></a>
+    <a class="stage-tile" href="12.8.4-hamming-75.html"><b>12.8.4</b><span lang="en">Hamming Window, 75% Overlap</span><span lang="zh">Hamming 視窗、75% 重疊</span></a>
+    <a class="stage-tile" href="12.8.5-kaiser-90.html"><b>12.8.5</b><span lang="en">Kaiser β=10, 90% Overlap</span><span lang="zh">Kaiser β=10、90% 重疊</span></a>
+    <a class="stage-tile" href="12.8.6-sliding-zp.html"><b>12.8.6</b><span lang="en">Sliding FFT (Max Overlap), 5× Zero-Pad</span><span lang="zh">滑動 FFT（最大重疊）、5 倍零填充</span></a>
+    <a class="stage-tile" href="12.9-wavelet-fb.html"><b>12.9</b><span lang="en">Wavelet Filter Banks</span><span lang="zh">小波濾波器組</span></a>
+    <a class="stage-tile" href="12.9.1-geom-sig.html"><b>12.9.1</b><span lang="en">Geometric Signal Theory</span><span lang="zh">幾何訊號理論</span></a>
+    <a class="stage-tile" href="12.9.1.1-nat-basis.html"><b>12.9.1.1</b><span lang="en">Natural Basis</span><span lang="zh">自然基底</span></a>
+    <a class="stage-tile" href="12.9.1.2-dft-basis.html"><b>12.9.1.2</b><span lang="en">Normalized DFT Basis for ℂ^N</span><span lang="zh">$\mathbb{C}^N$ 的歸一化 DFT 基底</span></a>
+    <a class="stage-tile" href="12.9.1.3-ft-basis.html"><b>12.9.1.3</b><span lang="en">Normalized Fourier Basis (L²(ℝ))</span><span lang="zh">連續 Fourier 歸一化基底</span></a>
+    <a class="stage-tile" href="12.9.1.4-dtft-basis.html"><b>12.9.1.4</b><span lang="en">Normalized DTFT Basis</span><span lang="zh">DTFT 歸一化基底</span></a>
+    <a class="stage-tile" href="12.9.1.5-stft-basis.html"><b>12.9.1.5</b><span lang="en">Normalized STFT Basis</span><span lang="zh">STFT 歸一化基底</span></a>
+    <a class="stage-tile" href="12.9.1.6-cwt.html"><b>12.9.1.6</b><span lang="en">Continuous Wavelet Transform</span><span lang="zh">連續小波變換</span></a>
+    <a class="stage-tile" href="12.9.1.7-dwt.html"><b>12.9.1.7</b><span lang="en">Discrete Wavelet Transform</span><span lang="zh">離散小波變換</span></a>
+    <a class="stage-tile" href="12.9.1.8-dwt-fb.html"><b>12.9.1.8</b><span lang="en">Discrete Wavelet Filter Bank</span><span lang="zh">離散小波濾波器組</span></a>
+    <a class="stage-tile" href="12.9.1.9-dyadic.html"><b>12.9.1.9</b><span lang="en">Dyadic Filter Banks</span><span lang="zh">二元濾波器組</span></a>
+    <a class="stage-tile" href="12.9.1.10-dyadic-design.html"><b>12.9.1.10</b><span lang="en">Dyadic Filter Bank Design</span><span lang="zh">二元濾波器組設計</span></a>
+    <a class="stage-tile" href="12.9.1.11-gen-stft.html"><b>12.9.1.11</b><span lang="en">Generalized STFT</span><span lang="zh">廣義 STFT</span></a>
+    <a class="stage-tile" href="12.10-further.html"><b>12.10</b><span lang="en">Further Reading</span><span lang="zh">延伸閱讀</span></a>
+    <a class="stage-tile" href="12.11-conclusions.html"><b>12.11</b><span lang="en">Conclusions</span><span lang="zh">結論</span></a>
+  </div>
+  <div class="pager"><a class="nes-btn" href="../ch11-stft-apps/index.html">◀ W11</a><a class="warp-pipe">12</a><a class="nes-btn nes-btn--primary" href="../ch13-conclusion/index.html">WORLD 13 ▶</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

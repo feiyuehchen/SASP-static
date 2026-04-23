@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>12.1.2.2 Example: Upsampling by 2 · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W12</a></span><span>STAGE <b>12-1-2-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 12-1-2-2 · Example: Upsampling by 2</span><span lang="zh">關卡 12-1-2-2 · 範例：升取樣 2</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Example_Upsampling_2.html" target="_blank">SASP §12.1.2.2 ↗</a></small></h1>
+  <div class="nes-box" data-label="INTERP BY 2">
+    <p lang="en">Upsample-by-2 gives zero-stuffed $[x_0,0,x_1,0,\ldots]$ whose spectrum has two identical copies of $X$ in $[0,2\pi)$. The second copy is an image; remove it with a lowpass at $\pi/2$ to complete the interpolation.</p>
+    <p lang="zh">$\uparrow 2$ 產生零填充序列 $[x_0,0,x_1,0,\ldots]$，其頻譜在 $[0,2\pi)$ 內有兩份相同的 $X$。第二份就是「映像」；用 $\pi/2$ 低通去掉它就完成插值。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="12.1.2.1-ds-by-2.html">◀ 12.1.2.1</a><a class="warp-pipe">12-1-2-2</a><a class="nes-btn nes-btn--primary" href="12.1.3-filter-ds.html">NEXT ▶ 12.1.3</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

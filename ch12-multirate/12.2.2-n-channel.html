@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>12.2.2 N-Channel Polyphase Decomposition · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W12</a></span><span>STAGE <b>12-2-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 12-2-2 · N-Channel Polyphase Decomposition</span><span lang="zh">關卡 12-2-2 · N 通道多相分解</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/N_Channel_Polyphase_Decomposition.html" target="_blank">SASP §12.2.2 ↗</a></small></h1>
+  <div class="nes-box" data-label="N-WAY SPLIT">
+    <p lang="en">Extend to any N: $H(z)=\sum_{k=0}^{N-1} z^{-k} E_k(z^N)$ where $E_k(z)=\sum_m h[mN+k]z^{-m}$. The polyphase matrix stacks all $E_k$ into a single vector transfer function — critical for paraunitary design later.</p>
+    <p lang="zh">推廣到任意 N：$H(z)=\sum_{k=0}^{N-1} z^{-k} E_k(z^N)$，其中 $E_k(z)=\sum_m h[mN+k]z^{-m}$。多相矩陣把所有 $E_k$ 堆成向量傳遞函式 — 後面 paraunitary 設計會靠它。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="12.2.1-two-channel.html">◀ 12.2.1</a><a class="warp-pipe">12-2-2</a><a class="nes-btn nes-btn--primary" href="12.2.3-type2.html">NEXT ▶ 12.2.3</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

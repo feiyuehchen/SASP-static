@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>12.9.1.8 Discrete Wavelet Filter Bank · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W12</a></span><span>STAGE <b>12-9-1-8</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 12-9-1-8 · Discrete Wavelet Filter Bank</span><span lang="zh">關卡 12-9-1-8 · 離散小波濾波器組</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Discrete_Wavelet_Filterbank.html" target="_blank">SASP §12.9.1.8 ↗</a></small></h1>
+  <div class="nes-box" data-label="RECURSIVE 2-CH">
+    <p lang="en">DWT implementation: iterate a 2-channel PR bank on the lowpass output only. After J levels you get 1 lowpass + J bandpasses, each at half the rate of the one above. Total work ≈ 2× one bank pass.</p>
+    <p lang="zh">DWT 實作：對 2 通道完美重建組的低通輸出重複套用。經 J 層後得 1 個低通 + J 個帶通，每下一層取樣率減半。總運算量約為單次組通過的 2 倍。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="12.9.1.7-dwt.html">◀ 12.9.1.7</a><a class="warp-pipe">12-9-1-8</a><a class="nes-btn nes-btn--primary" href="12.9.1.9-dyadic.html">NEXT ▶ 12.9.1.9</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>
