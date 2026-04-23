@@ -588,24 +588,24 @@ data-en-def …>` for hover tooltips.
 
 ## Appendix World F · Examples in Matlab and Octave  (appendix/matlab/)
 
-- [ ] F.1   Matlab for Spectrum Analysis Windows           — `appendix/matlab/F.1-windows.html`
-- [ ] F.1.1 Blackman Window Example                        — `appendix/matlab/F.1.1-blackman-ex.html`
-- [ ] F.1.2 Matlab listing: dpssw.m                        — `appendix/matlab/F.1.2-dpssw.html`
-- [ ] F.2   Interpolating Spectral Peaks                   — `appendix/matlab/F.2-interp.html`
-- [ ] F.2.1 Matlab listing: findpeaks.m                    — `appendix/matlab/F.2.1-findpeaks.html`
-- [ ] F.2.2 Matlab listing: maxr.m                         — `appendix/matlab/F.2.2-maxr.html`
-- [ ] F.2.3 Matlab listing: qint.m                         — `appendix/matlab/F.2.3-qint.html`
-- [ ] F.2.4 Matlab listing: zpfmin.m                       — `appendix/matlab/F.2.4-zpfmin.html`
-- [ ] F.2.5 Matlab listing: oboeanal.m                     — `appendix/matlab/F.2.5-oboeanal.html`
-- [ ] F.3   Matlab for Computing Spectrograms              — `appendix/matlab/F.3-spectrograms.html`
-- [ ] F.3.1 Matlab listing: myspectrogram.m                — `appendix/matlab/F.3.1-myspectrogram.html`
-- [ ] F.3.2 Matlab listing: invmyspectrogram.m             — `appendix/matlab/F.3.2-invmyspectrogram.html`
-- [ ] F.3.3 Matlab listing: testmyspectrogram.m            — `appendix/matlab/F.3.3-testmyspectrogram.html`
-- [ ] F.4   Matlab for Unwrapping Spectral Phase           — `appendix/matlab/F.4-unwrap.html`
-- [ ] F.4.1 Matlab listing: unwrap.m                       — `appendix/matlab/F.4.1-unwrap-m.html`
-- [ ] F.5   Non-Parametric Frequency Warping               — `appendix/matlab/F.5-nonpar-warp.html`
-- [ ] F.6   Fundamental Frequency Estimation               — `appendix/matlab/F.6-f0-est.html`
-- [ ] F.6.1 Test Program for F0 Estimation                 — `appendix/matlab/F.6.1-f0-test.html`
+- [~] F.1   Matlab for Spectrum Analysis Windows           — `appendix/matlab/F.1-windows.html`
+- [~] F.1.1 Blackman Window Example                        — `appendix/matlab/F.1.1-blackman-ex.html`
+- [~] F.1.2 Matlab listing: dpssw.m                        — `appendix/matlab/F.1.2-dpssw.html`
+- [~] F.2   Interpolating Spectral Peaks                   — `appendix/matlab/F.2-interp.html`
+- [~] F.2.1 Matlab listing: findpeaks.m                    — `appendix/matlab/F.2.1-findpeaks.html`
+- [~] F.2.2 Matlab listing: maxr.m                         — `appendix/matlab/F.2.2-maxr.html`
+- [~] F.2.3 Matlab listing: qint.m                         — `appendix/matlab/F.2.3-qint.html`
+- [~] F.2.4 Matlab listing: zpfmin.m                       — `appendix/matlab/F.2.4-zpfmin.html`
+- [~] F.2.5 Matlab listing: oboeanal.m                     — `appendix/matlab/F.2.5-oboeanal.html`
+- [~] F.3   Matlab for Computing Spectrograms              — `appendix/matlab/F.3-spectrograms.html`
+- [~] F.3.1 Matlab listing: myspectrogram.m                — `appendix/matlab/F.3.1-myspectrogram.html`
+- [~] F.3.2 Matlab listing: invmyspectrogram.m             — `appendix/matlab/F.3.2-invmyspectrogram.html`
+- [~] F.3.3 Matlab listing: testmyspectrogram.m            — `appendix/matlab/F.3.3-testmyspectrogram.html`
+- [~] F.4   Matlab for Unwrapping Spectral Phase           — `appendix/matlab/F.4-unwrap.html`
+- [~] F.4.1 Matlab listing: unwrap.m                       — `appendix/matlab/F.4.1-unwrap-m.html`
+- [~] F.5   Non-Parametric Frequency Warping               — `appendix/matlab/F.5-nonpar-warp.html`
+- [~] F.6   Fundamental Frequency Estimation               — `appendix/matlab/F.6-f0-est.html`
+- [~] F.6.1 Test Program for F0 Estimation                 — `appendix/matlab/F.6.1-f0-test.html`
 
 ## Appendix World G · Spectral Audio Modeling History  (appendix/history/)
 
