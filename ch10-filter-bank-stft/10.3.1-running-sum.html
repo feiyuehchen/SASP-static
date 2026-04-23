@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.3.1 Running-Sum LP · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-3-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 10-3-1 · Running-Sum Lowpass</span><span lang="zh">關卡 10-3-1 · 累計和低通</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Running_Sum_Lowpass_Filter.html" target="_blank">SASP §10.3.1 ↗</a></small></h1>
+  <div class="formula"><div>$$y[n]=\sum_{k=0}^{N-1}x[n-k]\quad\Longleftrightarrow\quad H(\omega)=e^{-j\omega(N-1)/2}\,\frac{\sin(N\omega/2)}{\sin(\omega/2)}$$</div></div>
+  <p lang="en">The prototype: a length-$N$ running sum. Its frequency response is the Dirichlet kernel; zeros at multiples of $2\pi/N$ — exactly where the other DFT-FB channels want to put their peaks.</p>
+  <p lang="zh">原型：長度 $N$ 的累計和。頻率響應為 Dirichlet 核；零點位於 $2\pi/N$ 的倍數 — 正是其他 DFT-FB 通道想放峰的位置。</p>
+  <div class="pager"><a class="nes-btn" href="10.3-dft-fb.html">◀ 10.3</a><a class="warp-pipe">10-3-1</a><a class="nes-btn nes-btn--primary" href="10.3.2-mod-complex.html">NEXT ▶ 10.3.2</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

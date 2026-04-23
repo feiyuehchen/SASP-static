@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.5 Nyquist(N) Windows · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-5</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 10-5 · Nyquist(N) Windows</span><span lang="zh">關卡 10-5 · Nyquist(N) 視窗</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Nyquist_N_Windows.html" target="_blank">SASP §10.5 ↗</a></small></h1>
+  <div class="nes-box" data-label="DEFINITION">
+    <p lang="en">A Nyquist(N) window is one whose DTFT has zeros at every non-zero multiple of $2\pi/N$. Equivalently: every $N$-th time sample of the window (except at $n=0$) is zero. Every Nyquist(N) window is an FBS-valid prototype at hop $R=N$.</p>
+    <p lang="zh">Nyquist(N) 視窗的 DTFT 在 $2\pi/N$ 所有非零倍數處為零。等價地：除 $n=0$ 外，每 $N$ 個時間樣本為零。Nyquist(N) 視窗就是跳距 $R=N$ 的 FBS 有效原型。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="10.4-fbs-r1.html">◀ 10.4</a><a class="warp-pipe">10-5</a><a class="nes-btn nes-btn--primary" href="10.6-cola-nyquist-duality.html">NEXT ▶ 10.6</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

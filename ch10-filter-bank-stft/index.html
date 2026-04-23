@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>World 10 — Filter Bank View of the STFT · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="../index.html">◀ MAP</a></span><span>WORLD <b>10</b></span><span lang="en">FB STFT</span><span lang="zh">濾波器組 STFT</span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">World 10 — Filter Bank View of the STFT</span><span lang="zh">第 10 世界 — STFT 的濾波器組觀點</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Filter_Bank_Summation_FBS.html" target="_blank">SASP Ch. 10 ↗</a></small></h1>
+  <div class="nes-box nes-box--green" data-label="BRIEFING">
+    <p lang="en">Flip the STFT inside-out: each frequency bin over time is the output of a bandpass filter centred there. The window is the prototype lowpass; complex-sinusoidal modulation shifts it to each frequency.</p>
+    <p lang="zh">把 STFT 翻過來看：每個 bin 隨時間的輸出，其實是該頻率中心帶通濾波器的輸出。視窗是原型低通；複正弦調變把它移到各頻率。</p>
+  </div>
+  <ul class="toc-list">
+    <li><a href="10.1-dual-views.html"><span><span class="num">10.1</span><span lang="en">Dual Views of the STFT</span><span lang="zh">STFT 雙重觀點</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.1.1-ola-view.html"><span><span class="num">10.1.1</span><span lang="en">OLA View</span><span lang="zh">OLA 觀點</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.1.2-fb-view.html"><span><span class="num">10.1.2</span><span lang="en">Filter-Bank View</span><span lang="zh">濾波器組觀點</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.1.3-fbs-pr.html"><span><span class="num">10.1.3</span><span lang="en">FBS Perfect Reconstruction</span><span lang="zh">FBS 完美重建</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.2-stft-fb.html"><span><span class="num">10.2</span><span lang="en">STFT Filter Bank</span><span lang="zh">STFT 濾波器組</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.2.1-matlab-examples.html"><span><span class="num">10.2.1</span><span lang="en">Matlab Examples</span><span lang="zh">Matlab 範例</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.3-dft-fb.html"><span><span class="num">10.3</span><span lang="en">DFT Filter Bank</span><span lang="zh">DFT 濾波器組</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.3.1-running-sum.html"><span><span class="num">10.3.1</span><span lang="en">Running-Sum LP</span><span lang="zh">累計和低通</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.3.2-mod-complex.html"><span><span class="num">10.3.2</span><span lang="en">Complex-Sinusoid Modulation</span><span lang="zh">複正弦調變</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.3.3-lp-to-bp.html"><span><span class="num">10.3.3</span><span lang="en">BP from LP</span><span lang="zh">由 LP 得到 BP</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.3.4-uniform-rs.html"><span><span class="num">10.3.4</span><span lang="en">Uniform Running-Sum FB</span><span lang="zh">均勻累計和 FB</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.3.4.1-rs-diagram.html"><span><span class="num">10.3.4.1</span><span lang="en">System Diagram</span><span lang="zh">系統圖</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.3.4.2-dft-fb-detail.html"><span><span class="num">10.3.4.2</span><span lang="en">DFT FB Detail</span><span lang="zh">DFT FB 細節</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.3.4.3-idft-fb.html"><span><span class="num">10.3.4.3</span><span lang="en">IDFT and FB Sum</span><span lang="zh">IDFT 與 FB 和</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.4-fbs-r1.html"><span><span class="num">10.4</span><span lang="en">FBS Window Constraints (R=1)</span><span lang="zh">FBS 視窗約束 (R=1)</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.5-nyquist-n.html"><span><span class="num">10.5</span><span lang="en">Nyquist(N) Windows</span><span lang="zh">Nyquist(N) 視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.6-cola-nyquist-duality.html"><span><span class="num">10.6</span><span lang="en">COLA ↔ Nyquist Duality</span><span lang="zh">COLA ↔ Nyquist 對偶</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.6.1-specific-windows.html"><span><span class="num">10.6.1</span><span lang="en">Specific Windows</span><span lang="zh">具體視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.6.2-nyquist-unit.html"><span><span class="num">10.6.2</span><span lang="en">Nyquist on Unit Circle</span><span lang="zh">單位圓上的 Nyquist</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.7-portnoff.html"><span><span class="num">10.7</span><span lang="en">Portnoff Windows</span><span lang="zh">Portnoff 視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.8-downsampled.html"><span><span class="num">10.8</span><span lang="en">Downsampled STFT FBs</span><span lang="zh">降取樣 STFT FBs</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.8.1-ds-stft-fb.html"><span><span class="num">10.8.1</span><span lang="en">Downsampled STFT FB</span><span lang="zh">降取樣 STFT FB</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.8.1.1-fb-recon.html"><span><span class="num">10.8.1.1</span><span lang="en">FB Reconstruction</span><span lang="zh">FB 重建</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.8.2-ds-anti-aliasing.html"><span><span class="num">10.8.2</span><span lang="en">DS with Anti-Aliasing</span><span lang="zh">抗混疊降取樣</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.8.2.1-window-anti-aliasing.html"><span><span class="num">10.8.2.1</span><span lang="en">Anti-Aliasing Windows</span><span lang="zh">抗混疊視窗</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.8.2.2-wola-hop.html"><span><span class="num">10.8.2.2</span><span lang="en">WOLA Hop Sizes</span><span lang="zh">WOLA 跳距</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.8.3-cola-cases.html"><span><span class="num">10.8.3</span><span lang="en">COLA Cases</span><span lang="zh">COLA 案例</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.8.3.1-hamming-ola.html"><span><span class="num">10.8.3.1</span><span lang="en">Hamming OLA</span><span lang="zh">Hamming OLA</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.8.3.2-periodic-hamming.html"><span><span class="num">10.8.3.2</span><span lang="en">Periodic Hamming OLA PSF</span><span lang="zh">週期 Hamming PSF</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.8.3.3-kaiser-ola.html"><span><span class="num">10.8.3.3</span><span lang="en">Kaiser OLA</span><span lang="zh">Kaiser OLA</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.9-stft-mods.html"><span><span class="num">10.9</span><span lang="en">STFT Modifications</span><span lang="zh">STFT 修改</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.9.1-fbs-fixed.html"><span><span class="num">10.9.1</span><span lang="en">FBS Fixed Mods</span><span lang="zh">FBS 固定修改</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.9.2-fbs-tv.html"><span><span class="num">10.9.2</span><span lang="en">FBS Time-Varying Mods</span><span lang="zh">FBS 時變修改</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.9.2.1-notes.html"><span><span class="num">10.9.2.1</span><span lang="en">Points to Note</span><span lang="zh">注意事項</span></span><span class="dim">▶</span></a></li>
+    <li><a href="10.10-summary.html"><span><span class="num">10.10</span><span lang="en">Summary &amp; Conclusions</span><span lang="zh">總結與結論</span></span><span class="dim">▶</span></a></li>
+  </ul>
+  <div class="pager"><a class="nes-btn" href="../ch09-ola-stft/index.html">◀ W9</a><a class="nes-btn nes-btn--primary" href="10.1-dual-views.html">START ▶</a><a class="nes-btn" href="../ch11-stft-apps/index.html">World 11 ▶</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script>
+</body></html>

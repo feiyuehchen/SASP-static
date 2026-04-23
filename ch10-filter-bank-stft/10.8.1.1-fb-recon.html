@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.8.1.1 FB Reconstruction · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-8-1-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 10-8-1-1 · Filter Bank Reconstruction</span><span lang="zh">關卡 10-8-1-1 · 濾波器組重建</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Filter_Bank_Reconstruction.html" target="_blank">SASP §10.8.1.1 ↗</a></small></h1>
+  <div class="nes-box" data-label="UP + FILTER + SUM">
+    <p lang="en">Reconstruct by upsampling each decimated channel by $R$ (zero-insertion), filtering through a synthesis prototype (often the same or $\sqrt{\cdot}$ of the analysis), then summing.</p>
+    <p lang="zh">重建：把每個被降取樣的通道升取樣 $R$（插零），通過合成原型（常與分析相同或取 $\sqrt{\cdot}$），再相加。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="10.8.1-ds-stft-fb.html">◀ 10.8.1</a><a class="warp-pipe">10-8-1-1</a><a class="nes-btn nes-btn--primary" href="10.8.2-ds-anti-aliasing.html">NEXT ▶ 10.8.2</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

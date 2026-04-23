@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.8.3.2 Periodic-Hamming OLA PSF · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-8-3-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 10-8-3-2 · Periodic-Hamming OLA from PSF</span><span lang="zh">關卡 10-8-3-2 · 由 PSF 導出週期 Hamming OLA</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Periodic_Hamming_OLA_Poisson_Summation.html" target="_blank">SASP §10.8.3.2 ↗</a></small></h1>
+  <div class="nes-box" data-label="APPLY PSF">
+    <p lang="en">$\sum_m w[n-mR]=\tfrac{1}{R}\sum_k W(2\pi k/R)\,e^{j2\pi k n/R}$. For periodic Hamming the second sum has only a few non-zero terms and reduces to a clean constant — giving COLA.</p>
+    <p lang="zh">$\sum_m w[n-mR]=\tfrac{1}{R}\sum_k W(2\pi k/R)e^{j2\pi k n/R}$。週期 Hamming 下右邊只剩少數非零項，可化成常數，即 COLA。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="10.8.3.1-hamming-ola.html">◀ 10.8.3.1</a><a class="warp-pipe">10-8-3-2</a><a class="nes-btn nes-btn--primary" href="10.8.3.3-kaiser-ola.html">NEXT ▶ 10.8.3.3</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

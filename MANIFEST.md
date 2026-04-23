@@ -305,41 +305,41 @@ data-en-def …>` for hover tooltips.
 
 ## World 10 · Filter Bank View of the STFT  (ch10-filter-bank-stft/)
 
-- [ ] 10.1  Dual Views of the STFT                         — `ch10-filter-bank-stft/10.1-dual-views.html`
-- [ ] 10.1.1 Overlap-Add View of the STFT                  — `ch10-filter-bank-stft/10.1.1-ola-view.html`
-- [ ] 10.1.2 Filter Bank View of the STFT                  — `ch10-filter-bank-stft/10.1.2-fb-view.html`
-- [ ] 10.1.3 FBS and Perfect Reconstruction                — `ch10-filter-bank-stft/10.1.3-fbs-pr.html`
-- [ ] 10.2  STFT Filter Bank                               — `ch10-filter-bank-stft/10.2-stft-fb.html`
-- [ ] 10.2.1 Computational Examples in Matlab             — `ch10-filter-bank-stft/10.2.1-matlab-examples.html`
-- [ ] 10.3  The DFT Filter Bank                            — `ch10-filter-bank-stft/10.3-dft-fb.html`
-- [ ] 10.3.1 The Running-Sum Lowpass Filter                — `ch10-filter-bank-stft/10.3.1-running-sum.html`
-- [ ] 10.3.2 Modulation by a Complex Sinusoid              — `ch10-filter-bank-stft/10.3.2-mod-complex.html`
-- [ ] 10.3.3 Making a BP from a LP                         — `ch10-filter-bank-stft/10.3.3-lp-to-bp.html`
-- [ ] 10.3.4 Uniform Running-Sum Filter Banks              — `ch10-filter-bank-stft/10.3.4-uniform-rs.html`
-- [ ] 10.3.4.1 System Diagram of the Running-Sum FB        — `ch10-filter-bank-stft/10.3.4.1-rs-diagram.html`
-- [ ] 10.3.4.2 DFT Filter Bank                             — `ch10-filter-bank-stft/10.3.4.2-dft-fb-detail.html`
-- [ ] 10.3.4.3 Inverse DFT and the DFT-FB Sum              — `ch10-filter-bank-stft/10.3.4.3-idft-fb.html`
-- [ ] 10.4  FBS Window Constraints for R=1                 — `ch10-filter-bank-stft/10.4-fbs-r1.html`
-- [ ] 10.5  Nyquist(N) Windows                             — `ch10-filter-bank-stft/10.5-nyquist-n.html`
-- [ ] 10.6  Duality of COLA and Nyquist Conditions         — `ch10-filter-bank-stft/10.6-cola-nyquist-duality.html`
-- [ ] 10.6.1 Specific Windows                              — `ch10-filter-bank-stft/10.6.1-specific-windows.html`
-- [ ] 10.6.2 Nyquist Property on the Unit Circle          — `ch10-filter-bank-stft/10.6.2-nyquist-unit.html`
-- [ ] 10.7  Portnoff Windows                               — `ch10-filter-bank-stft/10.7-portnoff.html`
-- [ ] 10.8  Downsampled STFT Filter Banks                  — `ch10-filter-bank-stft/10.8-downsampled.html`
-- [ ] 10.8.1 Downsampled STFT Filter Bank                  — `ch10-filter-bank-stft/10.8.1-ds-stft-fb.html`
-- [ ] 10.8.1.1 Filter Bank Reconstruction                  — `ch10-filter-bank-stft/10.8.1.1-fb-recon.html`
-- [ ] 10.8.2 Downsampling with Anti-Aliasing               — `ch10-filter-bank-stft/10.8.2-ds-anti-aliasing.html`
-- [ ] 10.8.2.1 Properly Anti-Aliasing Window Transforms    — `ch10-filter-bank-stft/10.8.2.1-window-anti-aliasing.html`
-- [ ] 10.8.2.2 Hop Sizes for WOLA                          — `ch10-filter-bank-stft/10.8.2.2-wola-hop.html`
-- [ ] 10.8.3 Constant-Overlap-Add (COLA) Cases             — `ch10-filter-bank-stft/10.8.3-cola-cases.html`
-- [ ] 10.8.3.1 Hamming Overlap-Add Example                 — `ch10-filter-bank-stft/10.8.3.1-hamming-ola.html`
-- [ ] 10.8.3.2 Periodic-Hamming OLA from PSF               — `ch10-filter-bank-stft/10.8.3.2-periodic-hamming.html`
-- [ ] 10.8.3.3 Kaiser Overlap-Add Example                  — `ch10-filter-bank-stft/10.8.3.3-kaiser-ola.html`
-- [ ] 10.9  STFT with Modifications                        — `ch10-filter-bank-stft/10.9-stft-mods.html`
-- [ ] 10.9.1 FBS Fixed Modifications                       — `ch10-filter-bank-stft/10.9.1-fbs-fixed.html`
-- [ ] 10.9.2 Time-Varying Modifications in FBS             — `ch10-filter-bank-stft/10.9.2-fbs-tv.html`
-- [ ] 10.9.2.1 Points to Note                              — `ch10-filter-bank-stft/10.9.2.1-notes.html`
-- [ ] 10.10 STFT Summary and Conclusions                   — `ch10-filter-bank-stft/10.10-summary.html`
+- [~] 10.1  Dual Views of the STFT                         — `ch10-filter-bank-stft/10.1-dual-views.html`
+- [~] 10.1.1 Overlap-Add View of the STFT                  — `ch10-filter-bank-stft/10.1.1-ola-view.html`
+- [~] 10.1.2 Filter Bank View of the STFT                  — `ch10-filter-bank-stft/10.1.2-fb-view.html`
+- [~] 10.1.3 FBS and Perfect Reconstruction                — `ch10-filter-bank-stft/10.1.3-fbs-pr.html`
+- [~] 10.2  STFT Filter Bank                               — `ch10-filter-bank-stft/10.2-stft-fb.html`
+- [~] 10.2.1 Computational Examples in Matlab             — `ch10-filter-bank-stft/10.2.1-matlab-examples.html`
+- [~] 10.3  The DFT Filter Bank                            — `ch10-filter-bank-stft/10.3-dft-fb.html`
+- [~] 10.3.1 The Running-Sum Lowpass Filter                — `ch10-filter-bank-stft/10.3.1-running-sum.html`
+- [~] 10.3.2 Modulation by a Complex Sinusoid              — `ch10-filter-bank-stft/10.3.2-mod-complex.html`
+- [~] 10.3.3 Making a BP from a LP                         — `ch10-filter-bank-stft/10.3.3-lp-to-bp.html`
+- [~] 10.3.4 Uniform Running-Sum Filter Banks              — `ch10-filter-bank-stft/10.3.4-uniform-rs.html`
+- [~] 10.3.4.1 System Diagram of the Running-Sum FB        — `ch10-filter-bank-stft/10.3.4.1-rs-diagram.html`
+- [~] 10.3.4.2 DFT Filter Bank                             — `ch10-filter-bank-stft/10.3.4.2-dft-fb-detail.html`
+- [~] 10.3.4.3 Inverse DFT and the DFT-FB Sum              — `ch10-filter-bank-stft/10.3.4.3-idft-fb.html`
+- [~] 10.4  FBS Window Constraints for R=1                 — `ch10-filter-bank-stft/10.4-fbs-r1.html`
+- [~] 10.5  Nyquist(N) Windows                             — `ch10-filter-bank-stft/10.5-nyquist-n.html`
+- [~] 10.6  Duality of COLA and Nyquist Conditions         — `ch10-filter-bank-stft/10.6-cola-nyquist-duality.html`
+- [~] 10.6.1 Specific Windows                              — `ch10-filter-bank-stft/10.6.1-specific-windows.html`
+- [~] 10.6.2 Nyquist Property on the Unit Circle          — `ch10-filter-bank-stft/10.6.2-nyquist-unit.html`
+- [~] 10.7  Portnoff Windows                               — `ch10-filter-bank-stft/10.7-portnoff.html`
+- [~] 10.8  Downsampled STFT Filter Banks                  — `ch10-filter-bank-stft/10.8-downsampled.html`
+- [~] 10.8.1 Downsampled STFT Filter Bank                  — `ch10-filter-bank-stft/10.8.1-ds-stft-fb.html`
+- [~] 10.8.1.1 Filter Bank Reconstruction                  — `ch10-filter-bank-stft/10.8.1.1-fb-recon.html`
+- [~] 10.8.2 Downsampling with Anti-Aliasing               — `ch10-filter-bank-stft/10.8.2-ds-anti-aliasing.html`
+- [~] 10.8.2.1 Properly Anti-Aliasing Window Transforms    — `ch10-filter-bank-stft/10.8.2.1-window-anti-aliasing.html`
+- [~] 10.8.2.2 Hop Sizes for WOLA                          — `ch10-filter-bank-stft/10.8.2.2-wola-hop.html`
+- [~] 10.8.3 Constant-Overlap-Add (COLA) Cases             — `ch10-filter-bank-stft/10.8.3-cola-cases.html`
+- [~] 10.8.3.1 Hamming Overlap-Add Example                 — `ch10-filter-bank-stft/10.8.3.1-hamming-ola.html`
+- [~] 10.8.3.2 Periodic-Hamming OLA from PSF               — `ch10-filter-bank-stft/10.8.3.2-periodic-hamming.html`
+- [~] 10.8.3.3 Kaiser Overlap-Add Example                  — `ch10-filter-bank-stft/10.8.3.3-kaiser-ola.html`
+- [~] 10.9  STFT with Modifications                        — `ch10-filter-bank-stft/10.9-stft-mods.html`
+- [~] 10.9.1 FBS Fixed Modifications                       — `ch10-filter-bank-stft/10.9.1-fbs-fixed.html`
+- [~] 10.9.2 Time-Varying Modifications in FBS             — `ch10-filter-bank-stft/10.9.2-fbs-tv.html`
+- [~] 10.9.2.1 Points to Note                              — `ch10-filter-bank-stft/10.9.2.1-notes.html`
+- [~] 10.10 STFT Summary and Conclusions                   — `ch10-filter-bank-stft/10.10-summary.html`
 
 ## World 11 · Applications of the STFT  (ch11-stft-apps/)
 
@@ -676,4 +676,4 @@ data-en-def …>` for hover tooltips.
 4. Every page gets a prev / next pager linking to its neighbors in the above order.
 5. No copyrighted prose from Smith's book. All explanations must be original.
 
-Current completed count: **265** / ≈ 530. Latest batch: full World 9 (33 OLA STFT pages).
+Current completed count: **301** / ≈ 530. Latest batch: full World 10 (36 filter-bank STFT pages).

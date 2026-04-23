@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.3.4.2 DFT FB Detail · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-3-4-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 10-3-4-2 · DFT Filter Bank Detail</span><span lang="zh">關卡 10-3-4-2 · DFT FB 細節</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/DFT_Filter_Bank_I.html" target="_blank">SASP §10.3.4.2 ↗</a></small></h1>
+  <div class="nes-box" data-label="CLEVER REORGANISATION">
+    <p lang="en">Push the modulator and running-sum together → each modulated-then-summed output becomes one DFT bin of a sliding $N$-point rectangular window. Running sum per channel → single DFT.</p>
+    <p lang="zh">把調變器與累計和合併：每個通道的「調變後再累計」剛好是滑動 $N$ 點矩形視窗的某個 DFT bin。逐通道的累計和 → 一次 DFT。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="10.3.4.1-rs-diagram.html">◀ 10.3.4.1</a><a class="warp-pipe">10-3-4-2</a><a class="nes-btn nes-btn--primary" href="10.3.4.3-idft-fb.html">NEXT ▶ 10.3.4.3</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>
