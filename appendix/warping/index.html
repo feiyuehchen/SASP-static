@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Appendix E · Bilinear Frequency Warping · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="../../index.html">◀ HOME</a></span><span>APX <b>E</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Appendix E · Bilinear Frequency Warping for Audio</span><span lang="zh">附錄 E · 音訊的雙線性頻率扭曲</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Bilinear_Frequency_Warping_Audio_Spectrum.html" target="_blank">SASP Appendix E ↗</a></small></h1>
+  <div class="nes-box nes-box--blue" data-label="APPENDIX BRIEF">
+    <p lang="en">A single all-pass substitution $z^{-1}\to\tfrac{z^{-1}-\rho}{1-\rho z^{-1}}$ bends the linear-Hz frequency axis onto a perceptual (Bark or ERB) axis. This appendix derives the optimal $\rho^*(f_s)$, gives arctan closed-form approximations, analyses the bandwidth error, and walks an audio-EQ example.</p>
+    <p lang="zh">單一全通代換 $z^{-1}\to\tfrac{z^{-1}-\rho}{1-\rho z^{-1}}$ 可把線性 Hz 軸彎曲到感知（Bark 或 ERB）軸。本附錄推導最佳 $\rho^*(f_s)$、給 arctan 解析近似、分析頻寬誤差，並示範音訊 EQ。</p>
+  </div>
+  <div class="stage-grid">
+    <a class="stage-tile" href="E.1-bark.html"><b>E.1</b><span lang="en">The Bark Frequency Scale</span><span lang="zh">Bark 頻率尺度</span></a>
+    <a class="stage-tile" href="E.2-bilinear.html"><b>E.2</b><span lang="en">The Bilinear Transform</span><span lang="zh">雙線性變換</span></a>
+    <a class="stage-tile" href="E.3-optimal-bark.html"><b>E.3</b><span lang="en">Optimal Bilinear Bark Warping</span><span lang="zh">最佳雙線性 Bark 扭曲</span></a>
+    <a class="stage-tile" href="E.3.1-rho.html"><b>E.3.1</b><span lang="en">Computing ρ</span><span lang="zh">計算 ρ</span></a>
+    <a class="stage-tile" href="E.3.2-optimal-warp.html"><b>E.3.2</b><span lang="en">Optimal Frequency Warpings</span><span lang="zh">最佳頻率扭曲</span></a>
+    <a class="stage-tile" href="E.3.3-bark-err.html"><b>E.3.3</b><span lang="en">Bark Relative Bandwidth Mapping Error</span><span lang="zh">Bark 相對頻寬映射誤差</span></a>
+    <a class="stage-tile" href="E.3.4-err-sig.html"><b>E.3.4</b><span lang="en">Error Significance</span><span lang="zh">誤差意義</span></a>
+    <a class="stage-tile" href="E.3.5-arctan.html"><b>E.3.5</b><span lang="en">Arctangent Approximation for ρ*(fs)</span><span lang="zh">ρ*(fs) 的 arctan 逼近</span></a>
+    <a class="stage-tile" href="E.4-filter-design.html"><b>E.4</b><span lang="en">Application to Audio Filter Design</span><span lang="zh">在音訊濾波器設計上的應用</span></a>
+    <a class="stage-tile" href="E.4.1-design-ex.html"><b>E.4.1</b><span lang="en">Filter Design Example</span><span lang="zh">濾波器設計範例</span></a>
+    <a class="stage-tile" href="E.5-erb.html"><b>E.5</b><span lang="en">Equivalent Rectangular Bandwidth (ERB)</span><span lang="zh">等效矩形頻寬（ERB）</span></a>
+    <a class="stage-tile" href="E.5.1-erb-err.html"><b>E.5.1</b><span lang="en">ERB Relative Bandwidth Mapping Error</span><span lang="zh">ERB 相對頻寬映射誤差</span></a>
+    <a class="stage-tile" href="E.5.2-erb-arctan.html"><b>E.5.2</b><span lang="en">Arctangent Approximation for ρ*, ERB</span><span lang="zh">ERB 版 arctan 逼近</span></a>
+    <a class="stage-tile" href="E.6-improvements.html"><b>E.6</b><span lang="en">Directions for Improvements</span><span lang="zh">改進方向</span></a>
+    <a class="stage-tile" href="E.7-summary.html"><b>E.7</b><span lang="en">Summary</span><span lang="zh">總結</span></a>
+  </div>
+  <div class="pager"><a class="nes-btn" href="../gaussian/index.html">◀ APPENDIX D</a><a class="warp-pipe">E</a><a class="nes-btn nes-btn--primary" href="../matlab/index.html">APPENDIX F ▶</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

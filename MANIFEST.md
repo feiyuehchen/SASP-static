@@ -570,21 +570,21 @@ data-en-def …>` for hover tooltips.
 
 ## Appendix World E · Bilinear Audio Frequency Warping  (appendix/warping/)
 
-- [ ] E.1   The Bark Frequency Scale                       — `appendix/warping/E.1-bark.html`
-- [ ] E.2   The Bilinear Transform                         — `appendix/warping/E.2-bilinear.html`
-- [ ] E.3   Optimal Bilinear Bark Warping                  — `appendix/warping/E.3-optimal-bark.html`
-- [ ] E.3.1 Computing ρ                                    — `appendix/warping/E.3.1-rho.html`
-- [ ] E.3.2 Optimal Frequency Warpings                     — `appendix/warping/E.3.2-optimal-warp.html`
-- [ ] E.3.3 Bark Relative Bandwidth Mapping Error          — `appendix/warping/E.3.3-bark-err.html`
-- [ ] E.3.4 Error Significance                             — `appendix/warping/E.3.4-err-sig.html`
-- [ ] E.3.5 Arctangent Approximations for ρ*(fs)           — `appendix/warping/E.3.5-arctan.html`
-- [ ] E.4   Application to Audio Filter Design             — `appendix/warping/E.4-filter-design.html`
-- [ ] E.4.1 Filter Design Example                          — `appendix/warping/E.4.1-design-ex.html`
-- [ ] E.5   Equivalent Rectangular Bandwidth               — `appendix/warping/E.5-erb.html`
-- [ ] E.5.1 ERB Relative Bandwidth Mapping Error           — `appendix/warping/E.5.1-erb-err.html`
-- [ ] E.5.2 Arctangent Approximations for ρ*(fs), ERB      — `appendix/warping/E.5.2-erb-arctan.html`
-- [ ] E.6   Directions for Improvements                    — `appendix/warping/E.6-improvements.html`
-- [ ] E.7   Summary                                        — `appendix/warping/E.7-summary.html`
+- [~] E.1   The Bark Frequency Scale                       — `appendix/warping/E.1-bark.html`
+- [~] E.2   The Bilinear Transform                         — `appendix/warping/E.2-bilinear.html`
+- [~] E.3   Optimal Bilinear Bark Warping                  — `appendix/warping/E.3-optimal-bark.html`
+- [~] E.3.1 Computing ρ                                    — `appendix/warping/E.3.1-rho.html`
+- [~] E.3.2 Optimal Frequency Warpings                     — `appendix/warping/E.3.2-optimal-warp.html`
+- [~] E.3.3 Bark Relative Bandwidth Mapping Error          — `appendix/warping/E.3.3-bark-err.html`
+- [~] E.3.4 Error Significance                             — `appendix/warping/E.3.4-err-sig.html`
+- [~] E.3.5 Arctangent Approximations for ρ*(fs)           — `appendix/warping/E.3.5-arctan.html`
+- [~] E.4   Application to Audio Filter Design             — `appendix/warping/E.4-filter-design.html`
+- [~] E.4.1 Filter Design Example                          — `appendix/warping/E.4.1-design-ex.html`
+- [~] E.5   Equivalent Rectangular Bandwidth               — `appendix/warping/E.5-erb.html`
+- [~] E.5.1 ERB Relative Bandwidth Mapping Error           — `appendix/warping/E.5.1-erb-err.html`
+- [~] E.5.2 Arctangent Approximations for ρ*(fs), ERB      — `appendix/warping/E.5.2-erb-arctan.html`
+- [~] E.6   Directions for Improvements                    — `appendix/warping/E.6-improvements.html`
+- [~] E.7   Summary                                        — `appendix/warping/E.7-summary.html`
 
 ## Appendix World F · Examples in Matlab and Octave  (appendix/matlab/)
 

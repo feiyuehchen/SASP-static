@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>E.2 The Bilinear Transform · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ APX E</a></span><span>STAGE <b>E-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage E-2 · The Bilinear Transform</span><span lang="zh">關卡 E-2 · 雙線性變換</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Bilinear_Transform.html" target="_blank">SASP §E.2 ↗</a></small></h1>
+  <div class="nes-box" data-label="z ↔ s">
+    <p lang="en">Bilinear: $s=\tfrac{2}{T}\tfrac{z-1}{z+1}$. Maps continuous-time jω axis to discrete unit circle monotonically, no aliasing. In multirate/warping context, used as an all-pass substitution $z^{-1}\to \tfrac{z^{-1}-\rho}{1-\rho z^{-1}}$ to reshape the frequency axis.</p>
+    <p lang="zh">雙線性：$s=\tfrac{2}{T}\tfrac{z-1}{z+1}$，連續時間 $j\omega$ 軸單調地映射到離散單位圓，無混疊。在扭曲中用為全通代換 $z^{-1}\to \tfrac{z^{-1}-\rho}{1-\rho z^{-1}}$，重塑頻率軸。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="E.1-bark.html">◀ E.1</a><a class="warp-pipe">E-2</a><a class="nes-btn nes-btn--primary" href="E.3-optimal-bark.html">NEXT ▶ E.3</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>
