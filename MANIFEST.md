@@ -536,37 +536,37 @@ data-en-def …>` for hover tooltips.
 
 ## Appendix World D · Gaussian Function Properties  (appendix/gaussian/)
 
-- [ ] D.1   Gaussian Window and Transform                  — `appendix/gaussian/D.1-gauss-xform.html`
-- [ ] D.2   Gaussians Closed under Multiplication          — `appendix/gaussian/D.2-mult-closed.html`
-- [ ] D.2.1 Product of Two Gaussian PDFs                   — `appendix/gaussian/D.2.1-product-pdfs.html`
-- [ ] D.3   Gaussians Closed under Convolution             — `appendix/gaussian/D.3-conv-closed.html`
-- [ ] D.4   Fitting a Gaussian to Data                     — `appendix/gaussian/D.4-fit.html`
-- [ ] D.5   Infinite Flatness at Infinity                  — `appendix/gaussian/D.5-inf-flat.html`
-- [ ] D.6   Integral of a Complex Gaussian                 — `appendix/gaussian/D.6-int-complex.html`
-- [ ] D.6.1 Area Under a Real Gaussian                     — `appendix/gaussian/D.6.1-area-real.html`
-- [ ] D.7   Gaussian Integral with Complex Offset          — `appendix/gaussian/D.7-complex-offset.html`
-- [ ] D.8   Fourier Transform of Complex Gaussian          — `appendix/gaussian/D.8-ft-complex.html`
-- [ ] D.8.1 Alternate Proof                                — `appendix/gaussian/D.8.1-alt-proof.html`
-- [ ] D.9   Why Gaussian?                                  — `appendix/gaussian/D.9-why.html`
-- [ ] D.9.1 Central Limit Theorem                          — `appendix/gaussian/D.9.1-clt.html`
-- [ ] D.9.2 Iterated Convolutions                          — `appendix/gaussian/D.9.2-iterated-conv.html`
-- [ ] D.9.3 Binomial Distribution                          — `appendix/gaussian/D.9.3-binomial.html`
-- [ ] D.10  Gaussian Probability Density Function          — `appendix/gaussian/D.10-gauss-pdf.html`
-- [ ] D.11  Maximum Entropy Property                       — `appendix/gaussian/D.11-max-entropy.html`
-- [ ] D.11.1 Entropy of a Probability Distribution         — `appendix/gaussian/D.11.1-entropy-def.html`
-- [ ] D.11.2 Example: Random Bit String                    — `appendix/gaussian/D.11.2-bit-example.html`
-- [ ] D.11.3 Maximum Entropy Distributions                 — `appendix/gaussian/D.11.3-max-ent-dist.html`
-- [ ] D.11.3.1 Uniform Distribution                        — `appendix/gaussian/D.11.3.1-uniform.html`
-- [ ] D.11.3.2 Exponential Distribution                    — `appendix/gaussian/D.11.3.2-exp.html`
-- [ ] D.11.3.3 Gaussian Distribution                       — `appendix/gaussian/D.11.3.3-gauss-me.html`
-- [ ] D.12  Gaussian Moments                               — `appendix/gaussian/D.12-moments.html`
-- [ ] D.12.1 Gaussian Mean                                 — `appendix/gaussian/D.12.1-gauss-mean.html`
-- [ ] D.12.2 Gaussian Variance                             — `appendix/gaussian/D.12.2-gauss-var.html`
-- [ ] D.12.3 Higher-Order Moments Revisited                — `appendix/gaussian/D.12.3-higher-moments.html`
-- [ ] D.12.4 Moment Theorem                                — `appendix/gaussian/D.12.4-moment-thm.html`
-- [ ] D.12.5 Gaussian Characteristic Function              — `appendix/gaussian/D.12.5-char-fn.html`
-- [ ] D.12.6 Gaussian Central Moments                      — `appendix/gaussian/D.12.6-central-moments.html`
-- [ ] D.13  Sums of Gaussian Random Variables              — `appendix/gaussian/D.13-sums.html`
+- [~] D.1   Gaussian Window and Transform                  — `appendix/gaussian/D.1-gauss-xform.html`
+- [~] D.2   Gaussians Closed under Multiplication          — `appendix/gaussian/D.2-mult-closed.html`
+- [~] D.2.1 Product of Two Gaussian PDFs                   — `appendix/gaussian/D.2.1-product-pdfs.html`
+- [~] D.3   Gaussians Closed under Convolution             — `appendix/gaussian/D.3-conv-closed.html`
+- [~] D.4   Fitting a Gaussian to Data                     — `appendix/gaussian/D.4-fit.html`
+- [~] D.5   Infinite Flatness at Infinity                  — `appendix/gaussian/D.5-inf-flat.html`
+- [~] D.6   Integral of a Complex Gaussian                 — `appendix/gaussian/D.6-int-complex.html`
+- [~] D.6.1 Area Under a Real Gaussian                     — `appendix/gaussian/D.6.1-area-real.html`
+- [~] D.7   Gaussian Integral with Complex Offset          — `appendix/gaussian/D.7-complex-offset.html`
+- [~] D.8   Fourier Transform of Complex Gaussian          — `appendix/gaussian/D.8-ft-complex.html`
+- [~] D.8.1 Alternate Proof                                — `appendix/gaussian/D.8.1-alt-proof.html`
+- [~] D.9   Why Gaussian?                                  — `appendix/gaussian/D.9-why.html`
+- [~] D.9.1 Central Limit Theorem                          — `appendix/gaussian/D.9.1-clt.html`
+- [~] D.9.2 Iterated Convolutions                          — `appendix/gaussian/D.9.2-iterated-conv.html`
+- [~] D.9.3 Binomial Distribution                          — `appendix/gaussian/D.9.3-binomial.html`
+- [~] D.10  Gaussian Probability Density Function          — `appendix/gaussian/D.10-gauss-pdf.html`
+- [~] D.11  Maximum Entropy Property                       — `appendix/gaussian/D.11-max-entropy.html`
+- [~] D.11.1 Entropy of a Probability Distribution         — `appendix/gaussian/D.11.1-entropy-def.html`
+- [~] D.11.2 Example: Random Bit String                    — `appendix/gaussian/D.11.2-bit-example.html`
+- [~] D.11.3 Maximum Entropy Distributions                 — `appendix/gaussian/D.11.3-max-ent-dist.html`
+- [~] D.11.3.1 Uniform Distribution                        — `appendix/gaussian/D.11.3.1-uniform.html`
+- [~] D.11.3.2 Exponential Distribution                    — `appendix/gaussian/D.11.3.2-exp.html`
+- [~] D.11.3.3 Gaussian Distribution                       — `appendix/gaussian/D.11.3.3-gauss-me.html`
+- [~] D.12  Gaussian Moments                               — `appendix/gaussian/D.12-moments.html`
+- [~] D.12.1 Gaussian Mean                                 — `appendix/gaussian/D.12.1-gauss-mean.html`
+- [~] D.12.2 Gaussian Variance                             — `appendix/gaussian/D.12.2-gauss-var.html`
+- [~] D.12.3 Higher-Order Moments Revisited                — `appendix/gaussian/D.12.3-higher-moments.html`
+- [~] D.12.4 Moment Theorem                                — `appendix/gaussian/D.12.4-moment-thm.html`
+- [~] D.12.5 Gaussian Characteristic Function              — `appendix/gaussian/D.12.5-char-fn.html`
+- [~] D.12.6 Gaussian Central Moments                      — `appendix/gaussian/D.12.6-central-moments.html`
+- [~] D.13  Sums of Gaussian Random Variables              — `appendix/gaussian/D.13-sums.html`
 
 ## Appendix World E · Bilinear Audio Frequency Warping  (appendix/warping/)
 

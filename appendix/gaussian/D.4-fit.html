@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>D.4 Fitting a Gaussian to Data · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ APX D</a></span><span>STAGE <b>D-4</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage D-4 · Fitting a Gaussian to Data</span><span lang="zh">關卡 D-4 · 將高斯擬合到資料</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Fitting_Gaussian_Data.html" target="_blank">SASP §D.4 ↗</a></small></h1>
+  <div class="nes-box" data-label="MEAN, VAR, DONE">
+    <p lang="en">For IID samples, MLE Gaussian uses sample mean and sample variance. Closed-form — no iteration. For spectral peaks, local parabolic fit in $\log|X|^2$ is equivalent due to the $-\omega^2$ shape of $\log g$.</p>
+    <p lang="zh">IID 樣本下，高斯 MLE 直接取樣本平均與樣本變異數，解析解、無需迭代。頻譜峰值上，對 $\log|X|^2$ 作局部拋物線擬合等價於此（因 $\log g$ 為 $-\omega^2$）。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="D.3-conv-closed.html">◀ D.3</a><a class="warp-pipe">D-4</a><a class="nes-btn nes-btn--primary" href="D.5-inf-flat.html">NEXT ▶ D.5</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

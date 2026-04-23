@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Appendix D · Gaussian Function Properties · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="../../index.html">◀ HOME</a></span><span>APX <b>D</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Appendix D · Gaussian Function Properties</span><span lang="zh">附錄 D · 高斯函數性質</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Gaussian_Function_Properties.html" target="_blank">SASP Appendix D ↗</a></small></h1>
+  <div class="nes-box nes-box--blue" data-label="APPENDIX BRIEF">
+    <p lang="en">The Gaussian appears everywhere in this book — as window, kernel, pulse, PDF, and uncertainty-optimal atom. This appendix packs its algebraic (closure under ×, ∗), integral, Fourier, and information-theoretic (max-entropy, CLT) properties into one reference.</p>
+    <p lang="zh">高斯函數在全書無處不在 — 視窗、核、脈衝、PDF、測不準最優原子。本附錄把其代數（×、∗ 封閉）、積分、傅立葉、資訊理論（最大熵、CLT）性質一併集中參考。</p>
+  </div>
+  <div class="stage-grid">
+    <a class="stage-tile" href="D.1-gauss-xform.html"><b>D.1</b><span lang="en">Gaussian Window and Transform</span><span lang="zh">高斯視窗與變換</span></a>
+    <a class="stage-tile" href="D.2-mult-closed.html"><b>D.2</b><span lang="en">Gaussians Closed under Multiplication</span><span lang="zh">高斯對乘法封閉</span></a>
+    <a class="stage-tile" href="D.2.1-product-pdfs.html"><b>D.2.1</b><span lang="en">Product of Two Gaussian PDFs</span><span lang="zh">兩高斯 PDF 相乘</span></a>
+    <a class="stage-tile" href="D.3-conv-closed.html"><b>D.3</b><span lang="en">Gaussians Closed under Convolution</span><span lang="zh">高斯對卷積封閉</span></a>
+    <a class="stage-tile" href="D.4-fit.html"><b>D.4</b><span lang="en">Fitting a Gaussian to Data</span><span lang="zh">將高斯擬合到資料</span></a>
+    <a class="stage-tile" href="D.5-inf-flat.html"><b>D.5</b><span lang="en">Infinite Flatness at Infinity</span><span lang="zh">無限遠處的無限平坦</span></a>
+    <a class="stage-tile" href="D.6-int-complex.html"><b>D.6</b><span lang="en">Integral of a Complex Gaussian</span><span lang="zh">複高斯的積分</span></a>
+    <a class="stage-tile" href="D.6.1-area-real.html"><b>D.6.1</b><span lang="en">Area Under a Real Gaussian</span><span lang="zh">實高斯的面積</span></a>
+    <a class="stage-tile" href="D.7-complex-offset.html"><b>D.7</b><span lang="en">Gaussian Integral with Complex Offset</span><span lang="zh">帶複位移的高斯積分</span></a>
+    <a class="stage-tile" href="D.8-ft-complex.html"><b>D.8</b><span lang="en">FT of a Complex Gaussian</span><span lang="zh">複高斯的 FT</span></a>
+    <a class="stage-tile" href="D.8.1-alt-proof.html"><b>D.8.1</b><span lang="en">Alternate Proof of FT</span><span lang="zh">高斯 FT 的另證</span></a>
+    <a class="stage-tile" href="D.9-why.html"><b>D.9</b><span lang="en">Why Gaussian?</span><span lang="zh">為何是高斯？</span></a>
+    <a class="stage-tile" href="D.9.1-clt.html"><b>D.9.1</b><span lang="en">Central Limit Theorem</span><span lang="zh">中央極限定理</span></a>
+    <a class="stage-tile" href="D.9.2-iterated-conv.html"><b>D.9.2</b><span lang="en">Iterated Convolutions</span><span lang="zh">迭代卷積</span></a>
+    <a class="stage-tile" href="D.9.3-binomial.html"><b>D.9.3</b><span lang="en">Binomial Distribution</span><span lang="zh">二項分佈</span></a>
+    <a class="stage-tile" href="D.10-gauss-pdf.html"><b>D.10</b><span lang="en">Gaussian PDF</span><span lang="zh">高斯機率密度函數</span></a>
+    <a class="stage-tile" href="D.11-max-entropy.html"><b>D.11</b><span lang="en">Maximum Entropy Property</span><span lang="zh">最大熵性質</span></a>
+    <a class="stage-tile" href="D.11.1-entropy-def.html"><b>D.11.1</b><span lang="en">Entropy of a Distribution</span><span lang="zh">分佈的熵</span></a>
+    <a class="stage-tile" href="D.11.2-bit-example.html"><b>D.11.2</b><span lang="en">Example: Random Bit String</span><span lang="zh">範例：隨機位元字串</span></a>
+    <a class="stage-tile" href="D.11.3-max-ent-dist.html"><b>D.11.3</b><span lang="en">Maximum Entropy Distributions</span><span lang="zh">最大熵分佈</span></a>
+    <a class="stage-tile" href="D.11.3.1-uniform.html"><b>D.11.3.1</b><span lang="en">Uniform Distribution</span><span lang="zh">均勻分佈</span></a>
+    <a class="stage-tile" href="D.11.3.2-exp.html"><b>D.11.3.2</b><span lang="en">Exponential Distribution</span><span lang="zh">指數分佈</span></a>
+    <a class="stage-tile" href="D.11.3.3-gauss-me.html"><b>D.11.3.3</b><span lang="en">Gaussian Distribution (Max-Ent)</span><span lang="zh">高斯分佈（最大熵角度）</span></a>
+    <a class="stage-tile" href="D.12-moments.html"><b>D.12</b><span lang="en">Gaussian Moments</span><span lang="zh">高斯的矩</span></a>
+    <a class="stage-tile" href="D.12.1-gauss-mean.html"><b>D.12.1</b><span lang="en">Gaussian Mean</span><span lang="zh">高斯均值</span></a>
+    <a class="stage-tile" href="D.12.2-gauss-var.html"><b>D.12.2</b><span lang="en">Gaussian Variance</span><span lang="zh">高斯變異數</span></a>
+    <a class="stage-tile" href="D.12.3-higher-moments.html"><b>D.12.3</b><span lang="en">Higher-Order Moments</span><span lang="zh">高階矩</span></a>
+    <a class="stage-tile" href="D.12.4-moment-thm.html"><b>D.12.4</b><span lang="en">Moment Theorem</span><span lang="zh">矩定理</span></a>
+    <a class="stage-tile" href="D.12.5-char-fn.html"><b>D.12.5</b><span lang="en">Gaussian Characteristic Function</span><span lang="zh">高斯特徵函數</span></a>
+    <a class="stage-tile" href="D.12.6-central-moments.html"><b>D.12.6</b><span lang="en">Gaussian Central Moments</span><span lang="zh">高斯中心矩</span></a>
+    <a class="stage-tile" href="D.13-sums.html"><b>D.13</b><span lang="en">Sums of Gaussian RVs</span><span lang="zh">高斯隨機變數之和</span></a>
+  </div>
+  <div class="pager"><a class="nes-btn" href="../stats/index.html">◀ APPENDIX C</a><a class="warp-pipe">D</a><a class="nes-btn nes-btn--primary" href="../warping/index.html">APPENDIX E ▶</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>
