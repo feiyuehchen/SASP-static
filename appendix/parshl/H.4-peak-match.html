@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>H.4 Peak Matching (Step 5) · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ APX H</a></span><span>STAGE <b>H-4</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage H-4 · Peak Matching (Step 5)</span><span lang="zh">關卡 H-4 · 峰值匹配（步驟 5）</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Peak_Matching_Step_5.html" target="_blank">SASP §H.4 ↗</a></small></h1>
+  <div class="nes-box" data-label="TRACKS ACROSS FRAMES">
+    <p lang="en">Step 5: associate each frame's peaks with partials from the previous frame. Use a greedy nearest-frequency matcher with maximum-delta $\Delta f_\max$. Births and deaths handle new/disappearing partials.</p>
+    <p lang="zh">步驟 5：把目前 frame 的峰值與上一 frame 的分音配對。用最大容差 $\Delta f_\max$ 的貪婪最近頻率匹配。以「出生／死亡」事件處理新生或消失的分音。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="H.3-peak-det.html">◀ H.3</a><a class="warp-pipe">H-4</a><a class="nes-btn nes-btn--primary" href="H.5-param-mod.html">NEXT ▶ H.5</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

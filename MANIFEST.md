@@ -653,18 +653,18 @@ data-en-def …>` for hover tooltips.
 
 ## Appendix World H · The PARSHL Program  (appendix/parshl/)
 
-- [ ] H.1   Choice of Hop Size                             — `appendix/parshl/H.1-hop.html`
-- [ ] H.2   Filling the FFT Input Buffer (Step 2)          — `appendix/parshl/H.2-fill.html`
-- [ ] H.3   Peak Detection (Steps 3 and 4)                 — `appendix/parshl/H.3-peak-det.html`
-- [ ] H.4   Peak Matching (Step 5)                         — `appendix/parshl/H.4-peak-match.html`
-- [ ] H.5   Parameter Modifications (Step 6)               — `appendix/parshl/H.5-param-mod.html`
-- [ ] H.6   Synthesis (Step 7)                             — `appendix/parshl/H.6-synth.html`
-- [ ] H.7   Magnitude-only Analysis/Synthesis              — `appendix/parshl/H.7-mag-only.html`
-- [ ] H.8   Preprocessing                                  — `appendix/parshl/H.8-pre.html`
-- [ ] H.9   Applications                                   — `appendix/parshl/H.9-apps.html`
-- [ ] H.10  Conclusions                                    — `appendix/parshl/H.10-conclusions.html`
-- [ ] H.11  Acknowledgments                                — `appendix/parshl/H.11-acks.html`
-- [ ] H.12  Software Listing                               — `appendix/parshl/H.12-software.html`
+- [~] H.1   Choice of Hop Size                             — `appendix/parshl/H.1-hop.html`
+- [~] H.2   Filling the FFT Input Buffer (Step 2)          — `appendix/parshl/H.2-fill.html`
+- [~] H.3   Peak Detection (Steps 3 and 4)                 — `appendix/parshl/H.3-peak-det.html`
+- [~] H.4   Peak Matching (Step 5)                         — `appendix/parshl/H.4-peak-match.html`
+- [~] H.5   Parameter Modifications (Step 6)               — `appendix/parshl/H.5-param-mod.html`
+- [~] H.6   Synthesis (Step 7)                             — `appendix/parshl/H.6-synth.html`
+- [~] H.7   Magnitude-only Analysis/Synthesis              — `appendix/parshl/H.7-mag-only.html`
+- [~] H.8   Preprocessing                                  — `appendix/parshl/H.8-pre.html`
+- [~] H.9   Applications                                   — `appendix/parshl/H.9-apps.html`
+- [~] H.10  Conclusions                                    — `appendix/parshl/H.10-conclusions.html`
+- [~] H.11  Acknowledgments                                — `appendix/parshl/H.11-acks.html`
+- [~] H.12  Software Listing                               — `appendix/parshl/H.12-software.html`
 
 ---
 

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Appendix H · PARSHL · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="../../index.html">◀ HOME</a></span><span>APX <b>H</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Appendix H · PARSHL — Sinusoidal Modeller</span><span lang="zh">附錄 H · PARSHL — 正弦建模器</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/PARSHLProgram.html" target="_blank">SASP Appendix H ↗</a></small></h1>
+  <div class="nes-box nes-box--blue" data-label="APPENDIX BRIEF">
+    <p lang="en">PARSHL is the canonical peak-picking sinusoidal analysis/synthesis program by Smith and Serra (1987). Seven-step pipeline: window → FFT → peak-detect → peak-match across frames → modify → resynthesise. The reference implementation for every SMS-style tool that came after.</p>
+    <p lang="zh">PARSHL 是 Smith 與 Serra 1987 年提出的挑峰式正弦分析/合成程式。七步流水線：加窗 → FFT → 峰值偵測 → 跨 frame 匹配 → 修改 → 重合成。後續所有 SMS 風工具的範本實作。</p>
+  </div>
+  <div class="stage-grid">
+    <a class="stage-tile" href="H.1-hop.html"><b>H.1</b><span lang="en">Choice of Hop Size</span><span lang="zh">跳距選擇</span></a>
+    <a class="stage-tile" href="H.2-fill.html"><b>H.2</b><span lang="en">Filling the FFT Input Buffer (Step 2)</span><span lang="zh">填 FFT 輸入緩衝（步驟 2）</span></a>
+    <a class="stage-tile" href="H.3-peak-det.html"><b>H.3</b><span lang="en">Peak Detection (Steps 3 and 4)</span><span lang="zh">峰值偵測（步驟 3-4）</span></a>
+    <a class="stage-tile" href="H.4-peak-match.html"><b>H.4</b><span lang="en">Peak Matching (Step 5)</span><span lang="zh">峰值匹配（步驟 5）</span></a>
+    <a class="stage-tile" href="H.5-param-mod.html"><b>H.5</b><span lang="en">Parameter Modifications (Step 6)</span><span lang="zh">參數修改（步驟 6）</span></a>
+    <a class="stage-tile" href="H.6-synth.html"><b>H.6</b><span lang="en">Synthesis (Step 7)</span><span lang="zh">合成（步驟 7）</span></a>
+    <a class="stage-tile" href="H.7-mag-only.html"><b>H.7</b><span lang="en">Magnitude-only Analysis/Synthesis</span><span lang="zh">僅用振幅的分析/合成</span></a>
+    <a class="stage-tile" href="H.8-pre.html"><b>H.8</b><span lang="en">Preprocessing</span><span lang="zh">前處理</span></a>
+    <a class="stage-tile" href="H.9-apps.html"><b>H.9</b><span lang="en">Applications</span><span lang="zh">應用</span></a>
+    <a class="stage-tile" href="H.10-conclusions.html"><b>H.10</b><span lang="en">Conclusions</span><span lang="zh">結論</span></a>
+    <a class="stage-tile" href="H.11-acks.html"><b>H.11</b><span lang="en">Acknowledgments</span><span lang="zh">致謝</span></a>
+    <a class="stage-tile" href="H.12-software.html"><b>H.12</b><span lang="en">Software Listing</span><span lang="zh">軟體列表</span></a>
+  </div>
+  <div class="pager"><a class="nes-btn" href="../history/index.html">◀ APPENDIX G</a><a class="warp-pipe">H</a><a class="nes-btn nes-btn--primary" href="../../index.html">HOME ▶</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

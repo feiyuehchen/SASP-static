@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>H.1 Choice of Hop Size · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ APX H</a></span><span>STAGE <b>H-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage H-1 · Choice of Hop Size</span><span lang="zh">關卡 H-1 · 跳距選擇</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Choice_Hop_Size.html" target="_blank">SASP §H.1 ↗</a></small></h1>
+  <div class="nes-box" data-label="FRAME RATE">
+    <p lang="en">PARSHL analyses input in overlapping frames; hop $R$ controls time resolution. Too small = CPU waste; too large = missed transients. Typical default $R=N/4$ for Hamming window (75% overlap).</p>
+    <p lang="zh">PARSHL 以重疊 frame 分析；跳距 $R$ 控制時間解析度。太小浪費 CPU，太大會錯失瞬態。Hamming 視窗常見預設 $R=N/4$（75% 重疊）。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="index.html">◀ APX H HOME</a><a class="warp-pipe">H-1</a><a class="nes-btn nes-btn--primary" href="H.2-fill.html">NEXT ▶ H.2</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

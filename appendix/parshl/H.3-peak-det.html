@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>H.3 Peak Detection (Steps 3 and 4) · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ APX H</a></span><span>STAGE <b>H-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage H-3 · Peak Detection (Steps 3 and 4)</span><span lang="zh">關卡 H-3 · 峰值偵測（步驟 3-4）</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Peak_Detection_Steps_3.html" target="_blank">SASP §H.3 ↗</a></small></h1>
+  <div class="nes-box" data-label="LOCAL MAX + QINT">
+    <p lang="en">Step 3: magnitude-peak scan — bin $k$ is a peak iff $|X[k]|>|X[k\pm 1]|$. Step 4: parabolic quadratic-interpolation for sub-bin frequency and amplitude. Together: fractional-bin peak list.</p>
+    <p lang="zh">步驟 3：振幅峰值掃描 — 若 $|X[k]|>|X[k\pm 1]|$ 則 $k$ 是峰值。步驟 4：以拋物線二次內插得到子 bin 頻率與振幅。合起來：分數 bin 峰值表。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="H.2-fill.html">◀ H.2</a><a class="warp-pipe">H-3</a><a class="nes-btn nes-btn--primary" href="H.4-peak-match.html">NEXT ▶ H.4</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

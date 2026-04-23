@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>H.8 Preprocessing · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg"/><link rel="stylesheet" href="../../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ APX H</a></span><span>STAGE <b>H-8</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage H-8 · Preprocessing</span><span lang="zh">關卡 H-8 · 前處理</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Preprocessing.html" target="_blank">SASP §H.8 ↗</a></small></h1>
+  <div class="nes-box" data-label="PRE-EMPH, DETREND">
+    <p lang="en">Pre-emphasis (+6 dB/oct) flattens the spectrum so low-amplitude high-frequency partials aren't masked in peak detection. DC removal and high-pass for rumble are standard. Restore spectrum on synthesis.</p>
+    <p lang="zh">預加強（+6 dB/oct）把頻譜拉平，避免低振幅高頻分音在峰值偵測時被掩蓋。去 DC 與低頻雜訊的高通是標準步驟。合成時再還原頻譜。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="H.7-mag-only.html">◀ H.7</a><a class="warp-pipe">H-8</a><a class="nes-btn nes-btn--primary" href="H.9-apps.html">NEXT ▶ H.9</a></div>
+</div>
+<script src="../../assets/js/i18n.js"></script><script src="../../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>
