@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.2 Sampled Complex Sinusoid · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-2 · Sampled Complex Sinusoid</span><span lang="zh">關卡 6-2 · 取樣複正弦</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Spectrum_Sampled_Complex_Sinusoid.html" target="_blank">SASP §6.2 ↗</a></small></h1>
+  <div class="formula">
+    <div>$$x[n]=A\,e^{j(\omega_0 n+\phi)}\;\longleftrightarrow\;2\pi A\,e^{j\phi}\sum_{k=-\infty}^{\infty}\delta(\omega-\omega_0-2\pi k)$$</div>
+  </div>
+  <p lang="en">
+    Sampling turns the pair of deltas at $\pm\omega_0$ into a pair of <em>delta trains</em> — an image of the ideal spectrum repeats every $2\pi$ in the normalized frequency axis. For a real cosine, the DTFT is the two delta trains summed.
+  </p>
+  <p lang="zh">取樣把兩個 $\pm\omega_0$ 的 delta 變成兩個 delta 列 — 理想頻譜在 $2\pi$ 週期複製一份。對實餘弦，DTFT 是兩個 delta 列相加。</p>
+  <div class="pager"><a class="nes-btn" href="6.1-spec-sinusoid.html">◀ 6.1</a><a class="warp-pipe">6-2</a><a class="nes-btn nes-btn--primary" href="6.3-windowed-sinusoid.html">NEXT ▶ 6.3</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

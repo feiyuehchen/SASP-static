@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.7.7 Generality of ML-LS · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-7-7</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-7-7 · Generality of Maximum-Likelihood Least Squares</span><span lang="zh">關卡 6-7-7 · 最大似然最小平方的一般性</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Generality_Maximum_Likelihood_Least.html" target="_blank">SASP §6.7.7 ↗</a></small></h1>
+  <div class="nes-box nes-box--green" data-label="BIG PICTURE">
+    <p lang="en">The recipe — peak-pick with a windowed DFT, refine with least squares under Gaussian noise — is the maximum-likelihood answer for a huge family of sinusoid estimation problems. Add transients, harmonics, or overlapping partials and the same machinery extends.</p>
+    <p lang="zh">「視窗 DFT 找峰 → 高斯雜訊下最小平方細調」在非常大一類正弦估計問題中都是 MLE 解。加入瞬態、諧波或重疊 partial 後，同一套工具仍可延伸。</p>
+  </div>
+  <div class="nes-box nes-box--blue" data-label="NEXT WORLD">
+    <p lang="en">World 7 flips the script: we now analyse noise itself — its power spectrum, autocorrelation, and how to estimate them from finite data.</p>
+    <p lang="zh">第 7 世界把劇本翻過來：改分析雜訊本身 — 它的功率譜、自相關，以及如何從有限資料估計。</p>
+  </div>
+  <div class="pager"><a class="nes-btn" href="6.7.6.2-nonwhite-noise.html">◀ 6.7.6.2</a><a class="warp-pipe">6-7-7</a><a class="nes-btn nes-btn--primary" href="../ch07-noise/index.html">WORLD 7 ▶</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

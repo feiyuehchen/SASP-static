@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.7.3 Matlab for ZP Factors · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-7-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-7-3 · Matlab for ZP Factors</span><span lang="zh">關卡 6-7-3 · 補零因子的 Matlab</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Computing_Minimum_Zero_Padding.html" target="_blank">SASP §6.7.3 ↗</a></small></h1>
+  <div class="nes-box nes-box--purple" data-label="SKETCH">
+    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
+function L = zpfmin(omega0, tol)
+  % Minimum zero-padding factor to find peak at omega0 to tol bins
+  L = ceil(1 / (tol * sqrt(1 - (omega0/pi)^2)));
+end
+    </pre>
+  </div>
+  <p lang="en">Returns the smallest integer $L$ so that parabolic peak-finding at $\omega_0$ is accurate to a fraction <code>tol</code> of a bin.</p>
+  <p lang="zh">回傳最小整數 $L$，使 $\omega_0$ 處拋物線找峰的精度達 bin 的 <code>tol</code> 倍之內。</p>
+  <div class="pager"><a class="nes-btn" href="6.7.2-min-zp-low.html">◀ 6.7.2</a><a class="warp-pipe">6-7-3</a><a class="nes-btn nes-btn--primary" href="6.7.4-ls-param.html">NEXT ▶ 6.7.4</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

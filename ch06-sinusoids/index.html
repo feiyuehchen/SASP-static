@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>World 6 — Sinusoid Spectrum Analysis · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="../index.html">◀ MAP</a></span>
+    <span>WORLD <b>6</b></span>
+    <span lang="en">SINUSOIDS</span>
+    <span lang="zh">正弦訊號</span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">
+    <span lang="en">World 6 — Sinusoid Spectrum Analysis</span>
+    <span lang="zh">第 6 世界 — 正弦訊號頻譜分析</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Spectrum_Sinusoid.html" target="_blank">SASP Ch. 6 ↗</a></small>
+  </h1>
+
+  <div class="nes-box nes-box--green" data-label="BRIEFING">
+    <p lang="en">If your signal is a few sinusoids in noise (like a musical note or a tonal alarm), the questions become: how many, at what frequencies, with what amplitudes and phases? This world answers them.</p>
+    <p lang="zh">若訊號是幾個正弦波加雜訊（例如樂音或警報），要問的是：幾個？頻率多少？振幅相位呢？本世界回答這些。</p>
+  </div>
+
+  <ul class="toc-list">
+    <li><a href="6.1-spec-sinusoid.html"><span><span class="num">6.1</span><span lang="en">Spectrum of a Sinusoid</span><span lang="zh">正弦的頻譜</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.2-spec-sampled-complex.html"><span><span class="num">6.2</span><span lang="en">Sampled Complex Sinusoid</span><span lang="zh">取樣複正弦</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.3-windowed-sinusoid.html"><span><span class="num">6.3</span><span lang="en">Windowed Sinusoid</span><span lang="zh">加窗正弦</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.4-effect-of-windowing.html"><span><span class="num">6.4</span><span lang="en">Effect of Windowing</span><span lang="zh">加窗的影響</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.4.1-freq-resolution.html"><span><span class="num">6.4.1</span><span lang="en">Frequency Resolution</span><span lang="zh">頻率解析度</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.4.1.1-two-cosines.html"><span><span class="num">6.4.1.1</span><span lang="en">Two Cosines (In-Phase)</span><span lang="zh">兩個同相餘弦</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.4.1.2-sine-cos-quad.html"><span><span class="num">6.4.1.2</span><span lang="en">Sine + Cosine (Quadrature)</span><span lang="zh">正弦+餘弦（正交相位）</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.5-resolving.html"><span><span class="num">6.5</span><span lang="en">Resolving Sinusoids</span><span lang="zh">分辨正弦波</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.5.1-mainlobe-defs.html"><span><span class="num">6.5.1</span><span lang="en">Main-Lobe Width Definitions</span><span lang="zh">主瓣寬度定義</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.5.2-peak-resolution.html"><span><span class="num">6.5.2</span><span lang="en">Sufficient Peak Resolution</span><span lang="zh">峰解析度充分條件</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.5.3-periodic.html"><span><span class="num">6.5.3</span><span lang="en">Periodic Signals</span><span lang="zh">週期訊號</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.5.4-tighter-bounds.html"><span><span class="num">6.5.4</span><span lang="en">Tighter Bounds</span><span lang="zh">更緊的界</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.5.5-resolve-summary.html"><span><span class="num">6.5.5</span><span lang="en">Summary</span><span lang="zh">小結</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.6-peak-interp.html"><span><span class="num">6.6</span><span lang="en">Peak Interpolation</span><span lang="zh">波峰內插</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.6.1-quadratic-interp.html"><span><span class="num">6.6.1</span><span lang="en">Quadratic Interpolation</span><span lang="zh">拋物線內插</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.6.1.1-phase-interp.html"><span><span class="num">6.6.1.1</span><span lang="en">Phase Interpolation</span><span lang="zh">相位內插</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.6.1.2-matlab-qint.html"><span><span class="num">6.6.1.2</span><span lang="en">Matlab for QINT</span><span lang="zh">QINT 的 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.6.2-parabolic-bias.html"><span><span class="num">6.6.2</span><span lang="en">Parabolic Bias</span><span lang="zh">拋物線偏差</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7-optimal-peak.html"><span><span class="num">6.7</span><span lang="en">Optimal Peak-Finding</span><span lang="zh">最優找峰</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.1-min-zp-high.html"><span><span class="num">6.7.1</span><span lang="en">Min ZP High</span><span lang="zh">高頻最小補零</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.2-min-zp-low.html"><span><span class="num">6.7.2</span><span lang="en">Min ZP Low</span><span lang="zh">低頻最小補零</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.3-matlab-zp.html"><span><span class="num">6.7.3</span><span lang="en">Matlab for ZP Factors</span><span lang="zh">補零因子 Matlab</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.4-ls-param.html"><span><span class="num">6.7.4</span><span lang="en">LS Sinusoidal Params</span><span lang="zh">LS 正弦參數估計</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.4.1-amp-est.html"><span><span class="num">6.7.4.1</span><span lang="en">Amplitude Estimation</span><span lang="zh">振幅估計</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.4.2-amp-phase-est.html"><span><span class="num">6.7.4.2</span><span lang="en">Amplitude &amp; Phase</span><span lang="zh">振幅與相位</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.4.3-freq-est.html"><span><span class="num">6.7.4.3</span><span lang="en">Frequency Estimation</span><span lang="zh">頻率估計</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.5-mle.html"><span><span class="num">6.7.5</span><span lang="en">Maximum Likelihood</span><span lang="zh">最大似然</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.6-likelihood.html"><span><span class="num">6.7.6</span><span lang="en">Likelihood Function</span><span lang="zh">似然函數</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.6.1-mult-sin-awgn.html"><span><span class="num">6.7.6.1</span><span lang="en">Multiple Sinusoids in AWGN</span><span lang="zh">多正弦+AWGN</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.6.2-nonwhite-noise.html"><span><span class="num">6.7.6.2</span><span lang="en">Non-White Noise</span><span lang="zh">非白雜訊</span></span><span class="dim">▶</span></a></li>
+    <li><a href="6.7.7-general-mle-ls.html"><span><span class="num">6.7.7</span><span lang="en">Generality of ML-LS</span><span lang="zh">ML-LS 的一般性</span></span><span class="dim">▶</span></a></li>
+  </ul>
+
+  <div class="pager">
+    <a class="nes-btn" href="../ch05-fir-design/index.html">◀ W5</a>
+    <a class="nes-btn nes-btn--primary" href="6.1-spec-sinusoid.html">START ▶</a>
+    <a class="nes-btn" href="../ch07-noise/index.html">World 7 ▶</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+</body>
+</html>

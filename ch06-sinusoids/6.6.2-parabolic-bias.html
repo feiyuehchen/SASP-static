@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.6.2 Parabolic Bias · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-6-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-6-2 · Bias of Parabolic Interpolation</span><span lang="zh">關卡 6-6-2 · 拋物線內插的偏差</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Bias_Parabolic_Peak_Interpolation.html" target="_blank">SASP §6.6.2 ↗</a></small></h1>
+  <div class="nes-box" data-label="NOT QUITE UNBIASED">
+    <p lang="en">The log magnitude of a windowed sinusoid's main lobe is not exactly a parabola. So QINT has a small systematic offset. For Gaussian windows the parabola fits perfectly and bias vanishes — a reason Gaussian is popular for peak-picking.</p>
+    <p lang="zh">加窗正弦主瓣的對數振幅並非真正拋物線，所以 QINT 有小系統性偏差。Gaussian 視窗下擬合完美、無偏差 — Gaussian 常被用於 peak-picking 的原因。</p>
+  </div>
+  <p lang="en">Quantify: bias is typically &lt;1% of a bin for Hann at moderate zero-padding. For most music/pitch work that is below the ear's JND.</p>
+  <p lang="zh">量化：Hann 加中度補零時偏差約 &lt;1% bin；音樂/基頻應用下通常在聽感 JND 之下。</p>
+  <div class="pager"><a class="nes-btn" href="6.6.1.2-matlab-qint.html">◀ 6.6.1.2</a><a class="warp-pipe">6-6-2</a><a class="nes-btn nes-btn--primary" href="6.7-optimal-peak.html">NEXT ▶ 6.7</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.4.1 Frequency Resolution · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-4-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-4-1 · Frequency Resolution</span><span lang="zh">關卡 6-4-1 · 頻率解析度</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Frequency_Resolution.html" target="_blank">SASP §6.4.1 ↗</a></small></h1>
+  <div class="nes-box" data-label="RULE OF THUMB">
+    <p lang="en">Two sinusoids can be "resolved" if their main lobes do not overlap — i.e. $|\omega_1-\omega_2|>\text{main-lobe width}$. That width is approximately $2\pi K/N$ where $K$ depends on the window.</p>
+    <p lang="zh">兩個正弦波能「分辨開」的條件：主瓣不重疊，也就是 $|\omega_1-\omega_2|>$ 主瓣寬。主瓣寬約 $2\pi K/N$，$K$ 看視窗。</p>
+  </div>
+  <div class="formula"><div>$$\begin{array}{lc}\text{Window} & K \\\text{rect} & 2 \\\text{Hann} & 4 \\\text{Hamming} & 4 \\\text{Blackman} & 6 \\\text{Kaiser }\beta=6 & \approx 5 \end{array}$$</div></div>
+  <div class="pager"><a class="nes-btn" href="6.4-effect-of-windowing.html">◀ 6.4</a><a class="warp-pipe">6-4-1</a><a class="nes-btn nes-btn--primary" href="6.4.1.1-two-cosines.html">NEXT ▶ 6.4.1.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

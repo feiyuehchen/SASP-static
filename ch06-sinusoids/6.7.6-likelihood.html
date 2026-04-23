@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.7.6 Likelihood Function · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-7-6</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-7-6 · Likelihood Function</span><span lang="zh">關卡 6-7-6 · 似然函數</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Likelihood_Function.html" target="_blank">SASP §6.7.6 ↗</a></small></h1>
+  <div class="formula"><div>$$L(\theta)\;=\;\prod_{n=0}^{N-1}\tfrac{1}{\sqrt{2\pi\sigma^{2}}}\exp\!\left(-\tfrac{(x[n]-s_\theta[n])^{2}}{2\sigma^{2}}\right)$$</div></div>
+  <p lang="en">Log-likelihood is proportional to $-\|x-s_\theta\|^2$ — so MLE ≡ minimum-residual fit. If noise is non-white, replace the sum with a weighted one.</p>
+  <p lang="zh">對數似然與 $-\|x-s_\theta\|^2$ 成比例 — MLE = 最小殘差擬合。若雜訊非白，求和換成加權求和。</p>
+  <div class="pager"><a class="nes-btn" href="6.7.5-mle.html">◀ 6.7.5</a><a class="warp-pipe">6-7-6</a><a class="nes-btn nes-btn--primary" href="6.7.6.1-mult-sin-awgn.html">NEXT ▶ 6.7.6.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

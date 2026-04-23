@@ -181,37 +181,37 @@ data-en-def …>` for hover tooltips.
 
 ## World 6 · Spectrum Analysis of Sinusoids  (ch06-sinusoids/)
 
-- [ ] 6.1   Spectrum of a Sinusoid                         — `ch06-sinusoids/6.1-spec-sinusoid.html`
-- [ ] 6.2   Spectrum of Sampled Complex Sinusoid           — `ch06-sinusoids/6.2-spec-sampled-complex.html`
-- [ ] 6.3   Spectrum of a Windowed Sinusoid                — `ch06-sinusoids/6.3-windowed-sinusoid.html`
-- [ ] 6.4   Effect of Windowing                            — `ch06-sinusoids/6.4-effect-of-windowing.html`
-- [ ] 6.4.1 Frequency Resolution                           — `ch06-sinusoids/6.4.1-freq-resolution.html`
-- [ ] 6.4.1.1 Two Cosines ("In-Phase")                     — `ch06-sinusoids/6.4.1.1-two-cosines.html`
-- [ ] 6.4.1.2 Sine + Cosine (Phase Quadrature)             — `ch06-sinusoids/6.4.1.2-sine-cos-quad.html`
-- [ ] 6.5   Resolving Sinusoids                            — `ch06-sinusoids/6.5-resolving.html`
-- [ ] 6.5.1 Other Definitions of Main-Lobe Width           — `ch06-sinusoids/6.5.1-mainlobe-defs.html`
-- [ ] 6.5.2 Simple Sufficient Condition for Peak Res.      — `ch06-sinusoids/6.5.2-peak-resolution.html`
-- [ ] 6.5.3 Periodic Signals                               — `ch06-sinusoids/6.5.3-periodic.html`
-- [ ] 6.5.4 Tighter Bounds for Min Window Length           — `ch06-sinusoids/6.5.4-tighter-bounds.html`
-- [ ] 6.5.5 Summary                                        — `ch06-sinusoids/6.5.5-resolve-summary.html`
-- [ ] 6.6   Sinusoidal Peak Interpolation                  — `ch06-sinusoids/6.6-peak-interp.html`
-- [ ] 6.6.1 Quadratic Interpolation of Spectral Peaks      — `ch06-sinusoids/6.6.1-quadratic-interp.html`
-- [ ] 6.6.1.1 Phase Interpolation at a Peak                — `ch06-sinusoids/6.6.1.1-phase-interp.html`
-- [ ] 6.6.1.2 Matlab for Parabolic Peak Interp.            — `ch06-sinusoids/6.6.1.2-matlab-qint.html`
-- [ ] 6.6.2 Bias of Parabolic Peak Interpolation           — `ch06-sinusoids/6.6.2-parabolic-bias.html`
-- [ ] 6.7   Optimal Peak-Finding in the Spectrum           — `ch06-sinusoids/6.7-optimal-peak.html`
-- [ ] 6.7.1 Min Zero-Padding for High-Freq Peaks           — `ch06-sinusoids/6.7.1-min-zp-high.html`
-- [ ] 6.7.2 Min Zero-Padding for Low-Freq Peaks            — `ch06-sinusoids/6.7.2-min-zp-low.html`
-- [ ] 6.7.3 Matlab for Min ZP Factors                      — `ch06-sinusoids/6.7.3-matlab-zp.html`
-- [ ] 6.7.4 Least-Squares Sinusoidal Param Estimation      — `ch06-sinusoids/6.7.4-ls-param.html`
-- [ ] 6.7.4.1 Sinusoidal Amplitude Estimation              — `ch06-sinusoids/6.7.4.1-amp-est.html`
-- [ ] 6.7.4.2 Sinusoidal Amplitude & Phase Estimation      — `ch06-sinusoids/6.7.4.2-amp-phase-est.html`
-- [ ] 6.7.4.3 Sinusoidal Frequency Estimation              — `ch06-sinusoids/6.7.4.3-freq-est.html`
-- [ ] 6.7.5 Maximum Likelihood Sinusoid Estimation         — `ch06-sinusoids/6.7.5-mle.html`
-- [ ] 6.7.6 Likelihood Function                            — `ch06-sinusoids/6.7.6-likelihood.html`
-- [ ] 6.7.6.1 Multiple Sinusoids in AWGN                   — `ch06-sinusoids/6.7.6.1-mult-sin-awgn.html`
-- [ ] 6.7.6.2 Non-White Noise                              — `ch06-sinusoids/6.7.6.2-nonwhite-noise.html`
-- [ ] 6.7.7 Generality of ML Least Squares                 — `ch06-sinusoids/6.7.7-general-mle-ls.html`
+- [~] 6.1   Spectrum of a Sinusoid                         — `ch06-sinusoids/6.1-spec-sinusoid.html`
+- [~] 6.2   Spectrum of Sampled Complex Sinusoid           — `ch06-sinusoids/6.2-spec-sampled-complex.html`
+- [~] 6.3   Spectrum of a Windowed Sinusoid                — `ch06-sinusoids/6.3-windowed-sinusoid.html`
+- [~] 6.4   Effect of Windowing                            — `ch06-sinusoids/6.4-effect-of-windowing.html`
+- [~] 6.4.1 Frequency Resolution                           — `ch06-sinusoids/6.4.1-freq-resolution.html`
+- [~] 6.4.1.1 Two Cosines ("In-Phase")                     — `ch06-sinusoids/6.4.1.1-two-cosines.html`
+- [~] 6.4.1.2 Sine + Cosine (Phase Quadrature)             — `ch06-sinusoids/6.4.1.2-sine-cos-quad.html`
+- [~] 6.5   Resolving Sinusoids                            — `ch06-sinusoids/6.5-resolving.html`
+- [~] 6.5.1 Other Definitions of Main-Lobe Width           — `ch06-sinusoids/6.5.1-mainlobe-defs.html`
+- [~] 6.5.2 Simple Sufficient Condition for Peak Res.      — `ch06-sinusoids/6.5.2-peak-resolution.html`
+- [~] 6.5.3 Periodic Signals                               — `ch06-sinusoids/6.5.3-periodic.html`
+- [~] 6.5.4 Tighter Bounds for Min Window Length           — `ch06-sinusoids/6.5.4-tighter-bounds.html`
+- [~] 6.5.5 Summary                                        — `ch06-sinusoids/6.5.5-resolve-summary.html`
+- [~] 6.6   Sinusoidal Peak Interpolation                  — `ch06-sinusoids/6.6-peak-interp.html`
+- [~] 6.6.1 Quadratic Interpolation of Spectral Peaks      — `ch06-sinusoids/6.6.1-quadratic-interp.html`
+- [~] 6.6.1.1 Phase Interpolation at a Peak                — `ch06-sinusoids/6.6.1.1-phase-interp.html`
+- [~] 6.6.1.2 Matlab for Parabolic Peak Interp.            — `ch06-sinusoids/6.6.1.2-matlab-qint.html`
+- [~] 6.6.2 Bias of Parabolic Peak Interpolation           — `ch06-sinusoids/6.6.2-parabolic-bias.html`
+- [~] 6.7   Optimal Peak-Finding in the Spectrum           — `ch06-sinusoids/6.7-optimal-peak.html`
+- [~] 6.7.1 Min Zero-Padding for High-Freq Peaks           — `ch06-sinusoids/6.7.1-min-zp-high.html`
+- [~] 6.7.2 Min Zero-Padding for Low-Freq Peaks            — `ch06-sinusoids/6.7.2-min-zp-low.html`
+- [~] 6.7.3 Matlab for Min ZP Factors                      — `ch06-sinusoids/6.7.3-matlab-zp.html`
+- [~] 6.7.4 Least-Squares Sinusoidal Param Estimation      — `ch06-sinusoids/6.7.4-ls-param.html`
+- [~] 6.7.4.1 Sinusoidal Amplitude Estimation              — `ch06-sinusoids/6.7.4.1-amp-est.html`
+- [~] 6.7.4.2 Sinusoidal Amplitude & Phase Estimation      — `ch06-sinusoids/6.7.4.2-amp-phase-est.html`
+- [~] 6.7.4.3 Sinusoidal Frequency Estimation              — `ch06-sinusoids/6.7.4.3-freq-est.html`
+- [~] 6.7.5 Maximum Likelihood Sinusoid Estimation         — `ch06-sinusoids/6.7.5-mle.html`
+- [~] 6.7.6 Likelihood Function                            — `ch06-sinusoids/6.7.6-likelihood.html`
+- [~] 6.7.6.1 Multiple Sinusoids in AWGN                   — `ch06-sinusoids/6.7.6.1-mult-sin-awgn.html`
+- [~] 6.7.6.2 Non-White Noise                              — `ch06-sinusoids/6.7.6.2-nonwhite-noise.html`
+- [~] 6.7.7 Generality of ML Least Squares                 — `ch06-sinusoids/6.7.7-general-mle-ls.html`
 
 ## World 7 · Spectrum Analysis of Noise  (ch07-noise/)
 
@@ -676,4 +676,4 @@ data-en-def …>` for hover tooltips.
 4. Every page gets a prev / next pager linking to its neighbors in the above order.
 5. No copyrighted prose from Smith's book. All explanations must be original.
 
-Current completed count: **149** / ≈ 530. Latest batch: full World 5 (41 FIR-design pages).
+Current completed count: **181** / ≈ 530. Latest batch: full World 6 (32 sinusoid-analysis pages).

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.3 Windowed Sinusoid · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-3</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-3 · Spectrum of a Windowed Sinusoid</span><span lang="zh">關卡 6-3 · 加窗正弦的頻譜</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Spectrum_Windowed_Sinusoid.html" target="_blank">SASP §6.3 ↗</a></small></h1>
+  <div class="nes-box" data-label="SHIFT &amp; SUM">
+    <p lang="en">Multiply a sinusoid by a window in time = convolve window's spectrum with the sinusoid's delta train in frequency. Result: the window shape centred on each sinusoid frequency.</p>
+    <p lang="zh">時域乘視窗 = 頻域卷積視窗頻譜與正弦的 delta 列。結果：視窗形狀在每個正弦頻率中心上。</p>
+  </div>
+  <div class="formula"><div>$$x_w[n]=w[n]\cos(\omega_0 n)\;\Rightarrow\;X_w(\omega)=\tfrac12 W(\omega-\omega_0)+\tfrac12 W(\omega+\omega_0)$$</div></div>
+  <p lang="en">For a real cosine, two mirror copies of $W$ appear at $\pm\omega_0$. If the window's main lobe width is much smaller than $2\omega_0$ the two copies do not interact; if not, they overlap and interfere.</p>
+  <p lang="zh">實餘弦下 $\pm\omega_0$ 各有一份 $W$。視窗主瓣寬遠小於 $2\omega_0$ 時兩份不互相干擾；否則會重疊干涉。</p>
+  <div class="pager"><a class="nes-btn" href="6.2-spec-sampled-complex.html">◀ 6.2</a><a class="warp-pipe">6-3</a><a class="nes-btn nes-btn--primary" href="6.4-effect-of-windowing.html">NEXT ▶ 6.4</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

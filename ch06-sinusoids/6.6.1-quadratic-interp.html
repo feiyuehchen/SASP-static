@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.6.1 Quadratic Interpolation · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-6-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-6-1 · Quadratic Peak Interpolation</span><span lang="zh">關卡 6-6-1 · 拋物線峰內插</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Quadratic_Interpolation_Spectral_Peaks.html" target="_blank">SASP §6.6.1 ↗</a></small></h1>
+  <div class="nes-box" data-label="THREE-POINT PARABOLA">
+    <p lang="en">Let $\alpha,\beta,\gamma$ be the log-magnitudes at the peak bin $k^*$ and its two neighbours. Fit a parabola through them; the vertex offset gives a sub-bin peak location.</p>
+    <p lang="zh">設 $\alpha,\beta,\gamma$ 為峰 bin $k^*$ 與兩鄰居的對數振幅。在這三點擬合拋物線，頂點偏移給出 sub-bin 的峰位置。</p>
+  </div>
+  <div class="formula"><div>$$p\;=\;\tfrac{1}{2}\,\frac{\alpha-\gamma}{\alpha-2\beta+\gamma},\quad k_{\text{peak}}\approx k^*+p$$</div></div>
+  <p lang="en">Best used on log magnitudes (dB) with a smooth window like Gaussian or Hann — the parabola model matches the log-magnitude shape near the peak.</p>
+  <p lang="zh">對對數振幅（dB）做效果最好；配 Gaussian 或 Hann 等平滑視窗時，拋物線剛好近似峰附近的對數形狀。</p>
+  <div class="pager"><a class="nes-btn" href="6.6-peak-interp.html">◀ 6.6</a><a class="warp-pipe">6-6-1</a><a class="nes-btn nes-btn--primary" href="6.6.1.1-phase-interp.html">NEXT ▶ 6.6.1.1</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

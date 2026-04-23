@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.6.1.2 Matlab QINT · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-6-1-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-6-1-2 · Matlab for QINT</span><span lang="zh">關卡 6-6-1-2 · QINT 的 Matlab</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Parabolic_Peak_Interpolation.html" target="_blank">SASP §6.6.1.2 ↗</a></small></h1>
+  <div class="nes-box nes-box--purple" data-label="CODE">
+    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
+function [p, y] = qint(ym1, y0, yp1)
+  p = (ym1 - yp1) / (2*(ym1 - 2*y0 + yp1));
+  y = y0 - 0.25 * (ym1 - yp1) * p;
+end
+    </pre>
+  </div>
+  <p lang="en">Returns offset $p\in[-0.5,0.5]$ and the interpolated peak value. Feed it log-magnitudes for best accuracy.</p>
+  <p lang="zh">回傳偏移 $p\in[-0.5,0.5]$ 與內插後的峰值。傳對數振幅效果最佳。</p>
+  <div class="pager"><a class="nes-btn" href="6.6.1.1-phase-interp.html">◀ 6.6.1.1</a><a class="warp-pipe">6-6-1-2</a><a class="nes-btn nes-btn--primary" href="6.6.2-parabolic-bias.html">NEXT ▶ 6.6.2</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

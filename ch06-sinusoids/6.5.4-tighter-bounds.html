@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.5.4 Tighter Bounds · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-5-4</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-5-4 · Tighter Bounds</span><span lang="zh">關卡 6-5-4 · 更緊的界</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Tighter_Bounds_Minimum_Window.html" target="_blank">SASP §6.5.4 ↗</a></small></h1>
+  <div class="nes-box" data-label="USE PHASE INFO">
+    <p lang="en">If you know phases match (worst-case constructive), you can resolve at about $0.6$× the null-to-null width with Hann. With random relative phase the required separation averages out to a fraction of a main-lobe width.</p>
+    <p lang="zh">若知道相位同相（最糟建設性），Hann 能在零點到零點寬的約 $0.6$ 倍分辨。隨機相位下平均只需主瓣寬的一部分。</p>
+  </div>
+  <p lang="en">Practical advice: use the null-to-null width as a conservative guide and only push lower when you have extra phase information from the application.</p>
+  <p lang="zh">實務建議：把零點到零點寬當保守基準；只有當應用提供額外相位資訊時才再壓低。</p>
+  <div class="pager"><a class="nes-btn" href="6.5.3-periodic.html">◀ 6.5.3</a><a class="warp-pipe">6-5-4</a><a class="nes-btn nes-btn--primary" href="6.5.5-resolve-summary.html">NEXT ▶ 6.5.5</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

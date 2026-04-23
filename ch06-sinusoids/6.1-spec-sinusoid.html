@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.1 Spectrum of a Sinusoid · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-1 · Spectrum of a Sinusoid</span><span lang="zh">關卡 6-1 · 正弦的頻譜</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Spectrum_Sinusoid.html" target="_blank">SASP §6.1 ↗</a></small></h1>
+  <div class="nes-box" data-label="TWO DELTAS">
+    <p lang="en">A real cosine is two complex exponentials, so its continuous spectrum is a pair of impulses.</p>
+    <p lang="zh">實餘弦 = 兩個複指數之和，因此連續頻譜是一對脈衝。</p>
+  </div>
+  <div class="formula"><div>$$A\cos(\omega_0 t+\phi)\;\leftrightarrow\;\tfrac{A}{2}\,e^{j\phi}\,\delta(\Omega-\omega_0)+\tfrac{A}{2}\,e^{-j\phi}\,\delta(\Omega+\omega_0)$$</div></div>
+  <p lang="en">That is the ideal picture. Real measurements smear those impulses by the analysis window's spectrum — which is what the rest of this chapter is about.</p>
+  <p lang="zh">這是理想版本。實際量測把這兩個脈衝依分析視窗的頻譜塗抹開來 — 本章接下來就在講這件事。</p>
+  <div class="pager"><a class="nes-btn" href="index.html">◀ W6</a><a class="warp-pipe">6-1</a><a class="nes-btn nes-btn--primary" href="6.2-spec-sampled-complex.html">NEXT ▶ 6.2</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>

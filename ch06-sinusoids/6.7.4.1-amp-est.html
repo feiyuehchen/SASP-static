@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>6.7.4.1 Amplitude Estimation · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script></head><body class="lang-en">
+<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W6</a></span><span>STAGE <b>6-7-4-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
+<div class="page">
+  <h1 class="page-title"><span lang="en">Stage 6-7-4-1 · Amplitude Estimation</span><span lang="zh">關卡 6-7-4-1 · 振幅估計</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Sinusoidal_Amplitude_Estimation.html" target="_blank">SASP §6.7.4.1 ↗</a></small></h1>
+  <div class="formula"><div>$$\hat A=\frac{2}{N}\sum_{n=0}^{N-1}x[n]\cos(\omega_0 n+\phi_0)$$</div></div>
+  <p lang="en">Known frequency and phase → project the signal onto the matching cosine and scale by $2/N$. This is the DFT bin at $\omega_0$ (properly scaled).</p>
+  <p lang="zh">已知頻率與相位 → 把訊號投影到匹配餘弦、再乘 $2/N$。其實就是 $\omega_0$ 處的 DFT bin（加對比例）。</p>
+  <div class="pager"><a class="nes-btn" href="6.7.4-ls-param.html">◀ 6.7.4</a><a class="warp-pipe">6-7-4-1</a><a class="nes-btn nes-btn--primary" href="6.7.4.2-amp-phase-est.html">NEXT ▶ 6.7.4.2</a></div>
+</div>
+<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+</body></html>
