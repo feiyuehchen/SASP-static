@@ -509,30 +509,30 @@ data-en-def …>` for hover tooltips.
 
 ## Appendix World C · Statistical Signal Processing  (appendix/stats/)
 
-- [ ] C.1   Stochastic Processes                           — `appendix/stats/C.1-stoch.html`
-- [ ] C.1.1 Probability Distribution                       — `appendix/stats/C.1.1-prob-dist.html`
-- [ ] C.1.2 Independent Events                             — `appendix/stats/C.1.2-independent.html`
-- [ ] C.1.3 Random Variable                                — `appendix/stats/C.1.3-rv.html`
-- [ ] C.1.4 Stochastic Process                             — `appendix/stats/C.1.4-stoch-proc.html`
-- [ ] C.1.5 Stationary Stochastic Process                  — `appendix/stats/C.1.5-stationary.html`
-- [ ] C.1.6 Expected Value                                 — `appendix/stats/C.1.6-expected.html`
-- [ ] C.1.7 Mean                                           — `appendix/stats/C.1.7-mean.html`
-- [ ] C.1.8 Sample Mean                                    — `appendix/stats/C.1.8-sample-mean.html`
-- [ ] C.1.9 Variance                                       — `appendix/stats/C.1.9-variance.html`
-- [ ] C.1.10 Sample Variance                               — `appendix/stats/C.1.10-sample-var.html`
-- [ ] C.2   Correlation Analysis                           — `appendix/stats/C.2-corr-analysis.html`
-- [ ] C.2.1 Cross-Correlation                              — `appendix/stats/C.2.1-cross-corr.html`
-- [ ] C.2.2 Cross-Power Spectral Density                   — `appendix/stats/C.2.2-cpsd.html`
-- [ ] C.2.3 Autocorrelation                                — `appendix/stats/C.2.3-autocorr.html`
-- [ ] C.2.4 Sample Autocorrelation                         — `appendix/stats/C.2.4-sample-autocorr.html`
-- [ ] C.2.5 Power Spectral Density                         — `appendix/stats/C.2.5-psd.html`
-- [ ] C.2.6 Sample Power Spectral Density                  — `appendix/stats/C.2.6-sample-psd.html`
-- [ ] C.3   White Noise                                    — `appendix/stats/C.3-white.html`
-- [ ] C.3.1 Making White Noise with Dice                   — `appendix/stats/C.3.1-dice.html`
-- [ ] C.3.2 Independent Implies Uncorrelated               — `appendix/stats/C.3.2-ind-uncorr.html`
-- [ ] C.3.3 Estimator Variance                             — `appendix/stats/C.3.3-est-var.html`
-- [ ] C.3.3.1 Sample-Mean Variance                         — `appendix/stats/C.3.3.1-sample-mean-var.html`
-- [ ] C.3.3.2 Sample-Variance Variance                     — `appendix/stats/C.3.3.2-sample-var-var.html`
+- [~] C.1   Stochastic Processes                           — `appendix/stats/C.1-stoch.html`
+- [~] C.1.1 Probability Distribution                       — `appendix/stats/C.1.1-prob-dist.html`
+- [~] C.1.2 Independent Events                             — `appendix/stats/C.1.2-independent.html`
+- [~] C.1.3 Random Variable                                — `appendix/stats/C.1.3-rv.html`
+- [~] C.1.4 Stochastic Process                             — `appendix/stats/C.1.4-stoch-proc.html`
+- [~] C.1.5 Stationary Stochastic Process                  — `appendix/stats/C.1.5-stationary.html`
+- [~] C.1.6 Expected Value                                 — `appendix/stats/C.1.6-expected.html`
+- [~] C.1.7 Mean                                           — `appendix/stats/C.1.7-mean.html`
+- [~] C.1.8 Sample Mean                                    — `appendix/stats/C.1.8-sample-mean.html`
+- [~] C.1.9 Variance                                       — `appendix/stats/C.1.9-variance.html`
+- [~] C.1.10 Sample Variance                               — `appendix/stats/C.1.10-sample-var.html`
+- [~] C.2   Correlation Analysis                           — `appendix/stats/C.2-corr-analysis.html`
+- [~] C.2.1 Cross-Correlation                              — `appendix/stats/C.2.1-cross-corr.html`
+- [~] C.2.2 Cross-Power Spectral Density                   — `appendix/stats/C.2.2-cpsd.html`
+- [~] C.2.3 Autocorrelation                                — `appendix/stats/C.2.3-autocorr.html`
+- [~] C.2.4 Sample Autocorrelation                         — `appendix/stats/C.2.4-sample-autocorr.html`
+- [~] C.2.5 Power Spectral Density                         — `appendix/stats/C.2.5-psd.html`
+- [~] C.2.6 Sample Power Spectral Density                  — `appendix/stats/C.2.6-sample-psd.html`
+- [~] C.3   White Noise                                    — `appendix/stats/C.3-white.html`
+- [~] C.3.1 Making White Noise with Dice                   — `appendix/stats/C.3.1-dice.html`
+- [~] C.3.2 Independent Implies Uncorrelated               — `appendix/stats/C.3.2-ind-uncorr.html`
+- [~] C.3.3 Estimator Variance                             — `appendix/stats/C.3.3-est-var.html`
+- [~] C.3.3.1 Sample-Mean Variance                         — `appendix/stats/C.3.3.1-sample-mean-var.html`
+- [~] C.3.3.2 Sample-Variance Variance                     — `appendix/stats/C.3.3.2-sample-var-var.html`
 
 ## Appendix World D · Gaussian Function Properties  (appendix/gaussian/)
 
