@@ -1,13 +1,252 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.6 COLA-Nyquist Duality · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-6</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-6 · Duality of COLA and Nyquist Conditions</span><span lang="zh">關卡 10-6 · COLA 與 Nyquist 的對偶</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Duality_COLA_Nyquist_Conditions.html" target="_blank">SASP §10.6 ↗</a></small></h1>
-  <div class="nes-box nes-box--purple" data-label="TIME ↔ FREQUENCY">
-    <p lang="en">COLA (time-domain sum of shifted windows = constant) and Nyquist(N) (frequency-domain samples at $2\pi k/N$ are zero) are Fourier duals. A window is COLA at hop $R=N$ iff its <em>transform</em> is Nyquist(N).</p>
-    <p lang="zh">COLA（平移視窗的時域和為常數）與 Nyquist(N)（頻域樣本在 $2\pi k/N$ 為零）互為傅立葉對偶。視窗在跳距 $R=N$ 下 COLA ⇔ 其<em>轉換</em>為 Nyquist(N)。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.6 COLA ↔ Nyquist Duality · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-6</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.5-nyquist-n.html">◀ 10.5</a><a class="warp-pipe">10-6</a><a class="nes-btn nes-btn--primary" href="10.6.1-specific-windows.html">NEXT ▶ 10.6.1</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-6 · Duality of COLA and Nyquist(N)</span>
+    <span lang="zh">關卡 10-6 · COLA 與 Nyquist(N) 的對偶</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Duality_COLA_Nyquist_Conditions.html" target="_blank">SASP §10.6 ↗</a></small>
+  </h1>
+
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">Prove the single most important structural statement of Ch 10: the OLA perfect-reconstruction condition (COLA on window, hop $R$) and the FBS perfect-reconstruction condition (Nyquist(N) on window, at DFT length $N$) are <em>Poisson-summation duals</em> of each other. Same theorem, two Fourier faces. Everything else in Ch 10/11/12 hangs from this.</p>
+        <p lang="zh">證明 Ch 10 最重要的結構性敘述：OLA 完美重建條件（視窗 + 跳距 $R$ 滿足 COLA）與 FBS 完美重建條件（視窗 + DFT 長度 $N$ 滿足 Nyquist(N)）互為 <em>Poisson 求和對偶</em>。同一條定理、傅立葉兩面。Ch 10/11/12 之後都靠它。</p>
+      </div>
+
+      <h2 lang="en">State both conditions</h2>
+      <h2 lang="zh">兩條件並列</h2>
+
+      <div class="formula">
+        <span class="label">OLA · COLA @ HOP R</span>
+        <div>$$\sum_m w[n - mR]\;=\;\text{const in }n$$</div>
+      </div>
+
+      <div class="formula">
+        <span class="label">FBS · NYQUIST(N)</span>
+        <div>$$w[pN]\;=\;w[0]\,\delta[p]$$</div>
+      </div>
+
+      <h2 lang="en">Poisson summation in one equation</h2>
+      <h2 lang="zh">Poisson 求和（一行表達）</h2>
+
+      <div class="formula">
+        <span class="label">PSF</span>
+        <div>$$\sum_m w[n - mR]\;=\;\frac{1}{R}\sum_k W\!\left(\tfrac{2\pi k}{R}\right)\,e^{j 2\pi k n/R}$$</div>
+      </div>
+
+      <p lang="en">The left side is the time-domain OLA sum; the right side is a Fourier series whose coefficients are the window spectrum $W(\cdot)$ <em>sampled</em> at frequencies $\omega=2\pi k/R$.</p>
+      <p lang="zh">左邊是時域 OLA 和；右邊是傅立葉級數，係數為視窗頻譜 $W(\cdot)$ 在頻率 $\omega=2\pi k/R$ 的<em>取樣值</em>。</p>
+
+      <h2 lang="en">COLA ⇔ Nyquist(R)</h2>
+      <h2 lang="zh">COLA ⇔ Nyquist(R)</h2>
+
+      <p lang="en">Apply PSF: the left side being "constant in $n$" means <em>every</em> coefficient of the Fourier series on the right is zero for $k\ne 0$. That is exactly:</p>
+      <p lang="zh">套 PSF：左邊「對 $n$ 為定值」即右邊傅立葉級數 <em>所有</em> $k\ne 0$ 的係數為零。也就是：</p>
+
+      <div class="formula">
+        <span class="label">COLA (TIME) ⇔ W(2π k/R) = 0 for k≠0</span>
+        <div>$$\sum_m w[n - mR]=\text{const}\;\;\Longleftrightarrow\;\;W\!\left(\tfrac{2\pi k}{R}\right)=0\;\text{for every }k\ne 0$$</div>
+      </div>
+
+      <p lang="en">That right-side condition is literally "the window's spectrum sampled at every $R$-point grid vanishes except at DC" — the <em>frequency-domain</em> Nyquist condition with rate $R$. So COLA-at-hop-$R$ is exactly Nyquist($R$) on the window's spectrum. Swap the roles of time and frequency (i.e. transpose the whole argument), and Nyquist(N) on the window's <em>time-domain</em> samples turns into COLA-at-hop-$N$ on the window's spectrum.</p>
+      <p lang="zh">右邊條件正是「視窗頻譜每 $R$ 點取樣、除直流外皆零」— 頻域版 Nyquist 條件，速率 $R$。所以「跳距 $R$ 的 COLA」恰等於視窗頻譜的 Nyquist($R$)。時頻互換（把論證整個轉置），視窗<em>時域</em>樣本的 Nyquist($N$) 就變成視窗頻譜跳距 $N$ 的 COLA。</p>
+
+      <h2 lang="en">The full picture in one table</h2>
+      <h2 lang="zh">一張總表</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <table style="border-collapse:collapse; margin:0 auto;">
+              <tr style="color:var(--nes-yellow);"><th style="padding:4px 10px; border-bottom:2px solid var(--nes-sky);">For OLA</th><th style="padding:4px 10px; border-bottom:2px solid var(--nes-sky);">For FBS</th></tr>
+              <tr><td style="padding:3px 10px;">$\sum_m w[n-mR]$ constant</td><td style="padding:3px 10px;">$w[pN] = w[0]\,\delta[p]$</td></tr>
+              <tr><td style="padding:3px 10px;">$W(2\pi k/R)=0$, $k\ne 0$</td><td style="padding:3px 10px;">$\sum_m W(\omega + 2\pi m/N)$ constant</td></tr>
+            </table>
+          </span>
+          <span lang="zh">
+            <table style="border-collapse:collapse; margin:0 auto;">
+              <tr style="color:var(--nes-yellow);"><th style="padding:4px 10px; border-bottom:2px solid var(--nes-sky);">OLA 版</th><th style="padding:4px 10px; border-bottom:2px solid var(--nes-sky);">FBS 版</th></tr>
+              <tr><td style="padding:3px 10px;">$\sum_m w[n-mR]$ 為定值</td><td style="padding:3px 10px;">$w[pN] = w[0]\,\delta[p]$</td></tr>
+              <tr><td style="padding:3px 10px;">$W(2\pi k/R)=0$，$k\ne 0$</td><td style="padding:3px 10px;">$\sum_m W(\omega + 2\pi m/N)$ 為定值</td></tr>
+            </table>
+          </span>
+        </div>
+      </div>
+
+      <p lang="en">Each row is an equivalence (PSF). Each column is the PR condition for OLA (left) or FBS (right). The top-left and bottom-right are time-domain statements; top-right and bottom-left are frequency-domain.</p>
+      <p lang="zh">每一列是等價（PSF）。每一欄是 OLA（左）或 FBS（右）的 PR 條件。左上、右下為時域；右上、左下為頻域。</p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>PR is a single theorem with two names.</b> Pick a window. At hop $R$, the question "does OLA reconstruct?" and "does FBS reconstruct (with $N=R$)?" have the <em>same</em> answer — because they are the same Poisson-summation statement. Designing a window for one automatically satisfies the other.</p>
+        <p lang="zh"><b>PR 是同一條定理的兩個名字。</b>給定視窗，在跳距 $R$ 下「OLA 能否還原」與「$N=R$ 時 FBS 能否還原」答案<em>相同</em> — 因為它們是同一個 Poisson 求和敘述。為其中一者設計的視窗自動滿足另一者。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Window time-samples vs spectrum-samples</h3>
+        <h3 lang="zh">實驗 · 視窗時域樣本 vs. 頻譜樣本</h3>
+
+        <canvas id="timeCanvas" style="height:160px;"></canvas>
+        <canvas id="freqCanvas" style="height:200px; margin-top:8px;"></canvas>
+
+        <div class="controls">
+          <label>Window</label>
+          <select id="winSel">
+            <option value="rect">Rectangular</option>
+            <option value="hann" selected>Hann</option>
+            <option value="hamming">Hamming</option>
+            <option value="blackman">Blackman</option>
+          </select>
+          <label>Length M</label>
+          <input type="range" id="mSlider" min="16" max="128" step="8" value="64"/>
+          <span class="val" id="mVal">64</span>
+          <label>Grid (R = N)</label>
+          <input type="range" id="rSlider" min="4" max="64" step="4" value="32"/>
+          <span class="val" id="rVal">32</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: time samples of $w[n]$, yellow dots at $n = pR$. Bottom: spectrum $|W(\omega)|$ in dB, yellow dots at $\omega = 2\pi k/R$. <b>COLA at hop $R$</b> holds when bottom yellow dots (except the one at $\omega=0$) sit at $-\infty$ dB. <b>Nyquist($R$)</b> holds when top yellow dots (except $n=0$) sit at zero. The duality says these two statements are the same.</p>
+          <p lang="zh">上：$w[n]$ 的時域樣本，黃點為 $n = pR$。下：頻譜 $|W(\omega)|$（dB），黃點為 $\omega = 2\pi k/R$。<b>跳距 $R$ 的 COLA</b> 成立 ⇔ 下方黃點（$\omega=0$ 以外）落在 $-\infty$ dB。<b>Nyquist($R$)</b> 成立 ⇔ 上方黃點（$n=0$ 以外）落在零。對偶性即「兩句話相同」。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.5-nyquist-n.html">◀ 10.5</a>
+    <a class="warp-pipe">10-6</a>
+    <a class="nes-btn nes-btn--primary" href="10.6.1-specific-windows.html">NEXT ▶ 10.6.1</a>
+  </div>
+</div>
+
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { win: 'hann', M: 64, R: 32 };
+  const winFn = { rect: DSP.rectWindow, hann: DSP.hannWindow, hamming: DSP.hammingWindow, blackman: DSP.blackmanWindow };
+
+  function redraw(){
+    const { win, M, R } = state;
+    const w = winFn[win](M);
+
+    // time canvas
+    const c1 = $('timeCanvas');
+    const ctx1 = c1.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c1.width=c1.clientWidth*dpr; c1.height=c1.clientHeight*dpr; ctx1.scale(dpr,dpr);
+    const W1 = c1.clientWidth, H1 = c1.clientHeight;
+    ctx1.fillStyle='#0b0c1a'; ctx1.fillRect(0,0,W1,H1);
+    const pad1={l:32,r:12,t:10,b:20}, iw1=W1-pad1.l-pad1.r, ih1=H1-pad1.t-pad1.b;
+    const dispN = Math.max(M, R*3);
+    const xT = n => pad1.l + iw1 * n/(dispN-1);
+    const yT = v => pad1.t + ih1*(1 - (v+0.15)/1.3);
+    ctx1.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad1.l+iw1*g/10; ctx1.beginPath(); ctx1.moveTo(x,pad1.t); ctx1.lineTo(x,H1-pad1.b); ctx1.stroke(); }
+    ctx1.strokeStyle='#e6e6ff'; ctx1.beginPath(); ctx1.moveTo(pad1.l,yT(0)); ctx1.lineTo(W1-pad1.r,yT(0)); ctx1.stroke();
+    ctx1.strokeStyle='#5aa0ff'; ctx1.lineWidth=2; ctx1.beginPath();
+    for (let n=0;n<M;n++){ const xp=xT(n), yp=yT(w[n]); if(n===0) ctx1.moveTo(xp,yp); else ctx1.lineTo(xp,yp); }
+    ctx1.stroke();
+    // dots at multiples of R
+    ctx1.fillStyle='#ffd95a';
+    for (let p=0; p*R<dispN; p++){
+      const idx=p*R; const v=(idx<M)?w[idx]:0;
+      ctx1.beginPath(); ctx1.arc(xT(idx), yT(v), 4, 0, 2*Math.PI); ctx1.fill();
+    }
+    ctx1.fillStyle='#8f8fa8'; ctx1.font='9px "Press Start 2P", monospace';
+    ctx1.fillText('w[n], dots at n = p·R', 8, 18);
+
+    // freq canvas: |W(ω)| in dB with dots at 2π k/R
+    const c2 = $('freqCanvas');
+    const ctx2 = c2.getContext('2d');
+    c2.width=c2.clientWidth*dpr; c2.height=c2.clientHeight*dpr; ctx2.scale(dpr,dpr);
+    const W2 = c2.clientWidth, H2 = c2.clientHeight;
+    ctx2.fillStyle='#0b0c1a'; ctx2.fillRect(0,0,W2,H2);
+    const pad2={l:44,r:12,t:14,b:24}, iw2=W2-pad2.l-pad2.r, ih2=H2-pad2.t-pad2.b;
+    const K=720;
+    const omegas=DSP.linspace(-Math.PI, Math.PI, K);
+    const {re,im}=DSP.dtft(w, omegas);
+    const mag=new Float32Array(K); for (let i=0;i<K;i++) mag[i]=Math.hypot(re[i],im[i]);
+    const maxMag=Math.max(...mag);
+    const floor=-80;
+    const yDb = db => pad2.t + ih2*(1 - (db-floor)/(0-floor));
+    const xF = i => pad2.l + iw2 * i/(K-1);
+    ctx2.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad2.l+iw2*g/12; ctx2.beginPath(); ctx2.moveTo(x,pad2.t); ctx2.lineTo(x,H2-pad2.b); ctx2.stroke(); }
+    for (let g=0;g<=8;g++){ const y=pad2.t+ih2*g/8; ctx2.beginPath(); ctx2.moveTo(pad2.l,y); ctx2.lineTo(W2-pad2.r,y); ctx2.stroke(); }
+    ctx2.strokeStyle='#e6e6ff'; ctx2.lineWidth=2;
+    ctx2.beginPath(); ctx2.moveTo(pad2.l, H2-pad2.b); ctx2.lineTo(W2-pad2.r, H2-pad2.b); ctx2.moveTo(pad2.l, pad2.t); ctx2.lineTo(pad2.l, H2-pad2.b); ctx2.stroke();
+    ctx2.strokeStyle='#5aa0ff'; ctx2.lineWidth=1.5; ctx2.beginPath();
+    for (let i=0;i<K;i++){
+      const db = 20*Math.log10(Math.max(mag[i]/maxMag, 1e-6));
+      const y = yDb(Math.max(floor, db));
+      if (i===0) ctx2.moveTo(xF(i), y); else ctx2.lineTo(xF(i), y);
+    }
+    ctx2.stroke();
+    // dots at 2π k / R
+    ctx2.fillStyle='#ffd95a';
+    for (let k=-Math.floor(R/2); k<=Math.floor(R/2); k++){
+      const omega = 2*Math.PI*k/R;
+      if (omega < -Math.PI || omega > Math.PI) continue;
+      // find interpolated mag at omega
+      let idx = (omega+Math.PI)/(2*Math.PI)*(K-1);
+      const i0 = Math.floor(idx), frac = idx-i0;
+      const m = (i0+1<K) ? (mag[i0]*(1-frac)+mag[i0+1]*frac) : mag[i0];
+      const db = 20*Math.log10(Math.max(m/maxMag, 1e-6));
+      const y = yDb(Math.max(floor, db));
+      const x = xF(idx);
+      ctx2.beginPath(); ctx2.arc(x, y, 4, 0, 2*Math.PI); ctx2.fill();
+    }
+    ctx2.fillStyle='#8f8fa8'; ctx2.font='9px "Press Start 2P", monospace';
+    ctx2.fillText('|W(ω)| dB, dots at ω = 2πk/R', 8, 12);
+    const xt = [['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){
+      const i = (v+Math.PI)/(2*Math.PI)*(K-1);
+      ctx2.fillText(lbl, xF(i)-8, H2-pad2.b+14);
+    }
+  }
+
+  $('winSel').addEventListener('change', e=>{ state.win=e.target.value; redraw(); });
+  $('mSlider').addEventListener('input', e=>{ state.M=parseInt(e.target.value,10); $('mVal').textContent=state.M; redraw(); });
+  $('rSlider').addEventListener('input', e=>{ state.R=parseInt(e.target.value,10); $('rVal').textContent=state.R; redraw(); });
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins') || '0';
+})();
+</script>
 </body></html>

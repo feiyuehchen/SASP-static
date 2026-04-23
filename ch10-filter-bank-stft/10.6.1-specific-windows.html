@@ -1,17 +1,117 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.6.1 Specific Windows · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-6-1</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-6-1 · Specific Windows</span><span lang="zh">關卡 10-6-1 · 具體視窗</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Specific_Windows.html" target="_blank">SASP §10.6.1 ↗</a></small></h1>
-  <ul>
-    <li lang="en">Rectangular: COLA at $R=N$; Nyquist(N) in the Dirichlet sense.</li>
-    <li lang="zh">矩形：$R=N$ 下 COLA；以 Dirichlet 意義是 Nyquist(N)。</li>
-    <li lang="en">Hann at $R=N/2$: COLA; transform has zeros at $\omega_k=4\pi k/N$.</li>
-    <li lang="zh">Hann（$R=N/2$）：COLA；轉換在 $\omega_k=4\pi k/N$ 為零。</li>
-    <li lang="en">Blackman at $R=N/3$: COLA; Nyquist at hop $N/3$.</li>
-    <li lang="zh">Blackman（$R=N/3$）：COLA；跳距 $N/3$ 下 Nyquist。</li>
-  </ul>
-  <div class="pager"><a class="nes-btn" href="10.6-cola-nyquist-duality.html">◀ 10.6</a><a class="warp-pipe">10-6-1</a><a class="nes-btn nes-btn--primary" href="10.6.2-nyquist-unit.html">NEXT ▶ 10.6.2</a></div>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.6.1 Specific Windows · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-6-1</b></span>
+    <span>COINS <b id="coins">0</b></span>
+  </div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-6-1 · Specific Windows and Their COLA / Nyquist Hops</span>
+    <span lang="zh">關卡 10-6-1 · 具體視窗及其 COLA / Nyquist 跳距</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Specific_Windows.html" target="_blank">SASP §10.6.1 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Table up the classic windows against the hop sizes $R$ at which they satisfy COLA. By duality, these are also the DFT lengths $N$ at which they satisfy Nyquist($N$). Memorising this table is the fastest way to pick (window, hop, FFT length) for a new project.</p>
+    <p lang="zh">把經典視窗與其滿足 COLA 的跳距 $R$ 整理成一張表。由對偶，它們同時是滿足 Nyquist($N$) 的 DFT 長度 $N$。背下這張表是新專案選（視窗、跳距、FFT 長度）最快的方法。</p>
+  </div>
+
+  <h2 lang="en">Canonical windows × hops (length = $M$)</h2>
+  <h2 lang="zh">經典視窗 × 跳距（長度 = $M$）</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:13px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <table style="border-collapse:collapse; margin:0 auto; min-width:520px;">
+          <tr style="color:var(--nes-yellow);">
+            <th style="padding:4px 10px; border-bottom:2px solid var(--nes-sky);">Window</th>
+            <th style="padding:4px 10px; border-bottom:2px solid var(--nes-sky);">COLA hops $R$</th>
+            <th style="padding:4px 10px; border-bottom:2px solid var(--nes-sky);">Side-lobe</th>
+          </tr>
+          <tr><td style="padding:3px 10px;">Rectangular</td><td>$R = M$ (no overlap)</td><td>$-13$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Bartlett (triangle)</td><td>$R = M/2$</td><td>$-27$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Hann</td><td>$R = M/2,\,M/4,\,M/6,\ldots$</td><td>$-32$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Hamming</td><td>$R \approx M/2$ (very close), $R=M/4$</td><td>$-42$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Blackman</td><td>$R = M/3,\,M/6,\,M/9,\ldots$</td><td>$-58$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Blackman-Harris</td><td>$R = M/4$ and finer</td><td>$-92$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Kaiser ($\beta=6$)</td><td>$R \approx M/4$ (approx COLA)</td><td>$-60$ dB</td></tr>
+        </table>
+      </span>
+      <span lang="zh">
+        <table style="border-collapse:collapse; margin:0 auto; min-width:520px;">
+          <tr style="color:var(--nes-yellow);">
+            <th style="padding:4px 10px; border-bottom:2px solid var(--nes-sky);">視窗</th>
+            <th style="padding:4px 10px; border-bottom:2px solid var(--nes-sky);">COLA 跳距 $R$</th>
+            <th style="padding:4px 10px; border-bottom:2px solid var(--nes-sky);">旁波瓣</th>
+          </tr>
+          <tr><td style="padding:3px 10px;">矩形 (rect)</td><td>$R = M$（無重疊）</td><td>$-13$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Bartlett（三角）</td><td>$R = M/2$</td><td>$-27$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Hann</td><td>$R = M/2,\,M/4,\,M/6,\ldots$</td><td>$-32$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Hamming</td><td>$R \approx M/2$（極接近）、$R=M/4$</td><td>$-42$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Blackman</td><td>$R = M/3,\,M/6,\,M/9,\ldots$</td><td>$-58$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Blackman-Harris</td><td>$R = M/4$ 及更小</td><td>$-92$ dB</td></tr>
+          <tr><td style="padding:3px 10px;">Kaiser（$\beta=6$）</td><td>$R \approx M/4$（近似 COLA）</td><td>$-60$ dB</td></tr>
+        </table>
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Why Hamming is "approximately COLA"</h2>
+  <h2 lang="zh">為何 Hamming 是「近似 COLA」</h2>
+
+  <p lang="en">Hamming is $0.54 - 0.46\cos(2\pi n/M)$ — almost a Hann shape but with a DC bias of $0.08$ making the edges non-zero. The DC bias breaks strict COLA: $\sum_m w[n-mR] = c_0 + \epsilon\cos(\ldots)$ where $\epsilon \approx 0.01$. Audible only as about $-40$ dB ripple — inaudible in practice. So Hamming is used at $R=M/2$ in most audio pipelines despite not being <em>exactly</em> COLA.</p>
+  <p lang="zh">Hamming：$0.54 - 0.46\cos(2\pi n/M)$ — 形狀接近 Hann 但直流偏置 $0.08$ 讓兩端非零。直流偏置破壞嚴格 COLA：$\sum_m w[n-mR] = c_0 + \epsilon\cos(\ldots)$，$\epsilon \approx 0.01$。實際上只出現 $-40$ dB 漣波，聽不出來。所以多數音訊流水線仍用 Hamming + $R=M/2$。</p>
+
+  <h2 lang="en">Kaiser as a tunable trade-off</h2>
+  <h2 lang="zh">Kaiser 作為可調的取捨</h2>
+
+  <p lang="en">Kaiser window $w[n] \propto I_0(\beta\sqrt{1-(2n/M-1)^2})$ with shape parameter $\beta$. Larger $\beta$ = longer main lobe, lower side-lobes. For a target side-lobe level $A$ in dB, Kaiser gives $\beta \approx 0.1102(A-8.7)$. COLA is only approximate; in practice use it at hops where the approximation residual is below your noise floor.</p>
+  <p lang="zh">Kaiser 視窗 $w[n] \propto I_0(\beta\sqrt{1-(2n/M-1)^2})$，以形狀參數 $\beta$ 控制。$\beta$ 越大 → 主波瓣越寬、旁波瓣越低。目標旁波瓣 $A$ dB 時，$\beta \approx 0.1102(A-8.7)$。COLA 只是近似；實務跳距要取到「近似殘差低於雜訊底」的程度。</p>
+
+  <h2 lang="en">Reality check — most audio uses Hann @ $R=M/2$</h2>
+  <h2 lang="zh">實務檢查 — 大多音訊用 Hann + $R=M/2$</h2>
+
+  <p lang="en">If you just need "something that works": Hann at 50% overlap. Exactly COLA, simple to code, side-lobe $-32$ dB is good enough for SMS, time-stretch, harmoniser, and spectral mixing.</p>
+  <p lang="zh">若你只要「能用的預設」：Hann + 50% 重疊。嚴格 COLA、好寫、旁波瓣 $-32$ dB 足以應付 SMS、時間伸縮、harmoniser、頻譜混音。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Pick the window first, then let COLA dictate the hop.</b> Don't invert: if you insist on a specific hop, you constrain your window choice. Side-lobe requirements drive the window; COLA then snaps the hop to $M/\{2,3,4,\ldots\}$.</p>
+    <p lang="zh"><b>先挑視窗，讓 COLA 決定跳距。</b>不要反過來：若堅持某個跳距，就把視窗選項框死。旁波瓣需求決定視窗；COLA 再把跳距 snap 到 $M/\{2,3,4,\ldots\}$。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.6-cola-nyquist-duality.html">◀ 10.6</a>
+    <a class="warp-pipe">10-6-1</a>
+    <a class="nes-btn nes-btn--primary" href="10.6.2-nyquist-unit.html">NEXT ▶ 10.6.2</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

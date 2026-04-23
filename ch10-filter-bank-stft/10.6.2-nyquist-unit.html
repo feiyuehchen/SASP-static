@@ -1,13 +1,108 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.6.2 Nyquist on Unit Circle · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-6-2</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-6-2 · The Nyquist Property on the Unit Circle</span><span lang="zh">關卡 10-6-2 · 單位圓上的 Nyquist 性質</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Nyquist_Property_Unit_Circle.html" target="_blank">SASP §10.6.2 ↗</a></small></h1>
-  <div class="nes-box" data-label="Z-DOMAIN VIEW">
-    <p lang="en">Treat the window as a polynomial in $z^{-1}$. Nyquist(N) means it vanishes at every non-DC $N$-th root of unity. The z-plane view exposes what window-design choices do to the filter-bank aliasing cancellation.</p>
-    <p lang="zh">把視窗視為 $z^{-1}$ 的多項式。Nyquist(N) 代表它在所有非 DC 的 $N$ 次單位根處為零。這個 z 域詮釋揭露視窗設計選擇對 FB 混疊消除的影響。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.6.2 Nyquist on the Unit Circle · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-6-2</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.6.1-specific-windows.html">◀ 10.6.1</a><a class="warp-pipe">10-6-2</a><a class="nes-btn nes-btn--primary" href="10.7-portnoff.html">NEXT ▶ 10.7</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-6-2 · The Nyquist Property on the Unit Circle</span>
+    <span lang="zh">關卡 10-6-2 · 單位圓上的 Nyquist 性質</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Nyquist_Property_Unit_Circle.html" target="_blank">SASP §10.6.2 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Recast Nyquist($N$) as a zero-placement statement on the unit circle: the window's Z-transform $W(z)$ must have zeros at every non-zero $N$-th root of unity. This geometric view makes window design by zero-placement obvious, and it is the dialect Ch 12 (polyphase, paraunitary) uses throughout.</p>
+    <p lang="zh">把 Nyquist($N$) 重述為單位圓上的零點放置：視窗的 Z 轉換 $W(z)$ 必須在<em>所有非零</em> $N$ 次單位根處有零。這個幾何視角讓「零點設計」變得一目瞭然，也正是 Ch 12（polyphase、paraunitary）通篇採用的方言。</p>
+  </div>
+
+  <h2 lang="en">The statement, in $z$</h2>
+  <h2 lang="zh">用 $z$ 表示</h2>
+
+  <div class="formula">
+    <span class="label">NYQUIST(N) IN Z-DOMAIN</span>
+    <div>$$W(z)\bigg|_{z = e^{j 2\pi k/N}} = 0\quad\text{for every }k\in\{1,\ldots,N-1\}$$</div>
+  </div>
+
+  <p lang="en">The $N$-th roots of unity are $z_k = e^{j 2\pi k/N}$ for $k=0,\ldots,N-1$. Nyquist($N$) says $W$ is zero at all of them except $z_0 = 1$ (which corresponds to DC). Equivalently, $W(z)$ has the factor $\displaystyle \frac{1 - z^{-N}}{1 - z^{-1}}$ — the running-sum lowpass from §10.3.1 — as a building block.</p>
+  <p lang="zh">$N$ 次單位根為 $z_k = e^{j 2\pi k/N}$，$k=0,\ldots,N-1$。Nyquist($N$) 即 $W$ 在這些根處全為零，只剩 $z_0 = 1$（對應直流）。等價地，$W(z)$ 含因式 $\displaystyle \frac{1 - z^{-N}}{1 - z^{-1}}$ — 正是 §10.3.1 的累計和低通 — 作為積木。</p>
+
+  <h2 lang="en">Why Nyquist(N) $\Rightarrow$ running-sum factor</h2>
+  <h2 lang="zh">為什麼 Nyquist($N$) $\Rightarrow$ 累計和因式</h2>
+
+  <p lang="en">A polynomial (FIR) whose zeros include $\{e^{j 2\pi k/N} : k \ne 0\}$ contains the factor $\prod_{k=1}^{N-1}(1 - e^{j 2\pi k/N}z^{-1}) = \frac{1 - z^{-N}}{1 - z^{-1}}$. So:</p>
+  <p lang="zh">若 FIR 多項式的零點包含 $\{e^{j 2\pi k/N} : k \ne 0\}$，則含因式 $\prod_{k=1}^{N-1}(1 - e^{j 2\pi k/N}z^{-1}) = \frac{1 - z^{-N}}{1 - z^{-1}}$。因此：</p>
+
+  <div class="formula">
+    <span class="label">STRUCTURE THEOREM</span>
+    <div>$$W(z)\;=\;\frac{1 - z^{-N}}{1 - z^{-1}}\;\cdot\; Q(z)$$</div>
+  </div>
+
+  <p lang="en">where $Q(z)$ is any polynomial. The running-sum-LP factor provides the Nyquist zeros "for free", and $Q(z)$ carries the side-lobe-shaping freedom. Classical window design is then the art of choosing $Q(z)$.</p>
+  <p lang="zh">$Q(z)$ 為任意多項式。累計和低通因式「免費」提供 Nyquist 零點；$Q(z)$ 承載塑形旁波瓣的自由度。古典視窗設計就是挑 $Q(z)$。</p>
+
+  <h2 lang="en">Examples</h2>
+  <h2 lang="zh">範例</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>Length-$N$ rectangle:</b> $W(z) = \frac{1-z^{-N}}{1-z^{-1}}$ — so $Q(z) = 1$, the minimal design.<br>
+        <b>Length-$N$ Hann:</b> linear combination $\frac{1}{2}\cdot \text{rect} - \frac{1}{4}\cdot(\text{rect shifted by }1) - \frac{1}{4}\cdot(\text{rect shifted by }-1)$ — still has the running-sum factor embedded.<br>
+        <b>Portnoff length $LN$ (§10.7):</b> Nyquist-zeros are manually inserted by summing $L$ shifted copies of a shorter window; gives Nyquist($N$) on a longer window with extra design freedom.
+      </span>
+      <span lang="zh">
+        <b>長度 $N$ 矩形：</b>$W(z) = \frac{1-z^{-N}}{1-z^{-1}}$ — 即 $Q(z) = 1$，最簡設計。<br>
+        <b>長度 $N$ Hann：</b>線性組合 $\frac{1}{2}\cdot \text{rect} - \frac{1}{4}\cdot\text{rect}_{+1} - \frac{1}{4}\cdot\text{rect}_{-1}$ — 仍嵌有累計和因式。<br>
+        <b>長度 $LN$ 的 Portnoff（§10.7）：</b>手動插入 Nyquist 零點 — 把短視窗的 $L$ 個位移副本加總 — 在更長視窗上保持 Nyquist($N$)，多出的自由度用於塑形。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Connection to perfect reconstruction in Ch 12</h2>
+  <h2 lang="zh">與 Ch 12 完美重建的連結</h2>
+
+  <p lang="en">Multirate FB theory (Ch 12) requires the <em>polyphase matrix</em> of an FB to be paraunitary / PR. When the prototype is Nyquist($N$), the polyphase decomposition's DC row is a delta — the structure that lets the inverse bank be derived in closed form. So every paraunitary cosine-modulated FB (MDCT, MLT, MPEG) has Nyquist($N$) baked in.</p>
+  <p lang="zh">多速率 FB 理論（Ch 12）要求 FB 的 <em>polyphase 矩陣</em>為 paraunitary / PR。當原型滿足 Nyquist($N$)，polyphase 分解的直流列為 delta — 這個結構讓逆組有閉式解。所以所有 paraunitary 餘弦調變 FB（MDCT、MLT、MPEG）都把 Nyquist($N$) 焊進去。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Nyquist($N$) = zeros on a lattice.</b> Time-domain: sub-sampling collapses to a delta. Frequency-domain: a grid of $N$-point evaluations vanishes except at DC. Z-domain: zeros at every non-zero $N$-th root of unity. All three are geometrically the same picture on different axes of the Fourier cube.</p>
+    <p lang="zh"><b>Nyquist($N$) = 格點上的零。</b>時域：子取樣塌成 delta。頻域：$N$ 點取值除直流外歸零。Z 域：每個非零 $N$ 次單位根都是零。三者在傅立葉立方體不同軸上是同一張幾何圖。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.6.1-specific-windows.html">◀ 10.6.1</a>
+    <a class="warp-pipe">10-6-2</a>
+    <a class="nes-btn nes-btn--primary" href="10.7-portnoff.html">NEXT ▶ 10.7</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>

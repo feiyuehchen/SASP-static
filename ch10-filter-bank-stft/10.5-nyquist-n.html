@@ -1,13 +1,120 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>10.5 Nyquist(N) Windows · DSP Quest</title><link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg"/><link rel="stylesheet" href="../assets/css/8bit.css"/></head><body class="lang-en">
-<div class="status-bar"><div class="hud"><span><a href="index.html">◀ W10</a></span><span>STAGE <b>10-5</b></span><span>COINS <b id="coins">0</b></span></div><div class="lang-switch"><button data-lang-btn="en" class="active">EN</button><button data-lang-btn="zh">繁中</button></div></div>
-<div class="page">
-  <h1 class="page-title"><span lang="en">Stage 10-5 · Nyquist(N) Windows</span><span lang="zh">關卡 10-5 · Nyquist(N) 視窗</span><small><a href="https://ccrma.stanford.edu/~jos/sasp/Nyquist_N_Windows.html" target="_blank">SASP §10.5 ↗</a></small></h1>
-  <div class="nes-box" data-label="DEFINITION">
-    <p lang="en">A Nyquist(N) window is one whose DTFT has zeros at every non-zero multiple of $2\pi/N$. Equivalently: every $N$-th time sample of the window (except at $n=0$) is zero. Every Nyquist(N) window is an FBS-valid prototype at hop $R=N$.</p>
-    <p lang="zh">Nyquist(N) 視窗的 DTFT 在 $2\pi/N$ 所有非零倍數處為零。等價地：除 $n=0$ 外，每 $N$ 個時間樣本為零。Nyquist(N) 視窗就是跳距 $R=N$ 的 FBS 有效原型。</p>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10.5 Nyquist(N) Windows · DSP Quest</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+<link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+</head>
+<body class="lang-en">
+
+<div class="status-bar">
+  <div class="hud">
+    <span><a href="index.html">◀ W10</a></span>
+    <span>STAGE <b>10-5</b></span>
+    <span>COINS <b id="coins">0</b></span>
   </div>
-  <div class="pager"><a class="nes-btn" href="10.4-fbs-r1.html">◀ 10.4</a><a class="warp-pipe">10-5</a><a class="nes-btn nes-btn--primary" href="10.6-cola-nyquist-duality.html">NEXT ▶ 10.6</a></div>
+  <div class="lang-switch">
+    <button data-lang-btn="en" class="active">EN</button>
+    <button data-lang-btn="zh">繁中</button>
+  </div>
 </div>
-<script src="../assets/js/i18n.js"></script><script src="../assets/js/terms.js"></script><script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
+
+<div class="page">
+
+  <h1 class="page-title">
+    <span lang="en">Stage 10-5 · Nyquist(N) Windows</span>
+    <span lang="zh">關卡 10-5 · Nyquist(N) 視窗</span>
+    <small><a href="https://ccrma.stanford.edu/~jos/sasp/Nyquist_N_Windows.html" target="_blank">SASP §10.5 ↗</a></small>
+  </h1>
+
+  <div class="nes-box" data-label="GOAL">
+    <p lang="en">Name the condition we derived in §10.4 and write it in all four equivalent forms — time-sampled, frequency-sampled, DTFT-periodised, and "impulse-train". Knowing which form to reach for is 90% of window analysis.</p>
+    <p lang="zh">替 §10.4 推出的條件命名，並寫成四種等價形式 — 時域取樣、頻域取樣、DTFT 週期化、「脈衝串」形式。選對形式就完成 90% 的視窗分析。</p>
+  </div>
+
+  <h2 lang="en">Definition</h2>
+  <h2 lang="zh">定義</h2>
+
+  <div class="formula">
+    <span class="label">NYQUIST(N) CONDITION · TIME DOMAIN</span>
+    <div>$$w[pN]\;=\;\delta[p]\cdot w[0]\quad\text{for all }p\in\mathbb{Z}$$</div>
+  </div>
+
+  <p lang="en">Equivalently: the window, sub-sampled every $N$ samples, is a single non-zero impulse (the spike at $p=0$). Any window of length $\le N$ gets this trivially — all other multiples are outside the support. Longer windows need explicit design.</p>
+  <p lang="zh">等價地：把視窗每 $N$ 個樣本取一次，結果只在 $p=0$ 處非零、其他為零。長度 $\le N$ 的視窗天然成立（其他倍數落在支撐外）；較長者需明確設計。</p>
+
+  <h2 lang="en">Four equivalent statements</h2>
+  <h2 lang="zh">四種等價敘述</h2>
+
+  <div class="formula">
+    <span class="label">(A) TIME SAMPLE</span>
+    <div>$$w[pN]\;=\;w[0]\,\delta[p]$$</div>
+  </div>
+
+  <div class="formula">
+    <span class="label">(B) FREQUENCY SUM</span>
+    <div>$$\sum_{m=0}^{N-1} W\!\left(\omega + \tfrac{2\pi m}{N}\right)\;=\;N\,w[0]\;\;(\text{constant in }\omega)$$</div>
+  </div>
+
+  <div class="formula">
+    <span class="label">(C) ALIAS COLLAPSE</span>
+    <div>$$\text{The length-}N\text{ aliasing of }w\text{ collapses to }w[0]\,\mathrm{rect}_N[n]$$</div>
+  </div>
+
+  <div class="formula">
+    <span class="label">(D) PSF TWIN</span>
+    <div>$$W(\omega)\text{ sampled on the }N\text{-point grid }\omega=\tfrac{2\pi k}{N}\text{ gives }N\,w[0]\,\delta[k]$$</div>
+  </div>
+
+  <p lang="en">Forms (A) and (D) are Poisson-summation duals: a time-domain $N$-sampling ↔ a frequency-domain $N$-point evaluation. Forms (B) and (C) re-state the same thing via aliasing.</p>
+  <p lang="zh">(A) 與 (D) 是 Poisson 求和對偶：時域每 $N$ 取樣 ↔ 頻域 $N$ 點取樣。(B) 與 (C) 只是從混疊角度把同一件事再說一次。</p>
+
+  <h2 lang="en">Who satisfies Nyquist(N)?</h2>
+  <h2 lang="zh">哪些視窗滿足 Nyquist(N)？</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>Trivially:</b> any window of length $\le N$ (rect, Hann, Hamming, Blackman, Kaiser truncated, Gaussian truncated).<br>
+        <b>By design:</b> Portnoff windows (§10.7) — length-$M$ windows with $M > N$ whose $N$-sample sub-sampling is forced to be a single impulse by multiplying a longer smooth shape by a reference Nyquist(N) "template".<br>
+        <b>Not without modification:</b> long Kaiser/Dolph-Chebyshev/raised-cosine windows of length $M > N$ — need Portnoff-style nyquistisation before they work.
+      </span>
+      <span lang="zh">
+        <b>天然滿足：</b>長度 $\le N$ 的任意視窗（rect、Hann、Hamming、Blackman、Kaiser 截斷、Gauss 截斷）。<br>
+        <b>刻意設計：</b>Portnoff 視窗（§10.7）— 長度 $M > N$，靠把平滑長形狀乘上 Nyquist(N) 模板，強制每 $N$ 取樣後只剩單一脈衝。<br>
+        <b>需額外處理：</b>長度 $M > N$ 的 Kaiser、Dolph-Chebyshev、raised-cosine — 須先 Portnoff 化才可用。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Why "Nyquist(N)"?</h2>
+  <h2 lang="zh">為什麼叫「Nyquist(N)」？</h2>
+
+  <p lang="en">A <em>classical Nyquist filter</em> (pulse shaping in communications) has the property that its uniformly sampled impulse response is a single non-zero impulse — so ISI vanishes. Our window has the same property with sub-sampling period $N$. The "(N)" specifies the sub-sampling rate. The terminology lines up with Oppenheim–Schafer and Vaidyanathan.</p>
+  <p lang="zh"><em>古典 Nyquist 濾波器</em>（通訊脈衝整形）的脈衝響應在等距取樣下只剩單一脈衝，讓 ISI 消失。我們的視窗在子取樣週期 $N$ 下具同樣性質。"(N)" 指定子取樣率，與 Oppenheim–Schafer、Vaidyanathan 術語一致。</p>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Nyquist(N) = perfect-reconstruction ticket for FBS.</b> The time-domain statement is "kill the time aliasing"; the frequency-domain statement is "all frequency samples except DC are zero" for the sub-sampled window spectrum. §10.6 will prove that Nyquist(N) for FBS and COLA for OLA are the same theorem, on opposite sides of the Fourier mirror.</p>
+    <p lang="zh"><b>Nyquist(N) = FBS 完美重建的門票。</b>時域版：「消滅時域混疊」；頻域版：「子取樣後的視窗頻譜除直流外全為零」。§10.6 會證：FBS 的 Nyquist(N) 與 OLA 的 COLA 是同一定理在傅立葉鏡像的兩面。</p>
+  </div>
+
+  <div class="pager">
+    <a class="nes-btn" href="10.4-fbs-r1.html">◀ 10.4</a>
+    <a class="warp-pipe">10-5</a>
+    <a class="nes-btn nes-btn--primary" href="10.6-cola-nyquist-duality.html">NEXT ▶ 10.6</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/terms.js"></script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body></html>
