@@ -30,25 +30,94 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Three_Term_Blackman_Harris_Window.html" target="_blank">SASP §4.3.4 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="OPTIMIZED 3-TERM">
-    <p lang="en">Same three-cosine shape as Blackman, but the weights are re-tuned by Blackman and Harris (1978) to push the first side-lobe all the way down to $-71$ dB.</p>
-    <p lang="zh">三項餘弦形狀同 Blackman，但 Blackman 與 Harris（1978）重新調整權重，把第一旁瓣壓到 $-71$ dB。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="OPTIMIZED 3-TERM">
+        <p lang="en">Same three-cosine shape as classic Blackman, but the weights are re-tuned by
+          <span class="term"
+            data-en="Blackman-Harris 3-term (1978)"
+            data-en-def="Coefficients a=(0.42323, 0.49755, 0.07922) that minimise the peak side-lobe level for the 3-cosine form."
+            data-zh-def="係數 a=(0.42323, 0.49755, 0.07922)，使三項餘弦形式的峰值旁瓣最低。">Blackman and Harris (1978)</span>
+          to push the first side-lobe all the way down to $-71$ dB.</p>
+        <p lang="zh">三項餘弦形狀同經典 Blackman，但 <span class="term"
+            data-en="Blackman-Harris 3-term (1978)"
+            data-en-def="Coefficients a=(0.42323, 0.49755, 0.07922) that minimise the peak side-lobe level for the 3-cosine form."
+            data-zh-def="係數 a=(0.42323, 0.49755, 0.07922)，使三項餘弦形式的峰值旁瓣最低。">Blackman 與 Harris（1978）</span>重新調整權重，把第一旁瓣壓到 $-71$ dB。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">3-TERM BLACKMAN-HARRIS</span>
-    <div>$$a_0=0.42323,\; a_1=0.49755,\; a_2=0.07922$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">3-TERM BLACKMAN-HARRIS COEFFICIENTS</span>
+        <div>$$a_0=0.42323,\quad a_1=0.49755,\quad a_2=0.07922$$</div>
+      </div>
 
-  <p lang="en">
-    Very close numerically to classic Blackman but gains about $13$ dB of
-    first-side-lobe depth. Useful when near-main-lobe interference
-    matters and main-lobe width is acceptable.
-  </p>
-  <p lang="zh">
-    數值上很接近經典 Blackman，但第一旁瓣深度多約 $13$ dB。
-    當近主瓣干擾重要、主瓣寬度可接受時很適合。
-  </p>
+      <p lang="en">
+        Numerically very close to classic Blackman (0.42, 0.50, 0.08) but with side-lobe depth gaining about $13$ dB. The optimisation problem: minimise $\max_\omega |W(\omega)|$ over the side-lobe region — a Chebyshev-type
+        <span class="term"
+          data-en="Minimax optimization"
+          data-en-def="Minimising the worst-case (maximum) error. Equioscillation property: the optimal solution has alternating equal-height peaks and troughs."
+          data-zh-def="最小化最壞情況（極大值）誤差。等振盪性質：最佳解在誤差上下交替取等高峰谷。">minimax problem</span>.
+      </p>
+      <p lang="zh">
+        數值上極接近經典 Blackman（0.42, 0.50, 0.08）但旁瓣深度多約 $13$ dB。最佳化問題：把旁瓣區域的 $\max_\omega |W(\omega)|$ 壓到最小 — 一個 Chebyshev 型<span class="term"
+          data-en="Minimax optimization"
+          data-en-def="Minimising the worst-case (maximum) error. Equioscillation property: the optimal solution has alternating equal-height peaks and troughs."
+          data-zh-def="最小化最壞情況（極大值）誤差。等振盪性質：最佳解在誤差上下交替取等高峰谷。">minimax</span> 問題。
+      </p>
+
+      <h2 lang="en">Equioscillation</h2>
+      <h2 lang="zh">等振盪性質</h2>
+
+      <p lang="en">
+        The optimal 3-term BH window's spectrum has all side-lobes <em>of equal height</em> (the $-71$ dB plateau). Any coefficient perturbation raises some side-lobe above that floor while lowering others — the classical sign that we've hit the Chebyshev optimum.
+      </p>
+      <p lang="zh">
+        最佳 3-term BH 頻譜的所有旁瓣<em>等高</em>（$-71$ dB 平台）。任何係數擾動都會讓某些旁瓣高出、某些降低 — Chebyshev 最佳解的經典特徵。
+      </p>
+
+      <div class="nes-box nes-box--yellow" data-label="WHEN TO USE">
+        <p lang="en">When the signal of interest has weak components close (in frequency) to strong ones, and first-side-lobe level is what limits your analysis. Otherwise Hann or classic Blackman are faster to type and effectively identical.</p>
+        <p lang="zh">當關切訊號有弱成分靠近強成分、且第一旁瓣位階限制分析時使用。其他情形 Hann 或經典 Blackman 寫起來快又幾乎一樣好。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Minimax optimisation ≈ "flat" side-lobes.</b> Beyond a certain design effort, classical round-number windows are essentially as good — but when you're measurement-limited, 3-term BH is the first stop.</p>
+        <p lang="zh"><b>Minimax 最佳化 ≈「平坦」旁瓣。</b>超過某程度設計努力，經典整數版視窗差不多好用 — 但若你受量測限制，3-term BH 是第一站。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Looking at an optimal 3-term BH spectrum, the side-lobes should look:</p>
+        <p lang="zh"><b>問：</b>看最佳 3-term BH 頻譜，旁瓣看起來應該：</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">All the same height (equioscillation).</button>
+          <button data-correct="1" lang="zh">所有旁瓣等高（等振盪）。</button>
+          <button data-correct="0" lang="en">Monotonically decreasing with ω.</button>
+          <button data-correct="0" lang="zh">隨 ω 單調下降。</button>
+          <button data-correct="0" lang="en">Alternating up and down by 20 dB.</button>
+          <button data-correct="0" lang="zh">每個升降差 20 dB。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Classic vs. 3-term BH side-by-side</h3>
+        <h3 lang="zh">實驗 · 經典 vs. 3-term BH 對照</h3>
+        <canvas id="fCanvas" style="height:320px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Blue: classic Blackman ($-58$ dB floor). Yellow: 3-term Blackman-Harris ($-71$ dB flat plateau). Both have the same main-lobe width; only the side-lobe floor differs.</p>
+          <p lang="zh">藍：經典 Blackman（$-58$ dB 底）。黃：3-term Blackman-Harris（$-71$ dB 平台）。主瓣寬相同，只差旁瓣底線。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.3.3-matlab-blackman.html">◀ 4.3.3</a>
@@ -57,8 +126,96 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 64 };
+
+  function mk(N, a){
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      w[n] = a[0] - a[1]*Math.cos(2*Math.PI*n/(N-1)) + a[2]*Math.cos(4*Math.PI*n/(N-1));
+    }
+    return w;
+  }
+
+  function redraw(){
+    const classic = mk(state.N, [0.42, 0.50, 0.08]);
+    const bh3 = mk(state.N, [0.42323, 0.49755, 0.07922]);
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const K = 720, omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const dBfloor = -100;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=10;g++){ const y=pad.t+ih*g/10; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+
+    for (const [data, color] of [[classic, '#5aa0ff'], [bh3, '#ffd95a']]){
+      const { re, im } = DSP.dtft(data, omegas);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      ctx.strokeStyle = color; ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-6)));
+        const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+        const x = pad.l + iw*i/(K-1);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    // reference lines at -58 and -71 dB
+    ctx.strokeStyle='#5aa0ff'; ctx.setLineDash([3,3]); ctx.lineWidth=1;
+    const y58 = pad.t + ih*(1-(-58-dBfloor)/(0-dBfloor));
+    ctx.beginPath(); ctx.moveTo(pad.l, y58); ctx.lineTo(W-pad.r, y58); ctx.stroke();
+    ctx.strokeStyle='#ffd95a';
+    const y71 = pad.t + ih*(1-(-71-dBfloor)/(0-dBfloor));
+    ctx.beginPath(); ctx.moveTo(pad.l, y71); ctx.lineTo(W-pad.r, y71); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#5aa0ff'; ctx.fillText('Classic Blackman (-58)', 8, 14);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('3-term BH (-71)', 240, 14);
+    ctx.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('nSlider').addEventListener('input', e => { state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Chebyshev equioscillation: optimal minimax solutions have equal-height extrema.</span><span lang="zh">🪙 金幣 +1！Chebyshev 等振盪：最佳 minimax 解的極值等高。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Look at the yellow curve — the side-lobes plateau at ~-71 dB.</span><span lang="zh">✗ 看黃色曲線 — 旁瓣在 ~-71 dB 形成平台。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

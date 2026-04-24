@@ -30,26 +30,85 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Blackman_Window_Family.html" target="_blank">SASP §4.3.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="THREE-TERM FAMILY">
-    <p lang="en">Three-cosine windows parametrized by two numbers. Choose them to minimise the first side-lobe, give a $-58$ dB plateau, or force side lobes to decay fastest asymptotically.</p>
-    <p lang="zh">由兩個參數決定的三項餘弦視窗家族。選不同參數可最小化第一旁瓣、形成 $-58$ dB 平台、或讓旁瓣漸進衰減最快。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THREE-TERM FAMILY">
+        <p lang="en">Three-cosine windows parametrized by two numbers. Choose them to minimise the first side-lobe, give a $-58$ dB plateau, or force side lobes to decay fastest asymptotically.</p>
+        <p lang="zh">由兩個參數決定的三項餘弦視窗家族。選不同參數可最小化第一旁瓣、形成 $-58$ dB 平台、或讓旁瓣漸進衰減最快。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">FORM</span>
-    <div>$$w[n]=a_0-a_1\cos\!\left(\frac{2\pi n}{N-1}\right)+a_2\cos\!\left(\frac{4\pi n}{N-1}\right)$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">3-TERM FORM</span>
+        <div>$$w[n]=a_0-a_1\cos\!\left(\frac{2\pi n}{N-1}\right)+a_2\cos\!\left(\frac{4\pi n}{N-1}\right)$$</div>
+      </div>
 
-  <p lang="en">Common members:</p>
-  <p lang="zh">常見成員：</p>
-  <ul>
-    <li lang="en"><b>Classic Blackman:</b> $(0.42, 0.5, 0.08)$.</li>
-    <li lang="zh"><b>經典 Blackman：</b>$(0.42, 0.5, 0.08)$。</li>
-    <li lang="en"><b>Exact Blackman:</b> $(0.42659, 0.49656, 0.07685)$.</li>
-    <li lang="zh"><b>精確 Blackman：</b>$(0.42659, 0.49656, 0.07685)$。</li>
-    <li lang="en"><b>Nuttall 3-term:</b> minimises first side lobe; tighter than classic Blackman.</li>
-    <li lang="zh"><b>Nuttall 三項：</b>把第一旁瓣壓得更低，比經典 Blackman 更緊。</li>
-  </ul>
+      <p lang="en">
+        The two independent parameters (with $a_0+a_1+a_2=1$ or not, depending on normalisation) place two zeros on the spectrum's side-lobe envelope. Pick where those zeros fall to tune the window for a specific job.
+      </p>
+      <p lang="zh">
+        兩個獨立參數（要不要求 $a_0+a_1+a_2=1$ 視歸一化而定）可在頻譜旁瓣包絡放兩個零。選擇零點位置即可針對不同工作調整視窗。
+      </p>
+
+      <h2 lang="en">Common members</h2>
+      <h2 lang="zh">常見成員</h2>
+
+      <div class="formula">
+        <div>
+          $$\begin{array}{llccr}
+          \text{Name} & a_0 & a_1 & a_2 & \text{1st SL} \\
+          \hline
+          \text{Classic Blackman}     & 0.42    & 0.50    & 0.08    & -58\ \text{dB} \\
+          \text{Exact Blackman}       & 0.42659 & 0.49656 & 0.07685 & -68\ \text{dB} \\
+          \text{3-term Blackman-Harris} & 0.42323 & 0.49755 & 0.07922 & -71\ \text{dB} \\
+          \text{Nuttall minimum-SL}   & 0.40897 & 0.5     & 0.09103 & -82\ \text{dB} \\
+          \end{array}$$
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--blue" data-label="PICKING ONE">
+        <p lang="en"><b>Start with Classic Blackman.</b> If you need deeper side-lobes in near-main-lobe interference, jump to 3-term Blackman-Harris. Nuttall wins on paper but for audio the last $10$ dB are rarely audible.</p>
+        <p lang="zh"><b>預設選 Classic Blackman。</b>近主瓣干擾要更深旁瓣就改用 3-term Blackman-Harris。Nuttall 理論最佳但音訊上最後 $10$ dB 多半聽不出。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Two numbers, many windows.</b> The Blackman 3-term family demonstrates that systematic optimisation of a small coefficient set can beat "cute-round-number" choices — but only by a few dB.</p>
+        <p lang="zh"><b>兩個數字、多種視窗。</b>Blackman 三項家族展示：對小數量係數做系統化最佳化，可勝過「整數好記」的選擇 — 不過只多幾 dB。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> What makes 3-term Blackman-Harris better than classic Blackman?</p>
+        <p lang="zh"><b>問：</b>3-term Blackman-Harris 比經典 Blackman 好在哪？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Optimized coefficients push the first side-lobe down by ≈ 13 dB.</button>
+          <button data-correct="1" lang="zh">最佳化係數把第一旁瓣壓低約 13 dB。</button>
+          <button data-correct="0" lang="en">It has a narrower main-lobe.</button>
+          <button data-correct="0" lang="zh">主瓣更窄。</button>
+          <button data-correct="0" lang="en">It uses four cosines instead of three.</button>
+          <button data-correct="0" lang="zh">用四項餘弦而非三項。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Compare four 3-term members</h3>
+        <h3 lang="zh">實驗 · 比較四個三項成員</h3>
+        <canvas id="fCanvas" style="height:320px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Four overlaid spectra in dB: Classic (blue), Exact (yellow), 3-term BH (pink), Nuttall min-SL (lime). Main-lobes are nearly identical; what differs is the side-lobe floor and the shape of distant side-lobes.</p>
+          <p lang="zh">四組 dB 頻譜疊加：Classic（藍）、Exact（黃）、3-term BH（粉）、Nuttall min-SL（綠）。主瓣近乎相同；差別在旁瓣底線與遠處旁瓣形狀。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.3-blackman-harris.html">◀ 4.3</a>
@@ -58,8 +117,93 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 64 };
+  const members = [
+    { name: 'Classic', a: [0.42, 0.50, 0.08], color: '#5aa0ff' },
+    { name: 'Exact', a: [0.42659, 0.49656, 0.07685], color: '#ffd95a' },
+    { name: '3-BH', a: [0.42323, 0.49755, 0.07922], color: '#ff6aa0' },
+    { name: 'Nuttall', a: [0.40897, 0.5, 0.09103], color: '#78d66a' },
+  ];
+
+  function mkWindow(N, a){
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      w[n] = a[0] - a[1]*Math.cos(2*Math.PI*n/(N-1)) + a[2]*Math.cos(4*Math.PI*n/(N-1));
+    }
+    return w;
+  }
+
+  function redraw(){
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const K = 720;
+    const omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const dBfloor = -100;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=10;g++){ const y=pad.t+ih*g/10; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+
+    for (const m of members){
+      const w = mkWindow(state.N, m.a);
+      const { re, im } = DSP.dtft(w, omegas);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      ctx.strokeStyle = m.color; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-6)));
+        const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+        const x = pad.l + iw*i/(K-1);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    // legend
+    ctx.font='9px "Press Start 2P", monospace'; let lx = 8;
+    for (const m of members){ ctx.fillStyle = m.color; ctx.fillText(m.name, lx, 14); lx += 68; }
+    ctx.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('nSlider').addEventListener('input', e => { state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Same 3-term structure, better-chosen $a_k$ drop the first SL from -58 to -71 dB.</span><span lang="zh">🪙 金幣 +1！相同三項結構，較佳的 $a_k$ 把第一旁瓣從 -58 拉到 -71 dB。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ They all use 3 cosines — the difference is coefficient optimisation.</span><span lang="zh">✗ 都是三項餘弦，差別在係數最佳化。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

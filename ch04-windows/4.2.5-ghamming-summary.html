@@ -30,28 +30,77 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Summary_Generalized_Hamming_Windows.html" target="_blank">SASP §4.2.5 ↗</a></small>
   </h1>
 
-  <div class="formula">
-    <span class="label">CHEAT CARD — 2-TERM COSINES</span>
-    <div>
-      $$\begin{array}{llcc}
-      \text{Name} & \alpha & \text{1st SL} & \text{Roll-off} \\
-      \text{Rectangular} & 1 & -13.3\ \text{dB} & 6\ \text{dB/oct} \\
-      \text{Hann} & 0.5 & -31.5\ \text{dB} & 18\ \text{dB/oct} \\
-      \text{Hamming} & 0.54 & -42.7\ \text{dB} & 6\ \text{dB/oct} \\
-      \end{array}$$
-    </div>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box nes-box--green" data-label="CHEAT CARD">
+        <p lang="en">Three windows, one knob $\alpha$. The table below is the whole family.</p>
+        <p lang="zh">三個視窗，一個旋鈕 $\alpha$。下表就是整個家族。</p>
+      </div>
 
-  <p lang="en">
-    Main-lobe width in this family is $8\pi/N$ for anything but pure
-    rectangle. The trade is always: first side lobe vs. asymptotic
-    roll-off. If you know where your interfering signals live, pick the
-    window whose worst side lobe is lowest in that band.
-  </p>
-  <p lang="zh">
-    除了純矩形外，這家族的主瓣寬皆 $8\pi/N$。取捨永遠是「第一旁瓣 vs 漸進滾降」。
-    若知道干擾訊號出現在哪一帶，就選在那一帶上旁瓣最低的視窗。
-  </p>
+      <div class="formula">
+        <span class="label">2-TERM COSINE WINDOWS</span>
+        <div>
+          $$\begin{array}{llcc}
+          \text{Name} & \alpha & \text{1st SL} & \text{Roll-off} \\
+          \text{Rectangular} & 1 & -13.3\ \text{dB} & 6\ \text{dB/oct} \\
+          \text{Hann} & 0.5 & -31.5\ \text{dB} & 18\ \text{dB/oct} \\
+          \text{Hamming} & 0.54 & -42.7\ \text{dB} & 6\ \text{dB/oct} \\
+          \end{array}$$
+        </div>
+      </div>
+
+      <p lang="en">
+        Main-lobe width is $8\pi/N$ for anything but pure rectangle. The
+        trade is always: first side lobe vs. asymptotic roll-off. If you
+        know where your interfering signals live, pick the window whose
+        <em>worst</em> side lobe is lowest in that band.
+      </p>
+      <p lang="zh">
+        除了純矩形外，主瓣寬都是 $8\pi/N$。取捨永遠是「第一旁瓣 vs. 漸進滾降」。若知道干擾訊號出現在哪一帶，就選在那一帶上<em>最壞</em>旁瓣最低的視窗。
+      </p>
+
+      <h2 lang="en">When each one wins</h2>
+      <h2 lang="zh">三者各贏的情境</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>Rectangular:</b> you want the narrowest possible main-lobe and don't mind $-13$ dB leakage (rare in audio).<br>
+            <b>Hann:</b> the best asymptotic roll-off ($18$ dB/oct) — interfering signals far from your peak are best suppressed. Default for STFT/audio.<br>
+            <b>Hamming:</b> lowest <em>first</em> side-lobe ($-43$ dB) at the cost of slower asymptotic decay — best when interference sits close to your peak.
+          </span>
+          <span lang="zh">
+            <b>矩形：</b>要最窄的主瓣、不介意 $-13$ dB 洩漏（音訊少用）。<br>
+            <b>Hann：</b>最佳漸進滾降（$18$ dB/oct）— 遠離峰的干擾壓制最好。STFT/音訊預設。<br>
+            <b>Hamming：</b><em>第一</em>旁瓣最低（$-43$ dB），代價是漸進衰減較慢 — 干擾接近峰時最適合。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>One formula $w[n]=\alpha-(1-\alpha)\cos(\tfrac{2\pi n}{N-1})$, three engineering trade-offs.</b> The 2-term cosine family is the simplest "tunable" window you can write down, and that simplicity is why it shows up so often.</p>
+        <p lang="zh"><b>一條公式 $w[n]=\alpha-(1-\alpha)\cos(\tfrac{2\pi n}{N-1})$、三種工程取捨。</b>兩項餘弦家族是你能寫下最簡單的「可調」視窗，簡單正是它到處出現的原因。</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Three windows, one plot</h3>
+        <h3 lang="zh">實驗 · 三視窗同圖對比</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:220px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="16" max="128" step="4" value="48"/>
+          <span class="val" id="nVal">48</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: three windows overlaid in time (blue rect, yellow Hann, pink Hamming). Bottom: their spectra in dB. Watch the first side-lobe level (height of the second bump from centre) and the asymptotic roll-off (slope toward $\pm\pi$).</p>
+          <p lang="zh">上：三視窗疊時域（藍=矩形、黃=Hann、粉=Hamming）。下：三者 dB 頻譜。注意第一旁瓣高度（中心第二個凸起）與漸進滾降（朝 $\pm\pi$ 的斜率）。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.2.4-matlab-hamming.html">◀ 4.2.4</a>
@@ -60,8 +109,109 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 48 };
+
+  function windows(){
+    const { N } = state;
+    const rect = new Float32Array(N), hann = new Float32Array(N), ham = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      rect[n] = 1;
+      hann[n] = 0.5 - 0.5 * Math.cos(2*Math.PI*n/(N-1));
+      ham[n]  = 0.54 - 0.46 * Math.cos(2*Math.PI*n/(N-1));
+    }
+    return { rect, hann, ham };
+  }
+
+  function plotStem(canvasId, arrs){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:32,r:10,t:14,b:22}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff';
+    const y0 = pad.t + ih*0.88;
+    ctx.beginPath(); ctx.moveTo(pad.l,y0); ctx.lineTo(W-pad.r,y0); ctx.stroke();
+    const N = arrs[0].data.length;
+    for (const { data, color } of arrs){
+      ctx.strokeStyle = color; ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      for (let n=0;n<N;n++){
+        const xp = pad.l + iw*n/(N-1), yp = y0 - ih*0.82 * data[n];
+        if (n===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+      }
+      ctx.stroke();
+    }
+    ctx.font='9px "Press Start 2P", monospace'; let lx = 10;
+    for (const { color, label } of arrs){ ctx.fillStyle = color; ctx.fillText(label, lx, 13); lx += 78; }
+  }
+
+  function plotDb(canvasId, arrs){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:14,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=8;g++){ const y=pad.t+ih*g/8; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+    const K = 512, omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const dBfloor = -80;
+    for (const { data, color } of arrs){
+      const { re, im } = DSP.dtft(data, omegas);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-6)));
+        const y = pad.t + ih*(1 - (db-dBfloor)/(0-dBfloor));
+        const x = pad.l + iw * i/(K-1);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('dB', 10, 12);
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){
+      const x = pad.l + iw*(v+Math.PI)/(2*Math.PI);
+      ctx.fillText(lbl, x-6, H-pad.b+14);
+    }
+  }
+
+  function redraw(){
+    const { rect, hann, ham } = windows();
+    plotStem('tCanvas', [
+      { data: rect, color:'#5aa0ff', label:'Rect' },
+      { data: hann, color:'#ffd95a', label:'Hann' },
+      { data: ham,  color:'#ff6aa0', label:'Hamming' },
+    ]);
+    plotDb('fCanvas', [
+      { data: rect, color:'#5aa0ff' },
+      { data: hann, color:'#ffd95a' },
+      { data: ham,  color:'#ff6aa0' },
+    ]);
+  }
+
+  $('nSlider').addEventListener('input', e => { state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

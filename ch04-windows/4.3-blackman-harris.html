@@ -30,24 +30,101 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Blackman_Harris_Window_Family.html" target="_blank">SASP §4.3 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="THREE OR FOUR COSINE TERMS">
-    <p lang="en">Generalize the two-term Hamming family to three or four cosines. More knobs → more zeros we can place on the side lobes of $W_R$. Result: ultra-low side lobes, at the cost of wider main lobes.</p>
-    <p lang="zh">把兩項 Hamming 家族推廣到三項或四項餘弦。多了旋鈕 → 可以在 $W_R$ 的旁瓣上放更多零。結果是旁瓣極低，代價是主瓣更寬。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THREE OR FOUR COSINE TERMS">
+        <p lang="en">Generalize the two-term Hamming family to three or four cosines. More knobs → more zeros we can place on the side lobes of $W_R(\omega)$. Result: ultra-low side lobes, at the cost of wider main lobes.</p>
+        <p lang="zh">把兩項 Hamming 家族推廣到三項或四項餘弦。多了旋鈕 → 可以在 $W_R(\omega)$ 旁瓣上放更多零點。結果：旁瓣極低，代價是主瓣更寬。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">GENERAL FORM</span>
-    <div>$$w[n]=\sum_{k=0}^{K-1}(-1)^{k}\,a_k\cos\!\left(\frac{2\pi k n}{N-1}\right)$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">K-TERM COSINE WINDOW</span>
+        <div>$$w[n]=\sum_{k=0}^{K-1}(-1)^{k}\,a_k\cos\!\left(\frac{2\pi k n}{N-1}\right)$$</div>
+      </div>
 
-  <ul>
-    <li lang="en">$K=2$ gives Hann (a₀=0.5, a₁=0.5) or Hamming (0.54, 0.46).</li>
-    <li lang="zh">$K=2$：Hann（0.5, 0.5）或 Hamming（0.54, 0.46）。</li>
-    <li lang="en">$K=3$ classical Blackman: (0.42, 0.5, 0.08). First side lobe $\approx -58$ dB.</li>
-    <li lang="zh">$K=3$ 經典 Blackman：(0.42, 0.5, 0.08)。第一旁瓣約 $-58$ dB。</li>
-    <li lang="en">$K=4$ Nuttall / Blackman-Harris with optimized $a_k$: $-74$ to $-92$ dB.</li>
-    <li lang="zh">$K=4$ Nuttall / Blackman-Harris（最佳化的 $a_k$）：$-74$ 到 $-92$ dB。</li>
-  </ul>
+      <h2 lang="en">Members at a glance</h2>
+      <h2 lang="zh">成員速覽</h2>
+
+      <div class="formula">
+        <div>
+          $$\begin{array}{lcccc}
+          \text{Window} & K & a_0 & a_1 & a_{k\ge 2} \\
+          \hline
+          \text{Hann}         & 2 & 0.5     & 0.5     & - \\
+          \text{Hamming}      & 2 & 0.54    & 0.46    & - \\
+          \text{Blackman}     & 3 & 0.42    & 0.50    & 0.08 \\
+          \text{3-term BH}    & 3 & 0.42323 & 0.49755 & 0.07922 \\
+          \text{Nuttall 3}    & 3 & 0.40897 & 0.5     & 0.09103 \\
+          \text{4-term BH}    & 4 & 0.35875 & 0.48829 & 0.14128,\,0.01168 \\
+          \end{array}$$
+        </div>
+      </div>
+
+      <h2 lang="en">Trade-offs</h2>
+      <h2 lang="zh">取捨</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            Each extra term places one more zero on the side-lobe envelope, pushing peak side-lobe down by $\sim 15$ dB. But the main-lobe width grows by about $4\pi/N$ per term added.<br>
+            <b>$K=2$</b>: main-lobe $8\pi/N$, first side-lobe $-31$ to $-43$ dB.<br>
+            <b>$K=3$</b>: main-lobe $12\pi/N$, first side-lobe $-58$ to $-71$ dB.<br>
+            <b>$K=4$</b>: main-lobe $16\pi/N$, first side-lobe $-74$ to $-92$ dB.
+          </span>
+          <span lang="zh">
+            每多一項就在旁瓣包絡多放一個零，第一旁瓣約降 $15$ dB。但主瓣每項加寬約 $4\pi/N$。<br>
+            <b>$K=2$</b>：主瓣 $8\pi/N$、第一旁瓣 $-31$ ～ $-43$ dB。<br>
+            <b>$K=3$</b>：主瓣 $12\pi/N$、第一旁瓣 $-58$ ～ $-71$ dB。<br>
+            <b>$K=4$</b>：主瓣 $16\pi/N$、第一旁瓣 $-74$ ～ $-92$ dB。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>More cosine terms = deeper side-lobes but wider main-lobes.</b> Blackman-Harris is the standard when analysing signals with very weak components close to strong ones.</p>
+        <p lang="zh"><b>餘弦項越多 → 旁瓣越深、主瓣越寬。</b>Blackman-Harris 是「強弱成分靠近」分析情境的標準選擇。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Going from Hann ($K=2$) to 4-term Blackman-Harris ($K=4$), the main-lobe width:</p>
+        <p lang="zh"><b>問：</b>從 Hann（$K=2$）換到 4-term Blackman-Harris（$K=4$），主瓣寬度：</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Roughly doubles ($8\pi/N$ → $16\pi/N$).</button>
+          <button data-correct="1" lang="zh">約翻倍（$8\pi/N$ → $16\pi/N$）。</button>
+          <button data-correct="0" lang="en">Stays the same.</button>
+          <button data-correct="0" lang="zh">不變。</button>
+          <button data-correct="0" lang="en">Halves.</button>
+          <button data-correct="0" lang="zh">減半。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Pick a family member, see its spectrum</h3>
+        <h3 lang="zh">實驗 · 選家族成員、看頻譜</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:240px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>Member</label>
+          <select id="memSel">
+            <option value="hann">Hann (K=2)</option>
+            <option value="ham">Hamming (K=2)</option>
+            <option value="blk" selected>Blackman (K=3)</option>
+            <option value="bh3">3-term BH (K=3)</option>
+            <option value="nut3">Nuttall 3 (K=3)</option>
+            <option value="bh4">4-term BH (K=4)</option>
+          </select>
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.2.6-mlt-sine.html">◀ 4.2.6</a>
@@ -56,8 +133,120 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { member: 'blk', N: 64 };
+  const coeffs = {
+    hann: [0.5, 0.5],
+    ham:  [0.54, 0.46],
+    blk:  [0.42, 0.50, 0.08],
+    bh3:  [0.42323, 0.49755, 0.07922],
+    nut3: [0.40897, 0.5, 0.09103],
+    bh4:  [0.35875, 0.48829, 0.14128, 0.01168],
+  };
+
+  function window(N, a){
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      let v = a[0];
+      for (let k=1;k<a.length;k++) v += (k%2===1?-1:1) * a[k] * Math.cos(2*Math.PI*k*n/(N-1));
+      w[n] = v;
+    }
+    return w;
+  }
+
+  function plotStem(canvasId, w){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:32,r:10,t:12,b:22}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    const y0 = pad.t + ih*0.88;
+    ctx.strokeStyle='#e6e6ff'; ctx.beginPath(); ctx.moveTo(pad.l,y0); ctx.lineTo(W-pad.r,y0); ctx.stroke();
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=2;
+    ctx.beginPath();
+    for (let n=0;n<w.length;n++){
+      const xp = pad.l+iw*n/(w.length-1), yp = y0 - ih*0.82 * w[n];
+      if (n===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+    }
+    ctx.stroke();
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('w[n], N='+state.N+' · '+state.member, 8, 14);
+  }
+
+  function plotDb(canvasId, w){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:14,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const K = 720;
+    const omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, omegas);
+    const mag = new Float32Array(K);
+    let mmax = 0;
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+    const dBfloor = -100;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=10;g++){ const y=pad.t+ih*g/10; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1.8;
+    ctx.beginPath();
+    for (let i=0;i<K;i++){
+      const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-6)));
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      const x = pad.l + iw*i/(K-1);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('|W(ω)| dB', 10, 12);
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  function redraw(){
+    const w = window(state.N, coeffs[state.member]);
+    plotStem('tCanvas', w);
+    plotDb('fCanvas', w);
+  }
+
+  $('memSel').addEventListener('change', e => { state.member = e.target.value; redraw(); });
+  $('nSlider').addEventListener('input', e => { state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Each extra term widens the main lobe by ~4π/N. K=2→4 doubles the width.</span><span lang="zh">🪙 金幣 +1！每多一項主瓣寬 ~4π/N。K=2→4 寬度翻倍。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Pick 4-term BH in the lab and compare its main-lobe width to Hann.</span><span lang="zh">✗ 在 lab 選 4-term BH，和 Hann 主瓣寬對比。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>
