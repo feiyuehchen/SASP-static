@@ -152,7 +152,7 @@ SASP-static/
 
 ---
 
-## 技術棧
+## 技術堆疊
 
 - **純 HTML + CSS + 原生 JS**（ES6，無框架）
 - **MathJax 3** CDN（SVG 輸出）
