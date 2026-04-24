@@ -30,51 +30,97 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Zero_Padding_Next_Higher_Power.html" target="_blank">SASP §3.17.3.2 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="WHY THE NEXT POWER OF 2?</div>">
-    <p lang="en">Radix-2 FFTs run in $O(M\log M)$ only when $M$ is a power of 2. Picking the next power of 2 above $N$ is the cheapest way to get fast spectra.</p>
-    <p lang="zh">Radix-2 FFT 只有在 $M$ 是 2 的冪次時才達到 $O(M\log M)$。把 $M$ 取在 $N$ 之上、最接近的 2 次冪，就能最便宜地得到快速頻譜。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="WHY THE NEXT POWER OF 2?">
+        <p lang="en">
+          <span class="term" data-en="Radix-2 FFT"
+            data-en-def="Cooley-Tukey FFT variant that divides the problem into even- and odd-indexed subproblems; only runs when M is a power of 2."
+            data-zh-def="Cooley-Tukey FFT 的一種，把問題切成偶/奇索引兩子問題；只能在 $M$ 為 2 次冪時執行。">Radix-2 FFTs</span>
+          run in $O(M\log M)$ only when $M$ is a power of 2. Picking the
+          next power of 2 above $N$ is the cheapest way to get fast
+          spectra.
+        </p>
+        <p lang="zh">
+          <span class="term" data-en="Radix-2 FFT"
+            data-en-def="Cooley-Tukey FFT variant that divides the problem into even- and odd-indexed subproblems; only runs when M is a power of 2."
+            data-zh-def="Cooley-Tukey FFT 的一種，把問題切成偶/奇索引兩子問題；只能在 $M$ 為 2 次冪時執行。">Radix-2 FFT</span>
+          只有在 $M$ 是 2 的冪次時才達到 $O(M\log M)$。把 $M$ 取在 $N$ 之上、最接近的 2 次冪是最便宜的快速頻譜方式。
+        </p>
+      </div>
 
-  <p lang="en">
-    Modern FFT libraries (FFTW, PocketFFT, cuFFT, etc.) handle
-    arbitrary composite sizes efficiently — for them, a power of 2 is not
-    mandatory, but powers of 2 (or "5-smooth" numbers) are usually still
-    the fastest. If you are writing your own radix-2 from scratch,
-    padding to a power of 2 is essentially required.
-  </p>
-  <p lang="zh">
-    現代 FFT 函式庫（FFTW、PocketFFT、cuFFT 等）對任意合數長度都很快 — 並不強制 2 的冪次，
-    但 2 次冪（或只有質因數 2、3、5 的數）通常還是最快。
-    若你自己實作 radix-2，補到 2 次冪幾乎是硬性要求。
-  </p>
+      <p lang="en">
+        Modern FFT libraries (FFTW, PocketFFT, cuFFT, etc.) handle
+        arbitrary composite sizes efficiently — for them, a power of 2 is
+        not mandatory, but powers of 2 (or
+        <span class="term" data-en="5-smooth number"
+          data-en-def="A positive integer whose prime factorisation contains only 2, 3, and 5. FFT-friendly sizes because mixed-radix algorithms handle them well."
+          data-zh-def="質因數只含 2、3、5 的正整數。mixed-radix FFT 對這類長度效能最佳。">5-smooth numbers</span>)
+        are usually still the fastest. If you write your own radix-2
+        from scratch, padding to a power of 2 is essentially required.
+      </p>
+      <p lang="zh">
+        現代 FFT 函式庫（FFTW、PocketFFT、cuFFT 等）對任意合數長度都很快 — 不強制 2 次冪，但 2 次冪（或
+        <span class="term" data-en="5-smooth number"
+          data-en-def="A positive integer whose prime factorisation contains only 2, 3, and 5. FFT-friendly sizes because mixed-radix algorithms handle them well."
+          data-zh-def="質因數只含 2、3、5 的正整數。mixed-radix FFT 對這類長度效能最佳。">5-smooth 數</span>）通常最快。若你自己實作 radix-2，補到 2 次冪幾乎必要。
+      </p>
 
-  <div class="formula">
-    <span class="label">PICK M</span>
-    <div>$$M\;=\;2^{\lceil\log_2 N\rceil}$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">PICK M</span>
+        <div>$$M\;=\;2^{\lceil\log_2 N\rceil}$$</div>
+      </div>
 
-  <p lang="en">
-    If you also want smoother spectral displays, use $M=2^{\lceil\log_2 N\rceil + k}$
-    with $k\in\{1,2,3\}$ for $2\times$, $4\times$, $8\times$ interpolation.
-  </p>
-  <p lang="zh">
-    如果想讓頻譜圖更平滑，取 $M=2^{\lceil\log_2 N\rceil + k}$，$k\in\{1,2,3\}$ 分別對應 $2\times$、$4\times$、$8\times$ 內插。
-  </p>
+      <p lang="en">
+        For smoother spectral displays, bump up by one or more powers:
+        $M=2^{\lceil\log_2 N\rceil + k}$ with $k\in\{1,2,3\}$ for
+        $2\times$, $4\times$, $8\times$ interpolation.
+      </p>
+      <p lang="zh">
+        若想讓頻譜圖更平滑，再往上取幾個 2 次冪：$M=2^{\lceil\log_2 N\rceil + k}$，$k\in\{1,2,3\}$ 分別對應 $2\times$、$4\times$、$8\times$ 內插。
+      </p>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> A window of 1000 samples. Smallest power-of-2 FFT length?</p>
-    <p lang="zh"><b>問：</b>視窗長 1000 樣本。最小的 2 次冪 FFT 長度是？</p>
-    <div class="choices">
-      <button data-correct="0" lang="en">512</button>
-      <button data-correct="0" lang="zh">512</button>
-      <button data-correct="1" lang="en">1024</button>
-      <button data-correct="1" lang="zh">1024</button>
-      <button data-correct="0" lang="en">2000</button>
-      <button data-correct="0" lang="zh">2000</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+      <div class="nes-box nes-box--yellow" data-label="CAVEAT">
+        <p lang="en">Bumping $M$ from $N$ to $2N$ costs about twice the FFT time; going to $8N$ costs about 11× (because $M\log M$). Check your real-time budget before defaulting to high padding.</p>
+        <p lang="zh">$M$ 從 $N$ 拉到 $2N$ 時 FFT 約慢 2 倍；$8N$ 慢約 11 倍（$M\log M$）。預設開大補零前先看即時預算。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Window 1000 samples. Smallest power-of-2 FFT length?</p>
+        <p lang="zh"><b>問：</b>視窗長 1000 樣本。最小的 2 次冪 FFT 長度？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">512</button>
+          <button data-correct="0" lang="zh">512</button>
+          <button data-correct="1" lang="en">1024</button>
+          <button data-correct="1" lang="zh">1024</button>
+          <button data-correct="0" lang="en">2000</button>
+          <button data-correct="0" lang="zh">2000</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · FFT cost vs. length</h3>
+        <h3 lang="zh">實驗 · FFT 計算量 vs. 長度</h3>
+
+        <canvas id="costCanvas" style="height:260px;"></canvas>
+
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="100" max="2000" step="50" value="1000"/>
+          <span class="val" id="nVal">1000</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Bars show the relative FFT cost ($\sim M\log_2 M$) at $M=N$ (no padding, blue), next power of 2 (yellow), $2\times$ (pink), $4\times$ (green), $8\times$ (purple). The red cross marks "not a power of 2" (generally slower in radix-2).</p>
+          <p lang="zh">長條顯示各 $M$ 的相對 FFT 成本（$\sim M\log_2 M$）：$M=N$（藍）、下個 2 次冪（黃）、$2\times$（粉）、$4\times$（綠）、$8\times$（紫）。紅叉代表「非 2 次冪」（radix-2 下通常較慢）。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -84,26 +130,84 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { N: 1000 };
+
+  function redraw(){
+    const N = state.N;
+    const nextPow2 = 1 << Math.ceil(Math.log2(N));
+    const cases = [
+      { label: 'N', M: N, color: '#5aa0ff', pow2: (N & (N-1))===0 },
+      { label: '2^k', M: nextPow2, color: '#ffd95a', pow2: true },
+      { label: '2×', M: nextPow2 * 2, color: '#ff6aa0', pow2: true },
+      { label: '4×', M: nextPow2 * 4, color: '#78d66a', pow2: true },
+      { label: '8×', M: nextPow2 * 8, color: '#c58cff', pow2: true },
+    ];
+    const costs = cases.map(c => c.M * Math.log2(c.M));
+    const cMax = Math.max(...costs);
+
+    const c = $('costCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:56,r:12,t:14,b:44}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=cases.length;g++){ const x=pad.l+iw*g/cases.length; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=5;g++){ const y=pad.t+ih*g/5; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+
+    const bw = iw / cases.length;
+    for (let i=0;i<cases.length;i++){
+      const c = cases[i];
+      const x = pad.l + iw*i/cases.length + bw*0.15;
+      const h = ih * costs[i]/cMax;
+      ctx.fillStyle = c.color;
+      ctx.fillRect(x, H-pad.b - h, bw*0.7, h);
+      // Label
+      ctx.fillStyle='#e6e6ff'; ctx.font='10px "Press Start 2P", monospace';
+      ctx.fillText(c.label, x + bw*0.1, H-pad.b + 14);
+      ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+      ctx.fillText('M='+c.M, x-2, H-pad.b + 28);
+      // relative cost
+      ctx.fillStyle='#e6e6ff';
+      ctx.fillText((costs[i]/costs[0]).toFixed(1)+'×', x + bw*0.05, H-pad.b - h - 4);
+      if (!c.pow2){
+        ctx.strokeStyle='#ff5a5a'; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(x+bw*0.2, H-pad.b - h - 10); ctx.lineTo(x+bw*0.5, H-pad.b - h - 20); ctx.moveTo(x+bw*0.5, H-pad.b - h - 10); ctx.lineTo(x+bw*0.2, H-pad.b - h - 20); ctx.stroke();
+      }
+    }
+
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('FFT cost ~ M log M (relative)', 10, 12);
+  }
+
+  $('nSlider').addEventListener('input', e=>{ state.N=parseInt(e.target.value,10); $('nVal').textContent=state.N; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! $2^{10}=1024$, the smallest power of 2 that holds 1000 samples.</span><span lang="zh">🪙 金幣 +1！$2^{10}=1024$，能裝下 1000 個樣本的最小 2 次冪。</span>';
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! $2^{10}=1024$, smallest power of 2 that holds 1000 samples.</span><span lang="zh">🪙 金幣 +1！$2^{10}=1024$，能裝下 1000 個樣本的最小 2 次冪。</span>';
       const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
       AudioKit.coin();
     } else {
-      fb.innerHTML = '<span lang="en">✗ $2^{10}=1024$; 512 is too small, 2000 is not a power of 2.</span><span lang="zh">✗ $2^{10}=1024$；512 太小，2000 不是 2 次冪。</span>';
+      fb.innerHTML = '<span lang="en">✗ $2^{10}=1024$; 512 too small, 2000 not a power of 2.</span><span lang="zh">✗ $2^{10}=1024$；512 太小，2000 不是 2 次冪。</span>';
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

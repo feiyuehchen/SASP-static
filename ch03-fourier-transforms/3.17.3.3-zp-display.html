@@ -30,44 +30,88 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Zero_Padding_Interpolating_Spectral_Displays.html" target="_blank">SASP §3.17.3.3 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="RULE OF THUMB">
-    <p lang="en">For a plot you can read with the eye, zero-pad so the FFT is 4× to 8× the window length.</p>
-    <p lang="zh">要畫出眼睛看得清楚的頻譜圖，補零讓 FFT 長度是視窗的 4× 到 8×。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="RULE OF THUMB">
+        <p lang="en">For a plot you can read with the eye, zero-pad so the FFT is 4× to 8× the window length.</p>
+        <p lang="zh">要畫出眼睛看得清楚的頻譜圖，補零讓 FFT 長度是視窗的 4× 到 8×。</p>
+      </div>
 
-  <p lang="en">
-    Without padding, the FFT samples are spaced at $2\pi/N$ — roughly the
-    Hann window's main-lobe <em>half</em>-width. You only get two samples
-    across a lobe, so every peak looks like a jagged zigzag. Padding to
-    $M=4N$ or $8N$ lays down 4 or 8 samples inside the same lobe and the
-    curve becomes smooth enough to read.
-  </p>
-  <p lang="zh">
-    不補零時，FFT 樣本間距是 $2\pi/N$ — 大約是 Hann 視窗主瓣<em>半</em>寬。
-    一個主瓣只有兩個樣本，每個峰都像鋸齒。
-    補零到 $M=4N$ 或 $8N$，同一個主瓣內有 4 或 8 個樣本，曲線就能一眼讀懂。
-  </p>
+      <p lang="en">
+        Without padding, the FFT samples are spaced at $2\pi/N$ — roughly
+        the Hann window's main-lobe <em>half</em>-width. Only two samples
+        across a lobe, so every peak looks like a jagged zigzag. Padding to
+        $M=4N$ or $8N$ lays down 4 or 8 samples inside the same lobe and
+        the curve becomes smooth enough to read.
+      </p>
+      <p lang="zh">
+        不補零時，FFT 樣本間距 $2\pi/N$ — 大約是 Hann 視窗主瓣<em>半</em>寬。
+        一個主瓣只有兩個樣本，每個峰像鋸齒。補零到 $M=4N$ 或 $8N$，同一主瓣內有 4 或 8 個樣本，
+        曲線就能一眼讀懂。
+      </p>
 
-  <div class="nes-box nes-box--yellow" data-label="COST-BENEFIT">
-    <p lang="en">FFT cost scales as $M\log M$. Going from $N$ to $8N$ multiplies the work by about 11×, which is usually fine for plots but might hurt real-time applications. Use the minimum $M$ you need for the decision you are making (display, peak picking, etc.).</p>
-    <p lang="zh">FFT 計算量是 $M\log M$。從 $N$ 變 $8N$ 大約變 11 倍，畫圖通常沒差；即時應用要注意。
-      依使用目的（顯示、找波峰…）挑剛好夠用的 $M$。</p>
-  </div>
+      <div class="nes-box nes-box--yellow" data-label="COST-BENEFIT">
+        <p lang="en">FFT cost scales as $M\log M$. Going from $N$ to $8N$ multiplies the work by about $11\times$, which is usually fine for plots but might hurt real-time applications. Use the minimum $M$ you need for the decision you are making (display, peak picking, etc.).</p>
+        <p lang="zh">FFT 計算量 $M\log M$。從 $N$ 變 $8N$ 約 $11\times$，畫圖沒差、即時應用要注意。依使用目的挑剛好夠用的 $M$。</p>
+      </div>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> You render a spectrogram of a 48 kHz recording with 1024-sample Hann frames, 75% overlap, and no zero padding. Frame-to-frame the plot looks jagged. What is the cheapest fix?</p>
-    <p lang="zh"><b>問：</b>48 kHz 錄音、1024 樣本 Hann frame、75% 重疊、不補零。頻譜圖看起來有鋸齒。最省工的修法？</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">Zero-pad each frame to 4096 before the FFT.</button>
-      <button data-correct="1" lang="zh">每個 frame 補零到 4096 再 FFT。</button>
-      <button data-correct="0" lang="en">Use a 4× longer window.</button>
-      <button data-correct="0" lang="zh">用 4 倍長的視窗。</button>
-      <button data-correct="0" lang="en">Raise the sample rate to 192 kHz.</button>
-      <button data-correct="0" lang="zh">把取樣率升到 192 kHz。</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+      <div class="formula" style="font-family:inherit;">
+        <span class="label">PADDING CHEAT SHEET</span>
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>Display:</b> $M = 4N\ldots 8N$ (smooth curves).<br>
+            <b>Peak picking:</b> $M = 2N$ + quadratic interpolation (see §3.17.3.4).<br>
+            <b>Convolution:</b> $M \ge N_x + N_h - 1$ (avoid circular wrap).<br>
+            <b>No change of behaviour:</b> $M = N$ (nothing happens).
+          </span>
+          <span lang="zh">
+            <b>顯示：</b>$M = 4N\ldots 8N$（曲線平滑）。<br>
+            <b>找波峰：</b>$M = 2N$ + 拋物線內插（見 §3.17.3.4）。<br>
+            <b>卷積：</b>$M \ge N_x + N_h - 1$（避免循環 wrap）。<br>
+            <b>不改變行為：</b>$M = N$（沒發生任何事）。
+          </span>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> 48 kHz recording, 1024-sample Hann frames, 75% overlap, no zero padding — the spectrogram looks jagged. Cheapest fix?</p>
+        <p lang="zh"><b>問：</b>48 kHz 錄音、1024 Hann frame、75% 重疊、不補零 — 聲譜圖鋸齒。最省工修法？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Zero-pad each frame to 4096 before the FFT.</button>
+          <button data-correct="1" lang="zh">每 frame 補零到 4096 再 FFT。</button>
+          <button data-correct="0" lang="en">Use a 4× longer window.</button>
+          <button data-correct="0" lang="zh">用 4 倍長的視窗。</button>
+          <button data-correct="0" lang="en">Raise the sample rate to 192 kHz.</button>
+          <button data-correct="0" lang="zh">把取樣率升到 192 kHz。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Jagged vs. smooth with padding factor</h3>
+        <h3 lang="zh">實驗 · 補零倍率對頻譜曲線的影響</h3>
+
+        <canvas id="zpCanvas" style="height:300px;"></canvas>
+
+        <div class="controls">
+          <label>N (window)</label>
+          <input type="range" id="nSlider" min="16" max="64" step="8" value="32"/>
+          <span class="val" id="nVal">32</span>
+          <label>Padding L (M = L·N)</label>
+          <input type="range" id="lSlider" min="1" max="8" step="1" value="1"/>
+          <span class="val" id="lVal">1</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Hann-windowed sinusoid at a non-integer bin, plotted as $|X[k]|$ after zero-padding to $M = L\cdot N$. At $L=1$ the plot is jagged (only the bin centres visible). Crank $L$ up to $4$ or $8$ and you can see the Hann's actual main-lobe shape and first side-lobes.</p>
+          <p lang="zh">在非整數 bin 的 Hann 加窗正弦波，補零到 $M = L\cdot N$ 後畫 $|X[k]|$。$L=1$ 時只看得到 bin 中心、圖形鋸齒。拉到 $4$ 或 $8$，Hann 的主波瓣形狀與第一旁波瓣都畫得清清楚楚。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -77,26 +121,93 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { N: 32, L: 1 };
+
+  function redraw(){
+    const { N, L } = state;
+    const M = N * L;
+    const w = DSP.hannWindow(N);
+    const x = new Float32Array(M);
+    const fbin = N/4 + 0.3;  // non-integer bin
+    for (let n=0;n<N;n++) x[n] = Math.cos(2*Math.PI*fbin*n/N) * w[n];
+
+    const re = new Float32Array(M), im = new Float32Array(M);
+    for (let k=0;k<M;k++){
+      let rr=0, ii=0;
+      for (let n=0;n<M;n++){
+        const ang = -2*Math.PI*k*n/M;
+        rr += x[n]*Math.cos(ang);
+        ii += x[n]*Math.sin(ang);
+      }
+      re[k]=rr; im[k]=ii;
+    }
+    const mag = new Float32Array(M);
+    let mmax = 0;
+    for (let k=0;k<M;k++){ mag[k] = Math.hypot(re[k], im[k]); if (mag[k] > mmax) mmax = mag[k]; }
+
+    const c = $('zpCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:40,r:12,t:14,b:26}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const maxBin = Math.min(M, Math.floor(M*0.6));
+    const yTo = v => pad.t + ih * (1 - v/(mmax*1.1));
+    const xTo = i => pad.l + iw * i/(maxBin-1);
+
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=6;g++){ const y=pad.t+ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+
+    // line
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1.8;
+    ctx.beginPath();
+    for (let k=0;k<maxBin;k++){
+      const xp=xTo(k), yp=yTo(mag[k]);
+      if (k===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+    }
+    ctx.stroke();
+    // dots at each bin
+    ctx.fillStyle='#ffd95a';
+    for (let k=0;k<maxBin;k++){
+      const xp=xTo(k), yp=yTo(mag[k]);
+      ctx.beginPath(); ctx.arc(xp, yp, 2.2, 0, 2*Math.PI); ctx.fill();
+    }
+
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('|X[k]| - N='+N+' M='+M+' (L='+L+')', 8, 12);
+    ctx.fillText('k', W-16, H-8);
+  }
+
+  $('nSlider').addEventListener('input', e=>{ state.N=parseInt(e.target.value,10); $('nVal').textContent=state.N; redraw(); });
+  $('lSlider').addEventListener('input', e=>{ state.L=parseInt(e.target.value,10); $('lVal').textContent=state.L; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! A longer window would change resolution; raising fs does not help. Padding is the cheap display fix.</span><span lang="zh">🪙 金幣 +1！更長的視窗會改變解析度；升取樣率也沒用。補零才是便宜的顯示修法。</span>';
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Longer window changes resolution; higher fs doesn\'t help. Padding is the cheap display fix.</span><span lang="zh">🪙 金幣 +1！更長視窗改變解析度；升取樣率無用。補零才是便宜的顯示修法。</span>';
       const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
       AudioKit.coin();
     } else {
-      fb.innerHTML = '<span lang="en">✗ You want a smoother curve, not more time-domain data.</span><span lang="zh">✗ 你要的是曲線更平滑，不是更多時域資料。</span>';
+      fb.innerHTML = '<span lang="en">✗ You want a smoother curve, not more time-domain data.</span><span lang="zh">✗ 你要曲線更平滑，不是更多時域資料。</span>';
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

@@ -30,60 +30,87 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Index_Ranges_Zero_Phase_Zero_Padding.html" target="_blank">SASP §3.17.4.2 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="THE BOOK-KEEPING">
-    <p lang="en">Odd and even window lengths need slightly different splits. Here is a cheat sheet that always works.</p>
-    <p lang="zh">奇數與偶數視窗長度的拆法略有不同。這頁是永遠正確的速查表。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THE BOOK-KEEPING">
+        <p lang="en">Odd and even window lengths need slightly different splits. Here is a cheat sheet that always works.</p>
+        <p lang="zh">奇數與偶數視窗長度的拆法略有不同。這是永遠正確的速查表。</p>
+      </div>
 
-  <h2 lang="en">Even window length $N$</h2>
-  <h2 lang="zh">偶數長度 $N$</h2>
+      <h2 lang="en">Even window length $N$</h2>
+      <h2 lang="zh">偶數長度 $N$</h2>
 
-  <p lang="en">Assume the centred window is indexed $n\in\{-N/2,\ldots,N/2-1\}$.</p>
-  <p lang="zh">假設中心化視窗索引為 $n\in\{-N/2,\ldots,N/2-1\}$。</p>
+      <p lang="en">Assume the centred window is indexed $n\in\{-N/2,\ldots,N/2-1\}$. Layout:</p>
+      <p lang="zh">中心化視窗索引 $n\in\{-N/2,\ldots,N/2-1\}$。排法：</p>
 
-  <ul>
-    <li lang="en">$w[0\ldots N/2-1]$ → buffer positions $0\ldots N/2-1$.</li>
-    <li lang="zh">$w[0\ldots N/2-1]$ → buffer 位置 $0\ldots N/2-1$。</li>
-    <li lang="en">$w[-N/2\ldots-1]$ → buffer positions $M-N/2\ldots M-1$.</li>
-    <li lang="zh">$w[-N/2\ldots-1]$ → buffer 位置 $M-N/2\ldots M-1$。</li>
-    <li lang="en">Zeros fill the gap $N/2\ldots M-N/2-1$.</li>
-    <li lang="zh">零填入 $N/2\ldots M-N/2-1$。</li>
-  </ul>
+      <ul>
+        <li lang="en">$w[0\ldots N/2-1]$ → buffer positions $0\ldots N/2-1$.</li>
+        <li lang="zh">$w[0\ldots N/2-1]$ → buffer 位置 $0\ldots N/2-1$。</li>
+        <li lang="en">$w[-N/2\ldots-1]$ → buffer positions $M-N/2\ldots M-1$.</li>
+        <li lang="zh">$w[-N/2\ldots-1]$ → buffer 位置 $M-N/2\ldots M-1$。</li>
+        <li lang="en">Zeros fill the gap $N/2\ldots M-N/2-1$.</li>
+        <li lang="zh">零填入 $N/2\ldots M-N/2-1$。</li>
+      </ul>
 
-  <h2 lang="en">Odd window length $N$</h2>
-  <h2 lang="zh">奇數長度 $N$</h2>
+      <h2 lang="en">Odd window length $N$</h2>
+      <h2 lang="zh">奇數長度 $N$</h2>
 
-  <p lang="en">Centred indexing $n\in\{-(N-1)/2,\ldots,(N-1)/2\}$.</p>
-  <p lang="zh">中心化索引 $n\in\{-(N-1)/2,\ldots,(N-1)/2\}$。</p>
+      <p lang="en">Centred indexing $n\in\{-(N-1)/2,\ldots,(N-1)/2\}$. Layout:</p>
+      <p lang="zh">中心化索引 $n\in\{-(N-1)/2,\ldots,(N-1)/2\}$。排法：</p>
 
-  <ul>
-    <li lang="en">$w[0\ldots (N-1)/2]$ → buffer $0\ldots(N-1)/2$.</li>
-    <li lang="zh">$w[0\ldots(N-1)/2]$ → buffer $0\ldots(N-1)/2$。</li>
-    <li lang="en">$w[-(N-1)/2\ldots-1]$ → buffer $M-(N-1)/2\ldots M-1$.</li>
-    <li lang="zh">$w[-(N-1)/2\ldots-1]$ → buffer $M-(N-1)/2\ldots M-1$。</li>
-    <li lang="en">Zeros fill $((N-1)/2)+1\ldots M-(N-1)/2-1$.</li>
-    <li lang="zh">零填入 $((N-1)/2)+1\ldots M-(N-1)/2-1$。</li>
-  </ul>
+      <ul>
+        <li lang="en">$w[0\ldots (N-1)/2]$ → buffer $0\ldots(N-1)/2$.</li>
+        <li lang="zh">$w[0\ldots(N-1)/2]$ → buffer $0\ldots(N-1)/2$。</li>
+        <li lang="en">$w[-(N-1)/2\ldots-1]$ → buffer $M-(N-1)/2\ldots M-1$.</li>
+        <li lang="zh">$w[-(N-1)/2\ldots-1]$ → buffer $M-(N-1)/2\ldots M-1$。</li>
+        <li lang="en">Zeros fill $((N-1)/2)+1\ldots M-(N-1)/2-1$.</li>
+        <li lang="zh">零填入 $((N-1)/2)+1\ldots M-(N-1)/2-1$。</li>
+      </ul>
 
-  <div class="nes-box nes-box--yellow" data-label="RULE OF THUMB">
-    <p lang="en">If you are unsure, test with a known symmetric signal (e.g. a Hann window). The FFT output should be real (imag part ≈ 0 to machine precision).</p>
-    <p lang="zh">不確定時，用已知對稱訊號（例如 Hann 視窗）測試。FFT 輸出應該是實數（虛部 ≈ 機器精度）。</p>
-  </div>
+      <div class="nes-box nes-box--yellow" data-label="ACID TEST">
+        <p lang="en">After correct zero-phase padding of a real symmetric window, the FFT imaginary part should be $\le$ machine epsilon ($\sim 10^{-15}$ in double precision). If not, you have an off-by-one in one of the index ranges.</p>
+        <p lang="zh">正確完成對稱實視窗的零相位補零後，FFT 虛部應 $\le$ 機器 epsilon（雙精度約 $10^{-15}$）。不是就代表某個索引 off-by-one。</p>
+      </div>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> After correct zero-phase padding of a symmetric real window, what should $\max_k|\operatorname{Im}X[k]|$ be?</p>
-    <p lang="zh"><b>問：</b>正確完成對稱實視窗的零相位補零後，$\max_k|\operatorname{Im}X[k]|$ 應該是？</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">Essentially machine epsilon (≈ 1e-15 in double precision).</button>
-      <button data-correct="1" lang="zh">大約機器誤差（雙精度 ≈ 1e-15）。</button>
-      <button data-correct="0" lang="en">About half the maximum magnitude.</button>
-      <button data-correct="0" lang="zh">約為最大振幅的一半。</button>
-      <button data-correct="0" lang="en">Growing with $M$.</button>
-      <button data-correct="0" lang="zh">隨 $M$ 變大。</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> After correct zero-phase padding of a symmetric real window, what should $\max_k|\operatorname{Im}X[k]|$ be?</p>
+        <p lang="zh"><b>問：</b>正確完成對稱實視窗的零相位補零後，$\max_k|\operatorname{Im}X[k]|$ 應該是？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Essentially machine epsilon (≈ 1e-15 in double precision).</button>
+          <button data-correct="1" lang="zh">大約機器誤差（雙精度 ≈ 1e-15）。</button>
+          <button data-correct="0" lang="en">About half the maximum magnitude.</button>
+          <button data-correct="0" lang="zh">約為最大振幅的一半。</button>
+          <button data-correct="0" lang="en">Growing with $M$.</button>
+          <button data-correct="0" lang="zh">隨 $M$ 變大。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Buffer layout visualizer</h3>
+        <h3 lang="zh">實驗 · 緩衝區排法視覺化</h3>
+
+        <canvas id="layoutCanvas" style="height:220px;"></canvas>
+
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="5" max="21" step="1" value="9"/>
+          <span class="val" id="nVal">9</span>
+          <label>M</label>
+          <input type="range" id="mSlider" min="16" max="32" step="1" value="24"/>
+          <span class="val" id="mVal">24</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Coloured blocks: the $M$-point buffer. Yellow = right half of the window ($w[0\ldots]$); pink = left half ($w[-\cdot]$) wrapped to the end; grey = zeros in the middle. Symmetric input → buffer is symmetric about $n=0$ modulo $M$ → FFT output is real.</p>
+          <p lang="zh">彩色方塊：$M$ 點緩衝區。黃 = 視窗右半（$w[0\ldots]$）；粉 = 左半（$w[-\cdot]$）繞到末端；灰 = 中間零段。對稱輸入 → 緩衝區對 $n=0$（mod $M$）對稱 → FFT 輸出為實數。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -93,19 +120,63 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { N: 9, M: 24 };
+
+  function redraw(){
+    const { N, M } = state;
+    if (N > M) return;
+    const c = $('layoutCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:24,r:12,t:30,b:40}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const bw = iw / M;
+    const bh = ih * 0.6;
+    const y0 = pad.t + ih*0.3;
+
+    const halfR = N % 2 === 0 ? N/2 : (N-1)/2 + 1;
+    const halfL = N - halfR;
+
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('buffer index m', pad.l, pad.t-10);
+
+    for (let i=0;i<M;i++){
+      const x = pad.l + i*bw;
+      let color, label;
+      if (i < halfR){ color='#ffd95a'; label='w['+i+']'; }
+      else if (i >= M - halfL){ color='#ff6aa0'; label='w['+(i-M)+']'; }
+      else { color='#44445a'; label='0'; }
+      ctx.fillStyle = color;
+      ctx.fillRect(x+1, y0, bw-2, bh);
+      ctx.fillStyle='#0b0c1a'; ctx.font='9px "Press Start 2P", monospace';
+      // index below
+      ctx.fillText(i, x + bw*0.2, y0 + bh + 14);
+    }
+    // legend
+    ctx.fillStyle='#ffd95a'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('■ right half', 10, 18);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('■ left half (wrapped)', 120, 18);
+    ctx.fillStyle='#44445a'; ctx.fillText('■ zeros', 310, 18);
+  }
+
+  $('nSlider').addEventListener('input', e=>{ state.N=parseInt(e.target.value,10); $('nVal').textContent=state.N; redraw(); });
+  $('mSlider').addEventListener('input', e=>{ state.M=parseInt(e.target.value,10); $('mVal').textContent=state.M; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! That is the acid test — real-even input should give numerically real output.</span><span lang="zh">🪙 金幣 +1！這是判斷對錯的標準 — 實偶輸入應給出在數值意義下的實輸出。</span>';
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! That is the acid test — real-even input gives numerically real output.</span><span lang="zh">🪙 金幣 +1！標準測試 — 實偶輸入給出（數值上）實輸出。</span>';
       const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
       AudioKit.coin();
     } else {
@@ -113,6 +184,9 @@
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

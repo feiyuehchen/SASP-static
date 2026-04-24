@@ -30,39 +30,87 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Practical_Zero_Padding.html" target="_blank">SASP §3.17.3.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="POINTS TO WATCH">
-    <p lang="en">Zero padding is routine — a few tiny pitfalls to keep in mind.</p>
-    <p lang="zh">補零很日常，但有幾個小陷阱要避開。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="POINTS TO WATCH">
+        <p lang="en">Zero padding is routine — a few tiny pitfalls to keep in mind.</p>
+        <p lang="zh">補零很日常，但有幾個小陷阱要避開。</p>
+      </div>
 
-  <ul>
-    <li lang="en"><b>Pad <em>after</em> windowing</b>, not before. Windowing a zero-padded signal can taper the zeros, which ruins the spectrum.</li>
-    <li lang="zh"><b>先加視窗，再補零</b>，不能反過來。先補零再加窗會把補上的零也弄成斜坡，毀掉頻譜。</li>
+      <h2 lang="en">Four common mistakes</h2>
+      <h2 lang="zh">四個常見錯誤</h2>
 
-    <li lang="en"><b>Match the zero sample values to the DC assumption</b>. If your signal has a non-zero DC component, padding with zeros introduces an edge. Subtract the mean first if you care.</li>
-    <li lang="zh"><b>補零值要與 DC 假設一致</b>。訊號有非零平均值時補零會產生邊緣。在意的話就先扣平均。</li>
+      <ol>
+        <li lang="en"><b>Pad <em>after</em> windowing</b>, not before. Windowing a zero-padded signal can taper the zeros, which distorts the frame.</li>
+        <li lang="zh"><b>先加窗、再補零</b>，不要顛倒。補零後才加窗會把零段也拉成斜坡，毀掉 frame。</li>
 
-    <li lang="en"><b>Amplitude scaling depends on convention</b>. Some libraries scale the FFT output by $1/M$, others by $1/\sqrt{M}$, others not at all. Padding does not change the scaling, but check what your tool does.</li>
-    <li lang="zh"><b>振幅縮放要看函式庫約定</b>。有的 FFT 輸出除以 $M$、有的除以 $\sqrt{M}$、有的不除。補零不改變縮放，但先查清楚你用的工具。</li>
+        <li lang="en"><b>Match the zero sample values to the DC assumption.</b> If the signal has a non-zero DC component, padding with zeros introduces an edge. Subtract the mean first if you care.</li>
+        <li lang="zh"><b>補零值要與 DC 假設一致。</b>訊號有非零平均時補零會產生邊緣。在意就先扣平均。</li>
 
-    <li lang="en"><b>Padding hides leakage, not eliminates it</b>. The leakage shape is set by your window, not by the FFT length.</li>
-    <li lang="zh"><b>補零只是把洩漏畫得清楚，不會消除洩漏</b>。洩漏形狀由視窗決定，與 FFT 長度無關。</li>
-  </ul>
+        <li lang="en"><b>Amplitude scaling depends on convention.</b> Some libraries scale by $1/M$, others by $1/\sqrt{M}$, others not at all. Padding does not change the scaling — but check what your tool does.</li>
+        <li lang="zh"><b>振幅縮放看函式庫慣例。</b>有的除以 $M$、有的除以 $\sqrt{M}$、有的不除。補零不改變縮放，但先查清楚你用的工具。</li>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> You take a length-512 Hann-windowed frame, zero-pad to 4096, then FFT. The Hann window's main-lobe width in the spectrum is:</p>
-    <p lang="zh"><b>問：</b>長度 512 的 Hann 加窗片段，補零到 4096 後 FFT。Hann 視窗在頻譜中的主瓣寬度是：</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">Still set by $N=512$ (≈ $8\pi/512$ wide).</button>
-      <button data-correct="1" lang="zh">仍由 $N=512$ 決定（約 $8\pi/512$ 寬）。</button>
-      <button data-correct="0" lang="en">Now 8× narrower, because the FFT is 8× longer.</button>
-      <button data-correct="0" lang="zh">變窄 8 倍，因為 FFT 長 8 倍。</button>
-      <button data-correct="0" lang="en">Zero — padding removes leakage.</button>
-      <button data-correct="0" lang="zh">是零 — 補零消除洩漏。</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+        <li lang="en"><b>Padding hides leakage, not eliminates it.</b> The leakage shape is set by your window, not by the FFT length.</li>
+        <li lang="zh"><b>補零只是把洩漏畫得清楚，不會消除洩漏。</b>洩漏形狀由視窗決定，與 FFT 長度無關。</li>
+      </ol>
+
+      <h2 lang="en">What zero-padding does and doesn't do</h2>
+      <h2 lang="zh">補零做了什麼、沒做什麼</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>DOES:</b> Sample the DTFT more densely; make plots smooth; enable peak interpolation; prevent circular-convolution artefacts in FFT-based filtering.<br>
+            <b>DOES NOT:</b> Increase frequency resolution (that's window length); reduce spectral leakage (that's window shape); add information (just interpolation).
+          </span>
+          <span lang="zh">
+            <b>做了：</b>更密地取樣 DTFT；讓圖變平滑；支援峰值內插；在 FFT 濾波時避免循環卷積瑕疵。<br>
+            <b>沒做：</b>提升頻率解析度（那是視窗長度）；降低頻譜洩漏（那是視窗形狀）；加進任何新資訊（只是內插）。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Zero padding = sampling the DTFT more densely.</b> It changes the <em>display</em> of the spectrum without changing the underlying <em>information</em>.</p>
+        <p lang="zh"><b>補零 = 更密地取樣 DTFT。</b>改變的是頻譜的<em>顯示</em>，不改變底層的<em>資訊</em>。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Length-512 Hann-windowed frame, zero-padded to 4096 then FFT'd. The Hann window's main-lobe width in the spectrum is:</p>
+        <p lang="zh"><b>問：</b>長度 512 Hann 加窗片段、補零到 4096 後 FFT。Hann 視窗在頻譜中的主瓣寬度是？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Still set by $N=512$ (≈ $8\pi/512$ wide).</button>
+          <button data-correct="1" lang="zh">仍由 $N=512$ 決定（約 $8\pi/512$ 寬）。</button>
+          <button data-correct="0" lang="en">Now 8× narrower, because the FFT is 8× longer.</button>
+          <button data-correct="0" lang="zh">變窄 8 倍，因為 FFT 長 8 倍。</button>
+          <button data-correct="0" lang="en">Zero — padding removes leakage.</button>
+          <button data-correct="0" lang="zh">是零 — 補零消除洩漏。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Same window, different padding</h3>
+        <h3 lang="zh">實驗 · 同視窗、不同補零</h3>
+
+        <canvas id="compareCanvas" style="height:300px;"></canvas>
+
+        <div class="controls">
+          <label>N (window length)</label>
+          <input type="range" id="nSlider" min="16" max="64" step="8" value="32"/>
+          <span class="val" id="nVal">32</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Blue: Hann window's DTFT (continuous truth). Three marker sets show FFT samples at $M=N$ (●), $M=2N$ (▲), $M=4N$ (✚). Notice all markers sit on the same curve — padding changes where we <em>sample</em> the spectrum, not the spectrum itself.</p>
+          <p lang="zh">藍：Hann 視窗的 DTFT（連續真相）。三組標記分別為 $M=N$（●）、$M=2N$（▲）、$M=4N$（✚）的 FFT 樣本。所有標記皆落在同一曲線 — 補零只改變<em>取樣位置</em>，不改變頻譜。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -72,13 +120,100 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { N: 32 };
+
+  function redraw(){
+    const N = state.N;
+    const w = DSP.hannWindow(N);
+    const c = $('compareCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:40,r:12,t:14,b:26}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+
+    // underlying DTFT of w
+    const K = 1024;
+    const omegas = new Float32Array(K);
+    for (let i=0;i<K;i++) omegas[i] = 2*Math.PI*i/K;
+    const dt = DSP.dtft(w, omegas);
+    const dtmag = new Float32Array(K);
+    let mmax=0;
+    for (let i=0;i<K;i++){ dtmag[i] = Math.hypot(dt.re[i], dt.im[i]); if (dtmag[i] > mmax) mmax = dtmag[i]; }
+    const showRange = 0.3; // show omega in [0, 0.3 * 2π]
+    const maxI = Math.floor(K * showRange);
+    const yTo = v => pad.t + ih * (1 - v / (mmax*1.1));
+    const xTo = i => pad.l + iw * i / maxI;
+
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=6;g++){ const y=pad.t+ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+
+    // blue curve
+    ctx.strokeStyle='#5aa0ff'; ctx.lineWidth=2;
+    ctx.beginPath();
+    for (let i=0;i<maxI;i++){ const xp=xTo(i), yp=yTo(dtmag[i]); if(i===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp); }
+    ctx.stroke();
+
+    // padded FFT samples at M = N, 2N, 4N
+    const configs = [
+      { M: N, color: '#ffd95a', shape: 'circle' },
+      { M: 2*N, color: '#ff6aa0', shape: 'triangle' },
+      { M: 4*N, color: '#78d66a', shape: 'plus' }
+    ];
+    for (const cfg of configs){
+      const M = cfg.M;
+      // compute FFT of padded w
+      const wp = new Float32Array(M);
+      for (let n=0;n<N;n++) wp[n] = w[n];
+      const re = new Float32Array(M), im = new Float32Array(M);
+      for (let k=0;k<M;k++){
+        let rr=0, ii=0;
+        for (let n=0;n<M;n++){
+          const ang = -2*Math.PI*k*n/M;
+          rr += wp[n]*Math.cos(ang);
+          ii += wp[n]*Math.sin(ang);
+        }
+        re[k]=rr; im[k]=ii;
+      }
+      ctx.fillStyle = cfg.color;
+      ctx.strokeStyle = cfg.color; ctx.lineWidth=1.5;
+      for (let k=0;k<M;k++){
+        const omega = 2*Math.PI*k/M;
+        if (omega > showRange * 2*Math.PI) break;
+        const i = omega / (2*Math.PI) * K;
+        const xp = xTo(i);
+        const mag = Math.hypot(re[k], im[k]);
+        const yp = yTo(mag);
+        if (cfg.shape === 'circle'){
+          ctx.beginPath(); ctx.arc(xp, yp, 4, 0, 2*Math.PI); ctx.fill();
+        } else if (cfg.shape === 'triangle'){
+          ctx.beginPath(); ctx.moveTo(xp, yp-5); ctx.lineTo(xp-4, yp+3); ctx.lineTo(xp+4, yp+3); ctx.closePath(); ctx.fill();
+        } else {
+          ctx.beginPath(); ctx.moveTo(xp-5, yp); ctx.lineTo(xp+5, yp); ctx.moveTo(xp, yp-5); ctx.lineTo(xp, yp+5); ctx.stroke();
+        }
+      }
+    }
+    // legend
+    ctx.fillStyle='#ffd95a'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('● M=N', 10, 18);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('▲ M=2N', 80, 18);
+    ctx.fillStyle='#78d66a'; ctx.fillText('✚ M=4N', 160, 18);
+    ctx.fillStyle='#8f8fa8'; ctx.fillText('ω', W-16, H-8);
+  }
+
+  $('nSlider').addEventListener('input', e=>{ state.N=parseInt(e.target.value,10); $('nVal').textContent=state.N; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
@@ -92,6 +227,9 @@
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>
