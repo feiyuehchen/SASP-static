@@ -30,29 +30,81 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Chebyshev_Polynomials.html" target="_blank">SASP §4.10.4.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="THE BUILDING BLOCK">
-    <p lang="en">$T_n(x)=\cos(n\cos^{-1} x)$ on $[-1,1]$. Stretches into $\cosh(n\cosh^{-1} x)$ for $|x|>1$. Within $[-1,1]$ it oscillates between $-1$ and $+1$ exactly $n$ times — that "equal ripple" is the whole trick.</p>
-    <p lang="zh">在 $[-1,1]$ 上 $T_n(x)=\cos(n\cos^{-1} x)$；$|x|>1$ 時延伸為 $\cosh(n\cosh^{-1} x)$。
-      在 $[-1,1]$ 內它在 $\pm 1$ 之間剛好震盪 $n$ 次 — 「等漣波」的精華就在這裡。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THE BUILDING BLOCK">
+        <p lang="en">$T_n(x)=\cos(n\cos^{-1} x)$ on $[-1,1]$. For $|x|>1$ the outer arccos becomes arccosh, giving $\cosh(n\cosh^{-1}x)$ — which grows without bound. Within $[-1,1]$, $T_n$ oscillates between $-1$ and $+1$ exactly $n$ times — the "equal ripple" property is the whole trick.</p>
+        <p lang="zh">在 $[-1,1]$ 上 $T_n(x)=\cos(n\cos^{-1} x)$；$|x|>1$ 時外層 arccos 變為 arccosh，得 $\cosh(n\cosh^{-1}x)$ — 會無界增長。在 $[-1,1]$ 內 $T_n$ 在 $\pm 1$ 間恰好震盪 $n$ 次 — 「等漣波」就在這裡。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">THREE EQUIVALENT FORMS</span>
-    <div>
-      $$T_n(x)=\begin{cases}\cos(n\cos^{-1}x),& |x|\le 1\\ \cosh(n\cosh^{-1}x),& |x|>1\\ \tfrac{1}{2}\bigl[(x+\sqrt{x^2-1})^n+(x-\sqrt{x^2-1})^n\bigr], & \text{always}\end{cases}$$
-    </div>
-  </div>
+      <div class="formula">
+        <span class="label">THREE EQUIVALENT FORMS</span>
+        <div>
+          $$T_n(x)=\begin{cases}\cos(n\cos^{-1}x),& |x|\le 1\\ \cosh(n\cosh^{-1}x),& |x|>1\\ \tfrac{1}{2}\bigl[(x+\sqrt{x^2-1})^n+(x-\sqrt{x^2-1})^n\bigr],& \text{always}\end{cases}$$
+        </div>
+      </div>
 
-  <p lang="en">
-    Minimax property: $T_n$ is the polynomial of degree $n$ with leading
-    coefficient fixed that minimises $\max_{x\in[-1,1]}|T_n(x)|$. This is
-    the reason Chebyshev-based window designs are optimal for equal-
-    ripple side lobes.
-  </p>
-  <p lang="zh">
-    Minimax 性質：在次數 $n$、首項係數固定的多項式中，$T_n$ 使 $\max_{x\in[-1,1]}|T_n(x)|$ 最小。
-    這就是 Chebyshev 視窗在等漣波準則下最佳的原因。
-  </p>
+      <div class="formula">
+        <span class="label">RECURSION</span>
+        <div>$$T_0(x)=1,\quad T_1(x)=x,\quad T_{n+1}(x)=2x\,T_n(x)-T_{n-1}(x)$$</div>
+      </div>
+
+      <p lang="en">
+        The recursion is what numerical libraries actually use — trig/hyperbolic forms are algebraic identities but suffer cancellation near $|x|=1$.
+      </p>
+      <p lang="zh">
+        數值程式庫實際使用的是遞推式 — 三角／雙曲形式為代數等式，但在 $|x|=1$ 附近有消去誤差。
+      </p>
+
+      <h2 lang="en">Minimax property</h2>
+      <h2 lang="zh">Minimax 性質</h2>
+
+      <p lang="en">
+        Among all degree-$n$ polynomials with leading coefficient $2^{n-1}$, $T_n$ is the one that minimises $\max_{x\in[-1,1]}|T_n(x)|$ — that minimum value is exactly $1$. This is Chebyshev's theorem and is the single most important fact about these polynomials.
+      </p>
+      <p lang="zh">
+        在所有首項係數為 $2^{n-1}$ 的 $n$ 次多項式中，$T_n$ 使 $\max_{x\in[-1,1]}|T_n(x)|$ 最小，該最小值恰為 $1$。這就是 Chebyshev 定理，也是這些多項式最重要的性質。
+      </p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Equal ripple = equal sign errors.</b> $T_n$ hits $\pm 1$ exactly $n+1$ times on $[-1,1]$, alternating sign. This alternation is what makes it the minimax solution and transfers directly to the window spectrum.</p>
+        <p lang="zh"><b>等漣波 ＝ 等號誤差。</b>$T_n$ 在 $[-1,1]$ 恰好 $n+1$ 次觸及 $\pm 1$、正負交替。這種交替使它成為 minimax 解、並直接搬到視窗頻譜上。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> How many times does $T_5(x)$ touch $\pm 1$ on $[-1, 1]$?</p>
+        <p lang="zh"><b>問：</b>$T_5(x)$ 在 $[-1, 1]$ 上觸及 $\pm 1$ 幾次？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">6 times (= n + 1).</button>
+          <button data-correct="1" lang="zh">6 次（= n + 1）。</button>
+          <button data-correct="0" lang="en">5 times.</button>
+          <button data-correct="0" lang="zh">5 次。</button>
+          <button data-correct="0" lang="en">Twice (at x = ±1).</button>
+          <button data-correct="0" lang="zh">2 次（在 x = ±1）。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · $T_n(x)$</h3>
+        <h3 lang="zh">實驗 · $T_n(x)$</h3>
+        <canvas id="pCanvas" style="height:320px;"></canvas>
+        <div class="controls">
+          <label>n</label>
+          <input type="range" id="nSlider" min="1" max="12" step="1" value="5"/>
+          <span class="val" id="nVal">5</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">On $[-1,1]$: $T_n$ oscillates between $\pm 1$, $n$ half-cycles. Outside $[-1,1]$: $T_n$ explodes as $\cosh(n\cosh^{-1}|x|)$. The boundary $x=\pm 1$ always evaluates to $\pm 1$ exactly.</p>
+          <p lang="zh">$[-1,1]$ 內 $T_n$ 在 $\pm 1$ 間 $n$ 個半週振盪；$[-1,1]$ 外以 $\cosh$ 發散。邊界 $x=\pm 1$ 恆為 $\pm 1$。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.10.4-cheby-theory.html">◀ 4.10.4</a>
@@ -61,8 +113,100 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { n: 5 };
+
+  function Tn(n, x){
+    if (Math.abs(x) <= 1) return Math.cos(n*Math.acos(x));
+    if (x > 1) return Math.cosh(n*Math.acosh(x));
+    return (n % 2 === 0 ? 1 : -1) * Math.cosh(n*Math.acosh(-x));
+  }
+
+  function redraw(){
+    const c = $('pCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:40,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+
+    const xMin = -1.4, xMax = 1.4;
+    const yMin = -3, yMax = 3;
+
+    // grid
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=14;g++){ const x=pad.l+iw*g/14; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=6;g++){ const y=pad.t+ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    // y=0 axis
+    const y0 = pad.t + ih*(1-(0-yMin)/(yMax-yMin));
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pad.l,y0); ctx.lineTo(W-pad.r,y0); ctx.stroke();
+
+    // y=±1 bands
+    ctx.strokeStyle='#c58cff'; ctx.setLineDash([4,4]);
+    const yp = pad.t + ih*(1-(1-yMin)/(yMax-yMin));
+    const yn = pad.t + ih*(1-(-1-yMin)/(yMax-yMin));
+    ctx.beginPath(); ctx.moveTo(pad.l,yp); ctx.lineTo(W-pad.r,yp); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.l,yn); ctx.lineTo(W-pad.r,yn); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // x=±1 borders
+    ctx.strokeStyle='#78d66a';
+    const xl = pad.l + iw*(-1-xMin)/(xMax-xMin);
+    const xr = pad.l + iw*(1-xMin)/(xMax-xMin);
+    ctx.beginPath(); ctx.moveTo(xl,pad.t); ctx.lineTo(xl,H-pad.b); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xr,pad.t); ctx.lineTo(xr,H-pad.b); ctx.stroke();
+
+    // T_n curve
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1.8;
+    ctx.beginPath();
+    const K = 720;
+    for (let i=0;i<K;i++){
+      const x = xMin + (xMax-xMin)*i/(K-1);
+      let y = Tn(state.n, x);
+      if (y > yMax) y = yMax; if (y < yMin) y = yMin;
+      const px = pad.l + iw*i/(K-1);
+      const py = pad.t + ih*(1-(y-yMin)/(yMax-yMin));
+      if (i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+
+    ctx.fillStyle='#ffd95a'; ctx.font='10px "Press Start 2P", monospace';
+    ctx.fillText('T'+state.n+'(x)', 8, 14);
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    const xt=[[-1,'-1'],[0,'0'],[1,'1']];
+    for (const [v,lbl] of xt){ const x = pad.l + iw*(v-xMin)/(xMax-xMin); ctx.fillText(lbl, x-4, H-pad.b+14); }
+    const yt=[[-2,'-2'],[-1,'-1'],[0,'0'],[1,'1'],[2,'2']];
+    for (const [v,lbl] of yt){ const y = pad.t + ih*(1-(v-yMin)/(yMax-yMin)); ctx.fillText(lbl, 4, y+3); }
+  }
+
+  $('nSlider').addEventListener('input', () => { state.n = parseInt($('nSlider').value,10); $('nVal').textContent = state.n; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! $T_5$ hits ±1 six times on [-1,1] — this alternation is exactly the minimax equioscillation condition.</span><span lang="zh">🪙 金幣 +1！$T_5$ 在 [-1,1] 觸及 ±1 共 6 次 — 這個交替正是 minimax 等漣波條件。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Slide n=5 in the lab and count the ±1 touches.</span><span lang="zh">✗ 在 lab 把 n=5，數一下觸及 ±1 的點。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

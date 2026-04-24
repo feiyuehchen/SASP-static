@@ -6,6 +6,8 @@
 <title>4.10.3 Chebyshev vs Hamming · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -23,22 +25,84 @@
 
 <div class="page">
   <h1 class="page-title">
-    <span lang="en">Stage 4-10-3 · Chebyshev vs Hamming</span>
-    <span lang="zh">關卡 4-10-3 · Chebyshev 對照 Hamming</span>
+    <span lang="en">Stage 4-10-3 · Chebyshev &amp; Hamming Compared</span>
+    <span lang="zh">關卡 4-10-3 · Chebyshev 與 Hamming 比較</span>
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Chebyshev_Hamming_Windows_Compared.html" target="_blank">SASP §4.10.3 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="SAME FIRST SIDELOBE, DIFFERENT FARFIELD">
-    <p lang="en">Tune Chebyshev to $-42$ dB (same first-sidelobe as Hamming). Chebyshev then holds the floor perfectly flat; Hamming's floor decays 6 dB/octave and eventually goes lower. Which wins depends on where your interferers live.</p>
-    <p lang="zh">把 Chebyshev 調成 $-42$ dB（與 Hamming 第一旁瓣同高）。Chebyshev 之後維持平的地板；Hamming 地板則以 6 dB/octave 衰減，遠處反而更低。誰贏，看干擾訊號在哪一帶。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="SAME 1ST SIDELOBE, DIFFERENT FAR-FIELD">
+        <p lang="en">Pick Chebyshev with $A=42$ dB so its flat floor equals Hamming's first side-lobe height. Near the main lobe both look similar; far from it, Hamming's floor rolls off 6 dB/octave and eventually sinks below Chebyshev's equiripple plateau.</p>
+        <p lang="zh">把 Chebyshev 的 $A$ 設成 42 dB 使其平地板等於 Hamming 的第一旁瓣高度。主瓣附近兩者相似；遠處 Hamming 以 6 dB/octave 滾降，最終沉到 Chebyshev 的等漣波平台之下。</p>
+      </div>
 
-  <ul>
-    <li lang="en">Near the main lobe → Chebyshev gives you the guaranteed floor.</li>
-    <li lang="zh">靠近主瓣 → Chebyshev 提供保證地板。</li>
-    <li lang="en">Far from the main lobe → Hamming falls below Chebyshev's equi-ripple floor.</li>
-    <li lang="zh">遠離主瓣 → Hamming 會降到比 Chebyshev 的等漣波地板更低。</li>
-  </ul>
+      <h2 lang="en">Which wins depends on your interferer</h2>
+      <h2 lang="zh">誰勝取決於干擾位置</h2>
+
+      <ul>
+        <li lang="en"><b>Near interferers</b> (within a few bins of the target) → Chebyshev's guaranteed floor is better.</li>
+        <li lang="zh"><b>近干擾</b>（目標幾個 bin 內）→ Chebyshev 的保證地板較佳。</li>
+        <li lang="en"><b>Far interferers</b> (across the band) → Hamming's rolled-off floor sinks lower.</li>
+        <li lang="zh"><b>遠干擾</b>（跨頻帶）→ Hamming 滾降地板沉得更低。</li>
+        <li lang="en"><b>Audio transients</b> → Hamming looks cleaner (less ringing artefact).</li>
+        <li lang="zh"><b>音訊瞬態</b> → Hamming 看來更乾淨（振鈴偽影較少）。</li>
+      </ul>
+
+      <div class="formula">
+        <span class="label">HAMMING ASYMPTOTIC FLOOR</span>
+        <div>$$|W_\text{Hamming}(\omega)|\;\sim\;\frac{C}{\omega^2}\quad\Longrightarrow\quad -12\,\text{dB/oct}\;\text{in}\;|W|^2$$</div>
+      </div>
+
+      <p lang="en">
+        (Hamming's side-lobe <em>peaks</em> sit on a curve that decays 6 dB per octave in $|W(\omega)|$ — i.e. $1/\omega$ on a linear scale. The quadratic $1/\omega^2$ form above applies to the power spectrum after non-perfect tuning.)
+      </p>
+      <p lang="zh">
+        （Hamming 旁瓣<em>峰</em>沿著 $|W(\omega)|$ 每 octave 降 6 dB 的曲線 — 線性尺度就是 $1/\omega$。能量頻譜在非完美微調下為二次衰減 $1/\omega^2$。）
+      </p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Equiripple buys a floor; rolled-off buys far-field depth.</b> You can't have both with a single classical window — pick based on where your interferers live.</p>
+        <p lang="zh"><b>等漣波買到地板；滾降買到遠場深度。</b>單一經典視窗不可兼得 — 依干擾位置擇一。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> A strong interferer sits far from your target tone (beyond half Nyquist). Pick the better window.</p>
+        <p lang="zh"><b>問：</b>強干擾遠離目標音（超過半 Nyquist）。選較佳視窗。</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Hamming (its side-lobes roll off to below Chebyshev floor far from main lobe).</button>
+          <button data-correct="1" lang="zh">Hamming（遠處旁瓣下探到 Chebyshev 地板之下）。</button>
+          <button data-correct="0" lang="en">Chebyshev 42 dB (guaranteed floor is enough).</button>
+          <button data-correct="0" lang="zh">Chebyshev 42 dB（地板保證就夠）。</button>
+          <button data-correct="0" lang="en">Doesn't matter — they're mathematically equivalent.</button>
+          <button data-correct="0" lang="zh">沒差 — 數學上等價。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Overlay</h3>
+        <h3 lang="zh">實驗 · 疊圖</h3>
+        <canvas id="fCanvas" style="height:320px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+          <label>A (dB, Cheby)</label>
+          <input type="range" id="aSlider" min="30" max="80" step="1" value="42"/>
+          <span class="val" id="aVal">42</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Pink: Hamming, side-lobes marching down. Yellow: Chebyshev at target $A$, floor perfectly flat. Horizontal pink-dashed line marks Hamming's $-42$ dB first side-lobe. Find the crossover $\omega$ — where does Hamming drop below Chebyshev?</p>
+          <p lang="zh">粉：Hamming 旁瓣遞降。黃：Chebyshev $A$ dB，地板完全平。粉虛線為 Hamming $-42$ dB 首旁瓣。找交叉 $\omega$ — 何處 Hamming 低於 Chebyshev？</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.10.2-cheby-examples.html">◀ 4.10.2</a>
@@ -47,8 +111,114 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 64, A: 42 };
+
+  function chebwin(N, A){
+    const beta = Math.cosh(Math.acosh(Math.pow(10, A/20)) / (N-1));
+    const w = new Float32Array(N);
+    const Wk = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      const wk = 2*Math.PI*k/N;
+      const x = beta * Math.cos(wk/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else if (x > 1) num = Math.cosh((N-1)*Math.acosh(x));
+      else num = ((N-1)%2 === 0 ? 1 : -1) * Math.cosh((N-1)*Math.acosh(-x));
+      Wk[k] = num;
+    }
+    for (let n=0;n<N;n++){
+      let s = 0;
+      for (let k=0;k<N;k++) s += Wk[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/N);
+      w[n] = s;
+    }
+    let mx = 0; for (let n=0;n<N;n++) if (Math.abs(w[n]) > mx) mx = Math.abs(w[n]);
+    for (let n=0;n<N;n++) w[n] /= mx;
+    return w;
+  }
+
+  function hamming(N){
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++) w[n] = 0.54 - 0.46*Math.cos(2*Math.PI*n/(N-1));
+    return w;
+  }
+
+  function redraw(){
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const dBfloor = -140;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=7;g++){ const y=pad.t+ih*g/7; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    // hamming 42 dB dashed reference
+    const yt = pad.t + ih*(1-(-state.A - dBfloor)/(0 - dBfloor));
+    ctx.strokeStyle='#ff6aa0'; ctx.setLineDash([3,3]); ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pad.l,yt); ctx.lineTo(W-pad.r,yt); ctx.stroke();
+    ctx.setLineDash([]);
+
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    function plot(w, color){
+      const { re, im } = DSP.dtft(w, om);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-8)));
+        const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+        const x = pad.l + iw*i/(K-1);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    plot(hamming(state.N), '#ff6aa0');
+    plot(chebwin(state.N, state.A), '#ffd95a');
+
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('Hamming', 8, 14);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('Cheby A='+state.A+'dB', 100, 14);
+    ctx.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+  $('aSlider').addEventListener('input', () => { state.A = parseInt($('aSlider').value,10); $('aVal').textContent = state.A; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Hamming keeps dropping past the Chebyshev plateau — that plateau is a guaranteed floor, not a hard ceiling.</span><span lang="zh">🪙 金幣 +1！Hamming 會繼續降到 Chebyshev 平台之下 — 那只是保證地板、非硬上限。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Look at the right side of the overlay — Hamming crosses below the Chebyshev plateau.</span><span lang="zh">✗ 看疊圖右側 — Hamming 穿越到 Chebyshev 平台之下。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

@@ -30,23 +30,100 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Dolph_Chebyshev_Window_Definition.html" target="_blank">SASP §4.10.4.2 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="START FROM THE SPECTRUM">
-    <p lang="en">We <em>declare</em> the spectrum to be a scaled $T_{N-1}$ and back out $w[n]$ by inverse DFT. No direct time-domain formula.</p>
-    <p lang="zh">先<em>宣告</em>頻譜形狀為縮放的 $T_{N-1}$，再用反 DFT 推出 $w[n]$。沒有直接的時域公式。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="START FROM THE SPECTRUM">
+        <p lang="en">Unlike every other window in this chapter, Dolph-Chebyshev is <em>defined by its spectrum</em>. We declare $W(\omega)$ to be a scaled Chebyshev polynomial, then back out the time-domain $w[n]$ by inverse DFT. There is no closed-form time-domain formula.</p>
+        <p lang="zh">與本章其他視窗不同，Dolph-Chebyshev 是<em>由頻譜定義</em>。先宣告 $W(\omega)$ 為縮放的 Chebyshev 多項式，再以反 DFT 推出時域 $w[n]$。沒有時域封閉式。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">SPECTRUM</span>
-    <div>$$W(\omega)=\frac{T_{N-1}\!\bigl(\beta\cos(\omega/2)\bigr)}{T_{N-1}(\beta)},\qquad \beta=\cosh\!\left(\tfrac{1}{N-1}\cosh^{-1} 10^{A/20}\right)$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">SPECTRUM</span>
+        <div>$$W(\omega)=\frac{T_{N-1}\!\bigl(\beta\cos(\omega/2)\bigr)}{T_{N-1}(\beta)},\qquad \beta=\cosh\!\left(\tfrac{1}{N-1}\cosh^{-1} 10^{A/20}\right)$$</div>
+      </div>
 
-  <p lang="en">
-    Evaluate $W$ on $N$ uniformly spaced points around the unit circle,
-    then inverse FFT → the Dolph-Chebyshev coefficients $w[n]$.
-  </p>
-  <p lang="zh">
-    在單位圓上均勻取 $N$ 點算 $W$、再反 FFT，得到 Dolph-Chebyshev 係數 $w[n]$。
-  </p>
+      <p lang="en">
+        The denominator $T_{N-1}(\beta)$ normalises the peak at $\omega=0$ to 1. For $|\beta\cos(\omega/2)| \leq 1$ the numerator oscillates between $\pm 1$ — those are the side lobes at level $1/T_{N-1}(\beta) = 10^{-A/20}$. For $|\beta\cos(\omega/2)| > 1$ it grows as $\cosh$ — that's the main lobe.
+      </p>
+      <p lang="zh">
+        分母 $T_{N-1}(\beta)$ 將 $\omega=0$ 峰值歸一至 1。$|\beta\cos(\omega/2)| \leq 1$ 時分子在 $\pm 1$ 振盪 — 即旁瓣，高度 $1/T_{N-1}(\beta) = 10^{-A/20}$。$|\beta\cos(\omega/2)| > 1$ 時分子以 $\cosh$ 增長 — 即主瓣。
+      </p>
+
+      <h2 lang="en">Construction recipe</h2>
+      <h2 lang="zh">建構食譜</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>1.</b> Pick $N$ and $A$ (dB).<br>
+            <b>2.</b> Compute $\beta=\cosh\bigl(\tfrac{1}{N-1}\cosh^{-1} 10^{A/20}\bigr)$.<br>
+            <b>3.</b> Evaluate $W(\omega_k)=T_{N-1}(\beta\cos(\omega_k/2))/T_{N-1}(\beta)$ at $N$ points $\omega_k=2\pi k/N$, $k=0,\dots,N-1$.<br>
+            <b>4.</b> Apply inverse DFT to the sampled spectrum → $w[n]$ (real, symmetric).
+          </span>
+          <span lang="zh">
+            <b>1.</b> 決定 $N$ 和 $A$（dB）。<br>
+            <b>2.</b> 算 $\beta=\cosh\bigl(\tfrac{1}{N-1}\cosh^{-1} 10^{A/20}\bigr)$。<br>
+            <b>3.</b> 在 $\omega_k=2\pi k/N$（$k=0,\dots,N-1$）$N$ 點上計算 $W(\omega_k)=T_{N-1}(\beta\cos(\omega_k/2))/T_{N-1}(\beta)$。<br>
+            <b>4.</b> 對頻譜樣本反 DFT → $w[n]$（實對稱）。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--yellow" data-label="ALTERNATE FORM">
+        <p lang="en">SASP §4.10 writes the spectrum as $W(\omega) = \cos\!\bigl[N\cos^{-1}(\beta\cos(\omega/2))\bigr] / \cosh\!\bigl[N\cosh^{-1}\beta\bigr]$. This is the same formula — just $T_N = \cos(N\cos^{-1} \cdot)$ unwound. Use whichever form you find clearer.</p>
+        <p lang="zh">SASP §4.10 寫成 $W(\omega) = \cos\!\bigl[N\cos^{-1}(\beta\cos(\omega/2))\bigr] / \cosh\!\bigl[N\cosh^{-1}\beta\bigr]$。同一公式 — 只是展開 $T_N = \cos(N\cos^{-1} \cdot)$。擇一採用即可。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Spectrum-first, time-domain-second.</b> Choose the spectrum to be Chebyshev-optimal, then let inverse DFT give you the time coefficients. No other window in this chapter is defined this way.</p>
+        <p lang="zh"><b>頻譜先、時域後。</b>選 Chebyshev 最優頻譜，反 DFT 得時域係數。本章其他視窗都不是這樣定義。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Why is there no closed-form time-domain formula for Dolph-Chebyshev?</p>
+        <p lang="zh"><b>問：</b>Dolph-Chebyshev 為何沒有封閉時域公式？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">The spectrum is sampled Chebyshev, so time-domain requires an IDFT of N Chebyshev values — no elementary closed form.</button>
+          <button data-correct="1" lang="zh">頻譜為 Chebyshev 取樣，時域需對 N 個 Chebyshev 值反 DFT — 無初等封閉式。</button>
+          <button data-correct="0" lang="en">The time-domain formula is secret / patented.</button>
+          <button data-correct="0" lang="zh">時域公式為專利保護。</button>
+          <button data-correct="0" lang="en">Time-domain doesn't exist for Chebyshev windows.</button>
+          <button data-correct="0" lang="zh">Chebyshev 視窗不存在時域。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Spectrum-then-IDFT</h3>
+        <h3 lang="zh">實驗 · 先頻譜再反 DFT</h3>
+
+        <p lang="en" style="font-size:11px; margin:0 0 6px; color:#8f8fa8;">Step 1 · Chebyshev spectrum samples $W(\omega_k)$</p>
+        <p lang="zh" style="font-size:11px; margin:0 0 6px; color:#8f8fa8;">步驟 1 · Chebyshev 頻譜樣本 $W(\omega_k)$</p>
+        <canvas id="fCanvas" style="height:160px;"></canvas>
+
+        <p lang="en" style="font-size:11px; margin:10px 0 6px; color:#8f8fa8;">Step 2 · IDFT → time-domain $w[n]$</p>
+        <p lang="zh" style="font-size:11px; margin:10px 0 6px; color:#8f8fa8;">步驟 2 · 反 DFT → 時域 $w[n]$</p>
+        <canvas id="tCanvas" style="height:140px;"></canvas>
+
+        <div class="controls">
+          <label>A (dB)</label>
+          <input type="range" id="aSlider" min="30" max="100" step="5" value="60"/>
+          <span class="val" id="aVal">60</span>
+          <label>N</label>
+          <input type="range" id="nSlider" min="16" max="64" step="4" value="32"/>
+          <span class="val" id="nVal">32</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: samples of the target spectrum $W(\omega_k)$. Bottom: the IDFT result $w[n]$ — positive bell with small negative tails for $A \gtrsim 50$.</p>
+          <p lang="zh">上：目標頻譜 $W(\omega_k)$ 樣本。下：反 DFT 結果 $w[n]$ — $A \gtrsim 50$ 時為正鐘帶少量負尾。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.10.4.1-cheby-poly.html">◀ 4.10.4.1</a>
@@ -55,8 +132,70 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { A: 60, N: 32 };
+
+  function computeSpec(N, A){
+    const beta = Math.cosh(Math.acosh(Math.pow(10, A/20)) / (N-1));
+    const denom = Math.cosh((N-1)*Math.acosh(beta));
+    const Wk = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      const wk = 2*Math.PI*k/N;
+      const x = beta * Math.cos(wk/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else if (x > 1) num = Math.cosh((N-1)*Math.acosh(x));
+      else num = ((N-1)%2 === 0 ? 1 : -1) * Math.cosh((N-1)*Math.acosh(-x));
+      Wk[k] = num / denom;
+    }
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      let s = 0;
+      for (let k=0;k<N;k++) s += Wk[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/N);
+      w[n] = s;
+    }
+    let mx = 0; for (let n=0;n<N;n++) if (Math.abs(w[n]) > mx) mx = Math.abs(w[n]);
+    for (let n=0;n<N;n++) w[n] /= mx;
+    return { Wk, w };
+  }
+
+  function redraw(){
+    const { Wk, w } = computeSpec(state.N, state.A);
+
+    // Top: stems for Wk (normalised to 1)
+    let mx = 0; for (let k=0;k<state.N;k++) if (Math.abs(Wk[k]) > mx) mx = Math.abs(Wk[k]);
+    const wkNorm = Array.from(Wk).map(v => v/mx);
+    Viz.stem($('fCanvas'), wkNorm, { yMin:-1.1, yMax:1.1, xLabel:'k', yLabel:'W[k]', title:`SPECTRUM SAMPLES at N=${state.N}, A=${state.A}dB` });
+
+    Viz.stem($('tCanvas'), w, { yMin:-0.25, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:'TIME DOMAIN (IDFT OUTPUT)' });
+  }
+
+  $('aSlider').addEventListener('input', () => { state.A = parseInt($('aSlider').value,10); $('aVal').textContent = state.A; redraw(); });
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! IDFT is the only connection between the Chebyshev spectrum and the time coefficients — there is no direct formula.</span><span lang="zh">🪙 金幣 +1！反 DFT 是 Chebyshev 頻譜與時域係數的唯一橋樑 — 無直接公式。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ The spectrum is a discrete Chebyshev polynomial; its IDFT is a polynomial in cosines with no elementary closed form.</span><span lang="zh">✗ 頻譜是離散 Chebyshev 多項式；其反 DFT 為 cos 多項式、無初等封閉式。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

@@ -6,6 +6,8 @@
 <title>4.10.4 Dolph-Chebyshev Theory · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -29,8 +31,14 @@
   </h1>
 
   <div class="nes-box nes-box--green" data-label="ROAD MAP">
-    <p lang="en">The next four pages show why Chebyshev polynomials are optimal, write down the window definition, and give closed-form formulas for main-lobe width and length.</p>
-    <p lang="zh">接下來四頁解釋為什麼 Chebyshev 多項式最優、寫下視窗定義、並給出主瓣寬與長度的顯式公式。</p>
+    <p lang="en">The next four pages show why <span class="term"
+      data-en="Chebyshev polynomials"
+      data-en-def="Polynomials T_n(x) = cos(n arccos x) on [-1,1]. They minimise the max absolute value among degree-n polynomials with fixed leading coefficient — the minimax property."
+      data-zh-def="多項式 T_n(x) = cos(n arccos x) 於 [-1,1]。在首項係數固定的 n 次多項式中，它使絕對值最大值最小 — minimax 性質。">Chebyshev polynomials</span> give the optimal equiripple window, write the window definition explicitly, and derive closed-form formulas for main-lobe width and length.</p>
+    <p lang="zh">接下來四頁說明為什麼<span class="term"
+      data-en="Chebyshev polynomials"
+      data-en-def="Polynomials T_n(x) = cos(n arccos x) on [-1,1]. They minimise the max absolute value among degree-n polynomials with fixed leading coefficient — the minimax property."
+      data-zh-def="多項式 T_n(x) = cos(n arccos x) 於 [-1,1]。在首項係數固定的 n 次多項式中，它使絕對值最大值最小 — minimax 性質。">Chebyshev 多項式</span>給出最優等漣波視窗、寫下視窗顯式定義、並推導主瓣寬與長度的封閉式。</p>
   </div>
 
   <ul class="toc-list">
@@ -39,6 +47,11 @@
     <li><a href="4.10.4.3-cheby-mainlobe.html"><span><span class="num">4.10.4.3</span><span lang="en">Main-lobe width</span><span lang="zh">主瓣寬度</span></span><span class="dim">▶</span></a></li>
     <li><a href="4.10.4.4-cheby-length.html"><span><span class="num">4.10.4.4</span><span lang="en">Length computation</span><span lang="zh">長度計算</span></span><span class="dim">▶</span></a></li>
   </ul>
+
+  <div class="nes-box nes-box--purple" data-label="WHY READ THE PROOFS">
+    <p lang="en">Most users just call <code>chebwin(N, A)</code> and move on. The theory below shows <em>why</em> the minimax property implies equiripple side lobes — a useful lesson that reappears in Parks-McClellan filter design (Ch 5).</p>
+    <p lang="zh">多數使用者只呼叫 <code>chebwin(N, A)</code> 即可。下面的理論解釋<em>為什麼</em> minimax 性質會導致等漣波旁瓣 — 這個觀念在 Parks-McClellan 濾波器設計（第 5 章）再次出現。</p>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.10.3-cheby-vs-hamming.html">◀ 4.10.3</a>
