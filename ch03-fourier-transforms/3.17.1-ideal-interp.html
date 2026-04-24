@@ -30,51 +30,104 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Ideal_Spectral_Interpolation.html" target="_blank">SASP §3.17.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="CORE IDEA">
-    <p lang="en">A length-$N$ sequence has a spectrum that is periodic and band-limited on the unit circle. The <span class="term" data-en="Dirichlet kernel"
-      data-en-def="sin(Nω/2)/(N sin(ω/2)) — the periodic sinc that interpolates uniformly-spaced DTFT samples of a length-N sequence."
-      data-zh-def="sin(Nω/2)/(N sin(ω/2)) — 用於內插長度 N 序列 DTFT 等距樣本的周期 sinc。">Dirichlet kernel</span> (periodic sinc) is the unique interpolator that recovers the whole DTFT from $N$ uniform samples.</p>
-    <p lang="zh">長度 $N$ 的序列，其頻譜在單位圓上是週期且帶限的。<span class="term" data-en="Dirichlet kernel"
-      data-en-def="sin(Nω/2)/(N sin(ω/2)) — the periodic sinc that interpolates uniformly-spaced DTFT samples of a length-N sequence."
-      data-zh-def="sin(Nω/2)/(N sin(ω/2)) — 用於內插長度 N 序列 DTFT 等距樣本的周期 sinc。">Dirichlet 核</span>（週期 sinc）是從 $N$ 個均勻樣本精確還原整條 DTFT 的唯一內插器。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="CORE IDEA">
+        <p lang="en">A length-$N$ sequence has a spectrum that is periodic and band-limited on the unit circle. The
+          <span class="term" data-en="Dirichlet kernel"
+            data-en-def="sin(Nω/2)/(N sin(ω/2)) — the periodic sinc that interpolates uniformly-spaced DTFT samples of a length-N sequence."
+            data-zh-def="sin(Nω/2)/(N sin(ω/2)) — 用於內插長度 N 序列 DTFT 等距樣本的週期 sinc。">Dirichlet kernel</span>
+          (periodic sinc) is the unique interpolator that recovers the whole DTFT from $N$ uniform samples.</p>
+        <p lang="zh">長度 $N$ 的序列，其頻譜在單位圓上是週期且帶限的。<span class="term" data-en="Dirichlet kernel"
+            data-en-def="sin(Nω/2)/(N sin(ω/2)) — the periodic sinc that interpolates uniformly-spaced DTFT samples of a length-N sequence."
+            data-zh-def="sin(Nω/2)/(N sin(ω/2)) — 用於內插長度 N 序列 DTFT 等距樣本的週期 sinc。">Dirichlet 核</span>（週期 sinc）是從 $N$ 個均勻樣本精確還原整條 DTFT 的唯一內插器。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">DIRICHLET KERNEL</span>
-    <div>$$D_N(\omega)\;=\;\frac{\sin(N\omega/2)}{N\,\sin(\omega/2)}$$</div>
-    <span class="label">INTERPOLATION</span>
-    <div>$$X(\omega)\;=\;\sum_{k=0}^{N-1}X[k]\,D_N\!\left(\omega-\tfrac{2\pi k}{N}\right)\,e^{-j(N-1)(\omega-2\pi k/N)/2}$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">DIRICHLET KERNEL</span>
+        <div>$$D_N(\omega)\;=\;\frac{\sin(N\omega/2)}{N\,\sin(\omega/2)}$$</div>
+        <span class="label">INTERPOLATION</span>
+        <div>$$X(\omega)\;=\;\sum_{k=0}^{N-1}X[k]\,D_N\!\left(\omega-\tfrac{2\pi k}{N}\right)\,e^{-j(N-1)(\omega-2\pi k/N)/2}$$</div>
+      </div>
 
-  <p lang="en">
-    At bin centres $\omega=2\pi k/N$, $D_N$ is 1 at its own centre and 0
-    at every other centre, so interpolation is consistent with the
-    samples. Between bins it blends them exactly.
-  </p>
-  <p lang="zh">
-    在 bin 中心 $\omega=2\pi k/N$，$D_N$ 對自己中心為 1、其它中心都為 0，所以內插在樣本點處一致。
-    兩個 bin 之間就精確地混合它們。
-  </p>
+      <p lang="en">
+        At bin centres $\omega=2\pi k/N$, $D_N$ is 1 at its own centre and 0
+        at every other centre — so interpolation at sample points is
+        consistent. Between bins it blends them exactly. The linear-phase
+        factor accounts for the "centred vs. causal" indexing mismatch.
+      </p>
+      <p lang="zh">
+        在 bin 中心 $\omega=2\pi k/N$ 時，$D_N$ 對自己為 1、對其他中心為 0 — 取樣點上內插與樣本一致；兩個 bin 之間則精確混合。線性相位因子修正「中心化 vs. 因果」索引慣例的差異。
+      </p>
 
-  <div class="nes-box nes-box--blue" data-label="COMPUTATIONAL NOTE">
-    <p lang="en">In practice we rarely evaluate Dirichlet kernels directly — zero padding (§3.17.3) achieves the same result via one FFT on the padded sequence.</p>
-    <p lang="zh">實務上很少直接算 Dirichlet 核 — 補零（§3.17.3）對同一條 DTFT 可用一次 FFT 得到相同結果。</p>
-  </div>
+      <h2 lang="en">Key numbers</h2>
+      <h2 lang="zh">關鍵數字</h2>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> How wide is the main lobe of $D_N(\omega)$ (first zero on each side)?</p>
-    <p lang="zh"><b>問：</b>$D_N(\omega)$ 的主瓣寬度（左右第一個零點之間）是多少？</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">$4\pi/N$.</button>
-      <button data-correct="1" lang="zh">$4\pi/N$。</button>
-      <button data-correct="0" lang="en">$\pi$.</button>
-      <button data-correct="0" lang="zh">$\pi$。</button>
-      <button data-correct="0" lang="en">$1/N$.</button>
-      <button data-correct="0" lang="zh">$1/N$。</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.8; text-align:left;">
+          <span lang="en">
+            <b>Centre value:</b> $D_N(0)=1$.<br>
+            <b>First zero:</b> $\omega=\pm 2\pi/N$.<br>
+            <b>Main-lobe width:</b> $4\pi/N$ (zero-to-zero).<br>
+            <b>First side-lobe:</b> $-13$ dB below centre.<br>
+            <b>Side-lobe decay rate:</b> $1/|\omega|$ asymptotically.
+          </span>
+          <span lang="zh">
+            <b>中心值：</b>$D_N(0)=1$。<br>
+            <b>第一個零點：</b>$\omega=\pm 2\pi/N$。<br>
+            <b>主波瓣寬度：</b>$4\pi/N$（零到零）。<br>
+            <b>第一旁波瓣：</b>低於中心 $-13$ dB。<br>
+            <b>旁波瓣漸近衰減：</b>$1/|\omega|$。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--blue" data-label="COMPUTATIONAL NOTE">
+        <p lang="en">In practice we rarely evaluate Dirichlet kernels directly — <span class="term" data-en="Zero padding"
+          data-en-def="Appending zeros to a signal before a DFT to evaluate the DTFT at denser frequencies."
+          data-zh-def="在做 DFT 前把訊號後面補零，等效於在更密的頻率上取樣 DTFT。">zero padding</span> (§3.17.3) achieves the same result with one FFT on the padded sequence.</p>
+        <p lang="zh">實務上很少直接算 Dirichlet 核 — <span class="term" data-en="Zero padding"
+          data-en-def="Appending zeros to a signal before a DFT to evaluate the DTFT at denser frequencies."
+          data-zh-def="在做 DFT 前把訊號後面補零，等效於在更密的頻率上取樣 DTFT。">補零</span>（§3.17.3）以一次 FFT 達到相同結果。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> How wide is the main lobe of $D_N(\omega)$ (first zero on each side)?</p>
+        <p lang="zh"><b>問：</b>$D_N(\omega)$ 的主瓣寬度（左右第一個零點之間）？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">$4\pi/N$.</button>
+          <button data-correct="1" lang="zh">$4\pi/N$。</button>
+          <button data-correct="0" lang="en">$\pi$.</button>
+          <button data-correct="0" lang="zh">$\pi$。</button>
+          <button data-correct="0" lang="en">$1/N$.</button>
+          <button data-correct="0" lang="zh">$1/N$。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · The Dirichlet kernel at variable $N$</h3>
+        <h3 lang="zh">實驗 · Dirichlet 核隨 $N$ 變化</h3>
+
+        <canvas id="dirCanvas" style="height:240px;"></canvas>
+        <canvas id="dbCanvas"  style="height:160px; margin-top:6px;"></canvas>
+
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="2" max="32" step="1" value="8"/>
+          <span class="val" id="nVal">8</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: $D_N(\omega)$ on linear axis; increasing $N$ makes the main lobe narrower and more numerous side-lobes. Bottom: the same in dB — first side-lobe sits at $-13$&nbsp;dB regardless of $N$. That $-13$&nbsp;dB floor is the famous rectangular-window side-lobe level.</p>
+          <p lang="zh">上：$D_N(\omega)$ 線性軸；$N$ 越大主波瓣越窄、旁波瓣越多。下：分貝軸 — 第一旁波瓣恆在 $-13$ dB，與 $N$ 無關。$-13$ dB 就是矩形視窗的著名旁波瓣位階。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -84,19 +137,81 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { N: 8 };
+
+  function dirichlet(omega, N){
+    const half = omega/2;
+    if (Math.abs(Math.sin(half)) < 1e-10) return 1;
+    return Math.sin(N*half) / (N * Math.sin(half));
+  }
+
+  function plot(canvasId, {dB}){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:12,b:22}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=6;g++){ const y=pad.t+ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    const yzero = dB ? pad.t+ih*(1-(-80-(-80))/(0-(-80))) : pad.t + ih*0.55;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+    const K = 720;
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1.8;
+    ctx.beginPath();
+    const dBfloor=-60;
+    for (let i=0;i<K;i++){
+      const omega = -Math.PI + 2*Math.PI*i/(K-1);
+      const v = dirichlet(omega, state.N);
+      let y;
+      if (dB){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.abs(v) + 1e-9));
+        y = pad.t + ih*(1 - (db-dBfloor)/(0-dBfloor));
+      } else {
+        y = pad.t + ih*(0.55 - v*0.45);
+      }
+      const x = pad.l + iw*i/(K-1);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    const xt=[['-π',-Math.PI],['-π/2',-Math.PI/2],['0',0],['π/2',Math.PI/2],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-10, H-pad.b+14); }
+    if (dB){
+      for (let db=0; db>=dBfloor; db-=20){
+        const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+        ctx.fillText(db+'dB', 4, y+3);
+      }
+      ctx.fillStyle='#ffd95a'; ctx.fillText('|D_N(ω)| dB, N='+state.N, 8, 12);
+    } else {
+      ctx.fillStyle='#ffd95a'; ctx.fillText('D_N(ω), N='+state.N, 8, 12);
+    }
+  }
+
+  function redraw(){
+    plot('dirCanvas', {dB:false});
+    plot('dbCanvas', {dB:true});
+  }
+
+  $('nSlider').addEventListener('input', e=>{ state.N=parseInt(e.target.value,10); $('nVal').textContent=state.N; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! First zero at ω = ±2π/N → full main-lobe width 4π/N.</span><span lang="zh">🪙 金幣 +1！第一個零在 ω = ±2π/N，主瓣寬度 4π/N。</span>';
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! First zero ω=±2π/N ⇒ full main-lobe width 4π/N.</span><span lang="zh">🪙 金幣 +1！第一個零點 ω=±2π/N ⇒ 主瓣寬度 4π/N。</span>';
       const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
       AudioKit.coin();
     } else {
@@ -104,6 +219,9 @@
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

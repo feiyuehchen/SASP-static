@@ -30,57 +30,97 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Interpolating_DFT.html" target="_blank">SASP §3.17.2 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="GOAL">
-    <p lang="en">Give me $X[k]$ for $k=0,\ldots,N-1$. I want the DTFT value at an arbitrary $\omega$.</p>
-    <p lang="zh">給我 $X[k]$（$k=0,\ldots,N-1$）。我要任意 $\omega$ 處的 DTFT 值。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="GOAL">
+        <p lang="en">Given $X[k]$ for $k=0,\ldots,N-1$, compute the DTFT $X(\omega)$ at an arbitrary $\omega$ — exactly, not approximately.</p>
+        <p lang="zh">給 $X[k]$（$k=0,\ldots,N-1$），在任意 $\omega$ 精確計算 DTFT $X(\omega)$ — 不是近似、是精確。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">WEIGHTED SUM OF BINS</span>
-    <div>$$X(\omega)\;=\;\sum_{k=0}^{N-1} X[k]\,g_k(\omega)$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">WEIGHTED SUM OF BINS</span>
+        <div>$$X(\omega)\;=\;\sum_{k=0}^{N-1} X[k]\,g_k(\omega)$$</div>
+      </div>
 
-  <p lang="en">
-    The weights $g_k(\omega)$ are shifted Dirichlet kernels centred at
-    each bin, with a linear-phase correction that accounts for the
-    mismatch between "centred" and "causal" indexing conventions. The
-    important takeaway is that the interpolation is <em>exact</em> — no
-    information is lost going from the $N$ DFT samples to any
-    intermediate frequency, as long as the original sequence was indeed
-    length $N$.
-  </p>
-  <p lang="zh">
-    權重 $g_k(\omega)$ 是以每個 bin 為中心的 Dirichlet 核，再加上一個線性相位修正項
-    （對應「中心化」與「因果」兩種索引慣例的差別）。重點是：內插是<em>精確的</em> —
-    只要原序列真的是長度 $N$，從 $N$ 個 DFT 樣本到任何中間頻率都不會丟資訊。
-  </p>
+      <p lang="en">
+        The weights $g_k(\omega)$ are shifted Dirichlet kernels centred at
+        each bin, with a linear-phase correction that accounts for
+        "centred" vs. "causal" indexing conventions. The takeaway:
+        interpolation is <em>exact</em> — no information is lost going from
+        the $N$ DFT samples to any intermediate frequency, as long as the
+        original sequence was indeed length $N$.
+      </p>
+      <p lang="zh">
+        權重 $g_k(\omega)$ 是以每個 bin 為中心的 Dirichlet 核，加上線性相位修正（對應「中心化」vs.「因果」索引慣例）。
+        結論：內插是<em>精確的</em> — 只要原序列真的是長度 $N$，從 $N$ 個 DFT 樣本到任意中間頻率都不會丟資訊。
+      </p>
 
-  <h2 lang="en">In practice</h2>
-  <h2 lang="zh">實務作法</h2>
-  <p lang="en">Two common shortcuts avoid computing Dirichlet kernels by hand:</p>
-  <p lang="zh">兩種常見捷徑可以免手算 Dirichlet 核：</p>
+      <h2 lang="en">Two shortcuts</h2>
+      <h2 lang="zh">兩種捷徑</h2>
 
-  <ul>
-    <li lang="en"><b>Zero pad</b> in time → FFT at size $M\gg N$ → the new bins already lie between the old ones.</li>
-    <li lang="zh"><b>時域補零</b> → 在長度 $M\gg N$ 做 FFT → 新 bin 就落在舊 bin 之間。</li>
-    <li lang="en"><b>Chirp-z transform</b> (or Goertzel) — evaluate $X(\omega)$ directly at a handful of chosen frequencies without gridding the whole circle.</li>
-    <li lang="zh"><b>Chirp-z 轉換</b>（或 Goertzel）— 直接在若干選定頻率算 $X(\omega)$，不必把整個圓都計算。</li>
-  </ul>
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.8; text-align:left;">
+          <span lang="en">
+            <b>Zero-pad in time</b> → FFT at $M\gg N$ → new bins already lie between the old ones. Cheap if you want <em>all</em> frequencies densely.<br>
+            <b>Chirp-z transform / Goertzel</b> → evaluate $X(\omega)$ directly at a handful of chosen frequencies without griding the whole circle. Cheap if you want <em>a few specific</em> frequencies.
+          </span>
+          <span lang="zh">
+            <b>時域補零</b> → 長度 $M\gg N$ 做 FFT → 新 bin 落在舊 bin 之間。想要<em>所有頻率</em>密集取樣時最便宜。<br>
+            <b>Chirp-z 轉換 / Goertzel</b> → 直接在少數選定頻率算 $X(\omega)$，不必把整個圓都算。想要<em>少量指定頻率</em>時最便宜。
+          </span>
+        </div>
+      </div>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> You have a length-256 recording and want the DTFT value at 100 specific frequencies only. Cheapest method?</p>
-    <p lang="zh"><b>問：</b>一段長 256 的錄音，只要算 100 個指定頻率上的 DTFT 值。最省算力的方法？</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">Goertzel or chirp-z at those 100 frequencies (no full FFT).</button>
-      <button data-correct="1" lang="zh">在那 100 個頻率用 Goertzel / chirp-z（不做完整 FFT）。</button>
-      <button data-correct="0" lang="en">Zero-pad to length $2^{20}$ then FFT.</button>
-      <button data-correct="0" lang="zh">補零到 $2^{20}$ 再做 FFT。</button>
-      <button data-correct="0" lang="en">Impossible — DFT only gives integer bins.</button>
-      <button data-correct="0" lang="zh">做不到 — DFT 只能給整數 bin。</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>DFT bins are a sub-sample of the DTFT.</b> Not an approximation — a down-sample. The missing values between bins can always be recovered via Dirichlet-weighted sums (or equivalently, zero-padding).</p>
+        <p lang="zh"><b>DFT bin 是 DTFT 的子取樣。</b>不是近似，是降取樣。bin 之間遺漏的值永遠可以用 Dirichlet 權重和（或等價地，補零）還原。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Length-256 recording, want the DTFT at 100 specific frequencies only. Cheapest?</p>
+        <p lang="zh"><b>問：</b>長 256 錄音，只要 100 個指定頻率的 DTFT 值。最便宜？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Goertzel or chirp-z at those 100 frequencies (no full FFT).</button>
+          <button data-correct="1" lang="zh">在那 100 個頻率用 Goertzel / chirp-z（不做完整 FFT）。</button>
+          <button data-correct="0" lang="en">Zero-pad to length $2^{20}$ then FFT.</button>
+          <button data-correct="0" lang="zh">補零到 $2^{20}$ 再做 FFT。</button>
+          <button data-correct="0" lang="en">Impossible — DFT only gives integer bins.</button>
+          <button data-correct="0" lang="zh">做不到 — DFT 只能給整數 bin。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Reconstruct DTFT from $N$ bins</h3>
+        <h3 lang="zh">實驗 · 從 $N$ 個 bin 重建 DTFT</h3>
+
+        <canvas id="interpCanvas" style="height:300px;"></canvas>
+
+        <div class="controls">
+          <label>Signal</label>
+          <select id="sigSel">
+            <option value="gauss" selected>Gaussian pulse</option>
+            <option value="pulse">Rectangular pulse</option>
+            <option value="damped">Damped cosine</option>
+          </select>
+          <label>N (DFT size)</label>
+          <input type="range" id="nSlider" min="4" max="32" step="2" value="8"/>
+          <span class="val" id="nVal">8</span>
+          <label>M (padded FFT)</label>
+          <input type="range" id="mSlider" min="64" max="1024" step="64" value="256"/>
+          <span class="val" id="mVal">256</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Yellow dots: $|X[k]|$ at the $N$ DFT bins. Blue curve: the full DTFT $|X(\omega)|$ reconstructed by zero-padding to length $M$ (equivalent to Dirichlet-weighted sum). Note how the blue curve passes <em>exactly</em> through every yellow dot — interpolation with no information loss.</p>
+          <p lang="zh">黃點：$N$ 個 DFT bin 的 $|X[k]|$。藍線：補零至 $M$ 重建的完整 $|X(\omega)|$（等價於 Dirichlet 權重和）。注意藍線<em>精確</em>通過每個黃點 — 內插無損失。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -90,26 +130,115 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { sig: 'gauss', N: 8, M: 256 };
+
+  function baseSignal(N){
+    const x = new Float32Array(N);
+    const c = (N-1)/2;
+    if (state.sig === 'gauss'){
+      for (let n=0;n<N;n++) x[n] = Math.exp(-((n-c)/(N/4))**2);
+    } else if (state.sig === 'pulse'){
+      const w = Math.max(2, Math.floor(N/3));
+      for (let n=0;n<N;n++) if (Math.abs(n-c) < w/2) x[n] = 1;
+    } else {
+      for (let n=0;n<N;n++) x[n] = Math.cos(2*Math.PI*0.2*(n-c)) * Math.exp(-Math.abs(n-c)/(N/3));
+    }
+    return x;
+  }
+
+  function redraw(){
+    const { N, M } = state;
+    const x = baseSignal(N);
+    // DFT of x (length N)
+    const xRe = new Float32Array(N), xIm = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      let re=0, im=0;
+      for (let n=0;n<N;n++){
+        const ang = -2*Math.PI*k*n/N;
+        re += x[n] * Math.cos(ang);
+        im += x[n] * Math.sin(ang);
+      }
+      xRe[k]=re; xIm[k]=im;
+    }
+    const dftMag = new Float32Array(N);
+    for (let k=0;k<N;k++) dftMag[k] = Math.hypot(xRe[k], xIm[k]);
+
+    // padded FFT via direct DTFT at M points on [0, 2π)
+    const omegas = new Float32Array(M);
+    for (let i=0;i<M;i++) omegas[i] = 2*Math.PI*i/M;
+    const xF = new Float32Array(N);
+    for (let n=0;n<N;n++) xF[n] = x[n];
+    const {re, im} = DSP.dtft(xF, omegas);
+    const dtftMag = new Float32Array(M);
+    let mmax = 0;
+    for (let i=0;i<M;i++){ dtftMag[i] = Math.hypot(re[i], im[i]); if (dtftMag[i] > mmax) mmax = dtftMag[i]; }
+
+    // plot
+    const c = $('interpCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:36,r:12,t:14,b:26}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const yTo = v => pad.t + ih * (1 - v / (mmax*1.1));
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=6;g++){ const y=pad.t+ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+
+    // DTFT curve (blue)
+    ctx.strokeStyle='#5aa0ff'; ctx.lineWidth=2;
+    ctx.beginPath();
+    for (let i=0;i<M;i++){
+      const xp = pad.l + iw*i/(M-1);
+      const yp = yTo(dtftMag[i]);
+      if (i===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+    }
+    ctx.stroke();
+
+    // DFT dots (yellow)
+    ctx.fillStyle='#ffd95a';
+    for (let k=0;k<N;k++){
+      const xp = pad.l + iw * k/N;
+      const yp = yTo(dftMag[k]);
+      ctx.beginPath(); ctx.arc(xp, yp, 5, 0, 2*Math.PI); ctx.fill();
+    }
+
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('DFT bins (●) vs DTFT (—)  N='+N+'  M='+M, 8, 12);
+    const xt=[['0',0],['π',Math.PI],['2π',2*Math.PI]];
+    for (const [lbl,v] of xt){ const xp = pad.l + iw*v/(2*Math.PI); ctx.fillText(lbl, xp-6, H-pad.b+14); }
+  }
+
+  $('sigSel').addEventListener('change', e=>{ state.sig=e.target.value; redraw(); });
+  $('nSlider').addEventListener('input', e=>{ state.N=parseInt(e.target.value,10); $('nVal').textContent=state.N; redraw(); });
+  $('mSlider').addEventListener('input', e=>{ state.M=parseInt(e.target.value,10); $('mVal').textContent=state.M; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! For a small number of arbitrary frequencies, per-point evaluation (Goertzel/chirp-z) beats a huge padded FFT.</span><span lang="zh">🪙 金幣 +1！要算「少量任意頻率」時，逐點估算（Goertzel / chirp-z）比巨大補零 FFT 便宜。</span>';
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! For a few arbitrary frequencies, per-point evaluation beats a huge padded FFT.</span><span lang="zh">🪙 金幣 +1！少量任意頻率時，逐點估算比巨大補零 FFT 便宜。</span>';
       const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
       AudioKit.coin();
     } else {
-      fb.innerHTML = '<span lang="en">✗ Zero padding samples ALL frequencies densely, which is overkill here.</span><span lang="zh">✗ 補零會把所有頻率都密集取樣，這題用不到那麼多。</span>';
+      fb.innerHTML = '<span lang="en">✗ Zero padding samples ALL frequencies densely — overkill here.</span><span lang="zh">✗ 補零會把所有頻率都密集取樣 — 這題用不到那麼多。</span>';
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

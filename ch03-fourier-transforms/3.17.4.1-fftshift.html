@@ -30,49 +30,78 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Octave_fftshift_utility.html" target="_blank">SASP §3.17.4.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="WHAT IT DOES">
-    <p lang="en">Swaps the two halves of an array. Converts between "centred" and "causal" indexing for both signals and spectra.</p>
-    <p lang="zh">把一個陣列前後兩半對調。在「中心化」與「因果」索引之間切換 — 訊號、頻譜都通用。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="WHAT IT DOES">
+        <p lang="en">Swaps the two halves of an array. Converts between "centred" and "causal" indexing for both signals and spectra.</p>
+        <p lang="zh">把一個陣列前後兩半對調。在「中心化」與「因果」索引之間切換 — 訊號、頻譜都通用。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">FOR EVEN LENGTH M</span>
-    <div>$$\texttt{fftshift}(x)\;=\;\bigl[\,x[M/2],\,x[M/2+1],\,\ldots,\,x[M-1],\,x[0],\,x[1],\,\ldots,\,x[M/2-1]\,\bigr]$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">FOR EVEN LENGTH M</span>
+        <div>$$\texttt{fftshift}(x)\;=\;\bigl[\,x[M/2],\,x[M/2+1],\,\ldots,\,x[M-1],\,x[0],\,x[1],\,\ldots,\,x[M/2-1]\,\bigr]$$</div>
+      </div>
 
-  <h2 lang="en">Typical uses</h2>
-  <h2 lang="zh">常見用法</h2>
+      <h2 lang="en">Typical uses</h2>
+      <h2 lang="zh">常見用法</h2>
 
-  <ul>
-    <li lang="en"><b>Plot a DFT centred at 0:</b> <code>plot(omega, fftshift(abs(X)))</code> puts DC in the middle.</li>
-    <li lang="zh"><b>以 0 為中心畫 DFT：</b><code>plot(omega, fftshift(abs(X)))</code>，DC 放中間。</li>
+      <ul>
+        <li lang="en"><b>Plot a DFT centred at 0:</b> <code>plot(omega, fftshift(abs(X)))</code> puts DC in the middle.</li>
+        <li lang="zh"><b>以 0 為中心畫 DFT：</b><code>plot(omega, fftshift(abs(X)))</code>，DC 放中間。</li>
+        <li lang="en"><b>Prepare a centred signal for zero-phase analysis:</b> <code>x_zp = fftshift([centered; zeros(M-N,1)])</code>.</li>
+        <li lang="zh"><b>為零相位分析準備中心化訊號：</b><code>x_zp = fftshift([centered; zeros(M-N,1)])</code>。</li>
+        <li lang="en"><code>ifftshift</code> is the inverse; equals <code>fftshift</code> for even $M$, differs for odd $M$. Use whichever matches direction.</li>
+        <li lang="zh"><code>ifftshift</code> 是反向；偶數 $M$ 兩者相同、奇數 $M$ 不同。依方向挑。</li>
+      </ul>
 
-    <li lang="en"><b>Prepare a centered signal for zero-phase analysis:</b> <code>x_zp = fftshift( [centered_data; zeros(M-N,1)] )</code>.</li>
-    <li lang="zh"><b>為零相位分析準備中心化訊號：</b><code>x_zp = fftshift( [centered_data; zeros(M-N,1)] )</code>。</li>
+      <div class="nes-box nes-box--purple" data-label="JS EQUIVALENT">
+        <p lang="en">In the browser: <code>const y = [...x.slice(M/2), ...x.slice(0, M/2)]</code>. That is all the utility really does.</p>
+        <p lang="zh">瀏覽器裡：<code>const y = [...x.slice(M/2), ...x.slice(0, M/2)]</code>。就這麼簡單。</p>
+      </div>
 
-    <li lang="en"><code>ifftshift</code> is the inverse and equals <code>fftshift</code> for even $M$ but differs for odd $M$. Use whichever matches the direction you need.</li>
-    <li lang="zh"><code>ifftshift</code> 是反向操作，對偶數 $M$ 和 <code>fftshift</code> 一樣；奇數 $M$ 時不同。請挑對方向使用。</li>
-  </ul>
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> $M=8$ FFT output, apply <code>fftshift</code>. Where does bin 0 (DC) end up?</p>
+        <p lang="zh"><b>問：</b>$M=8$ 的 FFT 輸出，套 <code>fftshift</code> 後 bin 0（DC）跑到哪？</p>
+        <div class="choices">
+          <button data-correct="0" lang="en">0</button>
+          <button data-correct="0" lang="zh">0</button>
+          <button data-correct="1" lang="en">4</button>
+          <button data-correct="1" lang="zh">4</button>
+          <button data-correct="0" lang="en">7</button>
+          <button data-correct="0" lang="zh">7</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
 
-  <div class="nes-box nes-box--purple" data-label="JS EQUIVALENT">
-    <p lang="en">In the browser: <code>const y = [...x.slice(M/2), ...x.slice(0, M/2)]</code>. That is all the utility really does.</p>
-    <p lang="zh">在瀏覽器裡：<code>const y = [...x.slice(M/2), ...x.slice(0, M/2)]</code>。其實就是這樣。</p>
-  </div>
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · fftshift in action</h3>
+        <h3 lang="zh">實驗 · fftshift 運作</h3>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> You have $M=8$ FFT output. Applying <code>fftshift</code> puts bin 0 (DC) at what index?</p>
-    <p lang="zh"><b>問：</b>$M=8$ 的 FFT 輸出，套 <code>fftshift</code> 後 bin 0（DC）跑到哪個索引？</p>
-    <div class="choices">
-      <button data-correct="0" lang="en">0</button>
-      <button data-correct="0" lang="zh">0</button>
-      <button data-correct="1" lang="en">4</button>
-      <button data-correct="1" lang="zh">4</button>
-      <button data-correct="0" lang="en">7</button>
-      <button data-correct="0" lang="zh">7</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+        <canvas id="beforeCanvas" style="height:180px;"></canvas>
+        <canvas id="afterCanvas"  style="height:180px; margin-top:6px;"></canvas>
+
+        <div class="controls">
+          <label>M</label>
+          <input type="range" id="mSlider" min="4" max="32" step="1" value="8"/>
+          <span class="val" id="mVal">8</span>
+          <label>Shape</label>
+          <select id="shapeSel">
+            <option value="linear" selected>Linear ramp</option>
+            <option value="gauss">Gaussian</option>
+            <option value="spike">Spike at DC</option>
+          </select>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top bar chart: the original array indexed $0\ldots M-1$. Bottom: after <code>fftshift</code>. The halves swap — old index $0$ lands at new index $M/2$. Try the "spike at DC" preset to see DC move from left edge to centre.</p>
+          <p lang="zh">上：原陣列（索引 $0\ldots M-1$）的長條圖。下：<code>fftshift</code> 後。兩半對調 — 舊索引 $0$ 落在新索引 $M/2$。試試「DC spike」預設，看 DC 從左邊搬到中間。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -82,19 +111,83 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { M: 8, shape: 'linear' };
+
+  function makeArray(){
+    const { M, shape } = state;
+    const a = new Float32Array(M);
+    if (shape === 'linear'){
+      for (let i=0;i<M;i++) a[i] = i/(M-1);
+    } else if (shape === 'gauss'){
+      const c = (M-1)/2;
+      for (let i=0;i<M;i++) a[i] = Math.exp(-((i-c)/(M/4))**2);
+    } else {
+      a[0] = 1;
+    }
+    return a;
+  }
+
+  function fftshift(a){
+    const M = a.length;
+    const b = new Float32Array(M);
+    const half = Math.floor(M/2);
+    for (let i=0;i<M;i++) b[i] = a[(i + half) % M];
+    return b;
+  }
+
+  function plotBars(canvasId, a, opts){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:36,r:10,t:14,b:26}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=a.length;g++){ const x=pad.l+iw*g/a.length; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+
+    let ymax=0; for (const v of a) ymax = Math.max(ymax, v);
+    if (ymax === 0) ymax = 1;
+    const bw = iw / a.length;
+    for (let i=0;i<a.length;i++){
+      const x = pad.l + iw*i/a.length + bw*0.1;
+      const h = ih * a[i]/ymax * 0.9;
+      const isDC = (opts.dcIndex === i);
+      ctx.fillStyle = isDC ? '#ffd95a' : '#5aa0ff';
+      ctx.fillRect(x, H-pad.b - h, bw*0.8, h);
+      ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+      ctx.fillText(i, x + bw*0.25, H - pad.b + 14);
+    }
+    ctx.fillStyle='#8f8fa8';
+    ctx.fillText(opts.label||'', 6, 14);
+  }
+
+  function redraw(){
+    const a = makeArray();
+    const b = fftshift(a);
+    const M = state.M;
+    const halfIdx = Math.floor(M/2);
+    plotBars('beforeCanvas', a, { label:'original, DC at index 0', dcIndex: 0 });
+    plotBars('afterCanvas', b, { label:'after fftshift, DC at index M/2', dcIndex: halfIdx });
+  }
+
+  $('mSlider').addEventListener('input', e=>{ state.M=parseInt(e.target.value,10); $('mVal').textContent=state.M; redraw(); });
+  $('shapeSel').addEventListener('change', e=>{ state.shape=e.target.value; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! fftshift swaps halves, so index 0 → M/2 = 4.</span><span lang="zh">🪙 金幣 +1！fftshift 交換兩半，索引 0 → M/2 = 4。</span>';
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! fftshift swaps halves: index 0 → M/2 = 4.</span><span lang="zh">🪙 金幣 +1！fftshift 交換兩半：索引 0 → M/2 = 4。</span>';
       const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
       AudioKit.coin();
     } else {
@@ -102,6 +195,9 @@
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

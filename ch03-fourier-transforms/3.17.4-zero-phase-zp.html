@@ -30,54 +30,96 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Zero_Phase_Zero_Padding.html" target="_blank">SASP §3.17.4 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="PROBLEM">
-    <p lang="en">Appending zeros shifts the window's centre of energy by $N/2$. This produces a huge linear phase slope in the FFT even when the underlying signal is symmetric. Zero-phase padding keeps the centre at index 0.</p>
-    <p lang="zh">把零加在後面會讓視窗能量中心位移 $N/2$，即使訊號是對稱的，FFT 也會冒出一條巨大的線性相位斜率。
-      零相位補零把能量中心維持在索引 0。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="PROBLEM">
+        <p lang="en">Appending zeros shifts the window's centre of energy by $N/2$. This produces a huge <span class="term" data-en="Linear-phase slope"
+          data-en-def="A phase response that grows linearly with frequency; corresponds to a pure time delay."
+          data-zh-def="隨頻率線性增長的相位響應，對應到純時間延遲。">linear-phase slope</span> in the FFT even when the underlying signal is symmetric. Zero-phase padding keeps the centre at index 0.</p>
+        <p lang="zh">把零加在後面會讓視窗能量中心位移 $N/2$，即使訊號是對稱的，FFT 也會冒出一條巨大的<span class="term" data-en="Linear-phase slope"
+          data-en-def="A phase response that grows linearly with frequency; corresponds to a pure time delay."
+          data-zh-def="隨頻率線性增長的相位響應，對應到純時間延遲。">線性相位斜率</span>。零相位補零把能量中心維持在索引 0。</p>
+      </div>
 
-  <h2 lang="en">The layout</h2>
-  <h2 lang="zh">排法</h2>
+      <h2 lang="en">The layout</h2>
+      <h2 lang="zh">排法</h2>
 
-  <ol>
-    <li lang="en">Centre the windowed data at index 0 by placing the left half at positive indices $0\ldots N/2-1$ and the right half at $M-N/2\ldots M-1$ (Matlab calls this layout <code>fftshift</code>).</li>
-    <li lang="zh">把加窗後資料中心放在索引 0 — 左半放在正索引 $0\ldots N/2-1$、右半放在 $M-N/2\ldots M-1$（Matlab 叫 <code>fftshift</code>）。</li>
-    <li lang="en">Fill the middle with zeros.</li>
-    <li lang="zh">中間填零。</li>
-    <li lang="en">FFT as usual.</li>
-    <li lang="zh">照常 FFT。</li>
-  </ol>
+      <ol>
+        <li lang="en">Centre the windowed data at index 0: left half at positive indices $0\ldots N/2-1$, right half at $M-N/2\ldots M-1$ (Matlab calls this layout <code>fftshift</code>).</li>
+        <li lang="zh">把加窗資料中心置於索引 0：左半放正索引 $0\ldots N/2-1$、右半放 $M-N/2\ldots M-1$（Matlab 叫 <code>fftshift</code>）。</li>
+        <li lang="en">Fill the middle with zeros.</li>
+        <li lang="zh">中間填零。</li>
+        <li lang="en">FFT as usual.</li>
+        <li lang="zh">照常 FFT。</li>
+      </ol>
 
-  <p lang="en">
-    Result: the resulting DFT is <em>real</em> if the input was
-    symmetric about $n=0$. No linear phase. This is what you want for
-    tracking phase changes of sinusoids across time — otherwise the
-    fixed linear phase dominates any actual motion.
-  </p>
-  <p lang="zh">
-    結果：如果原資料對 $n=0$ 對稱，輸出 DFT 為<em>純實數</em>，沒有線性相位。
-    這才是跨 frame 追蹤正弦波相位變化時你要的 — 否則固定的線性相位會壓過真正的相位運動。
-  </p>
+      <div class="formula">
+        <span class="label">LAYOUT IN M-POINT BUFFER (N ODD)</span>
+        <div>$$y[m]=\begin{cases}x[m],& 0\le m<\tfrac{N-1}{2}\\ 0,& \tfrac{N-1}{2}\le m<M-\tfrac{N-1}{2}\\ x[m-M],& M-\tfrac{N-1}{2}\le m<M\end{cases}$$</div>
+      </div>
 
-  <div class="formula">
-    <span class="label">LAYOUT IN M-POINT BUFFER (N ODD)</span>
-    <div>$$y[m]=\begin{cases}x[m],& 0\le m<\tfrac{N-1}{2}\\ 0,& \tfrac{N-1}{2}\le m<M-\tfrac{N-1}{2}\\ x[m-M],& M-\tfrac{N-1}{2}\le m<M\end{cases}$$</div>
-  </div>
+      <p lang="en">
+        Result: the DFT is <em>real</em> if the input was symmetric about
+        $n=0$. No linear phase. This is what you want for tracking phase
+        changes of sinusoids across time — otherwise the fixed linear
+        phase dominates any actual motion.
+      </p>
+      <p lang="zh">
+        結果：如果原資料對 $n=0$ 對稱，DFT 為<em>純實數</em>，沒有線性相位。
+        跨 frame 追蹤正弦波相位變化時你要的就是這個 — 否則固定的線性相位會壓過真正的相位運動。
+      </p>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> A window symmetric about its centre yields what kind of DFT, after zero-phase padding?</p>
-    <p lang="zh"><b>問：</b>對中心對稱的視窗，做零相位補零後 DFT 會是？</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">Real-valued (zero phase).</button>
-      <button data-correct="1" lang="zh">純實數（零相位）。</button>
-      <button data-correct="0" lang="en">Pure imaginary.</button>
-      <button data-correct="0" lang="zh">純虛數。</button>
-      <button data-correct="0" lang="en">Random complex numbers.</button>
-      <button data-correct="0" lang="zh">任意複數。</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+      <div class="nes-box nes-box--purple" data-label="WHEN TO USE">
+        <p lang="en"><b>Phase vocoder, sinusoidal modelling, group-delay estimation.</b> Any application where you compare phase across frames needs zero-phase layout. Audio-display and magnitude-only applications don't need it.</p>
+        <p lang="zh"><b>相位聲碼器、正弦建模、群延遲估計。</b>任何需要跨 frame 比較相位的應用都要零相位排法。只看振幅的顯示類應用則不用。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> A window symmetric about its centre yields what kind of DFT after zero-phase padding?</p>
+        <p lang="zh"><b>問：</b>對中心對稱的視窗，做零相位補零後 DFT 會是？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Real-valued (zero phase).</button>
+          <button data-correct="1" lang="zh">純實數（零相位）。</button>
+          <button data-correct="0" lang="en">Pure imaginary.</button>
+          <button data-correct="0" lang="zh">純虛數。</button>
+          <button data-correct="0" lang="en">Random complex numbers.</button>
+          <button data-correct="0" lang="zh">任意複數。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Trailing-zero vs. zero-phase layout</h3>
+        <h3 lang="zh">實驗 · 後端補零 vs. 零相位排法</h3>
+
+        <canvas id="tCanvas" style="height:140px;"></canvas>
+        <canvas id="mCanvas" style="height:140px; margin-top:6px;"></canvas>
+        <canvas id="pCanvas" style="height:140px; margin-top:6px;"></canvas>
+
+        <div class="controls">
+          <label>Layout</label>
+          <select id="layoutSel">
+            <option value="trailing" selected>Trailing zeros (naive)</option>
+            <option value="zerophase">Zero-phase (fftshift)</option>
+          </select>
+          <label>N (signal)</label>
+          <input type="range" id="nSlider" min="8" max="32" step="2" value="16"/>
+          <span class="val" id="nVal">16</span>
+          <label>M (buffer)</label>
+          <input type="range" id="mSlider" min="32" max="128" step="16" value="64"/>
+          <span class="val" id="mVal">64</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: time buffer $y[m]$ (symmetric window, two layouts). Middle: $|Y[k]|$. Bottom: $\angle Y[k]$. Notice: both layouts give identical magnitudes — but the trailing-zero layout has a steep linear phase slope while zero-phase gives a nearly flat phase (just $\pm\pi$ jumps at nulls).</p>
+          <p lang="zh">上：時間緩衝區 $y[m]$（對稱視窗、兩種排法）。中：$|Y[k]|$。下：$\angle Y[k]$。注意：兩種排法的振幅相同 — 但後端補零有陡的線性相位斜率，零相位排法則近乎平（只有零點附近的 $\pm\pi$ 跳變）。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -87,26 +129,99 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { layout: 'trailing', N: 16, M: 64 };
+
+  function buildBuffer(){
+    const { N, M, layout } = state;
+    const buf = new Float32Array(M);
+    // symmetric window (Hann on N samples)
+    const w = DSP.hannWindow(N);
+    if (layout === 'trailing'){
+      for (let n=0;n<N;n++) buf[n] = w[n];
+    } else {
+      const half = Math.floor(N/2);
+      for (let n=0;n<half;n++) buf[n] = w[half + n];
+      for (let n=0;n<N-half;n++) buf[M - (N-half) + n] = w[n];
+    }
+    return buf;
+  }
+
+  function plot(canvasId, arr, opts){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:36,r:10,t:12,b:22}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    const y0 = opts.center ? pad.t + ih/2 : pad.t + ih*0.85;
+    ctx.strokeStyle='#e6e6ff';
+    ctx.beginPath(); ctx.moveTo(pad.l,y0); ctx.lineTo(W-pad.r,y0); ctx.stroke();
+    let ymax = opts.fixedMax || 0;
+    if (!opts.fixedMax) for (const v of arr) ymax = Math.max(ymax, Math.abs(v));
+    if (ymax === 0) ymax = 1;
+    const scale = opts.center ? ih*0.45/ymax : ih*0.75/ymax;
+    ctx.strokeStyle = opts.color || '#5aa0ff'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for (let i=0;i<arr.length;i++){
+      const xp = pad.l + iw*i/(arr.length-1), yp = y0 - scale*arr[i];
+      if (i===0) ctx.moveTo(xp, yp); else ctx.lineTo(xp, yp);
+    }
+    ctx.stroke();
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText(opts.label||'', 6, 14);
+  }
+
+  function redraw(){
+    const buf = buildBuffer();
+    plot('tCanvas', buf, {color:'#5aa0ff', label:'y[m]'});
+    // DFT
+    const M = state.M;
+    const re = new Float32Array(M), im = new Float32Array(M);
+    for (let k=0;k<M;k++){
+      let rr=0, ii=0;
+      for (let n=0;n<M;n++){
+        const ang = -2*Math.PI*k*n/M;
+        rr += buf[n]*Math.cos(ang);
+        ii += buf[n]*Math.sin(ang);
+      }
+      re[k]=rr; im[k]=ii;
+    }
+    const mag = new Float32Array(M), ph = new Float32Array(M);
+    for (let k=0;k<M;k++){ mag[k] = Math.hypot(re[k], im[k]); ph[k] = Math.atan2(im[k], re[k]); }
+    plot('mCanvas', mag, {color:'#ffd95a', label:'|Y[k]|'});
+    plot('pCanvas', ph, {center:true, color:'#ff6aa0', label:'∠Y[k]'});
+  }
+
+  $('layoutSel').addEventListener('change', e=>{ state.layout=e.target.value; redraw(); });
+  $('nSlider').addEventListener('input', e=>{ state.N=parseInt(e.target.value,10); $('nVal').textContent=state.N; redraw(); });
+  $('mSlider').addEventListener('input', e=>{ state.M=parseInt(e.target.value,10); $('mVal').textContent=state.M; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! Real & even input ↔ real & even DFT — the whole point of the zero-phase layout.</span><span lang="zh">🪙 金幣 +1！實偶輸入 ↔ 實偶 DFT，就是零相位排法的目的。</span>';
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Real & even input ↔ real & even DFT — the whole point.</span><span lang="zh">🪙 金幣 +1！實偶輸入 ↔ 實偶 DFT，正是目的。</span>';
       const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
       AudioKit.coin();
     } else {
-      fb.innerHTML = '<span lang="en">✗ Even real signal ↔ even real spectrum (see 3.5.2).</span><span lang="zh">✗ 實偶訊號 ↔ 實偶頻譜（§3.5.2）。</span>';
+      fb.innerHTML = '<span lang="en">✗ Even real signal ↔ even real spectrum (§3.5.2).</span><span lang="zh">✗ 實偶訊號 ↔ 實偶頻譜（§3.5.2）。</span>';
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>
