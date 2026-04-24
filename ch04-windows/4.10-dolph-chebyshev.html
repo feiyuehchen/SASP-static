@@ -30,30 +30,93 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Dolph_Chebyshev_Window.html" target="_blank">SASP §4.10 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="EQUAL-RIPPLE SIDE LOBES">
-    <p lang="en">All its side lobes have the <em>exact same</em> height. For any chosen side-lobe level $A$ dB, this window has the narrowest possible main lobe — proven optimal for that criterion.</p>
-    <p lang="zh">所有旁瓣都是<em>同一高度</em>。對任何指定旁瓣高度 $A$ dB，這個視窗擁有最窄的主瓣 — 在此準則下可證明最優。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="EQUAL-RIPPLE SIDE LOBES">
+        <p lang="en">All side lobes sit at the <em>exact same</em> height $A$ dB. For any chosen $A$, the
+          <span class="term"
+            data-en="Dolph-Chebyshev window"
+            data-en-def="The length-N window whose DTFT has the narrowest main lobe for a prescribed side-lobe level A dB. Closed-form spectrum in terms of Chebyshev polynomials."
+            data-zh-def="在指定旁瓣高度 A dB 下，DTFT 主瓣最窄的長度 N 視窗；頻譜由 Chebyshev 多項式封閉表達。">Dolph-Chebyshev window</span>
+          has the narrowest possible main lobe — provably optimal for that criterion.</p>
+        <p lang="zh">所有旁瓣都是<em>同一高度</em> $A$ dB。對任何 $A$，<span class="term"
+          data-en="Dolph-Chebyshev window"
+          data-en-def="The length-N window whose DTFT has the narrowest main lobe for a prescribed side-lobe level A dB. Closed-form spectrum in terms of Chebyshev polynomials."
+          data-zh-def="在指定旁瓣高度 A dB 下，DTFT 主瓣最窄的長度 N 視窗；頻譜由 Chebyshev 多項式封閉表達。">Dolph-Chebyshev 視窗</span>擁有最窄主瓣 — 在此準則下可證明最優。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">SPECTRUM (CLOSED FORM)</span>
-    <div>$$W(\omega)=\frac{\cos\!\bigl[N\cos^{-1}\!\bigl(\beta\cos(\omega/2)\bigr)\bigr]}{\cosh\!\bigl[N\cosh^{-1}(\beta)\bigr]}$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">SPECTRUM (CLOSED FORM)</span>
+        <div>$$W(\omega)=\frac{\cos\!\bigl[N\cos^{-1}\!\bigl(\beta\cos(\omega/2)\bigr)\bigr]}{\cosh\!\bigl[N\cosh^{-1}(\beta)\bigr]}$$</div>
+      </div>
 
-  <p lang="en">
-    Time-domain $w[n]$ is obtained by inverse FFT of this magnitude
-    spectrum. $\beta$ is related to the side-lobe level $A$ by
-    $\beta=\cosh(\tfrac{1}{N}\cosh^{-1}(10^{A/20}))$.
-  </p>
-  <p lang="zh">
-    時域 $w[n]$ 由上面振幅頻譜反 FFT 得到。
-    $\beta$ 與旁瓣高度 $A$ 的關係：$\beta=\cosh\!\bigl(\tfrac{1}{N}\cosh^{-1}(10^{A/20})\bigr)$。
-  </p>
+      <p lang="en">
+        Inside the main lobe $|\beta\cos(\omega/2)| > 1$ so the numerator is a $\cosh$ (growing); outside it's a real $\cos$ oscillating between $\pm 1$, hence the perfectly flat side-lobe ripple at level $1/\cosh(N\cosh^{-1}\beta)$.
+      </p>
+      <p lang="zh">
+        主瓣內 $|\beta\cos(\omega/2)| > 1$，分子為 $\cosh$（上升）；主瓣外為實數 $\cos$ 在 $\pm 1$ 間振盪，因此旁瓣完全平坦、高度 $1/\cosh(N\cosh^{-1}\beta)$。
+      </p>
 
-  <div class="nes-box nes-box--yellow" data-label="QUIRK">
-    <p lang="en">Because all side lobes are equally tall, total side-lobe energy is high even though each is small. For steady-state sinusoid separation this is ideal; for transient or impulsive signals, the equal-ripple pattern can add distracting structure.</p>
-    <p lang="zh">因為所有旁瓣都等高，單一旁瓣雖低，但總旁瓣能量不小。
-      對穩態正弦分離理想；但對瞬態訊號，這個等漣波圖樣可能看起來很礙眼。</p>
+      <div class="formula">
+        <span class="label">β FROM TARGET A (dB)</span>
+        <div>$$\beta\;=\;\cosh\!\left[\tfrac{1}{N}\cosh^{-1}\!\bigl(10^{A/20}\bigr)\right]$$</div>
+      </div>
+
+      <p lang="en">
+        Time-domain $w[n]$ is obtained by inverse DFT of the magnitude-only spectrum above; the result is real and symmetric. All the design information flows <em>from the spectrum backward</em> — the opposite direction of Kaiser and DPSS.
+      </p>
+      <p lang="zh">
+        時域 $w[n]$ 由上面振幅頻譜反 DFT 得到，結果為實數且對稱。所有設計資訊都從<em>頻譜反推時域</em> — 和 Kaiser、DPSS 方向相反。
+      </p>
+
+      <div class="nes-box nes-box--yellow" data-label="QUIRK">
+        <p lang="en">Because all side lobes are equally tall, total side-lobe energy is high even though each is small. For steady-state sinusoid separation this is ideal; for transient or impulsive signals, the equal-ripple pattern looks like ringing.</p>
+        <p lang="zh">因所有旁瓣等高，單一旁瓣雖低但總能量不小。
+          對穩態正弦分離理想；但對瞬態訊號，等漣波圖樣看起來就像振鈴。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Dolph-Chebyshev is minimax in the frequency domain.</b> Given $A$, main-lobe width is provably minimum. The price: equal side-lobe energy everywhere instead of the usual roll-off.</p>
+        <p lang="zh"><b>Dolph-Chebyshev 是頻域 minimax。</b>給定 $A$，主瓣寬度可證最小。代價：旁瓣等高全域不衰減，而非平常的滾降。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Why might you prefer Kaiser over Dolph-Chebyshev in audio DSP?</p>
+        <p lang="zh"><b>問：</b>音訊 DSP 中，為何偏好 Kaiser 而非 Dolph-Chebyshev？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Kaiser's side-lobes roll off, so transient/ringing artefacts are less visible.</button>
+          <button data-correct="1" lang="zh">Kaiser 旁瓣會滾降，瞬態振鈴不那麼顯眼。</button>
+          <button data-correct="0" lang="en">Kaiser has narrower main lobe.</button>
+          <button data-correct="0" lang="zh">Kaiser 主瓣更窄。</button>
+          <button data-correct="0" lang="en">Dolph-Chebyshev's spectrum is not real.</button>
+          <button data-correct="0" lang="zh">Dolph-Chebyshev 頻譜不是實數。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Sweep A</h3>
+        <h3 lang="zh">實驗 · 調 A</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:220px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>A (dB)</label>
+          <input type="range" id="aSlider" min="20" max="120" step="5" value="60"/>
+          <span class="val" id="aVal">60</span>
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Watch every side-lobe sit on the same horizontal dashed line at $-A$ dB. Larger $A$ pushes the ripple level down and pulls the time-domain window shape toward a narrow peaked bell with slight negative tails at the ends.</p>
+          <p lang="zh">觀察每個旁瓣都躺在 $-A$ dB 的水平虛線上。$A$ 大旁瓣壓低，時域形狀變成窄峰鐘狀，兩端略有負值小翹。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -63,8 +126,109 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { A: 60, N: 64 };
+
+  function chebwin(N, A){
+    // Compute Dolph-Chebyshev window via inverse DFT of its spectrum samples
+    const beta = Math.cosh(Math.acosh(Math.pow(10, A/20)) / (N-1));
+    const w = new Float32Array(N);
+    // W[k] at k = 0..N-1, frequency ω_k = 2π k / N
+    const Wk = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      const wk = 2*Math.PI*k/N;
+      // map to Chebyshev domain; use (-1)^k * T_{N-1}(β cos(ω/2)) but with wrap-around convention
+      const x = beta * Math.cos(wk/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else if (x > 1) num = Math.cosh((N-1)*Math.acosh(x));
+      else num = ((N-1)%2 === 0 ? 1 : -1) * Math.cosh((N-1)*Math.acosh(-x));
+      Wk[k] = num; // no need to normalize — will normalize peak of w[n] to 1
+    }
+    // IDFT (real symmetric)
+    for (let n=0;n<N;n++){
+      let s = 0;
+      for (let k=0;k<N;k++){
+        s += Wk[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/N);
+      }
+      w[n] = s;
+    }
+    let mx = 0; for (let n=0;n<N;n++) if (Math.abs(w[n]) > mx) mx = Math.abs(w[n]);
+    for (let n=0;n<N;n++) w[n] /= mx;
+    return w;
+  }
+
+  function redraw(){
+    const w = chebwin(state.N, state.A);
+    Viz.stem($('tCanvas'), w, { yMin:-0.2, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`CHEBWIN A=${state.A}dB, N=${state.N}` });
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    let mmax = 0;
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const dBfloor = -140;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=7;g++){ const y=pad.t+ih*g/7; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    // target level dashed
+    const yt = pad.t + ih*(1-(-state.A - dBfloor)/(0 - dBfloor));
+    ctx.strokeStyle='#ff6aa0'; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(pad.l,yt); ctx.lineTo(W-pad.r,yt); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for (let i=0;i<K;i++){
+      const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-8)));
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      const x = pad.l + iw*i/(K-1);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    ctx.fillText('0', 4, pad.t+6);
+    ctx.fillText(dBfloor+'', 4, H-pad.b-2);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('-'+state.A+'dB target', W-pad.r-110, yt-4);
+  }
+
+  $('aSlider').addEventListener('input', () => { state.A = parseInt($('aSlider').value,10); $('aVal').textContent = state.A; redraw(); });
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Equal-height side-lobes pile up as ringing far from the main lobe. Rolled-off side-lobes are perceptually cleaner.</span><span lang="zh">🪙 金幣 +1！等高旁瓣會在遠處累積成振鈴。滾降旁瓣聽感更乾淨。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Kaiser actually has slightly wider main lobe at the same A; the benefit is audible/visual side-lobe shape.</span><span lang="zh">✗ 同 A 下 Kaiser 主瓣其實略寬；好處在於旁瓣形狀聽感/視覺較佳。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

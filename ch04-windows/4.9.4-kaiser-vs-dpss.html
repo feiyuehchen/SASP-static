@@ -6,6 +6,8 @@
 <title>4.9.4 Kaiser vs DPSS · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -23,15 +25,97 @@
 
 <div class="page">
   <h1 class="page-title">
-    <span lang="en">Stage 4-9-4 · Kaiser vs DPSS</span>
-    <span lang="zh">關卡 4-9-4 · Kaiser 對照 DPSS</span>
+    <span lang="en">Stage 4-9-4 · Kaiser &amp; DPSS Windows Compared</span>
+    <span lang="zh">關卡 4-9-4 · Kaiser 與 DPSS 視窗比較</span>
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Kaiser_DPSS_Windows_Compared.html" target="_blank">SASP §4.9.4 ↗</a></small>
   </h1>
 
-  <div class="nes-box nes-box--green" data-label="SHORT STORY">
-    <p lang="en">Kaiser is a simple, closed-form approximation to the DPSS. In practice they agree to within a fraction of a dB across the entire useful parameter range. Kaiser wins on implementation cost; DPSS wins only when you need the <em>exact</em> optimum or the full family of orthogonal tapers.</p>
-    <p lang="zh">Kaiser 是 DPSS 的簡單顯式近似。實務上兩者在整個可用範圍內差距不到幾分之一 dB。
-      Kaiser 實作便宜；只有在要<em>精確</em>最優或整組正交 taper 時，才必須用 DPSS。</p>
+  <div class="two-col">
+    <section>
+      <div class="nes-box nes-box--green" data-label="SHORT STORY">
+        <p lang="en">Kaiser is a closed-form approximation to DPSS. In practice they agree to within a small fraction of a dB across the entire useful parameter range. Kaiser wins on implementation cost; DPSS wins only when you need the exact optimum or the full orthogonal taper family.</p>
+        <p lang="zh">Kaiser 是 DPSS 的顯式近似。實務上兩者在整個可用範圍內差距不到 dB 的幾分之一。
+          Kaiser 實作便宜；只有在要精確最優或整組正交 taper 時才必須用 DPSS。</p>
+      </div>
+
+      <h2 lang="en">The mapping</h2>
+      <h2 lang="zh">對應關係</h2>
+
+      <div class="formula">
+        <span class="label">β ↔ NW</span>
+        <div>$$\beta\;\approx\;\pi\,NW\qquad\text{(both yield the same main-lobe / side-lobe trade)}$$</div>
+      </div>
+
+      <p lang="en">
+        So DPSS with $NW=2$ ≈ Kaiser with $\beta\approx 2\pi\approx 6.28$. Both give about $-60$ dB side-lobes with a main-lobe a little over $2\pi NW/N$ wide.
+      </p>
+      <p lang="zh">
+        所以 DPSS $NW=2$ ≈ Kaiser $\beta\approx 2\pi\approx 6.28$。兩者都給 $-60$ dB 左右旁瓣、主瓣寬略大於 $2\pi NW/N$。
+      </p>
+
+      <h2 lang="en">When DPSS is worth the cost</h2>
+      <h2 lang="zh">何時值得用 DPSS</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>✓ Multi-taper spectrum estimation</b> (Thomson's method) — needs the full orthogonal taper set.<br>
+            <b>✓ Provably optimal concentration</b> — paper / thesis demands.<br>
+            <b>✓ Very small N</b> (N &lt; 16) — Kaiser's asymptotic formula starts to drift.<br>
+            <b>✗ One-off windowing in audio DSP</b> — Kaiser is strictly easier and effectively identical.<br>
+            <b>✗ Real-time filter design</b> — DPSS needs an eigendecomposition per design.
+          </span>
+          <span lang="zh">
+            <b>✓ 多 taper 頻譜估計</b>（Thomson 法）— 需整組正交 taper。<br>
+            <b>✓ 可證最佳集中</b> — 論文 / 畢業口試要求。<br>
+            <b>✓ $N$ 非常小</b>（$N &lt; 16$）— Kaiser 漸近公式會漂移。<br>
+            <b>✗ 一次性音訊加窗</b> — Kaiser 絕對比較簡單、實際上相同。<br>
+            <b>✗ 即時濾波器設計</b> — DPSS 每組設計都要特徵分解。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Kaiser replaces DPSS for almost all audio work.</b> Use $\beta=\pi NW$ to translate between them. Keep DPSS for multi-taper and theoretical proofs.</p>
+        <p lang="zh"><b>音訊工作幾乎都可用 Kaiser 取代 DPSS。</b>用 $\beta=\pi NW$ 做換算。多 taper 與理論證明時才保留 DPSS。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You want to replicate a DPSS window with $NW=3$ using Kaiser. What $\beta$?</p>
+        <p lang="zh"><b>問：</b>想用 Kaiser 近似 $NW=3$ 的 DPSS，$\beta$ 取多少？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">β ≈ 9.42 (= 3π).</button>
+          <button data-correct="1" lang="zh">β ≈ 9.42（= 3π）。</button>
+          <button data-correct="0" lang="en">β = 3.</button>
+          <button data-correct="0" lang="zh">β = 3。</button>
+          <button data-correct="0" lang="en">β = 30.</button>
+          <button data-correct="0" lang="zh">β = 30。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · β = π·NW surrogate</h3>
+        <h3 lang="zh">實驗 · β = π·NW 代理</h3>
+        <canvas id="fCanvas" style="height:320px;"></canvas>
+        <div class="controls">
+          <label>NW</label>
+          <input type="range" id="nwSlider" min="1" max="6" step="0.5" value="2.5"/>
+          <span class="val" id="nwVal">2.5</span>
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Yellow: Kaiser with $\beta=\pi NW$. Blue dashed: Kaiser with $\beta=\pi NW-0.5$ (a rough stand-in for a true DPSS which we can't compute in-browser). Compare the main-lobe widths and side-lobe levels — differences are within 1-2 dB across the whole range.</p>
+          <p lang="zh">黃：Kaiser $\beta=\pi NW$。藍虛線：Kaiser $\beta=\pi NW-0.5$（瀏覽器無法算真 DPSS 的粗略替代）。比較主瓣寬與旁瓣高度 — 全範圍差異皆在 1-2 dB 內。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -41,8 +125,81 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { NW: 2.5, N: 64 };
+  function redraw(){
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const dBfloor = -120;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=6;g++){ const y=pad.t+ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    function plotKaiser(beta, color, dashed){
+      const w = DSP.WINDOWS.kaiser(state.N, beta);
+      const { re, im } = DSP.dtft(w, om);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      ctx.setLineDash(dashed ? [4,3] : []);
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-8)));
+        const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+        const x = pad.l + iw*i/(K-1);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    const betaK = Math.PI * state.NW;
+    plotKaiser(Math.max(0, betaK - 0.5), '#5aa0ff', true);
+    plotKaiser(betaK, '#ffd95a', false);
+
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#5aa0ff'; ctx.fillText('≈DPSS', 8, 14);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('Kaiser β=πNW='+betaK.toFixed(2), 90, 14);
+    ctx.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+  $('nwSlider').addEventListener('input', () => { state.NW = parseFloat($('nwSlider').value); $('nwVal').textContent = state.NW.toFixed(1); redraw(); });
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! β = π·3 ≈ 9.42. Both windows will give roughly $-80$ dB side-lobes.</span><span lang="zh">🪙 金幣 +1！β = π·3 ≈ 9.42。兩視窗旁瓣約 $-80$ dB。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Multiply NW by π.</span><span lang="zh">✗ 把 NW 乘上 π。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

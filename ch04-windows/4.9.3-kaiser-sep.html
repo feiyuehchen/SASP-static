@@ -30,24 +30,104 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Minimum_Frequency_Separation_vs_Window.html" target="_blank">SASP §4.9.3 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="DESIGN RULE">
-    <p lang="en">To resolve two tones at $\Delta f$ apart (at sample rate $f_s$) with side-lobe floor $A$ dB, pick</p>
-    <p lang="zh">要在取樣率 $f_s$ 下分離相差 $\Delta f$ 的兩個音、並維持 $A$ dB 旁瓣地板，長度至少：</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="DESIGN GOAL">
+        <p lang="en">Given a target side-lobe level $A$ dB and a minimum frequency separation $\Delta f$ Hz, what window length $N$ do we need? Kaiser has a closed-form answer — no iteration, no table lookup.</p>
+        <p lang="zh">給定旁瓣目標 $A$ dB 與最小頻率分離 $\Delta f$ Hz，所需視窗長度 $N$ 是多少？Kaiser 有顯式解，免迭代、免查表。</p>
+      </div>
 
-  <div class="formula">
-    <div>$$N\;\gtrsim\;\frac{A-8}{2.285\,(2\pi\,\Delta f/f_s)}$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">KAISER LENGTH FORMULA</span>
+        <div>$$N\;\gtrsim\;\frac{A-8}{2.285\,(2\pi\,\Delta f/f_s)}$$</div>
+      </div>
 
-  <p lang="en">
-    That is Kaiser's own design formula. A $60$ dB floor with $\Delta f=100$
-    Hz at $f_s=48000$ means $N\approx 1700$ samples. Beyond that, the
-    main-lobe width is always the bottleneck — not the side-lobe floor.
-  </p>
-  <p lang="zh">
-    這是 Kaiser 自己的設計公式。$f_s=48000$、$\Delta f=100$ Hz、60 dB 地板 → $N\approx 1700$。
-    超過後，主瓣寬度才是真正的瓶頸，而不是旁瓣地板。
-  </p>
+      <p lang="en">
+        The denominator $2\pi\Delta f/f_s$ is the separation in radians per
+        sample. The numerator is the attenuation minus an 8 dB "transition
+        bonus". So <b>doubling the attenuation target roughly doubles $N$</b>,
+        and <b>halving $\Delta f$ also roughly doubles $N$</b>.
+      </p>
+      <p lang="zh">
+        分母 $2\pi\Delta f/f_s$ 是以每樣本弧度表的分離量；分子是衰減減 8 dB「轉變區紅利」。
+        <b>衰減目標加倍、$N$ 大約加倍；$\Delta f$ 減半、$N$ 也大約加倍。</b>
+      </p>
+
+      <h2 lang="en">Typical audio examples ($f_s=48\,000$ Hz)</h2>
+      <h2 lang="zh">典型音訊例子（$f_s=48\,000$ Hz）</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>$\Delta f=100$ Hz, $A=60$ dB</b>: $N\approx 1700$ samples (36 ms).<br>
+            <b>$\Delta f=10$ Hz, $A=80$ dB</b>: $N\approx 24\,000$ samples (0.5 s).<br>
+            <b>$\Delta f=1000$ Hz, $A=40$ dB</b>: $N\approx 110$ samples (2.3 ms).<br>
+            <b>$\Delta f=50$ Hz, $A=100$ dB</b>: $N\approx 4200$ samples (88 ms).
+          </span>
+          <span lang="zh">
+            <b>$\Delta f=100$ Hz，$A=60$ dB</b>：$N\approx 1700$ 樣本（36 ms）。<br>
+            <b>$\Delta f=10$ Hz，$A=80$ dB</b>：$N\approx 24\,000$ 樣本（0.5 秒）。<br>
+            <b>$\Delta f=1000$ Hz，$A=40$ dB</b>：$N\approx 110$ 樣本（2.3 ms）。<br>
+            <b>$\Delta f=50$ Hz，$A=100$ dB</b>：$N\approx 4200$ 樣本（88 ms）。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Resolution has a hard time-cost.</b> 1 Hz separation at 48 kHz requires at least $\sim 0.5$ s of audio no matter how clever your window is — this is the uncertainty principle in wall-clock units.</p>
+        <p lang="zh"><b>解析度有硬性時間成本。</b>48 kHz 下要分離 1 Hz，至少需 $\sim 0.5$ 秒音訊，不論視窗多巧妙 — 這就是測不準原理用實際時間表達。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You want 80 dB attenuation and 100 Hz separation at $f_s=48$ kHz. Roughly what $N$ is needed?</p>
+        <p lang="zh"><b>問：</b>想要 80 dB 衰減、100 Hz 分離，$f_s=48$ kHz，$N$ 大約要多少？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">~2400 samples (50 ms).</button>
+          <button data-correct="1" lang="zh">約 2400 樣本（50 ms）。</button>
+          <button data-correct="0" lang="en">~240 samples (5 ms).</button>
+          <button data-correct="0" lang="zh">約 240 樣本（5 ms）。</button>
+          <button data-correct="0" lang="en">~24000 samples (0.5 s).</button>
+          <button data-correct="0" lang="zh">約 24000 樣本（0.5 秒）。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Kaiser length calculator</h3>
+        <h3 lang="zh">實驗 · Kaiser 長度計算機</h3>
+
+        <div class="controls">
+          <label>A (dB)</label>
+          <input type="range" id="aSlider" min="20" max="120" step="5" value="60"/>
+          <span class="val" id="aVal">60</span>
+          <label>Δf (Hz)</label>
+          <input type="range" id="dfSlider" min="10" max="2000" step="10" value="100"/>
+          <span class="val" id="dfVal">100</span>
+          <label>fs (Hz)</label>
+          <select id="fsSelect" style="font-family:'Press Start 2P',monospace;font-size:10px;padding:4px;background:#0b0c1a;color:#e6e6ff;border:1px solid #5aa0ff;">
+            <option value="8000">8 kHz</option>
+            <option value="16000">16 kHz</option>
+            <option value="44100">44.1 kHz</option>
+            <option value="48000" selected>48 kHz</option>
+            <option value="96000">96 kHz</option>
+          </select>
+        </div>
+
+        <div id="readout" style="font-family:'Press Start 2P',monospace;font-size:11px;line-height:1.8;color:#ffd95a;margin-top:10px;padding:10px;border:2px solid #ffd95a;background:#1a1a2e;"></div>
+
+        <canvas id="fCanvas" style="height:200px; margin-top:10px;"></canvas>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">The lower plot shows the actual Kaiser spectrum at the computed $N$ and $\beta = 0.1102(A-8.7)$ — verify the design reaches the target floor. For very large $N$ the plot is still shown at $N$ capped at 2048 so the FFT is tractable.</p>
+          <p lang="zh">下圖為計算出 $N$ 與 $\beta = 0.1102(A-8.7)$ 的實際 Kaiser 頻譜，驗證是否達目標地板。$N$ 過大時繪圖上限為 2048 方便 FFT。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.9.2-kaiser-xforms.html">◀ 4.9.2</a>
@@ -56,8 +136,91 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { A: 60, df: 100, fs: 48000 };
+
+  function computeN(A, df, fs){
+    const omega = 2*Math.PI*df/fs;
+    return Math.ceil((A - 8) / (2.285 * omega));
+  }
+
+  function redraw(){
+    const N = computeN(state.A, state.df, state.fs);
+    const ms = (N/state.fs*1000).toFixed(1);
+    const beta = state.A > 50 ? 0.1102*(state.A - 8.7) : (state.A >= 21 ? 0.5842*Math.pow(state.A-21, 0.4) + 0.07886*(state.A-21) : 0);
+    $('readout').innerHTML = `N ≥ ${N}<br>duration ≈ ${ms} ms<br>β ≈ ${beta.toFixed(2)}`;
+
+    const Nplot = Math.min(N, 2048);
+    const w = DSP.WINDOWS.kaiser(Nplot, beta);
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    let mmax = 0;
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+    const dBarr = new Float32Array(K);
+    for (let i=0;i<K;i++) dBarr[i] = Math.max(-120, 20*Math.log10(Math.max(mag[i]/mmax, 1e-8)));
+
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=6;g++){ const y=pad.t+ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    // target level line
+    const yt = pad.t + ih*(1-(-state.A - -120)/(0 - -120));
+    ctx.strokeStyle='#ff6aa0'; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(pad.l,yt); ctx.lineTo(W-pad.r,yt); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for (let i=0;i<K;i++){
+      const y = pad.t + ih*(1-(dBarr[i] - -120)/(0 - -120));
+      const x = pad.l + iw*i/(K-1);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    ctx.fillText('0dB', 4, pad.t+6);
+    ctx.fillText(state.A+'dB', 4, yt+3);
+    ctx.fillText('-120', 4, H-pad.b-2);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('target floor', W-pad.r-80, yt-4);
+  }
+  $('aSlider').addEventListener('input', () => { state.A = parseInt($('aSlider').value,10); $('aVal').textContent = state.A; redraw(); });
+  $('dfSlider').addEventListener('input', () => { state.df = parseInt($('dfSlider').value,10); $('dfVal').textContent = state.df; redraw(); });
+  $('fsSelect').addEventListener('change', () => { state.fs = parseInt($('fsSelect').value,10); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! (80-8)/(2.285·2π·100/48000) = 72/(0.0299) ≈ 2407. Try the lab to verify.</span><span lang="zh">🪙 金幣 +1！(80-8)/(2.285·2π·100/48000) = 72/(0.0299) ≈ 2407。去 lab 驗證。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Substitute into N ≳ (A-8)/(2.285·2π·Δf/fs).</span><span lang="zh">✗ 代入 N ≳ (A-8)/(2.285·2π·Δf/fs) 即可。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

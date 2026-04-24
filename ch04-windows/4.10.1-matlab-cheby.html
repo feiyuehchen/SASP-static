@@ -6,6 +6,8 @@
 <title>4.10.1 Matlab for Dolph-Chebyshev · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,20 +30,99 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Dolph_Chebyshev_Window.html" target="_blank">SASP §4.10.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box nes-box--purple" data-label="CODE">
-    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
-% Matlab
-A_dB = 60;                     % desired side-lobe attenuation
-w = chebwin(N, A_dB);
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="DIRECT dB INTERFACE">
+        <p lang="en">Matlab's <code>chebwin</code> takes the side-lobe attenuation in dB directly — no need to invert the $\beta$ formula by hand. scipy exposes the same interface via the <code>at=</code> argument.</p>
+        <p lang="zh">Matlab <code>chebwin</code> 直接吃 dB 衰減，不必手算 $\beta$。scipy 以 <code>at=</code> 對應相同介面。</p>
+      </div>
 
-% Python (scipy)
+      <div class="nes-box nes-box--purple" data-label="CODE">
+        <pre style="color:var(--nes-lime); font-size:11px; line-height:1.8; margin:0; white-space:pre-wrap;">
+% Matlab / Octave (Signal Processing Toolbox)
+N     = 64;
+A_dB  = 60;                     % desired side-lobe attenuation
+w     = chebwin(N, A_dB);
+
+% Spectrum check
+W = abs(fftshift(fft(w, 1024)));
+plot(20*log10(W / max(W)));     % should see flat ripple at -60 dB
+
+# Python (scipy)
 from scipy.signal.windows import chebwin
+import numpy as np
+N = 64
 w = chebwin(N, at=60)
-    </pre>
-  </div>
 
-  <p lang="en">Matlab's <code>chebwin</code> takes the side-lobe attenuation in dB directly, so no need to invert the $\beta$ formula by hand.</p>
-  <p lang="zh">Matlab 的 <code>chebwin</code> 直接吃 dB 衰減，不必手算 $\beta$。</p>
+W = np.abs(np.fft.fftshift(np.fft.fft(w, 1024)))
+# 20*log10(W / W.max()) → flat ripple at -60 dB
+</pre>
+      </div>
+
+      <h2 lang="en">Typical $A$ values</h2>
+      <h2 lang="zh">常見 $A$ 值</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>$A = 40$ dB</b>: very narrow main lobe, side-lobes at $-40$ dB — like a rectangular window, but controlled.<br>
+            <b>$A = 60$ dB</b>: audio-grade baseline; comparable to Blackman but narrower main lobe.<br>
+            <b>$A = 80$ dB</b>: precise spectrum analysis; comparable to Blackman-Harris.<br>
+            <b>$A = 100$-$120$ dB</b>: near double-precision noise floor; useful for forensic analysis.
+          </span>
+          <span lang="zh">
+            <b>$A = 40$ dB</b>：主瓣很窄、旁瓣 $-40$ dB — 類似矩形視窗但受控。<br>
+            <b>$A = 60$ dB</b>：音訊基準；類似 Blackman 但主瓣更窄。<br>
+            <b>$A = 80$ dB</b>：精密頻譜分析；類似 Blackman-Harris。<br>
+            <b>$A = 100$-$120$ dB</b>：逼近雙精度雜訊底；鑑識分析使用。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--yellow" data-label="EVEN N CAVEAT">
+        <p lang="en">Matlab's <code>chebwin</code> actually computes the Dolph-Chebyshev formula for <em>odd</em> $N$ and interpolates for even $N$; very small even $N$ can show slight asymmetry. For audio $N \geq 32$ this is invisible.</p>
+        <p lang="zh">Matlab <code>chebwin</code> 對<em>奇數</em> $N$ 算真正的 Dolph-Chebyshev，偶數 $N$ 用內插；$N$ 很小的偶數會略不對稱。音訊 $N \geq 32$ 看不出來。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>One function call, two parameters, exact minimax.</b> Pick $N$ for main-lobe width, pick $A$ for side-lobe level — <code>chebwin</code> returns the provably optimal window.</p>
+        <p lang="zh"><b>一個函式、兩個參數、精確 minimax。</b>$N$ 決定主瓣寬、$A$ 決定旁瓣高 — <code>chebwin</code> 回傳可證最優視窗。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> What does <code>chebwin(64, 80)</code> compute?</p>
+        <p lang="zh"><b>問：</b><code>chebwin(64, 80)</code> 在算什麼？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">A length-64 window with all side-lobes at -80 dB.</button>
+          <button data-correct="1" lang="zh">長度 64、旁瓣皆 -80 dB 的視窗。</button>
+          <button data-correct="0" lang="en">A window with 80 zero-crossings.</button>
+          <button data-correct="0" lang="zh">含 80 個零交越的視窗。</button>
+          <button data-correct="0" lang="en">An 80-tap filter with 64 dB stopband.</button>
+          <button data-correct="0" lang="zh">80 階、64 dB 阻帶的濾波器。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Time-domain reveal</h3>
+        <h3 lang="zh">實驗 · 時域長相</h3>
+        <canvas id="tCanvas" style="height:220px;"></canvas>
+        <div class="controls">
+          <label>A (dB)</label>
+          <input type="range" id="aSlider" min="20" max="120" step="5" value="60"/>
+          <span class="val" id="aVal">60</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Notice how higher $A$ concentrates more weight in the middle and even produces <em>negative</em> side lobes at the ends — a tell-tale of the frequency-domain equiripple solution.</p>
+          <p lang="zh">$A$ 大時權重更集中中央，兩端甚至出現<em>負</em>旁瓣 — 這是頻域等漣波解的特徵。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.10-dolph-chebyshev.html">◀ 4.10</a>
@@ -50,8 +131,61 @@ w = chebwin(N, at=60)
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { A: 60, N: 64 };
+
+  function chebwin(N, A){
+    const beta = Math.cosh(Math.acosh(Math.pow(10, A/20)) / (N-1));
+    const w = new Float32Array(N);
+    const Wk = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      const wk = 2*Math.PI*k/N;
+      const x = beta * Math.cos(wk/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else if (x > 1) num = Math.cosh((N-1)*Math.acosh(x));
+      else num = ((N-1)%2 === 0 ? 1 : -1) * Math.cosh((N-1)*Math.acosh(-x));
+      Wk[k] = num;
+    }
+    for (let n=0;n<N;n++){
+      let s = 0;
+      for (let k=0;k<N;k++) s += Wk[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/N);
+      w[n] = s;
+    }
+    let mx = 0; for (let n=0;n<N;n++) if (Math.abs(w[n]) > mx) mx = Math.abs(w[n]);
+    for (let n=0;n<N;n++) w[n] /= mx;
+    return w;
+  }
+
+  function redraw(){
+    const w = chebwin(state.N, state.A);
+    Viz.stem($('tCanvas'), w, { yMin:-0.2, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`chebwin(${state.N}, ${state.A} dB)` });
+  }
+  $('aSlider').addEventListener('input', () => { state.A = parseInt($('aSlider').value,10); $('aVal').textContent = state.A; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! First arg = length, second arg = side-lobe attenuation in dB. Main lobe width is chosen automatically to minimise subject to that constraint.</span><span lang="zh">🪙 金幣 +1！第一引數=長度、第二引數=旁瓣衰減 dB。主瓣寬自動取到該條件下最小。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Two-parameter API: length and side-lobe dB.</span><span lang="zh">✗ 兩參數 API：長度與旁瓣 dB。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>
