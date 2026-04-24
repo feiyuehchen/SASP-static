@@ -31,19 +31,71 @@
   </h1>
 
   <div class="nes-box" data-label="DISCRETE SELF-DUAL">
-    <p lang="en">On the unit circle (DTFT), a sampled Gaussian is NOT self-dual. The <em>exact discrete Gaussian</em> is the sequence whose DFT is also proportional to itself — a genuine discrete analogue built from Jacobi theta functions.</p>
-    <p lang="zh">在單位圓上，取樣高斯並不是真的自身對偶。<em>精確離散高斯</em>是其 DFT 與自己成比例的序列 — 用 Jacobi theta 函數建構的離散對應版。</p>
+    <p lang="en">On the unit circle (DTFT), a
+      <span class="term"
+        data-en="Sampled Gaussian"
+        data-en-def="A continuous Gaussian evaluated at integer sample locations; its DTFT is not exactly Gaussian but an aliased sum of Gaussians."
+        data-zh-def="在整數樣本位置取值的連續高斯；其 DTFT 不是嚴格高斯，而是 Gaussian 的混疊和。">sampled Gaussian</span>
+      is NOT self-dual. The
+      <span class="term"
+        data-en="Exact discrete Gaussian window"
+        data-en-def="Sequence whose DFT is proportional to itself; built from Jacobi theta functions (or equivalently, the ground-state of a discrete harmonic oscillator)."
+        data-zh-def="其 DFT 與自身成比例的序列；由 Jacobi theta 函數（或離散簡諧振子基態）構造。">exact discrete Gaussian</span>
+      is the sequence whose DFT is genuinely proportional to itself.</p>
+    <p lang="zh">單位圓上（DTFT）<span class="term"
+        data-en="Sampled Gaussian"
+        data-en-def="A continuous Gaussian evaluated at integer sample locations; its DTFT is not exactly Gaussian but an aliased sum of Gaussians."
+        data-zh-def="在整數樣本位置取值的連續高斯；其 DTFT 不是嚴格高斯，而是 Gaussian 的混疊和。">取樣高斯</span>並非嚴格自身對偶。<span class="term"
+        data-en="Exact discrete Gaussian window"
+        data-en-def="Sequence whose DFT is proportional to itself; built from Jacobi theta functions (or equivalently, the ground-state of a discrete harmonic oscillator)."
+        data-zh-def="其 DFT 與自身成比例的序列；由 Jacobi theta 函數（或離散簡諧振子基態）構造。">精確離散高斯</span>則是其 DFT 嚴格與自身成比例的序列。</p>
   </div>
 
-  <p lang="en">
-    For most audio practice the sampled Gaussian from §4.11 is close
-    enough; the exact version matters when you build theoretical
-    frameworks that need perfect self-duality (e.g. certain chirp-Gabor
-    decompositions).
-  </p>
-  <p lang="zh">
-    音訊實務中 §4.11 的取樣高斯已經夠用；只有在需要完美自身對偶的理論框架中才要用精確版，例如某些 chirp-Gabor 分解。
-  </p>
+  <h2 lang="en">Construction</h2>
+  <h2 lang="zh">構造</h2>
+
+  <div class="formula">
+    <span class="label">VIA JACOBI THETA</span>
+    <div>$$w[n]\;=\;\vartheta_3\!\left(\pi n/N,\,q\right),\qquad q=e^{-\pi/N}$$</div>
+  </div>
+
+  <p lang="en">where $\vartheta_3$ is the Jacobi theta function of the third kind. The key property: its DFT satisfies $W[k] = c\,w[k]$ for some constant $c$ — so the window and its spectrum are literally the same sequence up to scaling.</p>
+  <p lang="zh">其中 $\vartheta_3$ 是 Jacobi theta 第三類函數。關鍵性質：DFT 滿足 $W[k] = c\,w[k]$（$c$ 為常數）— 視窗與其頻譜字面上就是同一個序列（差一個倍數）。</p>
+
+  <h2 lang="en">When this matters</h2>
+  <h2 lang="zh">何時派上用場</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>Theoretical frameworks</b> needing perfect time-frequency self-duality (e.g. certain
+          <span class="term"
+            data-en="Chirp-Gabor decomposition"
+            data-en-def="Signal expansion in a Gaussian-windowed chirp basis; used in time-frequency analysis and chirplet transforms (Ch 11)."
+            data-zh-def="用高斯加窗啁啾為基底的訊號展開；應用於時頻分析與 chirplet 轉換（Ch 11）。">chirp-Gabor decompositions</span>).<br>
+        <b>Precision measurement</b> where any residual aliasing of the sampled Gaussian's spectrum would contaminate results.<br>
+        <b>Education</b>: showing students that the continuous "Gaussian ↔ Gaussian" duality has a discrete analogue, not just an approximation.
+      </span>
+      <span lang="zh">
+        <b>理論框架</b>需要完美時頻自身對偶（例如某些 <span class="term"
+            data-en="Chirp-Gabor decomposition"
+            data-en-def="Signal expansion in a Gaussian-windowed chirp basis; used in time-frequency analysis and chirplet transforms (Ch 11)."
+            data-zh-def="用高斯加窗啁啾為基底的訊號展開；應用於時頻分析與 chirplet 轉換（Ch 11）。">chirp-Gabor 分解</span>）。<br>
+        <b>精密量測</b>中任何取樣高斯頻譜的殘餘混疊都會污染結果。<br>
+        <b>教學</b>：向學生展示連續「高斯 ↔ 高斯」對偶有離散對應、不是近似而已。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--yellow" data-label="PRACTICAL NOTE">
+    <p lang="en">For standard audio STFT work, the sampled Gaussian from §4.11 is accurate enough — the truncation side-lobes are below $-100$ dB at $\sigma \le 0.3$. Reach for the exact discrete version only when the theory demands it.</p>
+    <p lang="zh">一般音訊 STFT，§4.11 的取樣高斯已經夠準 — $\sigma \le 0.3$ 時截斷旁瓣低於 $-100$ dB。只有理論要求時才用精確離散版。</p>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>The discrete world has its own Gaussian.</b> It just takes Jacobi theta functions to spell it out. Most of the time the sampled continuous version is indistinguishable.</p>
+    <p lang="zh"><b>離散世界有自己的高斯。</b>只是要用 Jacobi theta 函數才能寫下來。多數情況下和取樣連續版無法區分。</p>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.11.2-gauss-xform.html">◀ 4.11.2</a>
@@ -54,6 +106,6 @@
 
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body>
 </html>

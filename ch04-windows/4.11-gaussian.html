@@ -54,6 +54,8 @@
 
     <section>
       <div class="viz-card">
+        <h3 lang="en">Lab · σ controls the time / freq trade</h3>
+        <h3 lang="zh">實驗 · σ 控制時頻取捨</h3>
         <canvas id="tCanvas" style="height:130px;"></canvas>
         <canvas id="fCanvas" style="height:170px; margin-top:6px;"></canvas>
         <div class="controls">
@@ -61,6 +63,26 @@
           <input type="range" id="sSlider" min="0.15" max="0.6" step="0.01" value="0.4"/>
           <span class="val" id="sVal">0.40</span>
         </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Small σ = tight time bump, wide spectrum Gaussian. Large σ = broad time Gaussian, narrow spectrum. The product of their widths is constant — the uncertainty principle made visible.</p>
+          <p lang="zh">σ 小 = 時域窄、頻域寬；σ 大 = 時域寬、頻域窄。兩者寬度乘積為常數 — 把測不準原理看個清楚。</p>
+        </div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> What's unique about the Gaussian among all window shapes?</p>
+        <p lang="zh"><b>問：</b>所有視窗裡，Gaussian 的獨特之處？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">It minimises the time-bandwidth product (uncertainty bound).</button>
+          <button data-correct="1" lang="zh">它使時間頻寬積達到最小（測不準下界）。</button>
+          <button data-correct="0" lang="en">It has zero side-lobes.</button>
+          <button data-correct="0" lang="zh">旁瓣為零。</button>
+          <button data-correct="0" lang="en">It is the shortest in time.</button>
+          <button data-correct="0" lang="zh">時域上最短。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
       </div>
     </section>
   </div>
@@ -74,6 +96,7 @@
 
 <script src="../assets/js/dsp.js"></script>
 <script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
@@ -91,6 +114,22 @@
     Viz.line($('fCanvas'), DSP.toDb(mag,-100), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-100, xLabel:'ω', yLabel:'dB', title:'SPECTRUM', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
   }
   $('sSlider').addEventListener('input', () => { state.s = parseFloat($('sSlider').value); $('sVal').textContent = state.s.toFixed(2); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Δt·Δω ≥ 1/2 with equality iff Gaussian. The time-frequency atom everyone else wishes they were.</span><span lang="zh">🪙 金幣 +1！Δt·Δω ≥ 1/2，等號唯一達成者就是高斯。人人稱羨的時頻原子。</span>';
+      const n = (parseInt(localStorage.getItem("dsp.coins")||"0",10)+1); localStorage.setItem("dsp.coins",n); document.getElementById("coins").textContent = n;
+      if (typeof AudioKit !== "undefined") AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Uncertainty principle — the Gaussian hits equality.</span><span lang="zh">✗ 測不準原理 — 高斯剛好取等號。</span>';
+    }
+    if (typeof I18N !== "undefined") I18N.apply(I18N.get());
+  }));
+
+  document.getElementById("coins").textContent = localStorage.getItem("dsp.coins")||"0";
   redraw();
 })();
 </script>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>4.11.2 Gaussian Window &amp; Transform · DSP Quest</title>
+<title>4.11.2 Gaussian &amp; Its Transform · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
@@ -30,18 +30,84 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Gaussian_Window_Transform.html" target="_blank">SASP §4.11.2 ↗</a></small>
   </h1>
 
-  <div class="formula">
-    <span class="label">SELF-DUAL UNDER FT (CONTINUOUS)</span>
-    <div>$$w(t)=e^{-t^{2}/(2\sigma^{2})}\;\longleftrightarrow\;W(\Omega)=\sigma\sqrt{2\pi}\,e^{-\Omega^{2}\sigma^{2}/2}$$</div>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box nes-box--purple" data-label="SELF-DUAL UNDER FT">
+        <p lang="en">A Gaussian in time is a Gaussian in frequency. The widths trade off as $\sigma_t \sigma_\Omega = 1$ at the minimum — the continuous-time statement of the uncertainty principle.</p>
+        <p lang="zh">時域高斯 ↔ 頻域高斯。寬度以 $\sigma_t \sigma_\Omega = 1$ 互換（取最小值）— 測不準原理的連續時間版本。</p>
+      </div>
 
-  <p lang="en">
-    The time and frequency widths multiply to a constant ($\sigma_t \sigma_\Omega = 1$, at the minimum), which is the continuous form of the uncertainty principle. For the discrete, truncated version, the spectrum is only approximately Gaussian near the main lobe and has weak residual side lobes from the truncation.
-  </p>
-  <p lang="zh">
-    時間寬度與頻率寬度的乘積為常數（$\sigma_t \sigma_\Omega = 1$，取極小值），正是不確定性原理的連續形式。
-    對離散、截斷版本，頻譜只在主瓣附近近似高斯，截斷邊緣會有弱旁瓣。
-  </p>
+      <div class="formula">
+        <span class="label">CONTINUOUS-TIME PAIR</span>
+        <div>$$w(t)=e^{-t^{2}/(2\sigma^{2})}\;\longleftrightarrow\;W(\Omega)=\sigma\sqrt{2\pi}\,e^{-\Omega^{2}\sigma^{2}/2}$$</div>
+      </div>
+
+      <p lang="en">Reading the pair: time-domain $\sigma_t = \sigma$; frequency-domain $\sigma_\Omega = 1/\sigma$. Their product is the Heisenberg bound — no non-Gaussian window achieves it.</p>
+      <p lang="zh">讀這對：時域 $\sigma_t = \sigma$、頻域 $\sigma_\Omega = 1/\sigma$。兩者乘積即 Heisenberg 下界 — 非高斯視窗都達不到。</p>
+
+      <h2 lang="en">Discrete &amp; truncated version</h2>
+      <h2 lang="zh">離散與截斷版本</h2>
+
+      <p lang="en">
+        On the unit circle (DTFT) and after truncation to length $N$, the sampled Gaussian is only <em>approximately</em> Gaussian near the main lobe. Two artefacts appear:
+      </p>
+      <p lang="zh">
+        單位圓上（DTFT）且截斷到長度 $N$ 後，取樣高斯只在主瓣附近<em>近似</em>為高斯。出現兩個瑕疵：
+      </p>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>(1)</b> Finite-length endpoints introduce weak side-lobes (the "truncation error").<br>
+            <b>(2)</b> Aliasing: a sampled Gaussian's DTFT is a Gaussian plus its periodic copies — overlap is minimal when $\sigma$ is small enough relative to $N$.
+          </span>
+          <span lang="zh">
+            <b>(1)</b> 有限長度端點產生弱旁瓣（截斷誤差）。<br>
+            <b>(2)</b> 混疊：取樣高斯的 DTFT = 高斯 + 其週期副本；當 $\sigma$ 相對於 $N$ 夠小，重疊可忽略。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Continuous Gaussian is exactly self-dual; discrete / truncated Gaussian is only approximately so.</b> For theoretical elegance use the continuous statement; for practical FFTs, remember the two caveats and use §4.11.3's exact-discrete version if you need perfect self-duality.</p>
+        <p lang="zh"><b>連續高斯嚴格自身對偶；離散/截斷版只近似。</b>理論優雅取連續敘述；實際 FFT 時記住兩個注意事項，需完美自身對偶時請用 §4.11.3 的精確離散版。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Doubling $\sigma$ in $e^{-t^2/(2\sigma^2)}$. The spectrum's $\sigma_\Omega$ becomes:</p>
+        <p lang="zh"><b>問：</b>$e^{-t^2/(2\sigma^2)}$ 的 $\sigma$ 變 2 倍。頻譜的 $\sigma_\Omega$ 變成？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Half (σ_Ω = 1/σ).</button>
+          <button data-correct="1" lang="zh">一半（σ_Ω = 1/σ）。</button>
+          <button data-correct="0" lang="en">Also doubles.</button>
+          <button data-correct="0" lang="zh">也變 2 倍。</button>
+          <button data-correct="0" lang="en">Unchanged.</button>
+          <button data-correct="0" lang="zh">不變。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · σ trade between time and frequency</h3>
+        <h3 lang="zh">實驗 · σ 在時頻間取捨</h3>
+        <canvas id="tCanvas" style="height:160px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>σ</label>
+          <input type="range" id="sSlider" min="0.10" max="0.60" step="0.01" value="0.30"/>
+          <span class="val" id="sVal">0.30</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: Gaussian in time (continuous curve). Bottom: its FT, plotted in linear magnitude (not dB). Both are Gaussian shapes. Move σ: time gets wider → frequency gets narrower, and the product of the two "one-σ widths" printed in the title stays constant.</p>
+          <p lang="zh">上：時域 Gaussian（連續曲線）。下：其 FT，線性振幅（非 dB）。兩者皆為高斯形狀。拉 σ：時域變寬 → 頻域變窄；標題顯示的「一 σ 寬度乘積」保持定值。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.11.1-matlab-gaussian.html">◀ 4.11.1</a>
@@ -50,8 +116,79 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { sigma: 0.3 };
+
+  function plot(canvasId, pts, opts){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:40,r:10,t:16,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+    let ymax = 0; for (const [,y] of pts) ymax = Math.max(ymax, y);
+    if (ymax === 0) ymax = 1;
+    ctx.strokeStyle = opts.color || '#ffd95a'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i=0;i<pts.length;i++){
+      const [x,y] = pts[i];
+      const xp = pad.l + iw * (x - opts.xmin)/(opts.xmax - opts.xmin);
+      const yp = pad.t + ih * (1 - y/ymax);
+      if (i===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+    }
+    ctx.stroke();
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText(opts.title||'', 8, 12);
+  }
+
+  function redraw(){
+    const sigma = state.sigma;
+    const ptsT = [];
+    for (let i=0;i<=200;i++){
+      const t = -2 + 4*i/200;
+      ptsT.push([t, Math.exp(-t*t/(2*sigma*sigma))]);
+    }
+    const ptsF = [];
+    const sigmaOmega = 1/sigma;
+    for (let i=0;i<=200;i++){
+      const omega = -10 + 20*i/200;
+      ptsF.push([omega, sigma*Math.sqrt(2*Math.PI)*Math.exp(-omega*omega*sigma*sigma/2)]);
+    }
+    const prod = (sigma * sigmaOmega).toFixed(2);
+    plot('tCanvas', ptsT, { xmin:-2, xmax:2, color:'#5aa0ff', title:`time σ=${sigma.toFixed(2)}` });
+    plot('fCanvas', ptsF, { xmin:-10, xmax:10, color:'#ffd95a', title:`freq σ_Ω=${sigmaOmega.toFixed(2)}   product=${prod}` });
+  }
+
+  $('sSlider').addEventListener('input', e => { state.sigma = parseFloat(e.target.value); $('sVal').textContent = state.sigma.toFixed(2); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! σ_t · σ_Ω = 1. Doubling one halves the other.</span><span lang="zh">🪙 金幣 +1！σ_t · σ_Ω = 1。其中一個變 2 倍，另一個就減半。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Gaussian widths are inversely related.</span><span lang="zh">✗ 高斯的時頻寬度成反比。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

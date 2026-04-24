@@ -6,6 +6,8 @@
 <title>4.11.1 Matlab for Gaussian · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,21 +30,56 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Gaussian_Window.html" target="_blank">SASP §4.11.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box nes-box--purple" data-label="CODE">
-    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
-% Matlab — uses alpha = 1/(2*sigma)
-w = gausswin(N, alpha);
-
-% Manual
-n = (0:N-1)';
-M = (N-1)/2;
-sigma = 0.4;
-w = exp(-0.5 * ((n - M) / (sigma * M)).^2);
-    </pre>
+  <div class="nes-box" data-label="TWO PARAMETRISATIONS">
+    <p lang="en">Matlab's built-in <code>gausswin</code> uses $\alpha = 1/(2\sigma)$ — the reciprocal of the $\sigma$ parameter SASP prefers. Larger $\alpha$ → tighter taper → wider spectrum. Easy to confuse, so either spell it out or build manually.</p>
+    <p lang="zh">Matlab 內建 <code>gausswin</code> 用的是 $\alpha = 1/(2\sigma)$ — 與 SASP 偏好的 $\sigma$ 互為倒數。$\alpha$ 大 → 收尾緊 → 頻譜寬。容易混淆，不是寫清楚就是自己手寫。</p>
   </div>
 
-  <p lang="en">Matlab's parameter is the reciprocal: $\alpha=\tfrac{1}{2\sigma}$. A larger alpha → tighter taper → wider spectrum.</p>
-  <p lang="zh">Matlab 的參數是倒數關係 $\alpha=\tfrac{1}{2\sigma}$。alpha 大 → 收尾緊 → 頻譜寬。</p>
+  <div class="nes-box nes-box--purple" data-label="MATLAB / OCTAVE">
+    <pre style="color:var(--nes-lime); font-size:11px; line-height:1.8; margin:0; white-space:pre-wrap;">
+% Built-in: alpha = 1/(2*sigma)
+N = 256;  alpha = 2.5;           % alpha=2.5 → sigma=0.2
+w1 = gausswin(N, alpha);
+
+% Manual, parametrised by sigma
+function w = gauss_window(N, sigma)
+  n = (0:N-1)';
+  M = (N-1)/2;
+  w = exp(-0.5 * ((n - M) ./ (sigma * M)).^2);
+end
+
+sigma = 0.4;
+w2 = gauss_window(N, sigma);
+
+% Sanity: they should agree with alpha = 1/(2*sigma)
+max(abs(w1 - gauss_window(N, 0.2)))  % ≈ 1e-16
+</pre>
+  </div>
+
+  <h2 lang="en">Typical σ values</h2>
+  <h2 lang="zh">常見 σ 值</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>σ = 0.5</b>: very loose taper, wide time bump → narrow spectrum. Good for fine frequency resolution.<br>
+        <b>σ = 0.4</b>: the SASP default. Balanced — good main-lobe/side-lobe trade.<br>
+        <b>σ = 0.3</b>: tighter taper, main-lobe $\approx 6\pi/N$, side-lobes $\le -65$ dB.<br>
+        <b>σ = 0.2</b>: very tight, side-lobes below $-95$ dB but main-lobe becomes $> 10\pi/N$.
+      </span>
+      <span lang="zh">
+        <b>σ = 0.5</b>：收尾極鬆、時域寬 → 頻域窄。適合細緻頻率解析度。<br>
+        <b>σ = 0.4</b>：SASP 預設。主瓣/旁瓣取捨均衡。<br>
+        <b>σ = 0.3</b>：稍緊，主瓣約 $6\pi/N$、旁瓣 $\le -65$ dB。<br>
+        <b>σ = 0.2</b>：極緊，旁瓣低於 $-95$ dB，但主瓣變成 $> 10\pi/N$。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>σ parameterises the uncertainty trade directly.</b> Think "time support in units of half-window" — $\sigma=0.4$ means the Gaussian's $\pm 1\sigma$ extends to $\pm 40\%$ of the half-window.</p>
+    <p lang="zh"><b>σ 直接量化測不準取捨。</b>想成「以半視窗為單位的時間支撐」— $\sigma=0.4$ 代表 $\pm 1\sigma$ 範圍延伸到半視窗的 $\pm 40\%$。</p>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.11-gaussian.html">◀ 4.11</a>
@@ -53,6 +90,6 @@ w = exp(-0.5 * ((n - M) / (sigma * M)).^2);
 
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body>
 </html>

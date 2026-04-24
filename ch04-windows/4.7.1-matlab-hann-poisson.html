@@ -6,6 +6,8 @@
 <title>4.7.1 Matlab for Hann-Poisson · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,20 +30,57 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Hann_Poisson_Window.html" target="_blank">SASP §4.7.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box nes-box--purple" data-label="CODE">
-    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
-% Matlab / Octave
-n = (0:N-1)';
-M = (N-1)/2;
-alpha = 2;
-hann_part    = 0.5 * (1 - cos(2*pi*n/(N-1)));
-poisson_part = exp(-alpha * abs(n-M) / M);
-w = hann_part .* poisson_part;
-    </pre>
+  <div class="nes-box" data-label="NO BUILT-IN — ROLL YOUR OWN">
+    <p lang="en">Matlab's Signal Processing Toolbox ships Hann and Poisson separately but not their product. Build Hann-Poisson by element-wise multiplication.</p>
+    <p lang="zh">Matlab Signal Processing Toolbox 內建 Hann 和 Poisson，但不含乘積形式；自己做 — 逐元素相乘即可。</p>
   </div>
 
-  <p lang="en">No built-in; build it by element-wise product. Sweep α to find the side-lobe level / main-lobe width combination that fits your problem.</p>
-  <p lang="zh">沒有內建函式；逐元素相乘自己做。掃 α 找適合自己問題的旁瓣/主瓣組合。</p>
+  <div class="nes-box nes-box--purple" data-label="MATLAB / OCTAVE">
+    <pre style="color:var(--nes-lime); font-size:11px; line-height:1.8; margin:0; white-space:pre-wrap;">
+function w = hann_poisson(N, alpha)
+  n = (0:N-1)';
+  M = (N-1)/2;
+  hann_part    = 0.5 * (1 - cos(2*pi*n/(N-1)));
+  poisson_part = exp(-alpha * abs(n-M) / M);
+  w = hann_part .* poisson_part;
+end
+
+% usage
+N = 256; alpha = 2;
+w = hann_poisson(N, alpha);
+plot(w);                                % time-domain shape
+W = 20*log10(abs(fftshift(fft(w, 4096))));
+plot(linspace(-pi, pi, 4096), W);       % spectrum in dB
+</pre>
+  </div>
+
+  <h2 lang="en">Picking α</h2>
+  <h2 lang="zh">如何挑 α</h2>
+
+  <p lang="en">Sweep α over a grid (say $0.5 \ldots 3$ in steps of $0.25$) and measure the first side-lobe level and main-lobe width. Plot the tradeoff. Common sweet spots:</p>
+  <p lang="zh">對 α 做網格搜索（$0.5 \ldots 3$、步長 $0.25$），測第一旁瓣與主瓣寬度。畫取捨曲線。常見甜蜜點：</p>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>α = 0</b>: reduces to Hann. Side-lobe $-32$ dB, main-lobe $8\pi/N$.<br>
+        <b>α = 1</b>: modest Poisson taper. Side-lobe $\approx -40$ dB.<br>
+        <b>α = 2</b>: canonical Hann-Poisson. Side-lobe $\approx -55$ dB, main-lobe $\approx 10\pi/N$.<br>
+        <b>α = 3</b>: strong taper, side-lobe $\approx -65$ dB, main-lobe widens significantly.
+      </span>
+      <span lang="zh">
+        <b>α = 0</b>：退回 Hann。旁瓣 $-32$ dB、主瓣 $8\pi/N$。<br>
+        <b>α = 1</b>：輕度 Poisson 收尾。旁瓣約 $-40$ dB。<br>
+        <b>α = 2</b>：經典 Hann-Poisson。旁瓣約 $-55$ dB、主瓣約 $10\pi/N$。<br>
+        <b>α = 3</b>：強收尾、旁瓣約 $-65$ dB、主瓣顯著變寬。
+      </span>
+    </div>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>α is your single knob.</b> Hann-Poisson turns the standard Hann into a tunable family — cheap to compute, easy to sweep, and COLA-friendly when the Hann factor drives reconstruction.</p>
+    <p lang="zh"><b>α 是唯一旋鈕。</b>Hann-Poisson 把標準 Hann 變成可調家族 — 計算便宜、易於掃描，而且當 Hann 主導重建時仍 COLA 友善。</p>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.7-hann-poisson.html">◀ 4.7</a>
@@ -52,6 +91,6 @@ w = hann_part .* poisson_part;
 
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>document.getElementById('coins').textContent=localStorage.getItem('dsp.coins')||'0';</script>
 </body>
 </html>

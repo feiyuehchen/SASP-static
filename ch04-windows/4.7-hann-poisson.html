@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>4.7 Hann-Poisson · DSP Quest</title>
+<title>4.7 Hann-Poisson Window · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
@@ -30,17 +30,97 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Hann_Poisson_Window.html" target="_blank">SASP §4.7 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="MIX THE TWO">
-    <p lang="en">Product of a Hann and a Poisson window. Inherits the Hann's gentle zeros and the Poisson's exponential decay, killing side lobes faster than either.</p>
-    <p lang="zh">Hann 與 Poisson 的乘積。同時擁有 Hann 的兩端平滑為零、以及 Poisson 的指數衰減，旁瓣壓得比兩者都低。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="MIX THE TWO">
+        <p lang="en">Product of a
+          <span class="term"
+            data-en="Hann window"
+            data-en-def="0.5(1 - cos(2πn/(N-1))). Smooth raised cosine, zero at both endpoints."
+            data-zh-def="0.5(1 - cos(2πn/(N-1)))。平滑升餘弦，兩端點為零。">Hann</span>
+          and a
+          <span class="term"
+            data-en="Poisson window"
+            data-en-def="An exponential taper w[n]=exp(-α|n-M|/M) centred on the middle sample. Parameter α controls decay rate."
+            data-zh-def="指數收尾 w[n]=exp(-α|n-M|/M)，在中間樣本處最大。參數 α 控制衰減速率。">Poisson</span>
+          window. Inherits the Hann's gentle zeros and the Poisson's exponential decay, killing side lobes faster than either alone.</p>
+        <p lang="zh"><span class="term"
+            data-en="Hann window"
+            data-en-def="0.5(1 - cos(2πn/(N-1))). Smooth raised cosine, zero at both endpoints."
+            data-zh-def="0.5(1 - cos(2πn/(N-1)))。平滑升餘弦，兩端點為零。">Hann</span> 與
+          <span class="term"
+            data-en="Poisson window"
+            data-en-def="An exponential taper w[n]=exp(-α|n-M|/M) centred on the middle sample. Parameter α controls decay rate."
+            data-zh-def="指數收尾 w[n]=exp(-α|n-M|/M)，在中間樣本處最大。參數 α 控制衰減速率。">Poisson</span> 視窗的乘積。同時具備 Hann 的兩端平滑為零、以及 Poisson 的指數衰減 — 旁瓣壓得比兩者單獨都低。</p>
+      </div>
 
-  <div class="formula">
-    <div>$$w[n]=\tfrac{1}{2}\Bigl(1-\cos\tfrac{2\pi n}{N-1}\Bigr)\cdot e^{-\alpha|n-(N-1)/2|/((N-1)/2)}$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">HANN-POISSON</span>
+        <div>$$w[n]=\tfrac{1}{2}\Bigl(1-\cos\tfrac{2\pi n}{N-1}\Bigr)\cdot e^{-\alpha|n-M|/M},\quad M=\tfrac{N-1}{2}$$</div>
+      </div>
 
-  <p lang="en">Useful when you want Hann's nice COLA behaviour plus an extra tunable taper.</p>
-  <p lang="zh">當你想要 Hann 的 COLA 特性，又想多一個可調收尾時適用。</p>
+      <h2 lang="en">Why multiply instead of add?</h2>
+      <h2 lang="zh">為什麼是相乘而非相加？</h2>
+
+      <p lang="en">
+        Time-domain product ↔ frequency-domain convolution. Convolving a Hann's spectrum (which is already three Dirichlet bumps) with a Poisson's spectrum (a Lorentzian) produces a composite with deeper side-lobes than either factor. Adding time-domain shapes would not compound the side-lobe suppression — only multiplication gives the convolution-based reinforcement.
+      </p>
+      <p lang="zh">
+        時域相乘 ↔ 頻域卷積。Hann 頻譜（三個 Dirichlet 凸起）與 Poisson 頻譜（Lorentzian）卷積，旁瓣會比兩者單獨更深。時域相加不會讓旁瓣壓制疊加 — 只有相乘才能靠卷積互相強化。
+      </p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Use when:</b> you want Hann's 50%-overlap
+          <span class="term"
+            data-en="COLA (Constant Overlap-Add)"
+            data-en-def="Windows that sum to a constant across shifted positions, enabling lossless STFT overlap-add reconstruction."
+            data-zh-def="各平移位置相加為定值的視窗；使 STFT 重疊相加能無損重建。">COLA</span>
+          property <em>plus</em> deeper side-lobes than Hann alone. Good for analysis before aggressive per-band modification (SMS, pitch shift).</p>
+        <p lang="zh"><b>用於：</b>需要 Hann 的 50% 重疊
+          <span class="term"
+            data-en="COLA (Constant Overlap-Add)"
+            data-en-def="Windows that sum to a constant across shifted positions, enabling lossless STFT overlap-add reconstruction."
+            data-zh-def="各平移位置相加為定值的視窗；使 STFT 重疊相加能無損重建。">COLA</span>、<em>加上</em>比 Hann 更深的旁瓣。分析後要激進逐帶修改（SMS、變調）時特別適合。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Raising $\alpha$ from 0 to 2 in the Hann-Poisson primarily:</p>
+        <p lang="zh"><b>問：</b>Hann-Poisson 的 $\alpha$ 從 0 拉到 2 主要會：</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Narrows the overall window taper in time and deepens side-lobes in frequency.</button>
+          <button data-correct="1" lang="zh">時域整體收尾變窄、頻域旁瓣變深。</button>
+          <button data-correct="0" lang="en">Widens the time-domain taper and raises side-lobes.</button>
+          <button data-correct="0" lang="zh">時域變寬、旁瓣變高。</button>
+          <button data-correct="0" lang="en">Has no effect on the spectrum.</button>
+          <button data-correct="0" lang="zh">對頻譜無影響。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Hann, Poisson, and their product</h3>
+        <h3 lang="zh">實驗 · Hann、Poisson 與兩者乘積</h3>
+        <canvas id="tCanvas" style="height:150px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>α (Poisson)</label>
+          <input type="range" id="aSlider" min="0" max="4" step="0.1" value="2.0"/>
+          <span class="val" id="aVal">2.0</span>
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: Hann (blue), Poisson (pink), product = Hann-Poisson (yellow). Bottom: their spectra in dB. At $\alpha=0$ Poisson is flat, Hann-Poisson = Hann. As $\alpha$ grows, Poisson tapers faster and the composite side-lobes drop.</p>
+          <p lang="zh">上：Hann（藍）、Poisson（粉）、乘積 Hann-Poisson（黃）。下：三者頻譜 dB。$\alpha=0$ 時 Poisson 為常數，Hann-Poisson = Hann。$\alpha$ 變大 → Poisson 收尾更快 → 合成旁瓣下降。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.6-poisson.html">◀ 4.6</a>
@@ -49,8 +129,133 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { alpha: 2.0, N: 64 };
+
+  function windows() {
+    const { alpha, N } = state;
+    const M = (N-1)/2;
+    const hann = new Float32Array(N);
+    const poisson = new Float32Array(N);
+    const hp = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      hann[n] = 0.5 * (1 - Math.cos(2*Math.PI*n/(N-1)));
+      poisson[n] = Math.exp(-alpha * Math.abs(n-M) / M);
+      hp[n] = hann[n] * poisson[n];
+    }
+    return { hann, poisson, hp };
+  }
+
+  function plotStem(canvasId, arrs, opts){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:36,r:10,t:12,b:22}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff';
+    const y0 = pad.t + ih*0.9;
+    ctx.beginPath(); ctx.moveTo(pad.l,y0); ctx.lineTo(W-pad.r,y0); ctx.stroke();
+    const N = arrs[0].data.length;
+    for (const { data, color, label } of arrs){
+      ctx.strokeStyle = color; ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      for (let n=0;n<N;n++){
+        const xp = pad.l + iw*n/(N-1), yp = y0 - ih*0.85 * data[n];
+        if (n===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+      }
+      ctx.stroke();
+    }
+    // legend
+    ctx.font='9px "Press Start 2P", monospace';
+    let lx = 8;
+    for (const { color, label } of arrs){
+      ctx.fillStyle = color; ctx.fillText(label, lx, 14); lx += 80;
+    }
+  }
+
+  function plotDb(canvasId, arrs){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:14,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=6;g++){ const y=pad.t+ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+
+    const K = 512, omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const dBfloor = -80;
+    for (const { data, color } of arrs){
+      const {re, im} = DSP.dtft(data, omegas);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      ctx.strokeStyle = color; ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-6)));
+        const y = pad.t + ih * (1 - (db-dBfloor)/(0-dBfloor));
+        const x = pad.l + iw * i/(K-1);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('|W(ω)| dB', 8, 12);
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){
+      const x = pad.l + iw*(v+Math.PI)/(2*Math.PI);
+      ctx.fillText(lbl, x-6, H-pad.b+14);
+    }
+  }
+
+  function redraw(){
+    const { hann, poisson, hp } = windows();
+    plotStem('tCanvas', [
+      { data: hann, color:'#5aa0ff', label:'Hann' },
+      { data: poisson, color:'#ff6aa0', label:'Poisson' },
+      { data: hp, color:'#ffd95a', label:'H·P' },
+    ]);
+    plotDb('fCanvas', [
+      { data: hann, color:'#5aa0ff' },
+      { data: poisson, color:'#ff6aa0' },
+      { data: hp, color:'#ffd95a' },
+    ]);
+  }
+
+  $('aSlider').addEventListener('input', e => { state.alpha = parseFloat(e.target.value); $('aVal').textContent = state.alpha.toFixed(1); redraw(); });
+  $('nSlider').addEventListener('input', e => { state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Larger α = faster Poisson decay = narrower composite taper = deeper side-lobes via convolution in frequency.</span><span lang="zh">🪙 金幣 +1！α 越大 → Poisson 衰減越快 → 合成收尾越窄 → 頻域卷積後旁瓣越深。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Slide α and watch the yellow (product) curve.</span><span lang="zh">✗ 拉 α 觀察黃色（乘積）曲線。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>
