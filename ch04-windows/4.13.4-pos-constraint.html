@@ -6,6 +6,8 @@
 <title>4.13.4 Positive-Sample Constraint · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,13 +30,97 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Positive_Window_Sample_Constraint.html" target="_blank">SASP §4.13.4 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="WHY POSITIVE?">
-    <p lang="en">Negative samples add oscillation to the shape. Forcing $w[n]\ge 0$ guarantees a non-oscillating taper — often desirable for pedagogical reasons or when subsequent processing assumes a positive envelope.</p>
-    <p lang="zh">負樣本會讓形狀振盪。強制 $w[n]\ge 0$ 保證是不振盪的收尾 — 常在教學或要求正包絡的後處理中需要。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="WHY POSITIVE?">
+        <p lang="en">Negative samples add oscillation to the taper shape (look at Dolph-Chebyshev at large $A$ — those end wiggles). Forcing $w[n]\ge 0$ gives a non-oscillating bell shape, which downstream processing often assumes (e.g. envelope analysis, STFT energy accumulation, visual pedagogy).</p>
+        <p lang="zh">負樣本會讓形狀振盪（看大 $A$ 時的 Dolph-Chebyshev — 兩端的小翹曲）。強制 $w[n]\ge 0$ 得到不振盪的鐘形，下游處理常預設這個（如包絡分析、STFT 能量累計、視覺教學）。</p>
+      </div>
 
-  <p lang="en">Cost: larger main-lobe or higher side-lobe floor. Only add this constraint if you truly need non-negativity.</p>
-  <p lang="zh">代價：主瓣變寬或旁瓣抬高。真的需要非負時才加。</p>
+      <div class="formula">
+        <span class="label">THE CONSTRAINT</span>
+        <div>$$w[n]\;\ge\;0,\qquad n=0,\dots,N-1$$</div>
+      </div>
+
+      <p lang="en">
+        These are $N$ simple lower bounds in the LP — each variable gets <code>lb=0</code> in scipy, or a single linear inequality row $-w[n]\le 0$. Very cheap to add.
+      </p>
+      <p lang="zh">
+        在 LP 中為 $N$ 個簡單下界 — scipy 中每個變數設 <code>lb=0</code>，或加一行 $-w[n]\le 0$。成本極低。
+      </p>
+
+      <h2 lang="en">The cost</h2>
+      <h2 lang="zh">代價</h2>
+
+      <p lang="en">
+        Positivity restricts the feasible region, so the optimal $\delta$ grows. Typically:
+      </p>
+      <p lang="zh">
+        正值約束限縮可行域，最優 $\delta$ 會變大。典型差異：
+      </p>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>$A=60$ dB unconstrained</b> → same main-lobe width ($\sim 5\pi/N$).<br>
+            <b>$A=60$ dB positive-only</b> → main-lobe widens to $\sim 7\pi/N$ for the same $A$.<br>
+            <b>$A=100$ dB unconstrained</b> → $\sim 7.9\pi/N$.<br>
+            <b>$A=100$ dB positive-only</b> → won't achieve $A=100$ with compact support at small $N$.
+          </span>
+          <span lang="zh">
+            <b>$A=60$ dB 無約束</b> → 主瓣寬 $\sim 5\pi/N$。<br>
+            <b>$A=60$ dB 僅正</b> → 同 $A$ 下主瓣擴至 $\sim 7\pi/N$。<br>
+            <b>$A=100$ dB 無約束</b> → $\sim 7.9\pi/N$。<br>
+            <b>$A=100$ dB 僅正</b> → 在小 $N$ 下無法達 $A=100$。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--yellow" data-label="ALREADY POSITIVE">
+        <p lang="en">Hann, Hamming, Blackman, Kaiser, Gaussian, Poisson — all naturally positive. You only need this constraint if your formulation might produce negative tails (Dolph-Chebyshev, LP output).</p>
+        <p lang="zh">Hann、Hamming、Blackman、Kaiser、Gaussian、Poisson — 天然皆正。只有當你的公式可能產生負尾（Dolph-Chebyshev、LP 輸出），才需要此約束。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Positivity is a design choice, not a property.</b> Add it only when downstream processing needs it. Expect a few dB of attenuation or a modest main-lobe widening.</p>
+        <p lang="zh"><b>正值是設計選擇、非內稟性質。</b>下游需要時才加。預期幾 dB 衰減損失或主瓣略寬。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You need a window for computing a positive energy envelope per frame. Which window needs positivity enforcement?</p>
+        <p lang="zh"><b>問：</b>要用視窗算正能量包絡，哪種視窗需強制正值？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Dolph-Chebyshev with large A (has negative tails that would subtract energy incorrectly).</button>
+          <button data-correct="1" lang="zh">大 A 的 Dolph-Chebyshev（負尾會不正確地扣除能量）。</button>
+          <button data-correct="0" lang="en">Hann (already non-negative).</button>
+          <button data-correct="0" lang="zh">Hann（本就非負）。</button>
+          <button data-correct="0" lang="en">Rectangular (trivially positive = 1).</button>
+          <button data-correct="0" lang="zh">矩形（平凡為 1，正值）。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Positive vs default</h3>
+        <h3 lang="zh">實驗 · 正值 vs 預設</h3>
+        <canvas id="tCanvas" style="height:140px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>A (dB)</label>
+          <input type="range" id="aSlider" min="40" max="120" step="5" value="80"/>
+          <span class="val" id="aVal">80</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Yellow: Dolph-Chebyshev at target $A$ — note negative tails at large $A$. Pink: positive-clipped variant (rough simulation — keeps only $\max(w, 0)$ then renormalises). Spectrum comparison shows the positive version loses some attenuation depth.</p>
+          <p lang="zh">黃：Dolph-Chebyshev 目標 $A$ — 大 $A$ 時注意兩端負尾。粉：正值裁切版本（粗略模擬 — 取 $\max(w, 0)$ 再歸一）。頻譜比較顯示正值版本失去部分衰減深度。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13.3-sym-constraint.html">◀ 4.13.3</a>
@@ -43,8 +129,146 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { A: 80 };
+
+  function chebwin(N, A){
+    const beta = Math.cosh(Math.acosh(Math.pow(10, A/20)) / (N-1));
+    const w = new Float32Array(N);
+    const Wk = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      const wk = 2*Math.PI*k/N;
+      const x = beta * Math.cos(wk/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else if (x > 1) num = Math.cosh((N-1)*Math.acosh(x));
+      else num = ((N-1)%2 === 0 ? 1 : -1) * Math.cosh((N-1)*Math.acosh(-x));
+      Wk[k] = num;
+    }
+    for (let n=0;n<N;n++){
+      let s = 0;
+      for (let k=0;k<N;k++) s += Wk[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/N);
+      w[n] = s;
+    }
+    let mx = 0; for (let n=0;n<N;n++) if (Math.abs(w[n]) > mx) mx = Math.abs(w[n]);
+    for (let n=0;n<N;n++) w[n] /= mx;
+    return w;
+  }
+
+  function redraw(){
+    const N = 64;
+    const w1 = chebwin(N, state.A);
+    const w2 = new Float32Array(N);
+    for (let n=0;n<N;n++) w2[n] = Math.max(0, w1[n]);
+
+    const c = $('tCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:32,r:10,t:14,b:22}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    const y0 = pad.t + ih*0.6;
+    ctx.strokeStyle='#e6e6ff'; ctx.beginPath(); ctx.moveTo(pad.l,y0); ctx.lineTo(W-pad.r,y0); ctx.stroke();
+
+    // plot w1 and w2
+    function plot(w, color, dashed){
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      if (dashed) ctx.setLineDash([4,3]);
+      ctx.beginPath();
+      for (let n=0;n<N;n++){
+        const x = pad.l + iw*n/(N-1);
+        const y = y0 - ih*0.45 * w[n];
+        if (n===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    plot(w1, '#ffd95a');
+    plot(w2, '#ff6aa0', true);
+
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#ffd95a'; ctx.fillText('default', 8, 14);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('clipped', 80, 14);
+
+    // spectra
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    function specCanvas(w, canvas, color){
+      const { re, im } = DSP.dtft(w, om);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      return { mag, mmax };
+    }
+    const s1 = specCanvas(w1);
+    const s2 = specCanvas(w2);
+
+    const c2 = $('fCanvas'), ctx2 = c2.getContext('2d');
+    c2.width = c2.clientWidth*dpr; c2.height = c2.clientHeight*dpr;
+    ctx2.setTransform(1,0,0,1,0,0); ctx2.scale(dpr,dpr);
+    const W2 = c2.clientWidth, H2 = c2.clientHeight;
+    ctx2.fillStyle='#0b0c1a'; ctx2.fillRect(0,0,W2,H2);
+    const p={l:44,r:10,t:14,b:22}, iw2=W2-p.l-p.r, ih2=H2-p.t-p.b;
+    const dBfloor = -140;
+    ctx2.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=p.l+iw2*g/12; ctx2.beginPath(); ctx2.moveTo(x,p.t); ctx2.lineTo(x,H2-p.b); ctx2.stroke(); }
+    for (let g=0;g<=7;g++){ const y=p.t+ih2*g/7; ctx2.beginPath(); ctx2.moveTo(p.l,y); ctx2.lineTo(W2-p.r,y); ctx2.stroke(); }
+
+    function drawSpec(s, color, dashed){
+      ctx2.strokeStyle = color; ctx2.lineWidth = 1.4;
+      if (dashed) ctx2.setLineDash([4,3]);
+      ctx2.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(s.mag[i]/s.mmax, 1e-8)));
+        const y = p.t + ih2*(1-(db-dBfloor)/(0-dBfloor));
+        const x = p.l + iw2*i/(K-1);
+        if (i===0) ctx2.moveTo(x,y); else ctx2.lineTo(x,y);
+      }
+      ctx2.stroke();
+      ctx2.setLineDash([]);
+    }
+    drawSpec(s1, '#ffd95a');
+    drawSpec(s2, '#ff6aa0', true);
+
+    ctx2.font='9px "Press Start 2P", monospace';
+    ctx2.fillStyle='#ffd95a'; ctx2.fillText('default', 8, 14);
+    ctx2.fillStyle='#ff6aa0'; ctx2.fillText('clipped', 80, 14);
+    ctx2.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = p.l + iw2*(v+Math.PI)/(2*Math.PI); ctx2.fillText(lbl, x-6, H2-p.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = p.t + ih2*(1-(db-dBfloor)/(0-dBfloor));
+      ctx2.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('aSlider').addEventListener('input', () => { state.A = parseInt($('aSlider').value,10); $('aVal').textContent = state.A; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Dolph-Chebyshev at large A has ringing tails with small negative samples — bad for energy accumulation. Hann is already positive.</span><span lang="zh">🪙 金幣 +1！大 A 的 Dolph-Chebyshev 端點振鈴帶小負值 — 不利能量累計。Hann 本就為正。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Only windows defined spectrum-first (Dolph-Chebyshev, LP output) produce negative tails.</span><span lang="zh">✗ 只有頻譜先定義的視窗（Dolph-Chebyshev、LP 輸出）會有負尾。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

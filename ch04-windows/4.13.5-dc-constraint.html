@@ -30,17 +30,90 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/DC_Constraint.html" target="_blank">SASP §4.13.5 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="NORMALIZE THE PEAK">
-    <p lang="en">Without a DC constraint the LP would solve $w=0$. Fixing the main-lobe peak $W(0)=\sum w[n]=1$ turns the problem into "how low can side lobes go if DC is clamped to 1".</p>
-    <p lang="zh">沒有 DC 約束，LP 會直接解出 $w=0$。把主瓣峰 $W(0)=\sum w[n]=1$ 釘住，問題就變成「DC 固定為 1 時旁瓣能壓到多低」。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="NORMALIZE THE PEAK">
+        <p lang="en">Without a DC constraint, the LP's trivial optimum is $w=0$ — every side-lobe is zero, but so is the main lobe, so the "window" does nothing. Fixing the main-lobe peak $W(0)=\sum_n w[n]=1$ turns the problem into the meaningful question: <em>how low can side-lobes go while main-lobe peak stays at 1?</em></p>
+        <p lang="zh">沒有 DC 約束，LP 的平凡最優就是 $w=0$ — 旁瓣皆零但主瓣也為零，這個「視窗」什麼都沒做。固定主瓣峰 $W(0)=\sum_n w[n]=1$ 把問題化為有意義的：<em>主瓣峰維持 1 時旁瓣能壓到多低？</em></p>
+      </div>
 
-  <div class="formula">
-    <div>$$\sum_{n=0}^{N-1} w[n]\;=\;1$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">THE CONSTRAINT</span>
+        <div>$$W(0)\;=\;\sum_{n=0}^{N-1} w[n]\;=\;1$$</div>
+      </div>
 
-  <p lang="en">This is a single equality constraint — cheap to add, essential for the LP to be well-posed.</p>
-  <p lang="zh">只是一條等式約束 — 加起來便宜、是 LP 定義良好不可少的。</p>
+      <p lang="en">
+        This is a single equality constraint — one row added to $A_{eq}$ with all-ones coefficients, $b_{eq}=1$. Essential; cheap; non-negotiable.
+      </p>
+      <p lang="zh">
+        單一等式約束 — 在 $A_{eq}$ 加一列全 1、$b_{eq}=1$。必要、便宜、不可省。
+      </p>
+
+      <h2 lang="en">Variants</h2>
+      <h2 lang="zh">變體</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>DC = 1</b> (standard): Dolph-Chebyshev-like, side-lobe floor in dB is the LP's reported $\delta$.<br>
+            <b>DC fixed, $\max w=1$</b>: normalise the peak sample instead — different scale, same shape.<br>
+            <b>$\sum w^2 = 1$</b>: "unit-energy" window — not LP (quadratic); handled by QP or SDP.<br>
+            <b>$w[\lfloor N/2\rfloor]=1$</b>: normalise centre sample — simplest to state, shape unchanged.
+          </span>
+          <span lang="zh">
+            <b>DC = 1</b>（標準）：類 Dolph-Chebyshev，旁瓣地板 dB = LP 回報的 $\delta$。<br>
+            <b>DC 固定、$\max w=1$</b>：改歸一峰值樣本 — 尺度不同、形狀同。<br>
+            <b>$\sum w^2 = 1$</b>：「單位能量」視窗 — 非 LP（二次）；需 QP 或 SDP。<br>
+            <b>$w[\lfloor N/2\rfloor]=1$</b>：歸一中央樣本 — 陳述最簡、形狀不變。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--yellow" data-label="AFTER THE LP">
+        <p lang="en">Whatever normalisation you use during solving, you typically re-normalise $\max(w)=1$ or $\sum w=1$ afterwards for downstream use. The LP result is geometrically the same shape either way.</p>
+        <p lang="zh">不論求解時用哪種歸一，後續通常再以 $\max(w)=1$ 或 $\sum w=1$ 再歸一以便下游使用。幾何形狀不變。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>The DC constraint is the anchor.</b> It's what makes the side-lobe-minimisation problem non-trivial. Without it, LP collapses; with it, LP becomes the Dolph-Chebyshev solver (plus any extra constraints you stack).</p>
+        <p lang="zh"><b>DC 約束是錨點。</b>旁瓣最小化因它而有意義。沒它 LP 崩潰；有它 LP 就是 Dolph-Chebyshev 求解器（加你的附加約束）。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> What happens to an LP window-design problem if you <em>remove</em> the DC constraint (and don't replace it with something equivalent)?</p>
+        <p lang="zh"><b>問：</b>LP 視窗設計若<em>移除</em> DC 約束（也不換等效約束），會怎樣？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Solver returns $w=0, \delta=0$ — trivially feasible, useless as a window.</button>
+          <button data-correct="1" lang="zh">求解器回傳 $w=0, \delta=0$ — 平凡可行，作為視窗毫無用處。</button>
+          <button data-correct="0" lang="en">Solver reports infeasible.</button>
+          <button data-correct="0" lang="zh">求解器回報無可行解。</button>
+          <button data-correct="0" lang="en">Solver returns the Hann window.</button>
+          <button data-correct="0" lang="zh">求解器回傳 Hann 視窗。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · With / without DC</h3>
+        <h3 lang="zh">實驗 · 有無 DC</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>DC</label>
+          <input type="range" id="dcSlider" min="0" max="1" step="0.05" value="1"/>
+          <span class="val" id="dcVal">1.00</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Drag DC to 0 — the window shrinks toward zero (the trivial solution). Every finite DC in between gives a scaled Dolph-Chebyshev; the spectrum shape is identical, only the dB scale shifts. That's why DC=1 is the natural normalisation.</p>
+          <p lang="zh">把 DC 拉到 0 — 視窗萎縮至零（平凡解）。中間任意有限 DC 都給出縮放的 Dolph-Chebyshev；頻譜形狀相同，只是 dB 尺度平移。這就是 DC=1 為何為自然歸一。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13.4-pos-constraint.html">◀ 4.13.4</a>
@@ -49,8 +122,74 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { dc: 1 };
+
+  function chebwin(N, A){
+    const beta = Math.cosh(Math.acosh(Math.pow(10, A/20)) / (N-1));
+    const w = new Float32Array(N);
+    const Wk = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      const wk = 2*Math.PI*k/N;
+      const x = beta * Math.cos(wk/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else if (x > 1) num = Math.cosh((N-1)*Math.acosh(x));
+      else num = ((N-1)%2 === 0 ? 1 : -1) * Math.cosh((N-1)*Math.acosh(-x));
+      Wk[k] = num;
+    }
+    for (let n=0;n<N;n++){
+      let s = 0;
+      for (let k=0;k<N;k++) s += Wk[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/N);
+      w[n] = s;
+    }
+    // scale so that sum = 1
+    let sum = 0; for (let n=0;n<N;n++) sum += w[n];
+    for (let n=0;n<N;n++) w[n] /= sum;
+    return w;
+  }
+
+  function redraw(){
+    const N = 64;
+    const base = chebwin(N, 60);
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++) w[n] = base[n] * state.dc;
+
+    Viz.stem($('tCanvas'), w, { yMin:-0.01, yMax:0.05, xLabel:'n', yLabel:'w[n]', title:`WINDOW (DC = Σw = ${state.dc.toFixed(2)})` });
+
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    for (let i=0;i<K;i++) mag[i] = Math.hypot(re[i], im[i]);
+
+    // show W(ω) directly in dB relative to DC=1 reference (so DC=0 → spectrum collapses to -∞)
+    Viz.line($('fCanvas'), DSP.toDb(mag, -120), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-120, xLabel:'ω', yLabel:'dB', title:'SPECTRUM (abs dB)', color:'#ffd95a', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+  $('dcSlider').addEventListener('input', () => { state.dc = parseFloat($('dcSlider').value); $('dcVal').textContent = state.dc.toFixed(2); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! The all-zero vector satisfies every inequality vacuously — without the DC anchor, LP has no motivation to produce a useful window.</span><span lang="zh">🪙 金幣 +1！全零向量平凡地滿足所有不等式 — 沒有 DC 錨點，LP 沒動機產出有用視窗。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Check: does w=0 satisfy all side-lobe ≤ δ constraints? Yes — so it wins if nothing forbids it.</span><span lang="zh">✗ 想想：w=0 是否滿足所有旁瓣 ≤ δ 約束？是 — 所以若不禁止它就會勝出。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

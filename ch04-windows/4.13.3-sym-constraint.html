@@ -30,13 +30,81 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Symmetric_Window_Constraint.html" target="_blank">SASP §4.13.3 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="CUT THE UNKNOWNS IN HALF">
-    <p lang="en">A real symmetric window of length $N$ has only $\lceil N/2\rceil$ distinct values — $w[n]=w[N-1-n]$ ties the pairs together. Add these equality constraints and the LP is half the size.</p>
-    <p lang="zh">長度 $N$ 的實對稱視窗只有 $\lceil N/2\rceil$ 個獨立值 — $w[n]=w[N-1-n]$ 把兩兩綁定。加上這些等式約束，LP 就變一半大。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="CUT THE UNKNOWNS IN HALF">
+        <p lang="en">A real symmetric window of length $N$ has only $\lceil N/2\rceil$ distinct values — $w[n]=w[N-1-n]$ ties the pairs. Adding this as an equality constraint halves the variable count and gives you a zero-phase spectrum for free.</p>
+        <p lang="zh">長度 $N$ 的實對稱視窗只有 $\lceil N/2\rceil$ 個獨立值 — $w[n]=w[N-1-n]$ 把兩兩綁定。加等式約束使變數減半，並附送零相位頻譜。</p>
+      </div>
 
-  <p lang="en">Bonus: symmetry automatically gives zero-phase spectra (§3.5.2).</p>
-  <p lang="zh">附帶好處：對稱自動給出零相位頻譜（§3.5.2）。</p>
+      <div class="formula">
+        <span class="label">SYMMETRY EQUALITIES</span>
+        <div>$$w[n]\;=\;w[N-1-n],\qquad n=0,\dots,\lfloor (N-1)/2\rfloor$$</div>
+      </div>
+
+      <h2 lang="en">Two ways to enforce</h2>
+      <h2 lang="zh">兩種實現方式</h2>
+
+      <p lang="en">
+        <b>Option A — equality constraints:</b> Add $\lfloor N/2\rfloor$ linear equalities $w[n]-w[N-1-n]=0$ to the LP. Full $w$ variable kept; solver figures out symmetry by itself.
+      </p>
+      <p lang="zh">
+        <b>選項 A — 等式約束：</b>LP 加入 $\lfloor N/2\rfloor$ 條線性等式 $w[n]-w[N-1-n]=0$。保留完整 $w$ 變數，由求解器自行滿足對稱。
+      </p>
+
+      <p lang="en">
+        <b>Option B — change of variables:</b> Use only $h=w[0..\lceil N/2\rceil-1]$ and build the symmetric $w$ post-solve. Spectrum simplifies to $W(\omega)=\sum_{m=0}^{M} h[m]\cos(\omega\cdot(m-(N-1)/2))$ — half the cosines, half the LP matrix.
+      </p>
+      <p lang="zh">
+        <b>選項 B — 變數代換：</b>只用 $h=w[0..\lceil N/2\rceil-1]$，求解後再鏡像建 $w$。頻譜簡化為 $W(\omega)=\sum_{m=0}^{M} h[m]\cos(\omega\cdot(m-(N-1)/2))$ — cos 項減半、LP 矩陣減半。
+      </p>
+
+      <div class="nes-box nes-box--yellow" data-label="BONUS — ZERO PHASE">
+        <p lang="en">Symmetric real → spectrum is real and even → phase is identically zero (or ±π where magnitude crosses zero). No phase distortion when applied to an FFT analysis (§3.5.2).</p>
+        <p lang="zh">實對稱 → 頻譜為實且偶 → 相位恆為 0（或振幅過零時 ±π）。用於 FFT 解析時沒有相位失真（§3.5.2）。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Symmetry is free speed.</b> Halves the LP in both variable count and row count, and zero-phase spectrum comes along as a bonus. Virtually every audio window should be symmetric unless you have a specific reason not to.</p>
+        <p lang="zh"><b>對稱＝免費加速。</b>LP 變數與列數雙雙減半，零相位頻譜附贈。除非有特殊理由，所有音訊視窗都應對稱。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> What is the spectral consequence of a symmetric real window?</p>
+        <p lang="zh"><b>問：</b>實對稱視窗在頻譜上的結果是？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Spectrum is real and even, so phase is 0 (or ±π where magnitude is 0).</button>
+          <button data-correct="1" lang="zh">頻譜為實且偶，相位為 0（或振幅為零時 ±π）。</button>
+          <button data-correct="0" lang="en">Spectrum is complex with unit magnitude.</button>
+          <button data-correct="0" lang="zh">頻譜為模 1 的複數。</button>
+          <button data-correct="0" lang="en">No effect; symmetry is a time-domain-only property.</button>
+          <button data-correct="0" lang="zh">沒影響；對稱只是時域性質。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Phase check</h3>
+        <h3 lang="zh">實驗 · 相位檢查</h3>
+        <canvas id="tCanvas" style="height:110px;"></canvas>
+        <canvas id="mCanvas" style="height:110px; margin-top:6px;"></canvas>
+        <canvas id="pCanvas" style="height:110px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>asymmetry</label>
+          <input type="range" id="aSlider" min="0" max="1" step="0.05" value="0"/>
+          <span class="val" id="aVal">0.0</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: time-domain shape (Kaiser β=6, with left side pinched by the slider to break symmetry). Middle: $|W(\omega)|$ in dB. Bottom: phase. At asymmetry=0, phase is flat zero. Any asymmetry puts non-zero wiggles in the phase — the cost of breaking symmetry.</p>
+          <p lang="zh">上：時域形狀（Kaiser β=6，滑桿壓縮左側破壞對稱）。中：$|W(\omega)|$ dB。下：相位。asymmetry=0 時相位恆為零；只要不對稱、相位就產生非零擺動。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13.2-lp-cheby.html">◀ 4.13.2</a>
@@ -45,8 +113,57 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { asym: 0 };
+
+  function redraw(){
+    const N = 64;
+    const base = DSP.WINDOWS.kaiser(N, 6);
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      // stretch left half by (1-asym), right half unchanged → asymmetry
+      const mid = (N-1)/2;
+      const factor = n < mid ? (1 - state.asym*0.8) : 1;
+      w[n] = base[n] * factor;
+    }
+
+    Viz.stem($('tCanvas'), w, { yMin:-0.1, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`KAISER with asym=${state.asym.toFixed(2)}` });
+
+    const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K), phase = new Float32Array(K);
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); phase[i] = Math.atan2(im[i], re[i]); }
+    let mmax = 0; for (let i=0;i<K;i++) if (mag[i]>mmax) mmax = mag[i];
+
+    Viz.line($('mCanvas'), DSP.toDb(mag, -100), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-100, xLabel:'ω', yLabel:'dB', title:'MAGNITUDE', color:'#ffd95a', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+    Viz.line($('pCanvas'), Array.from(phase), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-Math.PI, yMax:Math.PI, xLabel:'ω', yLabel:'rad', title:'PHASE', color:'#ff6aa0', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+
+  $('aSlider').addEventListener('input', () => { state.asym = parseFloat($('aSlider').value); $('aVal').textContent = state.asym.toFixed(2); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Fourier theorem: even real → real even. So arg W = 0 (or ±π at zero crossings).</span><span lang="zh">🪙 金幣 +1！傅立葉定理：實偶 → 實偶。因此 arg W = 0（過零處 ±π）。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Fourier of real even is real even → phase zero.</span><span lang="zh">✗ 實偶的傅立葉為實偶 → 相位為零。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

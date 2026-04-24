@@ -30,24 +30,95 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Linear_Programming_LP.html" target="_blank">SASP §4.13.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="REFRESHER">
-    <p lang="en">Minimise a linear cost subject to linear inequalities. Matlab's <code>linprog</code>, scipy's <code>linprog</code>, GLPK, CVX, CPLEX — every numerical environment has one.</p>
-    <p lang="zh">在線性不等式約束下最小化一個線性成本。Matlab 有 <code>linprog</code>、scipy 有 <code>linprog</code>、GLPK、CVX、CPLEX — 每個數值環境都提供。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="REFRESHER">
+        <p lang="en">Minimise a linear cost subject to linear inequalities over a real vector. Geometry: the feasible region is a polytope (intersection of half-spaces), and the optimum sits at a vertex. Numerical tooling: Matlab <code>linprog</code>, scipy <code>linprog</code>, GLPK, CVXPY, CPLEX — every numerical environment has a polynomial-time solver.</p>
+        <p lang="zh">在線性不等式約束下最小化一個線性成本。幾何：可行區為多胞形（半空間交集），最優落在頂點。數值工具：Matlab <code>linprog</code>、scipy <code>linprog</code>、GLPK、CVXPY、CPLEX — 每個數值環境都有多項式時間求解器。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">LP STANDARD FORM</span>
-    <div>$$\min_{x}\ c^{T}x \quad\text{s.t.}\quad Ax\le b,\;\; x\ge 0$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">LP STANDARD FORM</span>
+        <div>$$\min_{x}\ c^{\top}x \quad\text{s.t.}\quad Ax\le b,\;\; x\ge 0$$</div>
+      </div>
 
-  <p lang="en">
-    The trick for window design is to encode "main-lobe peak = 1, side
-    lobes ≤ δ, δ minimal" as linear statements. When δ becomes another
-    variable, minimising δ <em>is</em> the LP.
-  </p>
-  <p lang="zh">
-    視窗設計的訣竅是把「主瓣峰 = 1、旁瓣 ≤ δ、δ 最小」寫成線性式。把 δ 也視為變數，極小化它<em>就是</em>一個 LP。
-  </p>
+      <h2 lang="en">The window-design trick</h2>
+      <h2 lang="zh">視窗設計的巧思</h2>
+
+      <p lang="en">
+        Encode "main-lobe peak $=1$, side-lobes $\le \delta$, $\delta$ minimal" as linear statements. Treat $\delta$ as an extra variable alongside $w$, with cost vector $c=(0,0,\dots,0,1)$ picking out $\delta$. Minimising $\delta$ <em>is</em> the LP — and the optimal $w$ falls out as part of the solution.
+      </p>
+      <p lang="zh">
+        把「主瓣峰 $=1$、旁瓣 $\le \delta$、$\delta$ 最小」寫成線性式。把 $\delta$ 當 $w$ 旁的額外變數，成本向量 $c=(0,0,\dots,0,1)$ 只挑出 $\delta$。極小化 $\delta$ <em>就是</em>這個 LP，最優 $w$ 會附帶解出。
+      </p>
+
+      <h2 lang="en">Solver quick reference</h2>
+      <h2 lang="zh">求解器速查</h2>
+
+      <div class="nes-box nes-box--purple" data-label="CODE">
+        <pre style="color:var(--nes-lime); font-size:11px; line-height:1.8; margin:0; white-space:pre-wrap;">
+% Matlab / Octave
+[x, fval] = linprog(c, A, b, Aeq, beq, lb, ub);
+
+# Python (scipy)
+from scipy.optimize import linprog
+result = linprog(c, A_ub=A, b_ub=b, A_eq=Aeq, b_eq=beq,
+                 bounds=list(zip(lb, ub)), method='highs')
+x = result.x
+
+# Python (CVXPY, more readable)
+import cvxpy as cp
+w = cp.Variable(N)
+delta = cp.Variable()
+prob = cp.Problem(cp.Minimize(delta),
+    [A @ w - b <= delta, -(A @ w - b) <= delta,  # |Aw - b| ≤ δ
+     cp.sum(w) == 1])                             # DC constraint
+prob.solve()
+</pre>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>LP is the universal glue for window design.</b> Any constraint you can express as "linear-in-$w$ must be $\le$ something" (side-lobes, main-lobe shape, symmetry, OLA) drops straight into the formulation. The solver finds the globally optimal combination.</p>
+        <p lang="zh"><b>LP 是視窗設計的通用膠水。</b>任何能寫成「$w$ 線性函數 $\le$ 某值」的約束（旁瓣、主瓣形狀、對稱、OLA）都能直接放入。求解器給出全域最優組合。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Why does LP give a window-design answer in polynomial time, while non-convex formulations often don't?</p>
+        <p lang="zh"><b>問：</b>為什麼 LP 能以多項式時間給出視窗答案，而非凸問題常做不到？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Linear + convex → feasible region is a polytope; simplex / interior-point find the global optimum efficiently.</button>
+          <button data-correct="1" lang="zh">線性＋凸 → 可行域為多胞形；simplex／內點法高效找到全域最優。</button>
+          <button data-correct="0" lang="en">LP runs in constant time regardless of input.</button>
+          <button data-correct="0" lang="zh">LP 不論輸入都為常數時間。</button>
+          <button data-correct="0" lang="en">LP is special-purpose hardware.</button>
+          <button data-correct="0" lang="zh">LP 需專用硬體。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · 2-D LP geometry</h3>
+        <h3 lang="zh">實驗 · 2 維 LP 幾何</h3>
+        <canvas id="lpCanvas" style="height:320px;"></canvas>
+        <div class="controls">
+          <label>c₁</label>
+          <input type="range" id="c1Slider" min="-2" max="2" step="0.1" value="1"/>
+          <span class="val" id="c1Val">1.0</span>
+          <label>c₂</label>
+          <input type="range" id="c2Slider" min="-2" max="2" step="0.1" value="1"/>
+          <span class="val" id="c2Val">1.0</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Cyan polygon: feasible region (here $x_1+2x_2\le 8$, $3x_1+x_2\le 9$, $x\ge 0$). Yellow level sets: the cost $c_1 x_1 + c_2 x_2$. Pink dot: optimum — always on a vertex. Drag the $c$ sliders to see the optimum hop between vertices.</p>
+          <p lang="zh">青色多邊形：可行域（此為 $x_1+2x_2\le 8$、$3x_1+x_2\le 9$、$x\ge 0$）。黃等值線：成本 $c_1 x_1 + c_2 x_2$。粉點：最優 — 永遠在頂點。拖動 $c$ 滑桿觀察最優點跳頂點。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13-linprog.html">◀ 4.13</a>
@@ -56,8 +127,112 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { c1: 1, c2: 1 };
+
+  // feasible vertices of the polygon
+  const vertices = [
+    [0, 0], [3, 0], [2, 3], [0, 4]
+  ];
+
+  function redraw(){
+    const c = $('lpCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:30}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+
+    const xMin=-0.5, xMax=5, yMin=-0.5, yMax=5;
+    function px(x){ return pad.l + iw*(x-xMin)/(xMax-xMin); }
+    function py(y){ return pad.t + ih*(1-(y-yMin)/(yMax-yMin)); }
+
+    // grid
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=10;g++){ const y=pad.t+ih*g/10; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    // axes
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(px(0),pad.t); ctx.lineTo(px(0),H-pad.b); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.l,py(0)); ctx.lineTo(W-pad.r,py(0)); ctx.stroke();
+
+    // feasible polygon
+    ctx.fillStyle='rgba(93, 255, 208, 0.18)'; ctx.strokeStyle='#5dffd0'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for (let i=0;i<vertices.length;i++){
+      const [x,y] = vertices[i];
+      if (i===0) ctx.moveTo(px(x),py(y)); else ctx.lineTo(px(x),py(y));
+    }
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+
+    // cost level sets
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+    for (let k=-8; k<=8; k+=1){
+      // c1*x1 + c2*x2 = k
+      // For varying x1, x2 = (k - c1*x1)/c2
+      if (Math.abs(state.c2) < 0.01) continue;
+      ctx.beginPath();
+      const steps = 20;
+      for (let i=0;i<=steps;i++){
+        const x1 = xMin + (xMax-xMin)*i/steps;
+        const x2 = (k - state.c1*x1)/state.c2;
+        if (i===0) ctx.moveTo(px(x1),py(x2)); else ctx.lineTo(px(x1),py(x2));
+      }
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // find optimum by vertex enumeration
+    let best = vertices[0], bestCost = Infinity;
+    for (const v of vertices){
+      const cost = state.c1*v[0] + state.c2*v[1];
+      if (cost < bestCost){ bestCost = cost; best = v; }
+    }
+    ctx.fillStyle='#ff6aa0';
+    ctx.beginPath(); ctx.arc(px(best[0]),py(best[1]),8,0,2*Math.PI); ctx.fill();
+    ctx.fillStyle='#ff6aa0'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText(`x* = (${best[0]}, ${best[1]})`, px(best[0])+12, py(best[1])-4);
+
+    // labels
+    ctx.fillStyle='#8f8fa8';
+    ctx.fillText('x₁ →', W-44, H-4);
+    ctx.fillText('x₂ ↑', 4, pad.t+10);
+    for (let x=0;x<=5;x++){ ctx.fillText(String(x), px(x)-3, H-pad.b+14); }
+    for (let y=0;y<=5;y++){ ctx.fillText(String(y), 28, py(y)+3); }
+    ctx.fillStyle='#5dffd0'; ctx.font='10px "Press Start 2P", monospace';
+    ctx.fillText('feasible', px(1), py(1));
+    ctx.fillStyle='#ffd95a'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('cost contours', W-140, 14);
+  }
+
+  $('c1Slider').addEventListener('input', () => { state.c1 = parseFloat($('c1Slider').value); $('c1Val').textContent = state.c1.toFixed(1); redraw(); });
+  $('c2Slider').addEventListener('input', () => { state.c2 = parseFloat($('c2Slider').value); $('c2Val').textContent = state.c2.toFixed(1); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Convexity + linearity = well-defined, polynomial-time solvable. This is why LP scales to thousands of constraints.</span><span lang="zh">🪙 金幣 +1！凸性＋線性＝問題良定、多項式可解。這是 LP 可擴展至千約束的原因。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Think about the geometry: polytope + linear cost → simplex can walk from vertex to vertex efficiently.</span><span lang="zh">✗ 想幾何：多胞形＋線性成本 → simplex 可有效地頂點走訪。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>
