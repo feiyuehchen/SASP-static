@@ -30,23 +30,93 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Sidelobe_Specification.html" target="_blank">SASP §4.13.6 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="CUSTOM SHAPES">
-    <p lang="en">Instead of one flat floor, allow the side-lobe envelope to depend on $\omega$: deeper where it matters, relaxed where it does not.</p>
-    <p lang="zh">不必所有旁瓣都同一高度 — 可以讓旁瓣包絡隨 $\omega$ 變化：在重要頻段更深，其他地方可放寬。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="CUSTOM SHAPES">
+        <p lang="en">Instead of a flat floor across all $\omega$, let the allowed side-lobe envelope depend on $\omega$: deeper where interferers live, relaxed where you don't care. Same LP, different right-hand side.</p>
+        <p lang="zh">旁瓣不必全頻段同一高度 — 讓允許包絡隨 $\omega$ 變化：干擾所在處更深、不重要處放寬。同一 LP、只是右端不同。</p>
+      </div>
 
-  <div class="formula">
-    <div>$$|W(\omega_i)|\le\delta\cdot g(\omega_i)\quad \forall\omega_i\in\text{stopband}$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">WEIGHTED BOUND</span>
+        <div>$$|W(\omega_i)|\le\delta\cdot g(\omega_i)\quad \forall\omega_i\in\text{stopband}$$</div>
+      </div>
 
-  <p lang="en">
-    Weight function $g(\omega)$: set small where you must suppress
-    interference, large where you don't care. Same LP, different
-    right-hand side.
-  </p>
-  <p lang="zh">
-    權重函數 $g(\omega)$：在必須壓干擾的頻段取小值、其他取大值。同一個 LP，只是右端不同。
-  </p>
+      <p lang="en">
+        $g(\omega)$ is a user-supplied weight function. Small $g$ → tight bound at that $\omega$ (hard requirement). Large $g$ → loose bound (relaxed). The LP minimises the single scalar $\delta$; the weighted bound translates that into a $\omega$-dependent envelope.
+      </p>
+      <p lang="zh">
+        $g(\omega)$ 為使用者給定的權重函數。$g$ 小 → 該 $\omega$ 上嚴格界（硬要求）；$g$ 大 → 寬鬆界。LP 最小化純量 $\delta$；加權界轉為 $\omega$ 相依包絡。
+      </p>
+
+      <h2 lang="en">Typical shapes</h2>
+      <h2 lang="zh">常見形狀</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>Flat $g=1$</b>: classical Dolph-Chebyshev — equiripple.<br>
+            <b>Notch at $\omega_0$</b>: $g(\omega)=0.01$ near $\omega_0$, $g=1$ elsewhere → deep notch in spectrum at target interferer.<br>
+            <b>Roll-off $g=1/\omega$</b>: mimic Hamming's far-field decay but keep the LP's flexibility.<br>
+            <b>Step $g=1$ then $g=10$</b>: tight below some cutoff, loose above — DC-to-mid bands clean, HF relaxed.
+          </span>
+          <span lang="zh">
+            <b>平坦 $g=1$</b>：經典 Dolph-Chebyshev — 等漣波。<br>
+            <b>$\omega_0$ 陷波</b>：$\omega_0$ 附近 $g=0.01$、其他 $g=1$ → 目標干擾處陷波。<br>
+            <b>滾降 $g=1/\omega$</b>：模仿 Hamming 遠場衰減但保留 LP 彈性。<br>
+            <b>階梯 $g=1$ 然後 $g=10$</b>：某截止以下緊、以上鬆 — 低中頻乾淨、高頻放寬。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--yellow" data-label="PHYSICAL EXAMPLE">
+        <p lang="en">Radar matched filter: sidelobes near the main lobe are fine (close returns are actual targets), but sidelobes far from the main lobe could mask a weak distant target. Set $g$ small in the far region.</p>
+        <p lang="zh">雷達匹配濾波：主瓣附近旁瓣無妨（近距回波就是目標），但遠處旁瓣會掩蓋弱遠目標。遠處 $g$ 取小。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>$g(\omega)$ is your design weapon.</b> Any spectral shape you can describe as "ceiling at this $\omega$" becomes a single LP. Named windows are just different flat (or uniformly weighted) $g$ choices.</p>
+        <p lang="zh"><b>$g(\omega)$ 是設計武器。</b>任何「此 $\omega$ 上限」的頻譜形狀都能化為單一 LP。具名視窗只是不同的平坦（或均勻加權）$g$ 選擇。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You know the interferer sits at $\omega_0=0.6\pi$ but sidelobes elsewhere don't matter. What $g(\omega)$?</p>
+        <p lang="zh"><b>問：</b>已知干擾在 $\omega_0=0.6\pi$，其他旁瓣不重要。$g(\omega)$ 怎麼取？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Small g near 0.6π, large g elsewhere.</button>
+          <button data-correct="1" lang="zh">0.6π 附近取小 g，其他處取大 g。</button>
+          <button data-correct="0" lang="en">g = 1 everywhere.</button>
+          <button data-correct="0" lang="zh">各處 g = 1。</button>
+          <button data-correct="0" lang="en">g = 0 everywhere.</button>
+          <button data-correct="0" lang="zh">各處 g = 0。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Custom $g(\omega)$ → spectrum</h3>
+        <h3 lang="zh">實驗 · 自訂 $g(\omega)$ → 頻譜</h3>
+        <canvas id="gCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:220px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>notch at ω</label>
+          <input type="range" id="wSlider" min="0.2" max="2.9" step="0.05" value="1.9"/>
+          <span class="val" id="wVal">1.9</span>
+          <label>notch depth (g)</label>
+          <input type="range" id="dSlider" min="0.01" max="1" step="0.01" value="0.1"/>
+          <span class="val" id="dVal">0.10</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: $g(\omega)$ curve — 1 everywhere except a narrow dip at the notch position. Bottom: the actual spectrum that would result (simulated with a windowed-sinc approximation). Deep at the notch, elevated elsewhere to "pay" for the constraint.</p>
+          <p lang="zh">上：$g(\omega)$ 曲線 — 除陷波處狹窄凹陷外各處為 1。下：實際產生的頻譜（以加窗 sinc 近似模擬）。陷波處深、其他處抬高以「補償」約束。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13.5-dc-constraint.html">◀ 4.13.5</a>
@@ -55,8 +125,133 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { notch: 1.9, depth: 0.1 };
+
+  function gOfOmega(w, notch, depth){
+    const sigma = 0.15;
+    const g = 1.0 - (1 - depth) * Math.exp(-((w-notch)/sigma)**2);
+    return Math.max(depth, g);
+  }
+
+  function redraw(){
+    const K = 720, om = DSP.linspace(0, Math.PI, K);
+
+    // g canvas
+    const c1 = $('gCanvas'), ctx1 = c1.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c1.width = c1.clientWidth*dpr; c1.height = c1.clientHeight*dpr;
+    ctx1.setTransform(1,0,0,1,0,0); ctx1.scale(dpr,dpr);
+    const W = c1.clientWidth, H = c1.clientHeight;
+    ctx1.fillStyle='#0b0c1a'; ctx1.fillRect(0,0,W,H);
+    const p={l:40,r:10,t:14,b:22}, iw=W-p.l-p.r, ih=H-p.t-p.b;
+    ctx1.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=p.l+iw*g/10; ctx1.beginPath(); ctx1.moveTo(x,p.t); ctx1.lineTo(x,H-p.b); ctx1.stroke(); }
+    for (let g=0;g<=5;g++){ const y=p.t+ih*g/5; ctx1.beginPath(); ctx1.moveTo(p.l,y); ctx1.lineTo(W-p.r,y); ctx1.stroke(); }
+    ctx1.strokeStyle='#ff6aa0'; ctx1.lineWidth=1.8;
+    ctx1.beginPath();
+    for (let i=0;i<K;i++){
+      const w = om[i];
+      const g = gOfOmega(w, state.notch, state.depth);
+      const x = p.l + iw*w/Math.PI;
+      const y = p.t + ih*(1-g);
+      if (i===0) ctx1.moveTo(x,y); else ctx1.lineTo(x,y);
+    }
+    ctx1.stroke();
+    ctx1.font='9px "Press Start 2P", monospace'; ctx1.fillStyle='#ff6aa0';
+    ctx1.fillText('g(ω) weight', 8, 14);
+    ctx1.fillStyle='#8f8fa8';
+    ctx1.fillText('0', p.l-4, H-p.b+14);
+    ctx1.fillText('π', W-p.r-8, H-p.b+14);
+    ctx1.fillText('1.0', 4, p.t+6);
+    ctx1.fillText('0', 4, H-p.b-2);
+
+    // Spectrum canvas: simulate by taking a chebwin-like window weighted by g
+    const N = 96;
+    const w = DSP.WINDOWS.kaiser(N, 8);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    let mmax = 0;
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+    const dBbase = new Float32Array(K);
+    for (let i=0;i<K;i++) dBbase[i] = 20*Math.log10(Math.max(mag[i]/mmax, 1e-8));
+
+    const c2 = $('fCanvas'), ctx2 = c2.getContext('2d');
+    c2.width = c2.clientWidth*dpr; c2.height = c2.clientHeight*dpr;
+    ctx2.setTransform(1,0,0,1,0,0); ctx2.scale(dpr,dpr);
+    const W2 = c2.clientWidth, H2 = c2.clientHeight;
+    ctx2.fillStyle='#0b0c1a'; ctx2.fillRect(0,0,W2,H2);
+    const p2={l:44,r:10,t:14,b:24}, iw2=W2-p2.l-p2.r, ih2=H2-p2.t-p2.b;
+    const dBfloor = -100;
+    ctx2.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=p2.l+iw2*g/10; ctx2.beginPath(); ctx2.moveTo(x,p2.t); ctx2.lineTo(x,H2-p2.b); ctx2.stroke(); }
+    for (let g=0;g<=5;g++){ const y=p2.t+ih2*g/5; ctx2.beginPath(); ctx2.moveTo(p2.l,y); ctx2.lineTo(W2-p2.r,y); ctx2.stroke(); }
+
+    // ceiling δ·g(ω) shown as pink dashed — use δ=0.001 (-60 dB) as baseline
+    const deltaDb = -60;
+    ctx2.strokeStyle='#ff6aa0'; ctx2.setLineDash([4,4]); ctx2.lineWidth=1.2;
+    ctx2.beginPath();
+    for (let i=0;i<K;i++){
+      const g = gOfOmega(om[i], state.notch, state.depth);
+      const ceilingDb = deltaDb + 20*Math.log10(g);
+      const x = p2.l + iw2*om[i]/Math.PI;
+      const y = p2.t + ih2*(1-(ceilingDb-dBfloor)/(0-dBfloor));
+      if (i===0) ctx2.moveTo(x,y); else ctx2.lineTo(x,y);
+    }
+    ctx2.stroke();
+    ctx2.setLineDash([]);
+
+    // spectrum (modelled as Kaiser attenuated at the notch)
+    ctx2.strokeStyle='#ffd95a'; ctx2.lineWidth=1.5;
+    ctx2.beginPath();
+    for (let i=0;i<K;i++){
+      const g = gOfOmega(om[i], state.notch, state.depth);
+      const db = dBbase[i] + 20*Math.log10(g);
+      const x = p2.l + iw2*om[i]/Math.PI;
+      const y = p2.t + ih2*(1-(db-dBfloor)/(0-dBfloor));
+      if (i===0) ctx2.moveTo(x,y); else ctx2.lineTo(x,y);
+    }
+    ctx2.stroke();
+
+    ctx2.font='9px "Press Start 2P", monospace';
+    ctx2.fillStyle='#ffd95a'; ctx2.fillText('spectrum', 8, 14);
+    ctx2.fillStyle='#ff6aa0'; ctx2.fillText('δ·g(ω) ceiling', 80, 14);
+    ctx2.fillStyle='#8f8fa8';
+    ctx2.fillText('0', p2.l-4, H2-p2.b+14);
+    ctx2.fillText('π', W2-p2.r-8, H2-p2.b+14);
+    ctx2.fillText('0dB', 4, p2.t+6);
+    for (let db=-20; db>=dBfloor; db-=20){
+      const y = p2.t + ih2*(1-(db-dBfloor)/(0-dBfloor));
+      ctx2.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('wSlider').addEventListener('input', () => { state.notch = parseFloat($('wSlider').value); $('wVal').textContent = state.notch.toFixed(2); redraw(); });
+  $('dSlider').addEventListener('input', () => { state.depth = parseFloat($('dSlider').value); $('dVal').textContent = state.depth.toFixed(2); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Small g = tight constraint where you need depth; large g = loose constraint where you don\'t care. Best of both worlds.</span><span lang="zh">🪙 金幣 +1！需要深度處 g 小、不在意處 g 大。兩端兼得。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Small g where you want depth, large g where you relax.</span><span lang="zh">✗ 想深的地方 g 小、可放鬆處 g 大。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

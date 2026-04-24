@@ -30,25 +30,120 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/LP_Standard_Form.html" target="_blank">SASP §4.13.7 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="PUTTING IT ALL TOGETHER">
-    <p lang="en">The window-design LP in one tableau:</p>
-    <p lang="zh">視窗設計 LP 的總表：</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="PUTTING IT ALL TOGETHER">
+        <p lang="en">All the pieces from §4.13.1-6 combine into one LP tableau. Symmetry halves variables; DC anchors the solution; positivity is optional; $g(\omega)$ shapes the sidelobe ceiling.</p>
+        <p lang="zh">§4.13.1-6 的所有片段合成一張 LP 總表。對稱減半變數；DC 錨定解；正值可選；$g(\omega)$ 塑造旁瓣天花板。</p>
+      </div>
 
-  <div class="formula">
-    <div>
-      $$\begin{aligned}
-      &\text{variables: } w[0],\ldots,w[(N-1)/2],\;\delta\\
-      &\min\;\delta\\
-      &\text{s.t.}\;\sum_n w[n]=1\quad\text{(DC)}\\
-      &\phantom{\text{s.t.}\;}\left|\sum_n w[n]\cos(\omega_i n)\right|\le\delta\,g(\omega_i)\;\forall\omega_i\in\text{stopband}\\
-      &\phantom{\text{s.t.}\;}w[n]\ge 0\;(\text{optional non-negativity})
-      \end{aligned}$$
-    </div>
-  </div>
+      <div class="formula">
+        <span class="label">THE FULL LP</span>
+        <div>
+          $$\begin{aligned}
+          &\text{variables: } w[0],\ldots,w[\lceil N/2\rceil-1],\;\delta\\
+          &\min\;\delta\\
+          &\text{s.t.}\;\sum_n w[n]=1\quad\text{(DC)}\\
+          &\phantom{\text{s.t.}\;}\left|\sum_n w[n]\cos(\omega_i (n-\tfrac{N-1}{2}))\right|\le\delta\,g(\omega_i)\;\forall\omega_i\in\text{stopband}\\
+          &\phantom{\text{s.t.}\;}w[n]\ge 0\quad(\text{optional non-negativity})
+          \end{aligned}$$
+        </div>
+      </div>
 
-  <p lang="en">The absolute value turns into two linear inequalities per $\omega_i$. Feed to <code>linprog</code> and you have your custom window.</p>
-  <p lang="zh">絕對值拆成每個 $\omega_i$ 兩條線性不等式。丟進 <code>linprog</code> 就得到你要的視窗。</p>
+      <p lang="en">
+        The absolute value $|A w|\le b$ becomes two linear inequalities $Aw\le b$ and $-Aw\le b$. Feed to any solver with standard form $\min c^\top x$ s.t. $Ax\le b$, $A_{eq}x=b_{eq}$.
+      </p>
+      <p lang="zh">
+        絕對值 $|A w|\le b$ 拆成兩條 $Aw\le b$ 與 $-Aw\le b$。餵給任何支援標準式 $\min c^\top x$ s.t. $Ax\le b$、$A_{eq}x=b_{eq}$ 的求解器。
+      </p>
+
+      <div class="nes-box nes-box--purple" data-label="TEMPLATE">
+        <pre style="color:var(--nes-lime); font-size:10px; line-height:1.7; margin:0; white-space:pre-wrap;">
+import numpy as np
+from scipy.optimize import linprog
+
+def design_window(N, omega_stop, g=None):
+    """LP-design a window with custom sidelobe envelope.
+    N           - length (odd for symmetric about centre)
+    omega_stop  - grid of stopband frequencies
+    g           - weight function values on that grid (None = flat)
+    """
+    M = (N+1)//2                           # half-window size (symmetric)
+    g = np.ones_like(omega_stop) if g is None else np.asarray(g)
+    n_sh = np.arange(M) - (N-1)/2          # shifted indices for zero-phase
+    # Build cos basis for full-length symmetric spectrum
+    # w[full] = mirror of w[half]; reconstruct cos(ω(n-mid)) for half + mirror
+    C = np.cos(np.outer(omega_stop, n_sh))
+    if N % 2 == 0:
+        # ensure mirror pairs count correctly
+        C[:,:-1] *= 2; # each pair contributes twice
+    else:
+        C[:,:-1] *= 2                       # middle sample singleton
+    # inequalities C·w - δ·g ≤ 0 and -C·w - δ·g ≤ 0
+    A_ub = np.vstack([
+        np.hstack([C, -g[:,None]]),
+        np.hstack([-C, -g[:,None]]),
+    ])
+    b_ub = np.zeros(2*len(omega_stop))
+    # DC: Σ over full symmetric w = 1
+    dc_row = np.zeros(M); dc_row[:-1] = 2; dc_row[-1] = 1
+    A_eq = np.hstack([dc_row[None,:], [[0]]])
+    b_eq = np.array([1.0])
+    c = np.zeros(M+1); c[-1] = 1
+    res = linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq,
+                  bounds=[(None,None)]*M + [(0,None)], method='highs')
+    half = res.x[:-1]
+    w_full = np.concatenate([half, half[:-1][::-1]]) if N % 2 else \
+             np.concatenate([half, half[::-1]])
+    return w_full, res.x[-1]
+</pre>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>One template, all named windows.</b> Dolph-Chebyshev = flat $g$. Hann-like roll-off = $g \propto 1/\omega^2$. Custom = whatever $g$ your application needs. Change right-hand side, get new window.</p>
+        <p lang="zh"><b>一個模板、所有具名視窗。</b>Dolph-Chebyshev = 平坦 $g$。類 Hann 滾降 = $g \propto 1/\omega^2$。客製 = 應用所需的 $g$。改右端 → 新視窗。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Your LP has $N=101$ symmetric half-variables + δ + 800 stopband ω-points. How many inequality rows does the standard form have?</p>
+        <p lang="zh"><b>問：</b>LP 有 $N=101$ 對稱半變數 + δ + 800 阻帶 ω 點。標準式有多少不等式？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">1600 (two per ω: |A·w|≤δ·g splits into +/- bounds).</button>
+          <button data-correct="1" lang="zh">1600（每個 ω 兩條：|A·w|≤δ·g 拆成 +/- 上下界）。</button>
+          <button data-correct="0" lang="en">800.</button>
+          <button data-correct="0" lang="zh">800。</button>
+          <button data-correct="0" lang="en">101.</button>
+          <button data-correct="0" lang="zh">101。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Matrix shape estimate</h3>
+        <h3 lang="zh">實驗 · 矩陣大小估算</h3>
+        <div id="readout" style="font-family:'Press Start 2P',monospace;font-size:11px;line-height:1.9;color:#ffd95a;padding:12px;border:2px solid #ffd95a;background:#1a1a2e;"></div>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="33" max="513" step="8" value="65"/>
+          <span class="val" id="nVal">65</span>
+          <label>ω grid</label>
+          <input type="range" id="mSlider" min="100" max="4000" step="100" value="800"/>
+          <span class="val" id="mVal">800</span>
+          <label>half (sym)</label>
+          <input type="checkbox" id="symCheck" checked>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Rough LP matrix shape for a windowed-sinc design at different $N$ / grid density. Modern solvers handle tens of thousands of rows in seconds.</p>
+          <p lang="zh">不同 $N$ / 格密度下加窗 sinc 設計的粗略 LP 矩陣大小。現代求解器數秒內可處理數萬列。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13.6-sidelobe-spec.html">◀ 4.13.6</a>
@@ -57,8 +152,50 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 65, M: 800, sym: true };
+
+  function redraw(){
+    const nVars = (state.sym ? Math.ceil(state.N/2) : state.N) + 1;
+    const nIneq = 2 * state.M;
+    const nEq = 1;
+    const nnz = nIneq * (nVars-1);
+    $('readout').innerHTML = `
+      N = ${state.N} ${state.sym ? '(symmetric)' : '(full)'}
+      <br>variables: ${nVars} (${nVars-1} w + δ)
+      <br>inequalities: ${nIneq}
+      <br>equalities: ${nEq} (DC)
+      <br>approx nnz: ${nnz.toLocaleString()}
+      <br>est. solve time: ${(nnz/5e5).toFixed(2)} s
+    `;
+  }
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+  $('mSlider').addEventListener('input', () => { state.M = parseInt($('mSlider').value,10); $('mVal').textContent = state.M; redraw(); });
+  $('symCheck').addEventListener('change', () => { state.sym = $('symCheck').checked; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Absolute values double up: each ω-point contributes an upper-bound row AND a lower-bound row.</span><span lang="zh">🪙 金幣 +1！絕對值化為兩條：每 ω 點貢獻上界一列 + 下界一列。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ |A·w|≤b → A·w≤b AND -A·w≤b, so rows double.</span><span lang="zh">✗ |A·w|≤b → A·w≤b 與 -A·w≤b 兩列，故加倍。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

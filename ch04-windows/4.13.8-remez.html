@@ -6,6 +6,8 @@
 <title>4.13.8 Remez Exchange Algorithm · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,21 +30,108 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Remez_Exchange_Algorithm.html" target="_blank">SASP §4.13.8 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="MUCH FASTER THAN GRID LP">
-    <p lang="en">A smarter way to solve the minimax side-lobe problem. Instead of thousands of frequency-grid inequalities, exchange a small set of extremal frequencies iteratively. Converges in a handful of steps.</p>
-    <p lang="zh">解 minimax 旁瓣問題的快速方法。不用密格點上的幾千條不等式，而是迭代地交換一小組極值頻率。幾步內收斂。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="MUCH FASTER THAN GRID LP">
+        <p lang="en">Grid LP discretises the stopband into thousands of points — accurate but heavy. Remez solves the same minimax problem using only $\lceil N/2\rceil+1$ extremal frequencies, updating them iteratively. Converges in 5-15 steps regardless of $N$.</p>
+        <p lang="zh">格點 LP 把阻帶離散為數千點 — 精確但重。Remez 用 $\lceil N/2\rceil+1$ 個極值頻率就解同一個 minimax 問題，迭代更新。不論 $N$，5-15 步就收斂。</p>
+      </div>
 
-  <p lang="en">
-    Historically used for FIR filter design (Parks-McClellan). For window
-    design the structure is the same: the extremal set has at most
-    $\lceil N/2\rceil+1$ points, and the solution equalises the error
-    magnitude at all of them.
-  </p>
-  <p lang="zh">
-    歷史上用於 FIR 濾波器設計（Parks-McClellan）。視窗設計結構相同：
-    極值集合最多 $\lceil N/2\rceil+1$ 個點，解會讓所有這些點上的誤差振幅一致。
-  </p>
+      <h2 lang="en">The alternation theorem</h2>
+      <h2 lang="zh">交替定理</h2>
+
+      <p lang="en">
+        <span class="term"
+          data-en="Chebyshev alternation theorem"
+          data-en-def="A polynomial p_n of degree n is the best minimax approximation to f on [a,b] iff the error f-p_n attains its max |error| at ≥n+2 points with alternating sign. Chebyshev 1854."
+          data-zh-def="次數 n 多項式 p_n 是 f 在 [a,b] 上的 minimax 最佳逼近，若且唯若誤差 f-p_n 在 ≥n+2 個點達最大振幅且正負交替。Chebyshev 1854。">Chebyshev's theorem</span>: the optimal error function achieves its maximum magnitude at exactly $\lceil N/2\rceil+1$ points, with alternating sign. So finding the optimum = finding this alternating extremal set.
+      </p>
+      <p lang="zh">
+        <span class="term"
+          data-en="Chebyshev alternation theorem"
+          data-en-def="A polynomial p_n of degree n is the best minimax approximation to f on [a,b] iff the error f-p_n attains its max |error| at ≥n+2 points with alternating sign. Chebyshev 1854."
+          data-zh-def="次數 n 多項式 p_n 是 f 在 [a,b] 上的 minimax 最佳逼近，若且唯若誤差 f-p_n 在 ≥n+2 個點達最大振幅且正負交替。Chebyshev 1854。">Chebyshev 定理</span>：最優誤差函數在恰好 $\lceil N/2\rceil+1$ 個點達最大振幅、正負交替。所以求最優 = 找這組交替極值集合。
+      </p>
+
+      <h2 lang="en">The loop</h2>
+      <h2 lang="zh">迴圈</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:12px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>1. Initialise</b> extremal frequencies $\{\omega_1,\dots,\omega_M\}$ (uniform or Chebyshev nodes).<br>
+            <b>2. Solve</b> small linear system: find $(w, \delta)$ such that $W(\omega_k)=\pm\delta$ with alternating signs.<br>
+            <b>3. Compute</b> the resulting $W(\omega)$ on a dense grid.<br>
+            <b>4. Find</b> all frequencies where $|W(\omega)|$ exceeds $|\delta|$ — these are new extrema.<br>
+            <b>5. Exchange</b>: replace old extrema with new ones, preserving alternation.<br>
+            <b>6. Check</b> convergence: $|\delta_{\text{new}} - \delta_{\text{old}}|$ small? Stop, else goto 2.
+          </span>
+          <span lang="zh">
+            <b>1. 初始化</b>極值頻率 $\{\omega_1,\dots,\omega_M\}$（均勻或 Chebyshev 節點）。<br>
+            <b>2. 小線性系統求解</b>：找 $(w, \delta)$ 使 $W(\omega_k)=\pm\delta$ 正負交替。<br>
+            <b>3. 密格點計算</b> $W(\omega)$。<br>
+            <b>4. 找</b>所有 $|W(\omega)|$ 超過 $|\delta|$ 的頻率 — 為新極值。<br>
+            <b>5. 交換</b>：新極值取代舊極值、保持交替。<br>
+            <b>6. 檢查收斂</b>：$|\delta_{\text{new}} - \delta_{\text{old}}|$ 小？停止，否則回 2。
+          </span>
+        </div>
+      </div>
+
+      <h2 lang="en">Comparison to grid LP</h2>
+      <h2 lang="zh">對照格點 LP</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:12px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>Grid LP</b>: $N=1000$ with 4000 ω-points → $\sim 8000$ inequalities, seconds to solve.<br>
+            <b>Remez</b>: same problem → $\sim 500$ extremal points per iteration, ~10 iterations, milliseconds total.
+          </span>
+          <span lang="zh">
+            <b>格點 LP</b>：$N=1000$、4000 ω 點 → 約 8000 條不等式，數秒。<br>
+            <b>Remez</b>：同問題 → 每次迭代約 500 極值，~10 次迭代，總共毫秒級。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Remez exchanges extrema, not variables.</b> Leverages the alternation theorem to identify the handful of active constraints. The rest of the stopband is inactive by construction.</p>
+        <p lang="zh"><b>Remez 交換的是極值，非變數。</b>利用交替定理辨識少數活躍約束。其餘阻帶依定義不活躍。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> For a length-$N=101$ symmetric window, how many extremal points does Remez's solution have at convergence?</p>
+        <p lang="zh"><b>問：</b>長度 $N=101$ 對稱視窗，Remez 收斂時有幾個極值點？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">52 (= ⌈N/2⌉ + 1 = 51 + 1).</button>
+          <button data-correct="1" lang="zh">52（= ⌈N/2⌉ + 1 = 51 + 1）。</button>
+          <button data-correct="0" lang="en">101.</button>
+          <button data-correct="0" lang="zh">101。</button>
+          <button data-correct="0" lang="en">2.</button>
+          <button data-correct="0" lang="zh">2。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Extremal locations</h3>
+        <h3 lang="zh">實驗 · 極值位置</h3>
+        <canvas id="fCanvas" style="height:320px;"></canvas>
+        <div class="controls">
+          <label>A (dB)</label>
+          <input type="range" id="aSlider" min="40" max="100" step="5" value="60"/>
+          <span class="val" id="aVal">60</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Each pink dot marks an extremum (sidelobe peak touching the $-A$ dB line). For Dolph-Chebyshev these are exactly the $\lceil N/2 \rceil + 1$ points Remez finds. Moving $A$ changes the ceiling — dots re-align along the new horizontal line.</p>
+          <p lang="zh">每個粉點為極值（旁瓣峰觸碰 $-A$ dB 線）。Dolph-Chebyshev 這些恰好是 Remez 找到的 $\lceil N/2 \rceil + 1$ 個點。調 $A$ 改變上限 — 點重新對齊新水平線。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13.7-lp-std.html">◀ 4.13.7</a>
@@ -51,8 +140,127 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { A: 60 };
+
+  function chebwin(N, A){
+    const beta = Math.cosh(Math.acosh(Math.pow(10, A/20)) / (N-1));
+    const w = new Float32Array(N);
+    const Wk = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      const wk = 2*Math.PI*k/N;
+      const x = beta * Math.cos(wk/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else if (x > 1) num = Math.cosh((N-1)*Math.acosh(x));
+      else num = ((N-1)%2 === 0 ? 1 : -1) * Math.cosh((N-1)*Math.acosh(-x));
+      Wk[k] = num;
+    }
+    for (let n=0;n<N;n++){
+      let s = 0;
+      for (let k=0;k<N;k++) s += Wk[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/N);
+      w[n] = s;
+    }
+    let mx = 0; for (let n=0;n<N;n++) if (Math.abs(w[n]) > mx) mx = Math.abs(w[n]);
+    for (let n=0;n<N;n++) w[n] /= mx;
+    return w;
+  }
+
+  function redraw(){
+    const N = 32;
+    const w = chebwin(N, state.A);
+    const K = 1000, om = DSP.linspace(0, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    let mmax = 0;
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+    const dBarr = new Float32Array(K);
+    for (let i=0;i<K;i++) dBarr[i] = 20*Math.log10(Math.max(mag[i]/mmax, 1e-8));
+
+    // find local maxima in sidelobe region (past main lobe)
+    const extrema = [];
+    for (let i=3;i<K-3;i++){
+      if (dBarr[i] > dBarr[i-1] && dBarr[i] > dBarr[i+1] && dBarr[i] > -state.A-2 && dBarr[i] < -state.A*0.3){
+        extrema.push(i);
+      }
+    }
+
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const dBfloor = -120;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=6;g++){ const y=pad.t+ih*g/6; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    // target
+    const yt = pad.t + ih*(1-(-state.A - dBfloor)/(0 - dBfloor));
+    ctx.strokeStyle='#5dffd0'; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(pad.l,yt); ctx.lineTo(W-pad.r,yt); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for (let i=0;i<K;i++){
+      const db = Math.max(dBfloor, dBarr[i]);
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      const x = pad.l + iw*om[i]/Math.PI;
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // extrema dots
+    ctx.fillStyle='#ff6aa0';
+    for (const i of extrema){
+      const db = dBarr[i];
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      const x = pad.l + iw*om[i]/Math.PI;
+      ctx.beginPath(); ctx.arc(x,y,4,0,2*Math.PI); ctx.fill();
+    }
+
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#ffd95a'; ctx.fillText('spectrum', 8, 14);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText(`${extrema.length} extrema`, 100, 14);
+    ctx.fillStyle='#5dffd0'; ctx.fillText(`-${state.A} dB`, 190, 14);
+    ctx.fillStyle='#8f8fa8';
+    ctx.fillText('0', pad.l-4, H-pad.b+14);
+    ctx.fillText('π', W-pad.r-8, H-pad.b+14);
+    ctx.fillText('0dB', 4, pad.t+6);
+    for (let db=-20; db>=dBfloor; db-=20){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('aSlider').addEventListener('input', () => { state.A = parseInt($('aSlider').value,10); $('aVal').textContent = state.A; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Alternation theorem: for a symmetric window the error function needs ⌈N/2⌉+1 alternating extrema.</span><span lang="zh">🪙 金幣 +1！交替定理：對稱視窗的誤差函數需 ⌈N/2⌉+1 個交替極值。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Degrees of freedom ⌈N/2⌉ + one for δ = need ⌈N/2⌉+1 extrema.</span><span lang="zh">✗ 自由度 ⌈N/2⌉ + 一個 δ = 需 ⌈N/2⌉+1 個極值。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>
