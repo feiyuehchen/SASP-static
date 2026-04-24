@@ -6,6 +6,8 @@
 <title>4.8.1 Matlab for DPSS · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,21 +30,92 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_DPSS_Window.html" target="_blank">SASP §4.8.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box nes-box--purple" data-label="CODE">
-    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
-% Matlab / Octave (signal processing toolbox)
-NW = 4;                   % time-bandwidth product
-[E, V] = dpss(N, NW);     % E columns = orthogonal tapers
-w = E(:,1);               % usually use the first one
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="TWO ARGUMENTS, MANY TAPERS">
+        <p lang="en">Matlab's <code>dpss(N, NW)</code> returns the matrix of all $N$ prolate sequences sorted by eigenvalue (concentration). Usually you only need the first one or two; the rest are for multi-taper PSD (§7 / Thomson's method).</p>
+        <p lang="zh">Matlab <code>dpss(N, NW)</code> 回傳所有 $N$ 個扁球體序列（依特徵值/集中度排序）。通常只用前 1 或 2 個；其餘給多 taper PSD 用（§7 Thomson 法）。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="CODE">
+        <pre style="color:var(--nes-lime); font-size:11px; line-height:1.8; margin:0; white-space:pre-wrap;">
+% Matlab / Octave (Signal Processing Toolbox)
+N  = 512;
+NW = 4;                         % time-bandwidth product
+[E, V] = dpss(N, NW);           % E: N×K tapers, V: concentration eigenvalues
+
+w = E(:, 1);                    % primary taper (V(1) closest to 1)
+
+% First few tapers — how multi-taper uses them
+K = 2 * NW - 1;                 % # of usable tapers
+tapers = E(:, 1:K);
 
 % Python / scipy
 from scipy.signal.windows import dpss
-w = dpss(N, NW)           % returns the first taper
-    </pre>
-  </div>
+w = dpss(N, NW)                 % first taper only
+tapers = dpss(N, NW, Kmax=K)    % first K tapers
+</pre>
+      </div>
 
-  <p lang="en"><code>NW</code> is the time-bandwidth product (half-width of the main lobe × $N$). Typical values 2.5–4. Larger <code>NW</code> pushes sidelobes down further.</p>
-  <p lang="zh"><code>NW</code> 是時間頻寬乘積（主瓣半寬 × $N$）。常用 2.5–4。<code>NW</code> 越大，旁瓣壓越深。</p>
+      <h2 lang="en">Typical $NW$ values</h2>
+      <h2 lang="zh">常見 $NW$ 值</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>$NW = 2.5$</b>: 4 usable tapers, ~$-55$ dB side-lobes, moderate main-lobe.<br>
+            <b>$NW = 4$</b>: 7 tapers, $-80$ dB side-lobes, wider main lobe.<br>
+            <b>$NW = 6$</b>: 11 tapers, $-100$ dB, quite wide main lobe.<br>
+            Pick $NW$ according to the number of tapers you need vs. frequency resolution you can afford.
+          </span>
+          <span lang="zh">
+            <b>$NW = 2.5$</b>：4 個可用 taper，旁瓣約 $-55$ dB，主瓣中等。<br>
+            <b>$NW = 4$</b>：7 tapers，旁瓣 $-80$ dB，主瓣較寬。<br>
+            <b>$NW = 6$</b>：11 tapers，$-100$ dB，主瓣很寬。<br>
+            依「所需 taper 數 vs. 可接受解析度」選 $NW$。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--blue" data-label="PREREQUISITE">
+        <p lang="en">Requires the Signal Processing Toolbox in Matlab (or scipy in Python). For a closed-form substitute see Kaiser (§4.9), which approximates DPSS with $\beta \approx \pi NW$.</p>
+        <p lang="zh">Matlab 需 Signal Processing Toolbox（Python 需 scipy）。想要閉式替代見 Kaiser（§4.9），$\beta \approx \pi NW$ 近似 DPSS。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>dpss returns a matrix, not a vector.</b> The columns are the orthogonal tapers sorted by concentration. Use column 1 for classic windowing; use all $2NW-1$ for multi-taper PSD.</p>
+        <p lang="zh"><b>dpss 回傳矩陣、非向量。</b>各行為依集中度排序的正交 tapers。單視窗取第 1 行；多 taper PSD 用前 $2NW-1$ 行。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> With $N=512, NW=4$, how many usable DPSS tapers does <code>dpss</code> return with eigenvalues close to 1?</p>
+        <p lang="zh"><b>問：</b>$N=512, NW=4$，<code>dpss</code> 回傳多少個特徵值接近 1 的可用 tapers？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">About $2NW - 1 = 7$.</button>
+          <button data-correct="1" lang="zh">約 $2NW - 1 = 7$ 個。</button>
+          <button data-correct="0" lang="en">$N = 512$.</button>
+          <button data-correct="0" lang="zh">$N = 512$ 個。</button>
+          <button data-correct="0" lang="en">Exactly 1.</button>
+          <button data-correct="0" lang="zh">恰好 1 個。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Multiple Kaiser "tapers" at the same β</h3>
+        <h3 lang="zh">實驗 · 同一 β 的多個 Kaiser「tapers」</h3>
+        <canvas id="tapCanvas" style="height:280px;"></canvas>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Simulated multi-taper view — shown with Kaiser windows shifted in the time axis. Real DPSS tapers have orthogonal shapes (each has a different number of zero-crossings), which is the key property that makes averaged periodograms independent. Kaiser alone doesn't give this orthogonality, but the lab here gives a feel for "many overlapping similar windows".</p>
+          <p lang="zh">多 taper 的模擬視覺 — 用時間軸上位移的 Kaiser 視窗表現。真正的 DPSS tapers 形狀互相正交（每個零交越次數不同），這是平均 periodogram 獨立性的關鍵。Kaiser 不具備此正交性，但 lab 給你「許多相似重疊視窗」的感覺。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.8-dpss.html">◀ 4.8</a>
@@ -51,8 +124,57 @@ w = dpss(N, NW)           % returns the first taper
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const N = 64;
+  const c = $('tapCanvas'), ctx = c.getContext('2d');
+  const dpr = Math.max(1, window.devicePixelRatio||1);
+  c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+  const W = c.clientWidth, H = c.clientHeight;
+  ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+  const pad={l:32,r:10,t:14,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+  ctx.strokeStyle='#262644';
+  for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+  const y0 = pad.t + ih*0.85;
+  ctx.strokeStyle='#e6e6ff'; ctx.beginPath(); ctx.moveTo(pad.l,y0); ctx.lineTo(W-pad.r,y0); ctx.stroke();
+  // Plot 7 Kaiser tapers with slightly different β, offset so each takes the full width
+  const colors = ['#5aa0ff','#ffd95a','#ff6aa0','#78d66a','#c58cff','#ff9a3c','#5dffd0'];
+  for (let k=0;k<7;k++){
+    const beta = 4 + k*0.8;
+    const w = DSP.WINDOWS.kaiser(N, beta);
+    ctx.strokeStyle = colors[k]; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.8;
+    ctx.beginPath();
+    for (let n=0;n<N;n++){
+      const xp = pad.l + iw*n/(N-1), yp = y0 - ih*0.8 * w[n];
+      if (n===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+    }
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+  ctx.fillText('7 overlapping Kaiser tapers (true DPSS tapers are orthogonal)', 8, 14);
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Rule of thumb: $2NW - 1$ tapers have eigenvalues ≳ 0.99. The rest fall off quickly.</span><span lang="zh">🪙 金幣 +1！經驗法則：$2NW - 1$ 個 tapers 特徵值 ≳ 0.99，其餘急速下降。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Only the first 2NW-1 tapers are well-concentrated.</span><span lang="zh">✗ 只有前 2NW-1 個 tapers 集中度足夠。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

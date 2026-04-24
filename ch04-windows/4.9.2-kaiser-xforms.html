@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>4.9.2 Kaiser Windows and Transforms · DSP Quest</title>
+<title>4.9.2 Kaiser Windows &amp; Transforms · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
@@ -30,15 +30,63 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Kaiser_Windows_Transforms.html" target="_blank">SASP §4.9.2 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="TRANSFORM FAMILY">
-    <p lang="en">The DTFT of the continuous Kaiser window is itself a scaled sinc-like $\sinh$ function; in practice we just compute it numerically by FFT.</p>
-    <p lang="zh">連續型 Kaiser 視窗的 DTFT 本身是一個縮放的 sinh 類 sinc；實務上用 FFT 算。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="TRANSFORM FAMILY">
+        <p lang="en">The DTFT of the continuous Kaiser is a scaled $\sinh$-ratio (not a plain sinc); in practice we always compute it numerically by FFT. Here we show three $\beta$ values side by side to see how the spectrum morphs.</p>
+        <p lang="zh">連續 Kaiser 的 DTFT 是縮放的 $\sinh$ 比（非純 sinc）；實務一律以 FFT 算。這裡展示三個 $\beta$ 並排看頻譜如何變形。</p>
+      </div>
 
-  <div class="viz-card">
-    <h3 lang="en">Lab · β = {2, 6, 10}</h3>
-    <h3 lang="zh">實驗 · β = {2, 6, 10}</h3>
-    <canvas id="fCanvas" style="height:240px;"></canvas>
+      <div class="formula">
+        <span class="label">CONTINUOUS KAISER TRANSFORM</span>
+        <div>$$W(\omega)\;\propto\;\frac{\sinh\!\Bigl(\sqrt{\beta^2-(T\omega/2)^2}\Bigr)}{\sqrt{\beta^2-(T\omega/2)^2}}$$</div>
+      </div>
+
+      <p lang="en">
+        For $|T\omega/2| < \beta$ the spectrum is a hyperbolic sine ratio (broad positive bump). For $|T\omega/2| > \beta$ the argument goes imaginary and the $\sinh$ becomes $\sin$, producing the side-lobe oscillations. The transition at $|T\omega/2| = \beta$ marks the main-lobe edge.
+      </p>
+      <p lang="zh">
+        $|T\omega/2| < \beta$ 時為雙曲 sinh 比（正向寬凸起）。$|T\omega/2| > \beta$ 時變為虛引數，$\sinh$ 變 $\sin$，產生旁瓣振盪。$|T\omega/2| = \beta$ 處就是主瓣邊緣。
+      </p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Kaiser's spectrum has one "shape" parametrised by β.</b> β small ≈ Dirichlet sinc; β large ≈ very concentrated lobe. The $\sinh / \sin$ transition is what you see in the dB plot.</p>
+        <p lang="zh"><b>Kaiser 頻譜只有一種「形狀」，由 β 參數化。</b>β 小 ≈ Dirichlet sinc；β 大 ≈ 極集中的凸起。$\sinh / \sin$ 轉換點就是 dB 圖上看到的轉折。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Comparing β=2, β=6, β=10 Kaiser spectra, the first side-lobe sinks by roughly how much going from β=2 to β=10?</p>
+        <p lang="zh"><b>問：</b>比較 β=2、β=6、β=10 的 Kaiser 頻譜，第一旁瓣從 β=2 到 β=10 大約下降多少？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">~75 dB (from about -19 dB to about -95 dB).</button>
+          <button data-correct="1" lang="zh">約 75 dB（從 -19 dB 到 -95 dB 左右）。</button>
+          <button data-correct="0" lang="en">~10 dB.</button>
+          <button data-correct="0" lang="zh">約 10 dB。</button>
+          <button data-correct="0" lang="en">No change — only main lobe changes.</button>
+          <button data-correct="0" lang="zh">沒變 — 只有主瓣變。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · β = {2, 6, 10}</h3>
+        <h3 lang="zh">實驗 · β = {2, 6, 10}</h3>
+        <canvas id="fCanvas" style="height:320px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Blue β=2 (like Hamming), yellow β=6 (like Hamming-Blackman), pink β=10 (tight-taper). Side-lobe floors at roughly $-19$, $-57$, $-95$ dB. Main-lobe widths: $\sim 5\pi/N$, $\sim 10\pi/N$, $\sim 14\pi/N$.</p>
+          <p lang="zh">藍 β=2（類 Hamming）、黃 β=6（類 Hamming-Blackman）、粉 β=10（緊收尾）。旁瓣底約 $-19$、$-57$、$-95$ dB。主瓣寬 $\sim 5\pi/N$、$\sim 10\pi/N$、$\sim 14\pi/N$。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -50,25 +98,77 @@
 
 <script src="../assets/js/dsp.js"></script>
 <script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  const N = 64;
-  const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
-  const magOf = b => {
-    const w = DSP.WINDOWS.kaiser(N, b);
-    const { re, im } = DSP.dtft(w, om);
-    const m = new Float32Array(K);
-    for (let i = 0; i < K; i++) m[i] = Math.hypot(re[i], im[i]);
-    return DSP.toDb(m, -120);
-  };
-  Viz.multiLine($('fCanvas'), [
-    { y: Array.from(magOf(2)),  color:'#3CBCFC', label:'β=2' },
-    { y: Array.from(magOf(6)),  color:'#F8B800', label:'β=6' },
-    { y: Array.from(magOf(10)), color:'#F83800', label:'β=10' },
-  ], { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-120, xLabel:'ω', yLabel:'dB', title:'KAISER SPECTRA — β trades main-lobe width for side-lobe depth', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  const state = { N: 64 };
+  function redraw(){
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const dBfloor = -120;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=12;g++){ const y=pad.t+ih*g/12; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+    const betas = [
+      { b: 2, color: '#5aa0ff' },
+      { b: 6, color: '#ffd95a' },
+      { b: 10, color: '#ff6aa0' },
+    ];
+    for (const { b, color } of betas){
+      const w = DSP.WINDOWS.kaiser(state.N, b);
+      const { re, im } = DSP.dtft(w, om);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-8)));
+        const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+        const x = pad.l + iw*i/(K-1);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#5aa0ff'; ctx.fillText('β=2', 8, 14);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('β=6', 80, 14);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('β=10', 152, 14);
+    ctx.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Design formula A = β/0.1102 + 8.7 gives A ≈ 27 dB at β=2, A ≈ 63 at β=6, A ≈ 99 at β=10 — a ~70 dB swing.</span><span lang="zh">🪙 金幣 +1！設計公式 A = β/0.1102 + 8.7，β=2 時 A ≈ 27、β=6 時 ≈ 63、β=10 時 ≈ 99 dB — 約 70 dB 動態。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Larger β pushes side-lobes much lower — try the lab.</span><span lang="zh">✗ β 大旁瓣大幅下降 — 試試 lab。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

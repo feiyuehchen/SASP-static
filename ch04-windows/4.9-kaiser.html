@@ -33,8 +33,8 @@
   <div class="two-col">
     <section>
       <div class="nes-box nes-box--purple" data-label="THE POCKET KNIFE">
-        <p lang="en">One parameter $\beta$ smoothly slides between rectangular ($\beta=0$) and extremely-tapered windows ($\beta\gg 1$). A close approximation to the DPSS but with a closed-form expression.</p>
-        <p lang="zh">一個參數 $\beta$ 平滑地從矩形（$\beta=0$）滑到極度收尾的視窗（$\beta\gg 1$）。DPSS 的近似版本，有顯式公式。</p>
+        <p lang="en">One parameter $\beta$ smoothly slides between rectangular ($\beta=0$) and extremely tapered windows ($\beta\gg 1$). A close approximation to the DPSS (§4.8) but with a closed-form expression — ideal for filter design and spectrum analysis when you want tunability without eigendecomposition.</p>
+        <p lang="zh">一個參數 $\beta$ 平滑地在矩形（$\beta=0$）與極度收尾（$\beta\gg 1$）之間切換。DPSS（§4.8）的封閉解近似 — 適合要可調但不想做特徵分解的濾波器設計與頻譜分析。</p>
       </div>
 
       <div class="formula">
@@ -42,8 +42,46 @@
         <div>$$w[n]=\frac{I_0\!\left(\beta\sqrt{1-\bigl[\frac{2n-(N-1)}{N-1}\bigr]^{2}}\right)}{I_0(\beta)}$$</div>
       </div>
 
-      <p lang="en">$I_0$ is the modified Bessel function of the first kind, order 0. Our <code>DSP.WINDOWS.kaiser(N, β)</code> uses a small series for $I_0$ that is accurate to machine precision.</p>
-      <p lang="zh">$I_0$ 是零階第一類修正 Bessel 函數。本站 <code>DSP.WINDOWS.kaiser(N, β)</code> 用級數展開計算，精度到機器誤差。</p>
+      <p lang="en">
+        $I_0$ is the
+        <span class="term"
+          data-en="Modified Bessel function I_0"
+          data-en-def="Modified Bessel function of the first kind, order zero: I_0(x) = Σ_{k=0}^∞ (x/2)^{2k} / (k!)². Used in DPSS approximations and circular-symmetric FFTs."
+          data-zh-def="第一類零階修正 Bessel 函數：I_0(x) = Σ_{k=0}^∞ (x/2)^{2k} / (k!)²。用於 DPSS 近似與圓對稱 FFT。">modified Bessel function of the first kind, order 0</span>.
+        Our <code>DSP.WINDOWS.kaiser(N, β)</code> evaluates it via a compact series accurate to machine precision.
+      </p>
+      <p lang="zh">
+        $I_0$ 是<span class="term"
+          data-en="Modified Bessel function I_0"
+          data-en-def="Modified Bessel function of the first kind, order zero: I_0(x) = Σ_{k=0}^∞ (x/2)^{2k} / (k!)². Used in DPSS approximations and circular-symmetric FFTs."
+          data-zh-def="第一類零階修正 Bessel 函數：I_0(x) = Σ_{k=0}^∞ (x/2)^{2k} / (k!)²。用於 DPSS 近似與圓對稱 FFT。">第一類零階修正 Bessel 函數</span>。本站 <code>DSP.WINDOWS.kaiser(N, β)</code> 用緊湊級數至機器精度。
+      </p>
+
+      <div class="nes-box nes-box--blue" data-label="β → WINDOW MAP">
+        <p lang="en"><b>$\beta=0$</b> → rectangular. <b>$\beta\approx 5.6$</b> ≈ Hamming-like. <b>$\beta\approx 8.6$</b> ≈ Blackman-like. <b>$\beta > 10$</b> → very low side-lobes, very wide main lobe.</p>
+        <p lang="zh"><b>$\beta=0$</b> → 矩形；<b>$\beta\approx 5.6$</b> ≈ 類 Hamming；<b>$\beta\approx 8.6$</b> ≈ 類 Blackman；<b>$\beta > 10$</b> → 旁瓣極低、主瓣極寬。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>One knob, any trade-off.</b> Kaiser lets you specify a sidelobe target in dB and computes the required β. No other classical window has this closed-form design recipe.</p>
+        <p lang="zh"><b>一個旋鈕、任意取捨。</b>Kaiser 讓你指定 dB 旁瓣目標、反推所需 β。其他經典視窗都沒有這個閉式設計配方。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> What does $\beta = 0$ in the Kaiser window give?</p>
+        <p lang="zh"><b>問：</b>Kaiser 視窗 $\beta = 0$ 時是什麼？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Rectangular window ($I_0(0)=1$ so all samples equal 1).</button>
+          <button data-correct="1" lang="zh">矩形視窗（$I_0(0)=1$ 故所有樣本為 1）。</button>
+          <button data-correct="0" lang="en">Hann window.</button>
+          <button data-correct="0" lang="zh">Hann 視窗。</button>
+          <button data-correct="0" lang="en">Gaussian window.</button>
+          <button data-correct="0" lang="zh">高斯視窗。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
     </section>
 
     <section>
@@ -51,11 +89,18 @@
         <h3 lang="en">Lab · Sweep β</h3>
         <h3 lang="zh">實驗 · 調 β</h3>
         <canvas id="tCanvas" style="height:130px;"></canvas>
-        <canvas id="fCanvas" style="height:190px; margin-top:6px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
         <div class="controls">
           <label>β</label>
           <input type="range" id="bSlider" min="0" max="14" step="0.2" value="6"/>
           <span class="val" id="bVal">6.0</span>
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">At $\beta=0$ you see the rectangular's $-13$ dB side-lobes. Push $\beta$ up — the side-lobes sink fast, the main lobe widens slowly.</p>
+          <p lang="zh">$\beta=0$ 看到矩形的 $-13$ dB 旁瓣。拉大 $\beta$ — 旁瓣快速下沉、主瓣緩慢變寬。</p>
         </div>
       </div>
     </section>
@@ -70,24 +115,40 @@
 
 <script src="../assets/js/dsp.js"></script>
 <script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  const state = { b: 6 };
-  const N = 64;
+  const state = { b: 6, N: 64 };
   function redraw() {
-    const w = DSP.WINDOWS.kaiser(N, state.b);
-    Viz.stem($('tCanvas'), w, { yMin:-0.05, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`KAISER β=${state.b.toFixed(1)}` });
+    const w = DSP.WINDOWS.kaiser(state.N, state.b);
+    Viz.stem($('tCanvas'), w, { yMin:-0.05, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`KAISER β=${state.b.toFixed(1)}, N=${state.N}` });
     const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
     const { re, im } = DSP.dtft(w, om);
     const mag = new Float32Array(K);
-    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
-    Viz.line($('fCanvas'), DSP.toDb(mag,-100), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-100, xLabel:'ω', yLabel:'dB', title:'SPECTRUM (dB)', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+    for (let i=0;i<K;i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), DSP.toDb(mag,-100), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-100, xLabel:'ω', yLabel:'dB', title:'SPECTRUM (dB)', color:'#ffd95a', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
   }
   $('bSlider').addEventListener('input', () => { state.b = parseFloat($('bSlider').value); $('bVal').textContent = state.b.toFixed(1); redraw(); });
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! I_0(0)=1 so every sample of w[n] becomes 1/1 = 1. Pure rect.</span><span lang="zh">🪙 金幣 +1！I_0(0)=1，所有 w[n] = 1/1 = 1。純矩形。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Set β=0 in the formula and simplify — every I_0 argument becomes 0.</span><span lang="zh">✗ β=0 代入公式，所有 I_0 參數為 0。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
   redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

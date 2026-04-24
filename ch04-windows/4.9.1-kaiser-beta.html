@@ -30,18 +30,101 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Kaiser_Window_Beta_Parameter.html" target="_blank">SASP §4.9.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="β PICKS THE SIDELOBE FLOOR">
-    <p lang="en">Kaiser's formula lets you pick β from a target stopband attenuation $A$ (in dB).</p>
-    <p lang="zh">Kaiser 公式可以從目標停帶衰減 $A$（dB）直接反推 β。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="β PICKS THE SIDELOBE FLOOR">
+        <p lang="en">Kaiser's design recipe: start with the target
+          <span class="term"
+            data-en="Stopband attenuation A"
+            data-en-def="The minimum suppression level of spectral leakage in the stopband, expressed in positive dB. A=60 means sidelobes are at most -60 dB below the main lobe."
+            data-zh-def="停帶洩漏最低抑制量，以正 dB 表示。A=60 表示旁瓣最多 -60 dB 相對主瓣。">stopband attenuation $A$</span>
+          in dB, read β from a closed-form formula.</p>
+        <p lang="zh">Kaiser 設計配方：給定目標<span class="term"
+            data-en="Stopband attenuation A"
+            data-en-def="The minimum suppression level of spectral leakage in the stopband, expressed in positive dB. A=60 means sidelobes are at most -60 dB below the main lobe."
+            data-zh-def="停帶洩漏最低抑制量，以正 dB 表示。A=60 表示旁瓣最多 -60 dB 相對主瓣。">停帶衰減 $A$</span>（dB），用閉式公式反推 β。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">KAISER β FROM A (dB)</span>
-    <div>$$\beta=\begin{cases}0.1102(A-8.7),& A>50\\ 0.5842(A-21)^{0.4}+0.07886(A-21),& 21\le A\le 50\\ 0,& A<21\end{cases}$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">KAISER β FROM A (dB)</span>
+        <div>$$\beta=\begin{cases}0.1102(A-8.7),& A>50\\ 0.5842(A-21)^{0.4}+0.07886(A-21),& 21\le A\le 50\\ 0,& A<21\end{cases}$$</div>
+      </div>
 
-  <p lang="en">So a $60$ dB floor asks for $\beta\approx 5.65$; a $80$ dB floor asks for $\beta\approx 7.86$.</p>
-  <p lang="zh">要 60 dB 旁瓣 → $\beta\approx 5.65$；80 dB → $\beta\approx 7.86$。</p>
+      <h2 lang="en">Quick lookup</h2>
+      <h2 lang="zh">查表</h2>
+
+      <div class="formula">
+        <div>
+          $$\begin{array}{cc}
+          A\;\text{(dB)} & \beta \\
+          \hline
+          30 & 1.68 \\
+          40 & 3.40 \\
+          50 & 4.54 \\
+          60 & 5.65 \\
+          70 & 6.76 \\
+          80 & 7.86 \\
+          90 & 8.96 \\
+          100 & 10.06 \\
+          120 & 12.27 \\
+          \end{array}$$
+        </div>
+      </div>
+
+      <p lang="en">
+        For $A = 60$ dB → $\beta \approx 5.65$. For $A = 80$ dB → $\beta \approx 7.86$. Formula is accurate to a few tenths; just read the table if you want integer values.
+      </p>
+      <p lang="zh">
+        $A = 60$ dB → $\beta \approx 5.65$；$A = 80$ dB → $\beta \approx 7.86$。公式誤差幾分之一；想要整數值直接查表。
+      </p>
+
+      <div class="nes-box nes-box--blue" data-label="AND THE REQUIRED LENGTH">
+        <p lang="en">Main-lobe width follows $\Delta \omega \approx (A - 8) / (2.285 N)$. Solve for $N$ to get the shortest Kaiser that meets both $A$ and $\Delta\omega$. Built into Matlab's <code>kaiserord</code>.</p>
+        <p lang="zh">主瓣寬度 $\Delta \omega \approx (A - 8) / (2.285 N)$。解 $N$ 即得同時滿足 $A$ 與 $\Delta\omega$ 的最短 Kaiser。Matlab <code>kaiserord</code> 內建此計算。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Kaiser's design is "specify-and-compute".</b> Tell it the attenuation you want, and the β (and optionally N) come out in closed form — no trial and error.</p>
+        <p lang="zh"><b>Kaiser 設計是「指定即得」。</b>給定想要的衰減，β（以及 N）由閉式公式直出 — 無需試錯。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You need $80$ dB stopband attenuation. Using Kaiser, what β do you pick?</p>
+        <p lang="zh"><b>問：</b>需要 $80$ dB 停帶衰減。Kaiser 該選哪個 β？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">≈ 7.86.</button>
+          <button data-correct="1" lang="zh">約 7.86。</button>
+          <button data-correct="0" lang="en">≈ 2.</button>
+          <button data-correct="0" lang="zh">約 2。</button>
+          <button data-correct="0" lang="en">≈ 80 (just use the dB number).</button>
+          <button data-correct="0" lang="zh">約 80（直接用 dB 數）。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Target A, compute β, see result</h3>
+        <h3 lang="zh">實驗 · 指定 A、算 β、看結果</h3>
+        <canvas id="fCanvas" style="height:300px;"></canvas>
+        <div class="controls">
+          <label>Target A (dB)</label>
+          <input type="range" id="aSlider" min="20" max="120" step="2" value="60"/>
+          <span class="val" id="aVal">60</span>
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="256" step="8" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Computes β from $A$, draws the Kaiser spectrum, marks the target $A$ as a reference line. The side-lobe floor should sit right at the line for $A > 21$ dB.</p>
+          <p lang="zh">從 $A$ 反推 β、畫 Kaiser 頻譜，並用參考線標出目標 $A$。$A > 21$ dB 時旁瓣底應正好落在線上。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.9-kaiser.html">◀ 4.9</a>
@@ -50,8 +133,84 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { A: 60, N: 64 };
+  function betaFromA(A){
+    if (A > 50) return 0.1102 * (A - 8.7);
+    if (A >= 21) return 0.5842 * Math.pow(A - 21, 0.4) + 0.07886 * (A - 21);
+    return 0;
+  }
+  function redraw(){
+    const beta = betaFromA(state.A);
+    const w = DSP.WINDOWS.kaiser(state.N, beta);
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:14,b:26}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    let mmax = 0;
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+    const dBfloor = -140;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=10;g++){ const y=pad.t+ih*g/10; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+    // target line at -A dB
+    ctx.strokeStyle='#ff6aa0'; ctx.setLineDash([4,4]);
+    const yA = pad.t + ih*(1 - (-state.A - dBfloor)/(0 - dBfloor));
+    ctx.beginPath(); ctx.moveTo(pad.l, yA); ctx.lineTo(W-pad.r, yA); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='#ff6aa0'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('target A = -'+state.A+' dB', pad.l+4, yA-4);
+    // spectrum
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1.8;
+    ctx.beginPath();
+    for (let i=0;i<K;i++){
+      const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-8)));
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      const x = pad.l + iw*i/(K-1);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('Kaiser spectrum · β='+beta.toFixed(2)+'  (A='+state.A+' dB, N='+state.N+')', 8, 12);
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    for (let db=0; db>=dBfloor; db-=40){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+  $('aSlider').addEventListener('input', e => { state.A = parseInt(e.target.value,10); $('aVal').textContent = state.A; redraw(); });
+  $('nSlider').addEventListener('input', e => { state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! 0.1102 × (80 − 8.7) = 7.855. Round to 7.86.</span><span lang="zh">🪙 金幣 +1！0.1102 × (80 − 8.7) = 7.855。四捨五入為 7.86。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Plug 80 into the $A > 50$ branch: $\\beta = 0.1102(A - 8.7)$.</span><span lang="zh">✗ 套 $A > 50$ 分支：$\\beta = 0.1102(A - 8.7)$。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

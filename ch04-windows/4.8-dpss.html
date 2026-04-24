@@ -30,31 +30,105 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Slepian_DPSS_Window.html" target="_blank">SASP §4.8 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="MAX ENERGY CONCENTRATION">
-    <p lang="en">The DPSS (Discrete Prolate Spheroidal Sequences) is the window that maximises the fraction of its spectrum energy inside a chosen bandwidth $|\omega|<W$. Provably optimal at this objective.</p>
-    <p lang="zh">DPSS（離散扁球體波函數）是讓「頻譜能量集中在選定頻寬 $|\omega|<W$ 內的比例」最大化的視窗。這個目標函數下是可證明最佳的。</p>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="PROVABLY OPTIMAL CONCENTRATION">
+        <p lang="en">The
+          <span class="term"
+            data-en="DPSS (Discrete Prolate Spheroidal Sequences)"
+            data-en-def="The length-N sequences that maximise the fraction of their spectrum energy inside a chosen bandwidth |ω|<W. Eigenvectors of a Toeplitz matrix formed from sinc(2Wn)."
+            data-zh-def="在選定頻寬 |ω|<W 內能量集中比例最大的長度 N 序列；由 sinc(2Wn) 組成的 Toeplitz 矩陣的特徵向量。">DPSS</span>
+          (Discrete Prolate Spheroidal Sequences, or Slepian sequences) is the window that <em>maximises</em> the fraction of its spectrum energy inside a chosen bandwidth $|\omega|<W$. Provably optimal at this one objective.</p>
+        <p lang="zh"><span class="term"
+            data-en="DPSS (Discrete Prolate Spheroidal Sequences)"
+            data-en-def="The length-N sequences that maximise the fraction of their spectrum energy inside a chosen bandwidth |ω|<W. Eigenvectors of a Toeplitz matrix formed from sinc(2Wn)."
+            data-zh-def="在選定頻寬 |ω|<W 內能量集中比例最大的長度 N 序列；由 sinc(2Wn) 組成的 Toeplitz 矩陣的特徵向量。">DPSS</span>（離散扁球體波函數，或 Slepian 序列）是「使頻譜能量集中在選定頻寬 $|\omega|<W$ 內的比例」<em>最大化</em>的視窗。這個目標下可證最佳。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">OPTIMIZATION</span>
+        <div>$$w^*\;=\;\underset{\|w\|=1}{\arg\max}\;\frac{\int_{-W}^{W}|W(\omega)|^2 d\omega}{\int_{-\pi}^{\pi}|W(\omega)|^2 d\omega}$$</div>
+      </div>
+
+      <p lang="en">
+        The solution is the dominant eigenvector of an $N\times N$
+        Toeplitz matrix $\mathbf{B}$ with entries $B_{k\ell} = \frac{\sin(2W(k-\ell))}{\pi(k-\ell)}$.
+        The time-bandwidth product $NW$ parametrises the family — larger
+        $NW$ pushes side-lobes deeper but widens the main lobe.
+      </p>
+      <p lang="zh">
+        解為 $N\times N$ Toeplitz 矩陣 $\mathbf{B}$（$B_{k\ell} = \frac{\sin(2W(k-\ell))}{\pi(k-\ell)}$）的主特徵向量。時間頻寬乘積 $NW$ 為家族參數 — $NW$ 越大旁瓣越深，主瓣也越寬。
+      </p>
+
+      <h2 lang="en">Multiple tapers</h2>
+      <h2 lang="zh">多個 taper</h2>
+
+      <p lang="en">
+        The matrix has several eigenvectors concentrated in the same
+        band. The first $2NW$ of them are "good"; using them as a set of
+        <em>orthogonal</em> tapers is the heart of the
+        <span class="term"
+          data-en="Thomson multi-taper method"
+          data-en-def="Estimate PSD by averaging periodograms from k=1..K DPSS tapers. Trades bias (each taper has lower resolution) for variance reduction."
+          data-zh-def="用 k=1..K 個 DPSS tapers 各算 periodogram 後平均；用偏誤（每 taper 解析度較差）換變異數降低。">Thomson multi-taper spectrum estimator</span>
+        (Ch 7).
+      </p>
+      <p lang="zh">
+        同一矩陣有多個在相同頻帶內集中的特徵向量。前 $2NW$ 個為「佳」tapers；用這組<em>正交</em> tapers 是
+        <span class="term"
+          data-en="Thomson multi-taper method"
+          data-en-def="Estimate PSD by averaging periodograms from k=1..K DPSS tapers. Trades bias (each taper has lower resolution) for variance reduction."
+          data-zh-def="用 k=1..K 個 DPSS tapers 各算 periodogram 後平均；用偏誤（每 taper 解析度較差）換變異數降低。">Thomson 多 taper 頻譜估計器</span>（Ch 7）的核心。
+      </p>
+
+      <div class="nes-box nes-box--yellow" data-label="COMPUTATION COST">
+        <p lang="en">Requires an $N\times N$ eigendecomposition. Matlab's <code>dpss</code> caches precomputed values. For one-off audio analysis, the Kaiser window (§4.9) is a closed-form approximation indistinguishable for most practical purposes.</p>
+        <p lang="zh">需 $N\times N$ 特徵分解。Matlab 的 <code>dpss</code> 有快取。一次性音訊分析中，Kaiser（§4.9）的封閉解在多數實務上難分軒輊。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>DPSS is the "gold standard" concentration window.</b> Expensive to compute but mathematically optimal. Everything else in this chapter can be compared against it.</p>
+        <p lang="zh"><b>DPSS 是能量集中的「金標準」視窗。</b>計算貴但數學最優。本章所有其他視窗都可拿來跟它比。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> What problem does DPSS solve exactly (with mathematical proof)?</p>
+        <p lang="zh"><b>問：</b>DPSS 精確（有數學證明）解決什麼問題？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Maximum fraction of spectrum energy concentrated inside $|\omega|<W$.</button>
+          <button data-correct="1" lang="zh">頻譜能量集中在 $|\omega|<W$ 內的比例最大。</button>
+          <button data-correct="0" lang="en">Minimum first side-lobe.</button>
+          <button data-correct="0" lang="zh">第一旁瓣最小。</button>
+          <button data-correct="0" lang="en">Fastest FFT computation.</button>
+          <button data-correct="0" lang="zh">FFT 運算最快。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Kaiser as a DPSS surrogate</h3>
+        <h3 lang="zh">實驗 · Kaiser 作為 DPSS 代理</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>β (Kaiser surrogate for NW)</label>
+          <input type="range" id="bSlider" min="1" max="14" step="0.5" value="6"/>
+          <span class="val" id="bVal">6.0</span>
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">DPSS requires an eigendecomposition (not practical in-browser for live demo). The Kaiser window gives an excellent approximation — $\beta \approx \pi NW$ matches the main-lobe / side-lobe trade. Use this lab as a DPSS stand-in; the shape and spectrum agree to within a dB for typical audio sizes.</p>
+          <p lang="zh">DPSS 需特徵分解，瀏覽器即時示範不實際。Kaiser 是極佳近似 — $\beta \approx \pi NW$ 可匹配主瓣/旁瓣取捨。把本 lab 當成 DPSS 替身；一般音訊尺寸下形狀與頻譜差異不到 1 dB。</p>
+        </div>
+      </div>
+    </section>
   </div>
-
-  <p lang="en">
-    The shape is the dominant eigenvector of a certain Toeplitz matrix;
-    in practice Matlab's <code>dpss(N, NW)</code> gives it back, with
-    <code>NW</code> being the time-bandwidth product. <code>NW</code>
-    controls the trade-off: larger <code>NW</code> means lower sidelobes
-    and wider main lobe.
-  </p>
-  <p lang="zh">
-    形狀是某個 Toeplitz 矩陣的主特徵向量；實務上 Matlab 的 <code>dpss(N, NW)</code> 直接給你，
-    <code>NW</code> 為時間頻寬乘積。<code>NW</code> 越大 → 旁瓣越低、主瓣越寬。
-  </p>
-
-  <ul>
-    <li lang="en">Theoretically optimal for sidelobe suppression at a given main-lobe width.</li>
-    <li lang="zh">在主瓣寬給定時，旁瓣壓制理論最優。</li>
-    <li lang="en">Multiple orthogonal DPSS sequences exist — used in the multi-taper spectral estimator.</li>
-    <li lang="zh">同一 <code>NW</code> 下有多個互正交的 DPSS 序列 — 多視窗頻譜估計（multi-taper）就是用它們。</li>
-    <li lang="en">Computation is nontrivial; Kaiser (next) is a close approximation.</li>
-    <li lang="zh">計算較複雜；Kaiser（下一關）是它的近似。</li>
-  </ul>
 
   <div class="pager">
     <a class="nes-btn" href="4.7.1-matlab-hann-poisson.html">◀ 4.7.1</a>
@@ -63,8 +137,43 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { b: 6, N: 64 };
+  function redraw(){
+    const w = DSP.WINDOWS.kaiser(state.N, state.b);
+    Viz.stem($('tCanvas'), w, { yMin:-0.05, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`Kaiser surrogate β=${state.b.toFixed(1)} (≈ DPSS NW≈${(state.b/Math.PI).toFixed(2)})` });
+    const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    for (let i=0;i<K;i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), DSP.toDb(mag,-100), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-100, xLabel:'ω', yLabel:'dB', title:'SPECTRUM', color:'#ffd95a', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+  $('bSlider').addEventListener('input', () => { state.b = parseFloat($('bSlider').value); $('bVal').textContent = state.b.toFixed(1); redraw(); });
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! DPSS maximises the in-band energy fraction — a concentration problem with a closed eigenvalue solution.</span><span lang="zh">🪙 金幣 +1！DPSS 最大化頻帶內能量比例 — 集中性問題有閉式特徵值解。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ DPSS is a concentration problem, not a minimax or compute problem.</span><span lang="zh">✗ DPSS 是集中性問題，不是 minimax 或運算問題。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>
