@@ -6,6 +6,8 @@
 <title>4.3.3 Matlab for Classic Blackman · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,9 +30,19 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Classic_Blackman_Window.html" target="_blank">SASP §4.3.3 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="CODE">
-    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
-% Matlab / Octave
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="COEFFICIENTS TO REMEMBER">
+        <p lang="en">Classic Blackman: $a_0=0.42,\; a_1=0.50,\; a_2=0.08$. Three numbers, every audio engineer knows them by heart.</p>
+        <p lang="zh">經典 Blackman：$a_0=0.42,\; a_1=0.50,\; a_2=0.08$。三個數字，每個音訊工程師都背得出來。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="MATLAB / OCTAVE / PYTHON / JS">
+        <pre style="color:var(--nes-lime); font-size:11px; line-height:1.8; margin:0; white-space:pre-wrap;">
+% Matlab / Octave — built-in
+w = blackman(N);
+
+% Manual (exactly what blackman does)
 n = (0:N-1)';
 w = 0.42 - 0.5*cos(2*pi*n/(N-1)) + 0.08*cos(4*pi*n/(N-1));
 
@@ -42,11 +54,69 @@ w = (0.42
 
 % JavaScript (this site)
 const w = DSP.WINDOWS.blackman(N);
-    </pre>
-  </div>
+</pre>
+      </div>
 
-  <p lang="en">Matlab's built-in <code>blackman(N)</code> uses the same classic coefficients by default.</p>
-  <p lang="zh">Matlab 內建 <code>blackman(N)</code> 預設就是這組經典係數。</p>
+      <h2 lang="en">The 0.08 is "exact enough"</h2>
+      <h2 lang="zh">0.08 已經「夠精確」</h2>
+
+      <p lang="en">
+        The truly optimal third coefficient for minimum first side-lobe is
+        $0.07685$ (the
+        <span class="term"
+          data-en="Exact Blackman"
+          data-en-def="Coefficients a=(0.42659, 0.49656, 0.07685) that are the minimax-optimal 3-cosine window by the original Blackman formulation. Gains ~10 dB over classic Blackman."
+          data-zh-def="係數 a=(0.42659, 0.49656, 0.07685)，依 Blackman 原文為 3-cosine 的 minimax 最佳解；比經典 Blackman 多約 10 dB 深度。">exact Blackman</span>).
+        The traditional $0.08$ was chosen for ease of hand calculation. The
+        penalty is only about $-58$ dB vs. $-68$ dB first side-lobe — a
+        visible but not dramatic difference.
+      </p>
+      <p lang="zh">
+        真正最佳化「最小第一旁瓣」的第三係數其實是 $0.07685$（<span class="term"
+          data-en="Exact Blackman"
+          data-en-def="Coefficients a=(0.42659, 0.49656, 0.07685) that are the minimax-optimal 3-cosine window by the original Blackman formulation. Gains ~10 dB over classic Blackman."
+          data-zh-def="係數 a=(0.42659, 0.49656, 0.07685)，依 Blackman 原文為 3-cosine 的 minimax 最佳解；比經典 Blackman 多約 10 dB 深度。">精確 Blackman</span>）。傳統選 $0.08$ 是為了手算方便。代價：第一旁瓣 $-58$ dB vs. $-68$ dB — 可見但不劇烈。
+      </p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>0.42 / 0.5 / 0.08 is a numerical mnemonic, not an optimum.</b> Keep that in mind when the last few dB of side-lobe suppression matter.</p>
+        <p lang="zh"><b>0.42 / 0.5 / 0.08 是好記的整數組合，不是最佳解。</b>需要最後幾 dB 旁瓣深度時別忘了這件事。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Why do most implementations ship 0.08 instead of the optimal 0.07685?</p>
+        <p lang="zh"><b>問：</b>多數實作為何寫 0.08 而非最佳的 0.07685？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Historical convention — easier to type and remember, only ~10 dB penalty.</button>
+          <button data-correct="1" lang="zh">歷史慣例 — 好記好寫，只差約 10 dB。</button>
+          <button data-correct="0" lang="en">0.08 gives a deeper first side lobe.</button>
+          <button data-correct="0" lang="zh">0.08 的第一旁瓣更深。</button>
+          <button data-correct="0" lang="en">Matlab doesn't support 5-decimal constants.</button>
+          <button data-correct="0" lang="zh">Matlab 不支援 5 位小數常數。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Classic vs. exact Blackman</h3>
+        <h3 lang="zh">實驗 · 經典 vs. 精確 Blackman</h3>
+        <canvas id="fCanvas" style="height:300px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Blue: classic (0.42 / 0.50 / 0.08) with its $-58$ dB first side-lobe. Yellow: exact (0.42659 / 0.49656 / 0.07685) with a $-68$ dB equioscillating floor. Main lobe is the same width; only the side-lobe depth changes.</p>
+          <p lang="zh">藍：經典（0.42 / 0.50 / 0.08），第一旁瓣 $-58$ dB。黃：精確（0.42659 / 0.49656 / 0.07685），$-68$ dB 等振盪底。主瓣寬相同，只差旁瓣深度。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.3.2-classic-blackman.html">◀ 4.3.2</a>
@@ -55,8 +125,87 @@ const w = DSP.WINDOWS.blackman(N);
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 64 };
+
+  function mk(N, a){
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      w[n] = a[0] - a[1]*Math.cos(2*Math.PI*n/(N-1)) + a[2]*Math.cos(4*Math.PI*n/(N-1));
+    }
+    return w;
+  }
+
+  function redraw(){
+    const classic = mk(state.N, [0.42, 0.50, 0.08]);
+    const exact = mk(state.N, [0.42659, 0.49656, 0.07685]);
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const K = 720, omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const dBfloor = -100;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=10;g++){ const y=pad.t+ih*g/10; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+
+    for (const [data, color] of [[classic, '#5aa0ff'], [exact, '#ffd95a']]){
+      const { re, im } = DSP.dtft(data, omegas);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      ctx.strokeStyle = color; ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-6)));
+        const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+        const x = pad.l + iw*i/(K-1);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#5aa0ff'; ctx.fillText('Classic (0.42/0.50/0.08)', 8, 14);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('Exact', 240, 14);
+    ctx.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('nSlider').addEventListener('input', e => { state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Historical convention dominates. Built-ins ship what people recognise; the dB difference is real but modest.</span><span lang="zh">🪙 金幣 +1！歷史慣例贏了。內建函式寫大家認得的；dB 差異真實但不大。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ 0.08 is historical; 0.07685 is the minimax-optimal choice.</span><span lang="zh">✗ 0.08 是歷史版本；0.07685 才是 minimax 最佳。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

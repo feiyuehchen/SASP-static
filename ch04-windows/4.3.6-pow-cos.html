@@ -30,20 +30,91 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Power_of_Cosine_Window_Family.html" target="_blank">SASP §4.3.6 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="SIMPLE YET USEFUL">
-    <p lang="en">$w[n]=\sin^p(\pi n/(N-1))$, or equivalently $\bigl[\tfrac{1}{2}(1-\cos(2\pi n/(N-1)))\bigr]^{p/2}$. $p=1$ is the MLT sine window; $p=2$ is the Hann; higher $p$ gives even softer taper.</p>
-    <p lang="zh">$w[n]=\sin^p(\pi n/(N-1))$，或等於 $\bigl[\tfrac{1}{2}(1-\cos(2\pi n/(N-1)))\bigr]^{p/2}$。$p=1$ 是 MLT 正弦視窗；$p=2$ 是 Hann；$p$ 更大代表收尾更軟。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="ONE-PARAMETER SHAPE">
+        <p lang="en">$w_p[n]=\sin^p(\pi n/(N-1))$ — a single real $p$ controls how soft the taper is. $p=1$ is the MLT sine window; $p=2$ is the Hann; larger $p$ keeps going softer.</p>
+        <p lang="zh">$w_p[n]=\sin^p(\pi n/(N-1))$ — 單一實數 $p$ 控制收尾柔軟度。$p=1$ 是 MLT 正弦視窗；$p=2$ 是 Hann；$p$ 更大代表收尾更軟。</p>
+      </div>
 
-  <p lang="en">
-    Advantages: no extra cosine coefficients to tune. Disadvantages:
-    loses the flexibility of Blackman-Harris. Useful when you want a
-    smooth one-parameter family (for example sweeping window softness
-    in real time).
-  </p>
-  <p lang="zh">
-    優點：沒有額外的餘弦係數要調。缺點：沒有 Blackman-Harris 的彈性。適用於想用單一參數平滑調整視窗柔軟度的情境（例如即時動態調整）。
-  </p>
+      <div class="formula">
+        <span class="label">POWER-OF-COSINE WINDOW</span>
+        <div>$$w_p[n]=\sin^p\!\left(\frac{\pi n}{N-1}\right)\;=\;\left[\tfrac{1}{2}\!\left(1-\cos\tfrac{2\pi n}{N-1}\right)\right]^{p/2}$$</div>
+      </div>
+
+      <h2 lang="en">Identification by $p$</h2>
+      <h2 lang="zh">依 $p$ 辨識</h2>
+
+      <div class="formula">
+        <div>
+          $$\begin{array}{cll}
+          p & \text{name} & \text{1st SL} \\
+          \hline
+          1 & \text{MLT sine} & -23\ \text{dB} \\
+          2 & \text{Hann} & -31\ \text{dB} \\
+          3 & \text{Rife-Vincent class I} & -39\ \text{dB} \\
+          4 & \text{Rife-Vincent class II} & -47\ \text{dB} \\
+          \end{array}$$
+        </div>
+      </div>
+
+      <p lang="en">
+        Each integer step of $p$ buys about $8$ dB of first side-lobe
+        depth. Main-lobe width grows roughly linearly with $\sqrt{p}$ — a
+        cheap, predictable family.
+      </p>
+      <p lang="zh">
+        $p$ 每加 1 大約多 $8$ dB 第一旁瓣深度。主瓣寬約隨 $\sqrt{p}$ 線性增長 — 便宜、可預測的家族。
+      </p>
+
+      <div class="nes-box nes-box--blue" data-label="WHEN TO USE">
+        <p lang="en">When you want a <em>continuous</em> one-knob family — e.g. sweeping window softness in real time, or automating a design search. For fixed needs, Blackman / Hamming are specific members that are easier to recall.</p>
+        <p lang="zh">想要<em>連續</em>單旋鈕家族時用 — 例如即時調整視窗柔軟度，或自動化設計搜索。固定需求時，Blackman / Hamming 更好記。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>One real number parameterises a whole family.</b> Simpler than Blackman-Harris (which has three), at the cost of less depth per main-lobe unit.</p>
+        <p lang="zh"><b>一個實數參數化整個家族。</b>比 Blackman-Harris（三個參數）簡單，代價是「每單位主瓣寬度的旁瓣深度」稍差。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> $\sin^2(\pi n/(N-1))$ is identical to:</p>
+        <p lang="zh"><b>問：</b>$\sin^2(\pi n/(N-1))$ 等於哪個視窗？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Hann (raised cosine).</button>
+          <button data-correct="1" lang="zh">Hann（升餘弦）。</button>
+          <button data-correct="0" lang="en">MLT sine.</button>
+          <button data-correct="0" lang="zh">MLT 正弦。</button>
+          <button data-correct="0" lang="en">Rectangular.</button>
+          <button data-correct="0" lang="zh">矩形。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Slide p, watch the family morph</h3>
+        <h3 lang="zh">實驗 · 滑 p、看家族變形</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="fCanvas" style="height:220px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>p</label>
+          <input type="range" id="pSlider" min="1" max="8" step="0.5" value="2"/>
+          <span class="val" id="pVal">2.0</span>
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: the time-domain $\sin^p$ shape. Bottom: its spectrum in dB. Watch first side-lobe drop ~8 dB per integer step in $p$, while the main lobe widens slowly.</p>
+          <p lang="zh">上：時域 $\sin^p$ 形狀。下：其頻譜 dB。$p$ 每增 1 第一旁瓣約降 8 dB，主瓣緩慢變寬。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.3.5-fd-bh.html">◀ 4.3.5</a>
@@ -52,8 +123,105 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { p: 2, N: 64 };
+
+  function mk(){
+    const { p, N } = state;
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      const s = Math.sin(Math.PI*n/(N-1));
+      w[n] = Math.pow(Math.max(s, 0), p);
+    }
+    return w;
+  }
+
+  function redraw(){
+    const w = mk();
+    // time
+    const c1 = $('tCanvas'), ctx1 = c1.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c1.width = c1.clientWidth*dpr; c1.height = c1.clientHeight*dpr; ctx1.scale(dpr,dpr);
+    const W1 = c1.clientWidth, H1 = c1.clientHeight;
+    ctx1.fillStyle='#0b0c1a'; ctx1.fillRect(0,0,W1,H1);
+    const pad1={l:32,r:10,t:14,b:22}, iw1=W1-pad1.l-pad1.r, ih1=H1-pad1.t-pad1.b;
+    ctx1.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad1.l+iw1*g/10; ctx1.beginPath(); ctx1.moveTo(x,pad1.t); ctx1.lineTo(x,H1-pad1.b); ctx1.stroke(); }
+    const y0 = pad1.t + ih1*0.88;
+    ctx1.strokeStyle='#e6e6ff'; ctx1.beginPath(); ctx1.moveTo(pad1.l,y0); ctx1.lineTo(W1-pad1.r,y0); ctx1.stroke();
+    ctx1.strokeStyle='#ffd95a'; ctx1.lineWidth=2;
+    ctx1.beginPath();
+    for (let n=0;n<w.length;n++){
+      const xp = pad1.l + iw1*n/(w.length-1), yp = y0 - ih1*0.82 * w[n];
+      if (n===0) ctx1.moveTo(xp,yp); else ctx1.lineTo(xp,yp);
+    }
+    ctx1.stroke();
+    ctx1.fillStyle='#8f8fa8'; ctx1.font='9px "Press Start 2P", monospace';
+    ctx1.fillText('sin^'+state.p+'  (N='+state.N+')', 8, 14);
+
+    // freq dB
+    const c2 = $('fCanvas'), ctx2 = c2.getContext('2d');
+    c2.width = c2.clientWidth*dpr; c2.height = c2.clientHeight*dpr; ctx2.scale(dpr,dpr);
+    const W2 = c2.clientWidth, H2 = c2.clientHeight;
+    ctx2.fillStyle='#0b0c1a'; ctx2.fillRect(0,0,W2,H2);
+    const pad2={l:44,r:10,t:14,b:24}, iw2=W2-pad2.l-pad2.r, ih2=H2-pad2.t-pad2.b;
+    const K = 720, omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, omegas);
+    const mag = new Float32Array(K);
+    let mmax = 0;
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+    const dBfloor = -80;
+    ctx2.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad2.l+iw2*g/12; ctx2.beginPath(); ctx2.moveTo(x,pad2.t); ctx2.lineTo(x,H2-pad2.b); ctx2.stroke(); }
+    for (let g=0;g<=8;g++){ const y=pad2.t+ih2*g/8; ctx2.beginPath(); ctx2.moveTo(pad2.l,y); ctx2.lineTo(W2-pad2.r,y); ctx2.stroke(); }
+    ctx2.strokeStyle='#e6e6ff'; ctx2.lineWidth=2;
+    ctx2.beginPath(); ctx2.moveTo(pad2.l, H2-pad2.b); ctx2.lineTo(W2-pad2.r, H2-pad2.b); ctx2.stroke();
+    ctx2.strokeStyle='#ffd95a'; ctx2.lineWidth=1.8;
+    ctx2.beginPath();
+    for (let i=0;i<K;i++){
+      const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-6)));
+      const y = pad2.t + ih2*(1-(db-dBfloor)/(0-dBfloor));
+      const x = pad2.l + iw2*i/(K-1);
+      if (i===0) ctx2.moveTo(x,y); else ctx2.lineTo(x,y);
+    }
+    ctx2.stroke();
+    ctx2.fillStyle='#8f8fa8'; ctx2.font='9px "Press Start 2P", monospace';
+    ctx2.fillText('|W(ω)| dB', 10, 12);
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad2.l + iw2*(v+Math.PI)/(2*Math.PI); ctx2.fillText(lbl, x-6, H2-pad2.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = pad2.t + ih2*(1-(db-dBfloor)/(0-dBfloor));
+      ctx2.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('pSlider').addEventListener('input', e => { state.p = parseFloat(e.target.value); $('pVal').textContent = state.p.toFixed(1); redraw(); });
+  $('nSlider').addEventListener('input', e => { state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! $\\sin^2 = (1-\\cos)/2$ — the Hann formula. $p=2$ is literally Hann.</span><span lang="zh">🪙 金幣 +1！$\\sin^2 = (1-\\cos)/2$ — 即 Hann 公式。$p=2$ 就是 Hann。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Try $p=2$ in the lab and compare with Hann.</span><span lang="zh">✗ 在 lab 選 $p=2$ 與 Hann 比。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

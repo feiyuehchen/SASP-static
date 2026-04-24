@@ -30,37 +30,82 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Frequency_Domain_Implementation_Blackman_Harris_Family.html" target="_blank">SASP §4.3.5 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="IMPLEMENTATION TRICK">
-    <p lang="en">A cosine-sum window applied to time-domain samples is equivalent to adding a few shifted copies of the rectangular-window DFT in the frequency domain.</p>
-    <p lang="zh">時域上「乘一個餘弦和視窗」等價於頻域上「把矩形視窗的 DFT 做幾個位移副本相加」。</p>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="IMPLEMENTATION TRICK">
+        <p lang="en">Applying a cosine-sum window in the time domain is equivalent to convolving the spectrum with a few delta functions — or, more usefully, summing a few frequency-shifted copies of the <em>rectangular</em>-window DFT.</p>
+        <p lang="zh">時域上「乘一個餘弦和視窗」等價於頻域上「對頻譜做幾個 delta 卷積」— 或更實用地說，把<em>矩形</em>視窗 DFT 做幾份頻率位移副本相加。</p>
+      </div>
+
+      <div class="formula">
+        <span class="label">SPECTRAL IDENTITY</span>
+        <div>$$W(\omega)=\sum_{k=0}^{K-1}(-1)^{k}\,a_k\,W_R\!\left(\omega-\frac{2\pi k}{N-1}\right)$$</div>
+      </div>
+
+      <p lang="en">
+        Each cosine term $a_k\cos(2\pi k n/(N-1))$ is a frequency shift of a constant; after multiplying it by $x[n]$ we get two copies of $X(\omega)$ at $\pm\omega_k$. Stacking $K$ of these with the right $a_k$ is exactly what the time-domain window does.
+      </p>
+      <p lang="zh">
+        每個餘弦項 $a_k\cos(2\pi k n/(N-1))$ 是常數的頻率位移；乘上 $x[n]$ 後得到 $X(\omega)$ 在 $\pm\omega_k$ 的兩份副本。以適當 $a_k$ 把 $K$ 份疊起來，恰好就是時域加窗的結果。
+      </p>
+
+      <h2 lang="en">Why implement it this way?</h2>
+      <h2 lang="zh">為何這樣做？</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>(1)</b> For windows <em>longer</em> than the transform (Portnoff-style, §10.7) you can't just multiply in time; the frequency-domain realisation is cleaner.<br>
+            <b>(2)</b> Hardware DSP often runs the DFT first then windows in frequency — saves a pass through time-domain memory.<br>
+            <b>(3)</b> Pedagogically, it makes the convolution-theorem link (§3.7) concrete: BH spectrum = 3 or 4 shifted Dirichlet kernels added.
+          </span>
+          <span lang="zh">
+            <b>(1)</b> 視窗<em>長於</em> transform 時（Portnoff，§10.7）不能單純時域乘；頻域實作更乾淨。<br>
+            <b>(2)</b> 硬體 DSP 經常 DFT 先做、再於頻域加窗 — 省一次時域記憶體存取。<br>
+            <b>(3)</b> 教學上把卷積定理（§3.7）具體化：BH 頻譜 = 3 或 4 個位移 Dirichlet 核相加。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Blackman spectrum = three Dirichlet sincs, nicely aligned.</b> The $a_k$ place zeros on the side-lobe envelope; choose them well and the result is the Blackman-Harris family.</p>
+        <p lang="zh"><b>Blackman 頻譜 = 三個排好的 Dirichlet sinc。</b>$a_k$ 決定旁瓣包絡的零點位置；選得好就是 Blackman-Harris 家族。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Expressing a 3-cosine Blackman in frequency domain, how many shifted rectangular-window spectra do we add?</p>
+        <p lang="zh"><b>問：</b>把 3 項餘弦 Blackman 寫成頻域形式，需要加多少個位移矩形視窗頻譜？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Three (one per cosine term).</button>
+          <button data-correct="1" lang="zh">三個（每個餘弦項一個）。</button>
+          <button data-correct="0" lang="en">One (the whole window's DFT).</button>
+          <button data-correct="0" lang="zh">一個（整個視窗的 DFT）。</button>
+          <button data-correct="0" lang="en">$N$ (one per bin).</button>
+          <button data-correct="0" lang="zh">$N$ 個（每 bin 一個）。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · 3 Dirichlet sincs sum to Blackman</h3>
+        <h3 lang="zh">實驗 · 3 個 Dirichlet sinc 相加成 Blackman</h3>
+        <canvas id="fCanvas" style="height:320px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="48"/>
+          <span class="val" id="nVal">48</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Faint: three shifted Dirichlet kernels at $\omega=0$ (centre, weight $0.42$), $\omega=\pm 2\pi/(N-1)$ (weight $-0.25$ each). Yellow: their sum = Blackman spectrum. Side-lobe peaks of the first term cancel with the corresponding nulls of the shifted terms — the whole design philosophy visible in one plot.</p>
+          <p lang="zh">淡色：三個位移 Dirichlet 核，中心在 $\omega=0$（權重 $0.42$）與 $\omega=\pm 2\pi/(N-1)$（各權重 $-0.25$）。黃：相加 = Blackman 頻譜。首項旁瓣峰被位移項的零點抵消 — 整個設計哲學一張圖看懂。</p>
+        </div>
+      </div>
+    </section>
   </div>
-
-  <p lang="en">
-    Because each cosine term is a frequency shift, applying the window in
-    the time domain is like convolving the spectrum with a few deltas
-    whose weights are the $a_k$. In real codecs this is sometimes done
-    directly in the frequency domain — especially for windows much
-    longer than the transform size.
-  </p>
-  <p lang="zh">
-    每個餘弦項就是一個頻率位移，時域乘視窗等同於頻域上對頻譜做若干 delta 卷積（權重為 $a_k$）。
-    實際編碼器有時直接在頻域做這件事 — 尤其當視窗比 transform 長許多時。
-  </p>
-
-  <div class="formula">
-    <span class="label">SPECTRAL IDENTITY</span>
-    <div>$$W(\omega)=\sum_{k=0}^{K-1}(-1)^{k}\,a_k\,W_R\!\left(\omega-\frac{2\pi k}{N-1}\right)$$</div>
-  </div>
-
-  <p lang="en">
-    For $K=3$ this is three deltas, so the Blackman window's spectrum is
-    the sum of three shifted Dirichlet kernels — a straight read from
-    the convolution theorem of §3.7.
-  </p>
-  <p lang="zh">
-    $K=3$ 時共三個 delta，所以 Blackman 頻譜就是三個位移過的 Dirichlet 核相加 —
-    §3.7 的卷積定理直接套用。
-  </p>
 
   <div class="pager">
     <a class="nes-btn" href="4.3.4-3term-bh.html">◀ 4.3.4</a>
@@ -69,8 +114,122 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 48 };
+
+  function dirichletMag(omega, N){
+    const half = omega/2;
+    if (Math.abs(Math.sin(half)) < 1e-10) return N;
+    return Math.sin(N*half) / Math.sin(half);
+  }
+
+  function redraw(){
+    const N = state.N;
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:16,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const K = 720;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=10;g++){ const y=pad.t+ih*g/10; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+
+    const coeffs = [
+      { shift: 0, weight: 0.42, color: '#5aa0ff' },
+      { shift: 2*Math.PI/(N-1), weight: -0.25, color: '#ff6aa0' },
+      { shift: -2*Math.PI/(N-1), weight: -0.25, color: '#ff6aa0' },
+      { shift: 2*2*Math.PI/(N-1), weight: 0.04, color: '#78d66a' },
+      { shift: -2*2*Math.PI/(N-1), weight: 0.04, color: '#78d66a' },
+    ];
+    // compute sum spectrum and individual components
+    const sum = new Float32Array(K);
+    const components = coeffs.map(() => new Float32Array(K));
+    for (let i=0;i<K;i++){
+      const omega = -Math.PI + 2*Math.PI*i/(K-1);
+      let s = 0;
+      for (let j=0; j<coeffs.length; j++){
+        const c = coeffs[j];
+        let w = omega - c.shift;
+        while (w > Math.PI) w -= 2*Math.PI;
+        while (w <= -Math.PI) w += 2*Math.PI;
+        const v = c.weight * dirichletMag(w, N);
+        components[j][i] = v;
+        s += v;
+      }
+      sum[i] = s;
+    }
+    let mmax = 0;
+    for (let i=0;i<K;i++) mmax = Math.max(mmax, Math.abs(sum[i]));
+    const dBfloor = -80;
+
+    // individual components faint
+    ctx.globalAlpha = 0.4; ctx.lineWidth = 1;
+    for (let j=0;j<coeffs.length;j++){
+      ctx.strokeStyle = coeffs[j].color;
+      ctx.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(Math.abs(components[j][i])/mmax, 1e-6)));
+        const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+        const x = pad.l + iw*i/(K-1);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    // sum
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=2;
+    ctx.beginPath();
+    for (let i=0;i<K;i++){
+      const db = Math.max(dBfloor, 20*Math.log10(Math.max(Math.abs(sum[i])/mmax, 1e-6)));
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      const x = pad.l + iw*i/(K-1);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#5aa0ff'; ctx.fillText('centre', 8, 14);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('±2π/(N-1)', 80, 14);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('SUM (Blackman)', 200, 14);
+    ctx.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('nSlider').addEventListener('input', e => { state.N = parseInt(e.target.value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! One shift per cosine (centre, +, -) for 3-term; four for 4-term BH.</span><span lang="zh">🪙 金幣 +1！每個餘弦一個位移（中心、±），三項共三個；四項共四個。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Each cosine term is one frequency shift.</span><span lang="zh">✗ 每個餘弦項 = 一個頻率位移。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

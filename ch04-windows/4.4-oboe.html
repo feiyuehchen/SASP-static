@@ -30,19 +30,87 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Spectrum_Analysis_Oboe_Tone.html" target="_blank">SASP §4.4 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="CASE STUDY">
-    <p lang="en">Real-world example. An oboe tone is highly harmonic — many partials at integer multiples of the fundamental. The spectrum tells us which harmonics are loud, but leakage from the analysis window can obscure the quieter ones.</p>
-    <p lang="zh">實戰案例。雙簧管聲音是高度諧波性的 — 基頻的整數倍處有很多 partial。
-      頻譜告訴我們哪些諧波比較強，但分析視窗的洩漏可能把較弱的諧波蓋住。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="CASE STUDY">
+        <p lang="en">Real-world example. An oboe tone is
+          <span class="term"
+            data-en="Harmonic signal"
+            data-en-def="A signal whose spectral energy concentrates at integer multiples of a fundamental frequency; characteristic of sustained pitched instruments."
+            data-zh-def="能量集中在基頻整數倍處的訊號；持續有音高樂器的典型特徵。">highly harmonic</span>
+          — many
+          <span class="term"
+            data-en="Partials"
+            data-en-def="Individual sinusoidal components of a complex tone. For a perfectly harmonic signal, partials coincide with integer-multiple harmonics of the fundamental."
+            data-zh-def="複合音中的個別正弦成分；對完全諧波性訊號，partial 就是基頻整數倍諧波。">partials</span>
+          at integer multiples of the fundamental. The spectrum tells us which harmonics are loud, but leakage from the analysis window can obscure the quieter ones.</p>
+        <p lang="zh">實戰案例。雙簧管是<span class="term"
+          data-en="Harmonic signal"
+          data-en-def="A signal whose spectral energy concentrates at integer multiples of a fundamental frequency; characteristic of sustained pitched instruments."
+          data-zh-def="能量集中在基頻整數倍處的訊號；持續有音高樂器的典型特徵。">高諧波訊號</span> — 許多<span class="term"
+          data-en="Partials"
+          data-en-def="Individual sinusoidal components of a complex tone. For a perfectly harmonic signal, partials coincide with integer-multiple harmonics of the fundamental."
+          data-zh-def="複合音中的個別正弦成分；對完全諧波性訊號，partial 就是基頻整數倍諧波。">partial</span> 在基頻整數倍處。頻譜告訴我們哪些諧波強，但分析視窗的洩漏可能蓋住較弱的。</p>
+      </div>
 
-  <p lang="en">The following three pages compare three window choices on a synthetic oboe-like tone. We generate 8 harmonics of a 200 Hz fundamental at $f_s=8000$ Hz with slowly decreasing amplitude, window 512 samples, zero-pad to 4096, take the FFT.</p>
-  <p lang="zh">接下來三頁比較三種視窗用在一段仿雙簧管音上：在 $f_s=8000$ Hz 下生成 200 Hz 基頻的 8 個諧波、振幅漸減，取 512 樣本加窗、補零到 4096、做 FFT。</p>
+      <h2 lang="en">Analysis setup</h2>
+      <h2 lang="zh">分析設定</h2>
 
-  <div class="viz-card">
-    <h3 lang="en">Lab · All three windows side by side</h3>
-    <h3 lang="zh">實驗 · 三種視窗並排</h3>
-    <canvas id="fCanvas" style="height:260px;"></canvas>
+      <p lang="en">
+        The following three pages compare three window choices on a synthetic oboe-like tone. We generate $8$ harmonics of a $200$ Hz fundamental at $f_s = 8000$ Hz with slowly decreasing amplitudes, window $512$ samples, zero-pad to $4096$, take the FFT, plot dB magnitude.
+      </p>
+      <p lang="zh">
+        接下來三頁比較三種視窗在仿雙簧管音上：$f_s = 8000$ Hz 下 $200$ Hz 基頻的 $8$ 個諧波、振幅漸減；取 $512$ 樣本加窗、補零到 $4096$、FFT、畫 dB。
+      </p>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>Fundamental:</b> $f_0 = 200$ Hz → first peak at bin $200/(8000/4096) \approx 102$.<br>
+            <b>Harmonic amplitudes:</b> $[1, 0.6, 0.35, 0.2, 0.1, 0.05, 0.02, 0.01]$ — span of $40$ dB.<br>
+            <b>Weakest harmonic:</b> at $1600$ Hz, $-40$ dB. The analysis question: can the window's side-lobe floor stay below $-40$ dB so we can see this harmonic cleanly?
+          </span>
+          <span lang="zh">
+            <b>基頻：</b>$f_0 = 200$ Hz → 第一個峰在 bin $200/(8000/4096) \approx 102$。<br>
+            <b>諧波振幅：</b>$[1, 0.6, 0.35, 0.2, 0.1, 0.05, 0.02, 0.01]$ — 跨 $40$ dB。<br>
+            <b>最弱諧波：</b>在 $1600$ Hz、$-40$ dB。分析問題：視窗旁瓣底能否低於 $-40$ dB，讓這個諧波看得清楚？
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Window choice shows up as a practical limit.</b> Rect leaks at $-13$ dB — the 8th harmonic disappears. Hamming reaches $-43$ dB — just barely resolves the 8th. Blackman at $-58$ dB gives $18$ dB of headroom. Pick as much headroom as you can afford.</p>
+        <p lang="zh"><b>視窗選擇直接轉成實務上限。</b>矩形 $-13$ dB 洩漏 — 第 8 諧波消失。Hamming $-43$ dB — 勉強看得到。Blackman $-58$ dB 多 $18$ dB 餘裕。在算力允許下選越深越好。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> The weakest harmonic is at $-40$ dB. With a rectangular window (first side lobe $-13$ dB), you would:</p>
+        <p lang="zh"><b>問：</b>最弱諧波在 $-40$ dB。用矩形視窗（第一旁瓣 $-13$ dB），你會：</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Not see it — the fundamental's leakage floor masks anything below ~$-13$ dB.</button>
+          <button data-correct="1" lang="zh">看不到 — 基頻的洩漏地板會蓋過 $-13$ dB 以下的東西。</button>
+          <button data-correct="0" lang="en">See it cleanly — the $-40$ dB peak rises above the $-13$ dB side-lobe floor.</button>
+          <button data-correct="0" lang="zh">乾淨看到 — $-40$ dB 峰高過 $-13$ dB 旁瓣底。</button>
+          <button data-correct="0" lang="en">See it after zero-padding to $8192$.</button>
+          <button data-correct="0" lang="zh">補零到 $8192$ 後就看得到。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · All three windows side by side</h3>
+        <h3 lang="zh">實驗 · 三種視窗並排</h3>
+        <canvas id="fCanvas" style="height:320px;"></canvas>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Three dB spectra overlaid. Blue: rect (tallest side-lobe leakage at $-13$ dB). Yellow: Hamming ($-43$ dB). Pink: Blackman ($-58$ dB). The 8 peaks are at $200, 400, \ldots, 1600$ Hz. Count how many you can cleanly distinguish from the leakage noise below.</p>
+          <p lang="zh">三組 dB 頻譜疊加：藍=矩形（旁瓣洩漏 $-13$ dB）、黃=Hamming（$-43$ dB）、粉=Blackman（$-58$ dB）。8 個峰在 $200, 400, \ldots, 1600$ Hz。數看看哪種視窗下能乾淨看到幾個。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -54,6 +122,7 @@
 
 <script src="../assets/js/dsp.js"></script>
 <script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
@@ -62,31 +131,97 @@
   const fs = 8000, N = 512, M = 4096;
   const x = new Float32Array(N);
   const harm = [1,0.6,0.35,0.2,0.1,0.05,0.02,0.01];
-  for (let n = 0; n < N; n++) {
+  for (let n=0;n<N;n++){
     let s = 0;
-    for (let k = 0; k < harm.length; k++) s += harm[k] * Math.sin(2*Math.PI*200*(k+1)*n/fs + k*0.7);
+    for (let k=0;k<harm.length;k++) s += harm[k] * Math.sin(2*Math.PI*200*(k+1)*n/fs + k*0.7);
     x[n] = 0.5 * s;
   }
 
-  function mag(win) {
+  function spec(win){
     const w = DSP.WINDOWS[win](N);
     const xw = new Float32Array(M);
-    for (let n = 0; n < N; n++) xw[n] = x[n] * w[n];
+    for (let n=0;n<N;n++) xw[n] = x[n] * w[n];
     const re = new Float32Array(M), im = new Float32Array(M);
     re.set(xw); DSP.fft(re, im);
     const H = M/2 + 1;
     const out = new Float32Array(H);
-    for (let k = 0; k < H; k++) out[k] = Math.hypot(re[k], im[k]);
-    return DSP.toDb(out, -80);
+    for (let k=0;k<H;k++) out[k] = Math.hypot(re[k], im[k]);
+    return out;
   }
 
-  const freqs = Array.from({length: M/2 + 1}, (_,k) => k * fs / M);
+  function redraw(){
+    const specs = {
+      rect: spec('rect'),
+      hamming: spec('hamming'),
+      blackman: spec('blackman')
+    };
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:14,b:28}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const dBfloor = -80;
+    const fmax = 3000;
+    const maxK = Math.floor(fmax * M / fs);
+    // find per-spectrum max
+    const configs = [
+      { key: 'rect', color: '#5aa0ff', label: 'Rect (-13 dB)' },
+      { key: 'hamming', color: '#ffd95a', label: 'Hamming (-43 dB)' },
+      { key: 'blackman', color: '#ff6aa0', label: 'Blackman (-58 dB)' },
+    ];
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=8;g++){ const y=pad.t+ih*g/8; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
 
-  Viz.multiLine($('fCanvas'), [
-    { y: Array.from(mag('rect')),     xValues: freqs, color:'#3CBCFC', label:'Rectangular' },
-    { y: Array.from(mag('hamming')),  xValues: freqs, color:'#F8B800', label:'Hamming' },
-    { y: Array.from(mag('blackman')), xValues: freqs, color:'#F83800', label:'Blackman' },
-  ], { xMin: 0, xMax: 3000, yMin: -80, xLabel:'f (Hz)', yLabel:'dB', title:'OBOE (8 harmonics) — 3 window choices', xTicks: [{v:0,label:'0'},{v:1000,label:'1k'},{v:2000,label:'2k'},{v:3000,label:'3k'}] });
+    for (const cfg of configs){
+      const data = specs[cfg.key];
+      let mmax = 0;
+      for (let k=0;k<=maxK;k++) mmax = Math.max(mmax, data[k]);
+      ctx.strokeStyle = cfg.color; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (let k=0;k<=maxK;k++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(data[k]/mmax, 1e-6)));
+        const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+        const x = pad.l + iw*k/maxK;
+        if (k===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    ctx.font='9px "Press Start 2P", monospace';
+    let lx = 8;
+    for (const cfg of configs){ ctx.fillStyle = cfg.color; ctx.fillText(cfg.label, lx, 12); lx += 140; }
+    ctx.fillStyle='#8f8fa8';
+    const xt=[['0',0],['500',500],['1k',1000],['1.5k',1500],['2k',2000],['2.5k',2500],['3k',3000]];
+    for (const [lbl, fHz] of xt){
+      const x = pad.l + iw * fHz / fmax;
+      ctx.fillText(lbl, x-8, H-pad.b+14);
+    }
+    ctx.fillText('Hz', W-16, H-pad.b+14);
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      ctx.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Side-lobe floor of rect is only $-13$ dB — anything below that rides the leakage.</span><span lang="zh">🪙 金幣 +1！矩形旁瓣底只有 $-13$ dB — 低於它的都淹沒在洩漏裡。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Zero-padding doesn\'t fix leakage; only deeper side-lobes do.</span><span lang="zh">✗ 補零不解決洩漏，只有更深的旁瓣才行。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

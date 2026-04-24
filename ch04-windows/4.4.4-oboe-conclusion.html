@@ -6,6 +6,8 @@
 <title>4.4.4 Conclusions (Oboe) · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -29,18 +31,82 @@
   </h1>
 
   <div class="nes-box nes-box--green" data-label="TAKEAWAY">
-    <p lang="en">Pick your window by what you are looking for.</p>
-    <p lang="zh">選視窗的依據：你要看什麼。</p>
+    <p lang="en">Pick your window by what you're looking for. The oboe comparison makes the trade-off concrete — main-lobe width vs. side-lobe depth, directly visible on the spectrogram.</p>
+    <p lang="zh">選視窗的依據是：你要看什麼。雙簧管對比讓取捨具體化 — 主瓣寬 vs. 旁瓣深度，直接從頻譜看出來。</p>
   </div>
 
-  <ul>
-    <li lang="en"><b>Close resolution of nearby partials</b> → Hann or Hamming. Narrowish main lobe, reasonable side-lobe floor.</li>
-    <li lang="zh"><b>相近 partial 要分開</b> → Hann 或 Hamming。主瓣窄一點、旁瓣還算夠深。</li>
-    <li lang="en"><b>Deep dynamic range, tones are well-separated</b> → Blackman or 3-term Blackman-Harris. Accept a wider main lobe for a 60–70 dB floor.</li>
-    <li lang="zh"><b>要深的動態範圍、頻率分得開</b> → Blackman 或 3-term Blackman-Harris。允許主瓣寬一點，換 60–70 dB 的底板。</li>
-    <li lang="en"><b>Need both</b> → Kaiser (§4.9) or DPSS (§4.8), which have a tunable knob.</li>
-    <li lang="zh"><b>兩邊都要</b> → Kaiser（§4.9）或 DPSS（§4.8），這兩個有可調旋鈕。</li>
-  </ul>
+  <h2 lang="en">Decision tree</h2>
+  <h2 lang="zh">決策樹</h2>
+
+  <div class="formula" style="font-family:inherit;">
+    <div style="font-size:14px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>Close resolution of nearby partials</b> → Hann or Hamming.<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Narrow-ish main lobe ($8\pi/N$), reasonable side-lobe floor ($-32$ to $-43$ dB).<br><br>
+        <b>Deep dynamic range, tones well-separated</b> → Blackman or 3-term Blackman-Harris.<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Accept a wider main lobe ($12\pi/N$) for $-58$ to $-71$ dB floor.<br><br>
+        <b>Need both</b> → <span class="term"
+          data-en="Kaiser window"
+          data-en-def="A near-optimal window with a tunable β parameter controlling main-lobe/side-lobe trade. Kaiser-Bessel function of the first kind."
+          data-zh-def="近最佳化視窗，β 參數可調主瓣/旁瓣取捨；由第一類修正 Kaiser-Bessel 函數定義。">Kaiser</span>
+          (§4.9) or <span class="term"
+          data-en="DPSS (Slepian) window"
+          data-en-def="Discrete prolate spheroidal sequence: the window that maximises energy concentration in a given band of width 2πW. Parameterised by (N, W)."
+          data-zh-def="離散長橢圓球面序列：使能量在寬度 2πW 的頻帶內集中度最大的視窗；由 (N, W) 參數化。">DPSS</span>
+          (§4.8), both with a tunable knob.<br><br>
+        <b>Codec / perfect reconstruction</b> → MLT sine (§4.2.6) at 50% overlap. Pythagoras does the heavy lifting.<br><br>
+        <b>Minimum time-bandwidth product</b> → Gaussian (§4.11). Sole uncertainty-principle optimum.
+      </span>
+      <span lang="zh">
+        <b>相近 partial 要分開</b> → Hann 或 Hamming。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;主瓣窄一點（$8\pi/N$）、旁瓣 $-32$ ~ $-43$ dB。<br><br>
+        <b>要深的動態範圍、頻率分得開</b> → Blackman 或 3-term Blackman-Harris。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;接受主瓣寬一點（$12\pi/N$），換 $-58$ ~ $-71$ dB 底板。<br><br>
+        <b>兩邊都要</b> → <span class="term"
+          data-en="Kaiser window"
+          data-en-def="A near-optimal window with a tunable β parameter controlling main-lobe/side-lobe trade. Kaiser-Bessel function of the first kind."
+          data-zh-def="近最佳化視窗，β 參數可調主瓣/旁瓣取捨；由第一類修正 Kaiser-Bessel 函數定義。">Kaiser</span>（§4.9）或 <span class="term"
+          data-en="DPSS (Slepian) window"
+          data-en-def="Discrete prolate spheroidal sequence: the window that maximises energy concentration in a given band of width 2πW. Parameterised by (N, W)."
+          data-zh-def="離散長橢圓球面序列：使能量在寬度 2πW 的頻帶內集中度最大的視窗；由 (N, W) 參數化。">DPSS</span>（§4.8），兩者都有可調旋鈕。<br><br>
+        <b>編碼器 / 完美重建</b> → 50% 重疊下的 MLT 正弦（§4.2.6），畢氏定理搞定。<br><br>
+        <b>最小時間頻寬積</b> → Gaussian（§4.11），唯一達到測不準下界者。
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">What the oboe taught us</h2>
+  <h2 lang="zh">雙簧管教會我們什麼</h2>
+
+  <div class="nes-box nes-box--blue" data-label="THREE LESSONS">
+    <p lang="en"><b>1.</b> Side-lobe level is a practical detection floor — pick $\ge 10$ dB below your weakest expected signal.<br>
+      <b>2.</b> Main-lobe width determines closely-spaced-peak resolution — halve $N$ and watch peaks merge.<br>
+      <b>3.</b> Zero-padding cleans up the display but does not lower the leakage floor — the window shape does.</p>
+    <p lang="zh"><b>1.</b> 旁瓣位階就是實務偵測底線 — 選至少低於你預期最弱訊號 $10$ dB。<br>
+      <b>2.</b> 主瓣寬決定相鄰峰能否分開 — 把 $N$ 減半，看峰如何糊在一起。<br>
+      <b>3.</b> 補零讓顯示乾淨但不降洩漏底 — 降底靠視窗形狀。</p>
+  </div>
+
+  <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+    <p lang="en"><b>Analysis is signal-specific.</b> For a harmonic tone the trade is dynamic range vs. resolution. Other signals (noise, transients, chirps) have different priorities — §4.5 onward shows windows tuned to those.</p>
+    <p lang="zh"><b>分析是訊號相關的。</b>諧波音的取捨是「動態範圍 vs. 解析度」。其他訊號（雜訊、瞬態、啾頻）有不同優先級 — §4.5 起介紹針對它們的視窗。</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <h3 lang="en">✦ Mini-Boss ✦</h3>
+    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+    <p lang="en"><b>Q.</b> Your signal has tones at $440$ and $460$ Hz at $f_s = 8$ kHz, both strong, no weak competitors. Which window would you pick?</p>
+    <p lang="zh"><b>問：</b>$f_s = 8$ kHz，訊號只有 $440$ 與 $460$ Hz 兩強音、沒有弱競爭者。選哪個視窗？</p>
+    <div class="choices">
+      <button data-correct="1" lang="en">Hann — its narrower main lobe resolves the $20$ Hz gap.</button>
+      <button data-correct="1" lang="zh">Hann — 主瓣較窄，能分開 $20$ Hz 間距。</button>
+      <button data-correct="0" lang="en">Blackman — deeper side-lobes are critical here.</button>
+      <button data-correct="0" lang="zh">Blackman — 此題關鍵是更深的旁瓣。</button>
+      <button data-correct="0" lang="en">Rect — narrowest main lobe wins every time.</button>
+      <button data-correct="0" lang="zh">矩形 — 主瓣最窄永遠最好。</button>
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.4.3-oboe-blackman.html">◀ 4.4.3</a>
@@ -49,8 +115,27 @@
   </div>
 </div>
 
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! When both tones are strong, resolution wins — Hann\'s narrower main lobe is the right choice.</span><span lang="zh">🪙 金幣 +1！兩音皆強時，解析度贏 — Hann 較窄主瓣是正確選擇。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Rect\'s $-13$ dB leakage floor still wrecks nearby tones even if both are strong. Blackman\'s wide main lobe would merge them.</span><span lang="zh">✗ 矩形 $-13$ dB 洩漏仍會干擾鄰近音。Blackman 主瓣太寬反而把兩峰糊在一起。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>
