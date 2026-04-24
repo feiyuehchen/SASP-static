@@ -6,6 +6,8 @@
 <title>4.12.1 Windows for Audio Coding · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,19 +30,84 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Optimal_Windows_Audio_Coding.html" target="_blank">SASP §4.12.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="CODEC REQUIREMENTS">
-    <p lang="en">A good codec window needs: perfect reconstruction after overlap-add (COLA or sum-of-squares-COLA), a smooth masking-friendly main lobe, and low side lobes to stop quantisation noise in one band spilling into another.</p>
-    <p lang="zh">編碼器視窗的需求：重疊相加後可精確還原（COLA 或平方和 COLA）、主瓣形狀與聽覺遮蔽相容、旁瓣夠低不讓量化雜訊洩到別帶。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="CODEC REQUIREMENTS">
+        <p lang="en">A good codec window must satisfy all four simultaneously:</p>
+        <p lang="zh">好的編碼器視窗必須四條同時滿足：</p>
+      </div>
 
-  <ul>
-    <li lang="en">MP3 / AAC: MLT sine window (§4.2.6). Squared-overlap = constant.</li>
-    <li lang="zh">MP3 / AAC：MLT 正弦視窗（§4.2.6）。平方和重疊為定值。</li>
-    <li lang="en">Vorbis / Opus: Vorbis window (a specific optimisation of the MLT sine) and Opus switched windows for transients.</li>
-    <li lang="zh">Vorbis / Opus：Vorbis 視窗（MLT 正弦的特定最佳化）；Opus 針對瞬態切換視窗。</li>
-    <li lang="en">Bluetooth SBC: square-root-Hann variants.</li>
-    <li lang="zh">Bluetooth SBC：根 Hann 的變形。</li>
-  </ul>
+      <ul>
+        <li lang="en"><b>Perfect reconstruction</b> after 50 % overlap-add — squared-sum must be constant: $\sum_k w^2[n-kR] = \text{const}$ (so-called <span class="term"
+          data-en="Squared-OLA / Princen-Bradley condition"
+          data-en-def="Sum of squared window shifts by hop R equals a constant — the synthesis condition that guarantees perfect reconstruction in modulated filter banks like MDCT."
+          data-zh-def="平移跳幀 R 的平方視窗和為常數 — 在如 MDCT 的調變濾波器組中保證完美還原的合成條件。">Princen-Bradley condition</span>).</li>
+        <li lang="zh"><b>完美還原</b>（50% 重疊相加後）— 平方和須為定值 $\sum_k w^2[n-kR] = \text{const}$（<span class="term"
+          data-en="Squared-OLA / Princen-Bradley condition"
+          data-en-def="Sum of squared window shifts by hop R equals a constant — the synthesis condition that guarantees perfect reconstruction in modulated filter banks like MDCT."
+          data-zh-def="平移跳幀 R 的平方視窗和為常數 — 在如 MDCT 的調變濾波器組中保證完美還原的合成條件。">Princen-Bradley 條件</span>）。</li>
+        <li lang="en"><b>Smooth main lobe</b> matching psychoacoustic masking — sharp cutoffs create audible pre-echo.</li>
+        <li lang="zh"><b>主瓣平滑</b>、符合聽覺遮蔽 — 太陡會產生可聞預迴響。</li>
+        <li lang="en"><b>Low side-lobes</b> to stop quantisation noise in one band leaking into another.</li>
+        <li lang="zh"><b>旁瓣夠低</b>，避免量化雜訊跨帶洩漏。</li>
+        <li lang="en"><b>Short-enough latency</b> — block size usually 1024 to 2048 samples.</li>
+        <li lang="zh"><b>延遲可接受</b> — 方塊大小通常 1024 到 2048 樣本。</li>
+      </ul>
+
+      <h2 lang="en">Codec roll call</h2>
+      <h2 lang="zh">編碼器點名</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>MP3 / AAC</b>: MLT sine $w[n]=\sin\!\bigl(\tfrac{\pi(n+1/2)}{N}\bigr)$ — satisfies $\sin^2+\cos^2=1$ COLA.<br>
+            <b>Vorbis</b>: Windowed MLT sine, $w[n]=\sin\!\bigl(\tfrac{\pi}{2}\sin^2\!(\tfrac{\pi(n+1/2)}{N})\bigr)$ — deeper sides, still COLA.<br>
+            <b>Opus</b>: switches between Vorbis window (stationary) and short transient-tuned window.<br>
+            <b>Bluetooth SBC</b>: square-root Hann + cosine tweaks — matches the SBC filter bank's analysis-synthesis constraints.
+          </span>
+          <span lang="zh">
+            <b>MP3 / AAC</b>：MLT 正弦 $w[n]=\sin\!\bigl(\tfrac{\pi(n+1/2)}{N}\bigr)$ — 滿足 $\sin^2+\cos^2=1$ COLA。<br>
+            <b>Vorbis</b>：套用 MLT 正弦，$w[n]=\sin\!\bigl(\tfrac{\pi}{2}\sin^2\!(\tfrac{\pi(n+1/2)}{N})\bigr)$ — 旁瓣更深，仍 COLA。<br>
+            <b>Opus</b>：穩態用 Vorbis 視窗，瞬態切到短視窗。<br>
+            <b>Bluetooth SBC</b>：根 Hann + cos 調整 — 配合 SBC 濾波器組的解析/合成約束。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Codec windows are solutions to a system.</b> Four constraints — PR + smoothness + side-lobes + latency — collapse the design space to a narrow family. Named codec windows are named <em>solutions</em> to that system, not separate inventions.</p>
+        <p lang="zh"><b>編碼器視窗是系統解。</b>四條約束 — PR + 平滑 + 旁瓣 + 延遲 — 把設計空間壓到一小家族。各編碼器的視窗都是這個系統的<em>解</em>、非個別發明。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Why must audio codec windows satisfy the squared-OLA (Princen-Bradley) condition, not just linear OLA?</p>
+        <p lang="zh"><b>問：</b>為何音訊編碼器視窗需滿足平方 OLA（Princen-Bradley），而非僅線性 OLA？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Window is applied on both analysis and synthesis sides; only squared-OLA guarantees perfect reconstruction of the overlap.</button>
+          <button data-correct="1" lang="zh">視窗在解析與合成兩端都套用；只有平方 OLA 能保證重疊完美還原。</button>
+          <button data-correct="0" lang="en">Linear OLA only works for symmetric windows.</button>
+          <button data-correct="0" lang="zh">線性 OLA 只適用對稱視窗。</button>
+          <button data-correct="0" lang="en">Squared-OLA is required by all audio standards even without synthesis windows.</button>
+          <button data-correct="0" lang="zh">音訊標準都要求平方 OLA，即使沒有合成視窗。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · MLT sine — the squared-OLA check</h3>
+        <h3 lang="zh">實驗 · MLT 正弦 — 平方 OLA 驗證</h3>
+        <canvas id="olaCanvas" style="height:260px;"></canvas>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Three copies of $\sin^2(\pi(n+1/2)/N)$ overlapped at 50% hop. Blue + yellow + pink individual shapes; green trace: their sum — exactly constant = 1 in the middle. That flat green is why MP3/AAC/Vorbis work.</p>
+          <p lang="zh">三個 $\sin^2(\pi(n+1/2)/N)$ 複本在 50% 跳幀重疊。藍+黃+粉為個別形狀；綠線為總和 — 中段恰為定值 1。綠線平坦就是 MP3/AAC/Vorbis 能用的原因。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.12-optimized.html">◀ 4.12</a>
@@ -49,8 +116,85 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  function redraw(){
+    const c = $('olaCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:36,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=5;g++){ const y=pad.t+ih*g/5; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    const N = 64, hop = N/2, total = 2*N;
+    const sum = new Float32Array(total);
+    const windows = [0, hop, 2*hop].map(off => {
+      const w = new Float32Array(total);
+      for (let n=0;n<N;n++){
+        const s = Math.sin(Math.PI*(n+0.5)/N);
+        w[n+off] = s*s;
+        sum[n+off] += s*s;
+      }
+      return w;
+    });
+
+    const colors = ['#5aa0ff','#ffd95a','#ff6aa0'];
+    for (let w=0;w<windows.length;w++){
+      ctx.strokeStyle = colors[w]; ctx.lineWidth=1.3;
+      ctx.beginPath();
+      for (let n=0;n<total;n++){
+        const x = pad.l + iw*n/(total-1);
+        const y = pad.t + ih*(1 - windows[w][n]/1.2);
+        if (n===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+
+    ctx.strokeStyle='#78d66a'; ctx.lineWidth=2.5;
+    ctx.beginPath();
+    for (let n=0;n<total;n++){
+      const x = pad.l + iw*n/(total-1);
+      const y = pad.t + ih*(1 - sum[n]/1.2);
+      if (n===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#5aa0ff'; ctx.fillText('w₁²', 8, 14);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('w₂²', 44, 14);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('w₃²', 80, 14);
+    ctx.fillStyle='#78d66a'; ctx.fillText('Σ (flat!)', 120, 14);
+    ctx.fillStyle='#8f8fa8';
+    ctx.fillText('n →', W-36, H-4);
+  }
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! MDCT-based codecs apply the window on analysis and again on synthesis → squared window shapes must sum to a constant.</span><span lang="zh">🪙 金幣 +1！MDCT 型編碼器在解析與合成兩端都套視窗 → 平方視窗和須為定值。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Think about where the window is applied — analysis AND synthesis.</span><span lang="zh">✗ 想想視窗在哪套用 — 解析與合成兩次。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

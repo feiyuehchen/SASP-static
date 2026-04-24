@@ -30,25 +30,90 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Dolph_Chebyshev_Window_Length_Computation.html" target="_blank">SASP §4.10.4.4 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="INVERT THE RULE">
-    <p lang="en">Given a target main-lobe half-width $\omega_0$ and side-lobe attenuation $A$ (dB), solve for $N$.</p>
-    <p lang="zh">給主瓣半寬 $\omega_0$ 與旁瓣衰減 $A$（dB），反推 $N$。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="INVERT THE RULE">
+        <p lang="en">Given a target main-lobe half-width $\omega_0$ and side-lobe attenuation $A$ (dB), solve for $N$. Invert the width formula: $\omega_0=2\cos^{-1}(1/\beta)$ and $\beta=\cosh\bigl(\tfrac{1}{N-1}\cosh^{-1}10^{A/20}\bigr)$.</p>
+        <p lang="zh">給主瓣半寬 $\omega_0$ 與旁瓣衰減 $A$（dB），反推 $N$。反解寬度公式 $\omega_0=2\cos^{-1}(1/\beta)$ 與 $\beta=\cosh\bigl(\tfrac{1}{N-1}\cosh^{-1}10^{A/20}\bigr)$。</p>
+      </div>
 
-  <div class="formula">
-    <div>$$N\;=\;1+\left\lceil\frac{\cosh^{-1}(10^{A/20})}{\cosh^{-1}\!\bigl(1/\cos(\omega_0/2)\bigr)}\right\rceil$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">LENGTH FORMULA</span>
+        <div>$$N\;=\;1+\left\lceil\frac{\cosh^{-1}(10^{A/20})}{\cosh^{-1}\!\bigl(1/\cos(\omega_0/2)\bigr)}\right\rceil$$</div>
+      </div>
 
-  <p lang="en">
-    Typical back-of-envelope: $A=80$ dB, $\omega_0=0.05\pi$ → $N\approx 120$.
-    Smaller main lobes or deeper side lobes both need more samples; the
-    cost grows roughly logarithmically in $A$ and inversely with
-    $\omega_0$.
-  </p>
-  <p lang="zh">
-    快速估算：$A=80$ dB、$\omega_0=0.05\pi$ → $N\approx 120$。
-    要主瓣更窄或旁瓣更深都要更多樣本；成本對 $A$ 大致對數、對 $\omega_0$ 反比。
-  </p>
+      <h2 lang="en">Back-of-envelope examples</h2>
+      <h2 lang="zh">快速估算</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>$A=60$ dB, $\omega_0=0.1\pi$</b> → $N\approx 45$.<br>
+            <b>$A=80$ dB, $\omega_0=0.05\pi$</b> → $N\approx 120$.<br>
+            <b>$A=100$ dB, $\omega_0=0.02\pi$</b> → $N\approx 370$.<br>
+            <b>$A=120$ dB, $\omega_0=0.01\pi$</b> → $N\approx 900$.
+          </span>
+          <span lang="zh">
+            <b>$A=60$ dB，$\omega_0=0.1\pi$</b> → $N\approx 45$。<br>
+            <b>$A=80$ dB，$\omega_0=0.05\pi$</b> → $N\approx 120$。<br>
+            <b>$A=100$ dB，$\omega_0=0.02\pi$</b> → $N\approx 370$。<br>
+            <b>$A=120$ dB，$\omega_0=0.01\pi$</b> → $N\approx 900$。
+          </span>
+        </div>
+      </div>
+
+      <p lang="en">
+        Cost scaling: $N$ grows <em>logarithmically</em> with $A$ (the $\cosh^{-1}$ numerator) but roughly <em>inversely</em> with $\omega_0$ (the denominator $\cosh^{-1}(1/\cos(\omega_0/2))\approx \omega_0/\sqrt{2}$ for small $\omega_0$). So halving $\omega_0$ doubles $N$; doubling $A$ adds only a modest increment.
+      </p>
+      <p lang="zh">
+        成本縮放：$N$ 與 $A$ 呈<em>對數</em>（分子的 $\cosh^{-1}$）、與 $\omega_0$ 呈<em>反比</em>（小 $\omega_0$ 時分母 $\cosh^{-1}(1/\cos(\omega_0/2))\approx \omega_0/\sqrt{2}$）。$\omega_0$ 減半 → $N$ 加倍；$A$ 加倍 → $N$ 只增加一點。
+      </p>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>$\omega_0$ is the expensive axis.</b> The log-cost in $A$ means going from 60 dB to 120 dB roughly doubles $N$; halving $\omega_0$ also doubles $N$. Design specs that push both hard compound multiplicatively.</p>
+        <p lang="zh"><b>$\omega_0$ 是昂貴的軸。</b>$A$ 對數成本 → 60→120 dB 使 $N$ 大約加倍；$\omega_0$ 減半也使 $N$ 加倍。兩者同推，成本乘法成長。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Design at $A=80$ dB, $\omega_0=0.05\pi$ gives $N\approx 120$. You need to tighten $\omega_0$ to $0.025\pi$ (half). Best estimate for new $N$?</p>
+        <p lang="zh"><b>問：</b>$A=80$ dB、$\omega_0=0.05\pi$ 時 $N\approx 120$。若把 $\omega_0$ 緊縮到 $0.025\pi$（減半），新 $N$ 約多少？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">~240 (N roughly doubles).</button>
+          <button data-correct="1" lang="zh">約 240（N 大約加倍）。</button>
+          <button data-correct="0" lang="en">~60 (N halves).</button>
+          <button data-correct="0" lang="zh">約 60（N 減半）。</button>
+          <button data-correct="0" lang="en">~120 (N unchanged).</button>
+          <button data-correct="0" lang="zh">約 120（N 不變）。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Length solver</h3>
+        <h3 lang="zh">實驗 · 長度求解器</h3>
+        <div class="controls">
+          <label>A (dB)</label>
+          <input type="range" id="aSlider" min="30" max="120" step="5" value="80"/>
+          <span class="val" id="aVal">80</span>
+          <label>ω₀ (rad)</label>
+          <input type="range" id="wSlider" min="0.005" max="0.5" step="0.005" value="0.157"/>
+          <span class="val" id="wVal">0.157</span>
+        </div>
+        <div id="readout" style="font-family:'Press Start 2P',monospace;font-size:11px;line-height:1.8;color:#ffd95a;margin-top:10px;padding:10px;border:2px solid #ffd95a;background:#1a1a2e;"></div>
+
+        <canvas id="fCanvas" style="height:220px; margin-top:10px;"></canvas>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">The computed $N$ gives a Chebyshev window whose first null lands at $\omega_0$ and every side-lobe at $-A$ dB. Drag $\omega_0$ smaller → $N$ grows quickly. Drag $A$ deeper → $N$ grows slowly.</p>
+          <p lang="zh">計算出的 $N$ 給出 Chebyshev 視窗，首零落在 $\omega_0$、所有旁瓣在 $-A$ dB。$\omega_0$ 減小 → $N$ 大幅增長。$A$ 加深 → $N$ 只緩慢增長。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.10.4.3-cheby-mainlobe.html">◀ 4.10.4.3</a>
@@ -57,8 +122,122 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { A: 80, w0: 0.157 };
+
+  function solveN(A, w0){
+    const num = Math.acosh(Math.pow(10, A/20));
+    const den = Math.acosh(1/Math.cos(w0/2));
+    return 1 + Math.ceil(num/den);
+  }
+
+  function chebwin(N, A){
+    const beta = Math.cosh(Math.acosh(Math.pow(10, A/20)) / (N-1));
+    const w = new Float32Array(N);
+    const Wk = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      const wk = 2*Math.PI*k/N;
+      const x = beta * Math.cos(wk/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else if (x > 1) num = Math.cosh((N-1)*Math.acosh(x));
+      else num = ((N-1)%2 === 0 ? 1 : -1) * Math.cosh((N-1)*Math.acosh(-x));
+      Wk[k] = num;
+    }
+    for (let n=0;n<N;n++){
+      let s = 0;
+      for (let k=0;k<N;k++) s += Wk[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/N);
+      w[n] = s;
+    }
+    let mx = 0; for (let n=0;n<N;n++) if (Math.abs(w[n]) > mx) mx = Math.abs(w[n]);
+    for (let n=0;n<N;n++) w[n] /= mx;
+    return w;
+  }
+
+  function redraw(){
+    const N = solveN(state.A, state.w0);
+    $('readout').innerHTML = `A = ${state.A} dB<br>ω₀ = ${state.w0.toFixed(3)} rad (${(state.w0/Math.PI).toFixed(3)}π)<br>→ N = ${N}`;
+
+    const Nplot = Math.min(N, 512);
+    const w = chebwin(Nplot, state.A);
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    let mmax = 0;
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+
+    const c = $('fCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:44,r:10,t:18,b:24}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const dBfloor = -140;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad.l+iw*g/12; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=7;g++){ const y=pad.t+ih*g/7; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    // target A
+    const yt = pad.t + ih*(1-(-state.A - dBfloor)/(0 - dBfloor));
+    ctx.strokeStyle='#ff6aa0'; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(pad.l,yt); ctx.lineTo(W-pad.r,yt); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // target ω₀ marker vertical
+    ctx.strokeStyle='#78d66a'; ctx.setLineDash([2,3]);
+    const xw = pad.l + iw*(state.w0 + Math.PI)/(2*Math.PI);
+    const xwn = pad.l + iw*(-state.w0 + Math.PI)/(2*Math.PI);
+    ctx.beginPath(); ctx.moveTo(xw,pad.t); ctx.lineTo(xw,H-pad.b); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xwn,pad.t); ctx.lineTo(xwn,H-pad.b); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // spectrum
+    ctx.strokeStyle='#ffd95a'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for (let i=0;i<K;i++){
+      const db = Math.max(dBfloor, 20*Math.log10(Math.max(mag[i]/mmax, 1e-8)));
+      const y = pad.t + ih*(1-(db-dBfloor)/(0-dBfloor));
+      const x = pad.l + iw*i/(K-1);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    ctx.font='9px "Press Start 2P", monospace'; ctx.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = pad.l + iw*(v+Math.PI)/(2*Math.PI); ctx.fillText(lbl, x-6, H-pad.b+14); }
+    ctx.fillText('0', 4, pad.t+6);
+    ctx.fillText(dBfloor+'', 4, H-pad.b-2);
+    ctx.fillStyle='#78d66a'; ctx.fillText('±ω₀', xw+4, pad.t+10);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('-'+state.A+'dB', W-pad.r-60, yt-4);
+  }
+
+  $('aSlider').addEventListener('input', () => { state.A = parseInt($('aSlider').value,10); $('aVal').textContent = state.A; redraw(); });
+  $('wSlider').addEventListener('input', () => { state.w0 = parseFloat($('wSlider').value); $('wVal').textContent = state.w0.toFixed(3); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Length ∝ 1/ω₀ for the dominant term. A-dependence is log and slow by comparison.</span><span lang="zh">🪙 金幣 +1！長度主項 ∝ 1/ω₀。A 依賴為對數，相對緩慢。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ N ≈ (numerator)/ω₀ · √2 → halve ω₀, double N.</span><span lang="zh">✗ N ≈ (分子)/ω₀·√2 → ω₀ 減半、N 加倍。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

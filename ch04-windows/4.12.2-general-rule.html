@@ -6,6 +6,8 @@
 <title>4.12.2 General Rule · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,20 +30,93 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/General_Rule.html" target="_blank">SASP §4.12.2 ↗</a></small>
   </h1>
 
-  <div class="nes-box nes-box--green" data-label="ONE LINE">
-    <p lang="en">Pick the window that makes your worst-case interferer smallest in the band you care about, subject to the main-lobe and reconstruction constraints you can afford.</p>
-    <p lang="zh">在可接受的主瓣寬與重建約束下，選能讓你最關心的那一帶上最糟干擾變最小的視窗。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box nes-box--green" data-label="ONE LINE">
+        <p lang="en">Pick the window that makes your worst-case interferer smallest <em>in the band you care about</em>, subject to the main-lobe and reconstruction constraints you can afford.</p>
+        <p lang="zh">在可接受的主瓣寬與重建約束下，選能讓你<em>最關心</em>的那一帶最糟干擾變最小的視窗。</p>
+      </div>
 
-  <p lang="en">
-    That is the entire philosophy of window design. Every named window in
-    this world is one point on a Pareto frontier. The next section shows
-    how to compute other points using linear programming.
-  </p>
-  <p lang="zh">
-    這就是視窗設計的全部哲學。本世界所有的具名視窗，都是某條柏拉圖前緣上的一點。
-    下一節會示範如何用線性規劃算出其他點。
-  </p>
+      <h2 lang="en">Each named window = one Pareto point</h2>
+      <h2 lang="zh">每個具名視窗 ＝ 柏拉圖前緣上一點</h2>
+
+      <p lang="en">
+        Every window studied in this world represents a specific trade on the two main axes — main-lobe width and side-lobe depth — plus auxiliary constraints like OLA, smoothness, endpoint value. Moving one axis always costs you the other.
+      </p>
+      <p lang="zh">
+        本世界研讀的每個視窗，都代表主瓣寬與旁瓣深這兩軸上某個取捨點，加上 OLA、平滑、端點值這類附加約束。移動一軸必定在另一軸付出代價。
+      </p>
+
+      <div class="formula" style="font-family:inherit;">
+        <span class="label">PARETO CHEAT SHEET</span>
+        <div style="font-size:12px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>Rectangular</b>: narrowest main lobe, worst side-lobe (−13 dB).<br>
+            <b>Hann / Hamming</b>: standard audio-grade, moderate both.<br>
+            <b>Blackman / B-Harris / Nuttall</b>: deeper sides, wider main.<br>
+            <b>Kaiser / DPSS / Dolph-Cheby</b>: parametric — pick your axis.<br>
+            <b>MLT sine / Vorbis</b>: optimised for squared-OLA codecs.<br>
+            <b>LP-designed (§4.13)</b>: any Pareto point, pay with compute.
+          </span>
+          <span lang="zh">
+            <b>矩形</b>：主瓣最窄、旁瓣最差（-13 dB）。<br>
+            <b>Hann / Hamming</b>：音訊標準，兩軸中等。<br>
+            <b>Blackman / B-Harris / Nuttall</b>：旁瓣深、主瓣寬。<br>
+            <b>Kaiser / DPSS / Dolph-Cheby</b>：參數化 — 選軸。<br>
+            <b>MLT 正弦 / Vorbis</b>：為平方 OLA 編碼器最佳化。<br>
+            <b>LP 設計（§4.13）</b>：任何柏拉圖點，代價是運算。
+          </span>
+        </div>
+      </div>
+
+      <h2 lang="en">The decision checklist</h2>
+      <h2 lang="zh">決策清單</h2>
+
+      <ol>
+        <li lang="en"><b>What's the interferer?</b> Strong neighbour tone → narrow main lobe wins. Broadband noise → low side-lobes win.</li>
+        <li lang="zh"><b>干擾是什麼？</b>強鄰音 → 窄主瓣勝；寬頻雜訊 → 低旁瓣勝。</li>
+        <li lang="en"><b>Where is the interferer?</b> Near the target → Dolph-Chebyshev plateau. Far away → Hamming-like roll-off.</li>
+        <li lang="zh"><b>干擾在哪？</b>靠近目標 → Dolph-Chebyshev 平台；離目標遠 → Hamming 類滾降。</li>
+        <li lang="en"><b>Reconstruction needed?</b> Yes → Hann, MLT sine, Vorbis. No → any analysis-side window.</li>
+        <li lang="zh"><b>需要重建嗎？</b>是 → Hann、MLT 正弦、Vorbis。否 → 任何解析端視窗。</li>
+        <li lang="en"><b>Latency budget?</b> Low → short $N$. Long OK → everything opens up.</li>
+        <li lang="zh"><b>延遲預算？</b>低 → 短 $N$。可接受長 → 任何視窗皆可。</li>
+      </ol>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Window design is Pareto frontier selection.</b> There is no universal "best" window — only "best given these application constraints." The remaining §4.13 sub-sections show how to compute an arbitrary Pareto point by LP, when catalog windows aren't quite right.</p>
+        <p lang="zh"><b>視窗設計是柏拉圖前緣選點。</b>沒有通用「最佳」視窗 — 只有「這組應用約束下的最佳」。§4.13 教你在目錄視窗不夠合身時，如何用 LP 計算任意柏拉圖點。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Which scenario would push you toward designing a custom LP-optimised window rather than grabbing a named one?</p>
+        <p lang="zh"><b>問：</b>哪種場景會迫使你用 LP 自訂最佳化而非挑現成視窗？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Strong asymmetric stop-band requirements (e.g. aggressive roll-off above 0.3π but flat from 0.1π-0.3π).</button>
+          <button data-correct="1" lang="zh">強烈不對稱的阻帶要求（如 0.3π 以上急劇滾降但 0.1π-0.3π 須平坦）。</button>
+          <button data-correct="0" lang="en">You need −60 dB side-lobes with N=256 — Kaiser handles this easily.</button>
+          <button data-correct="0" lang="zh">$N=256$ 時要 $-60$ dB 旁瓣 — Kaiser 輕鬆搞定。</button>
+          <button data-correct="0" lang="en">You need a COLA-constant sum for 50% overlap — MLT sine handles this.</button>
+          <button data-correct="0" lang="zh">需 50% 重疊 COLA 定值 — MLT 正弦就夠。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · The trade curve</h3>
+        <h3 lang="zh">實驗 · 權衡曲線</h3>
+        <canvas id="pCanvas" style="height:320px;"></canvas>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Each dot is a named window at $N=64$: plotted as (main-lobe width, first side-lobe level). Classical windows form a staircase; Kaiser/DPSS/Dolph-Chebyshev trace a smooth curve — the Pareto frontier. LP-designed windows can land arbitrary points on or near this curve.</p>
+          <p lang="zh">$N=64$ 下每個點代表一具名視窗：橫軸主瓣寬、縱軸首旁瓣高度。經典視窗成階梯；Kaiser/DPSS/Dolph-Chebyshev 連成光滑前緣。LP 設計可落在前緣上或附近任意點。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.12.1-audio-coding.html">◀ 4.12.1</a>
@@ -50,8 +125,82 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  // Rough approximate points — first side-lobe dB vs main-lobe width in units of 2π/N
+  const points = [
+    { name: 'Rect',     w: 2.0, sl: -13.3, color: '#ff5a5a' },
+    { name: 'Bartlett', w: 4.0, sl: -26.5, color: '#ff9a3c' },
+    { name: 'Hann',     w: 4.0, sl: -31.5, color: '#5aa0ff' },
+    { name: 'Hamming',  w: 4.0, sl: -42.7, color: '#ffd95a' },
+    { name: 'Blackman', w: 6.0, sl: -58.1, color: '#c58cff' },
+    { name: '3-BH',     w: 6.0, sl: -71.5, color: '#ff6aa0' },
+    { name: 'Nuttall',  w: 8.0, sl: -93.3, color: '#78d66a' },
+    { name: 'Kaiser8',  w: 7.0, sl: -78.0, color: '#5dffd0' },
+    { name: 'DolphC80', w: 6.3, sl: -80.0, color: '#ff6aa0' },
+    { name: 'DolphC100',w: 7.9, sl: -100.0, color: '#ff6aa0' },
+  ];
+  function redraw(){
+    const c = $('pCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:50,r:10,t:24,b:30}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const xMin=1, xMax=10;
+    const yMin=-110, yMax=-10;
+
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=9;g++){ const x=pad.l+iw*g/9; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=10;g++){ const y=pad.t+ih*g/10; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    for (const p of points){
+      const x = pad.l + iw*(p.w-xMin)/(xMax-xMin);
+      const y = pad.t + ih*(1-(p.sl-yMin)/(yMax-yMin));
+      ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(x,y,5,0,2*Math.PI); ctx.fill();
+      ctx.font='8px "Press Start 2P", monospace';
+      ctx.fillText(p.name, x+8, y+3);
+    }
+
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('main-lobe (units of 2π/N) →', pad.l, H-6);
+    ctx.save(); ctx.translate(14, pad.t+ih*0.6); ctx.rotate(-Math.PI/2); ctx.fillText('↑ 1st side-lobe (dB)', 0, 0); ctx.restore();
+    for (let x=2;x<=10;x+=2){
+      const px = pad.l + iw*(x-xMin)/(xMax-xMin);
+      ctx.fillText(String(x), px-3, H-pad.b+14);
+    }
+    for (let y=-100;y<=-20;y+=20){
+      const py = pad.t + ih*(1-(y-yMin)/(yMax-yMin));
+      ctx.fillText(String(y), 28, py+3);
+    }
+    ctx.fillStyle='#e6e6ff'; ctx.font='10px "Press Start 2P", monospace';
+    ctx.fillText('Window Pareto (N=64)', pad.l, 16);
+  }
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! LP handles arbitrary shape constraints — exactly what named closed-form windows cannot express.</span><span lang="zh">🪙 金幣 +1！LP 能處理任意形狀約束 — 這正是具名封閉式視窗無法表達的。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ LP shines when your spec has region-specific shape requirements that no named window provides.</span><span lang="zh">✗ 規格包含分區特定形狀要求、現成視窗皆不足時 LP 才必要。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

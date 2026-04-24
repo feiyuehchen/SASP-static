@@ -6,6 +6,8 @@
 <title>4.12 Optimized Windows · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,15 +30,36 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Optimized_Windows.html" target="_blank">SASP §4.12 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="BEYOND CLOSED FORMS">
-    <p lang="en">Instead of starting from a named formula, state the desired spectrum properties (main-lobe width, side-lobe floor, smoothness) as constraints and solve a numerical optimisation. The rest of World 4 is about that recipe.</p>
-    <p lang="zh">不從已命名公式出發 — 把主瓣寬、旁瓣地板、平滑度直接寫成約束，用數值最佳化求解。第 4 世界剩下的篇幅都在講這條路。</p>
+  <div class="nes-box nes-box--green" data-label="BEYOND CLOSED FORMS">
+    <p lang="en">Instead of starting from a named formula (Hann, Kaiser, Dolph-Chebyshev, …), directly <em>state</em> the desired spectrum properties — main-lobe width, side-lobe floor, smoothness, OLA constraints — as constraints in a numerical optimisation. This gives you windows tailored to specific applications (audio codec, filter-bank, STFT with prescribed aliasing) rather than a catalog-lookup.</p>
+    <p lang="zh">不從已命名公式（Hann、Kaiser、Dolph-Chebyshev …）出發 — 把主瓣寬、旁瓣地板、平滑度、OLA 約束直接<em>陳述</em>為數值最佳化的約束。這樣可針對特定應用（音訊編碼、濾波器組、有限混疊 STFT）量身定做視窗，而非查表取用。</p>
+  </div>
+
+  <div class="formula" style="font-family:inherit;">
+    <span class="label">TYPICAL OPTIMISATION SHAPE</span>
+    <div style="font-size:12px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>minimize</b>: $\max_{\omega\in\text{stop}}|W(\omega)|$ (side-lobe peak)<br>
+        <b>subject to</b>: $|W(\omega)|$ main-lobe shape, $w[n]$ symmetry,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;OLA property $\sum_k w[n-kR]=C$, and/or smoothness bounds.
+      </span>
+      <span lang="zh">
+        <b>最小化</b>：$\max_{\omega\in\text{stop}}|W(\omega)|$（旁瓣峰值）<br>
+        <b>約束</b>：$|W(\omega)|$ 主瓣形狀、$w[n]$ 對稱、<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;OLA 性質 $\sum_k w[n-kR]=C$、以及／或平滑度界。
+      </span>
+    </div>
   </div>
 
   <ul class="toc-list">
     <li><a href="4.12.1-audio-coding.html"><span><span class="num">4.12.1</span><span lang="en">Windows for audio coding</span><span lang="zh">音訊編碼用視窗</span></span><span class="dim">▶</span></a></li>
     <li><a href="4.12.2-general-rule.html"><span><span class="num">4.12.2</span><span lang="en">General rule</span><span lang="zh">通則</span></span><span class="dim">▶</span></a></li>
   </ul>
+
+  <div class="nes-box nes-box--purple" data-label="WHY THIS MATTERS">
+    <p lang="en"><b>Every modern audio codec uses a window designed this way.</b> MP3, AAC, Vorbis, Opus, SBC — all derived via constrained optimisation, not pulled from a textbook table. §4.12.1 shows which constraints each codec chose; §4.12.2 gives the general recipe.</p>
+    <p lang="zh"><b>所有現代音訊編碼器都用這條路設計視窗。</b>MP3、AAC、Vorbis、Opus、SBC — 全是約束最佳化的產物，而非教科書表格。§4.12.1 說明各編碼器選了哪些約束；§4.12.2 給出通用食譜。</p>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.11.3-exact-discrete-gauss.html">◀ 4.11.3</a>

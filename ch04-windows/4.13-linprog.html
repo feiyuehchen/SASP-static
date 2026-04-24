@@ -6,6 +6,8 @@
 <title>4.13 Window Design by Linear Programming · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -29,9 +31,53 @@
   </h1>
 
   <div class="nes-box nes-box--green" data-label="ROAD MAP">
-    <p lang="en">Think of $w[n]$ as an $N$-vector of unknowns. The spectrum is a linear function of that vector. Constraints on the spectrum become linear inequalities — which is exactly what a linear program (LP) solver eats.</p>
-    <p lang="zh">把 $w[n]$ 當成一個 $N$ 維未知向量。頻譜是它的線性函數，對頻譜的要求就變成線性不等式 — 正是 LP 求解器吃的輸入。</p>
+    <p lang="en">Treat $w[n]$ as an $N$-vector of unknowns. The spectrum $W(\omega)=\sum_n w[n]e^{-j\omega n}$ is a <em>linear function</em> of that vector. Any constraint on $W(\omega)$ becomes a linear inequality — exactly what a <span class="term"
+      data-en="Linear program (LP)"
+      data-en-def="Optimisation problem with linear objective and linear inequality/equality constraints over a real vector. Solved in polynomial time by simplex or interior-point methods (scipy.optimize.linprog, MATLAB linprog, GLPK, CPLEX)."
+      data-zh-def="線性目標函數 + 線性不等式/等式約束的最佳化問題。由 simplex 或 內點法多項式時間求解（scipy.optimize.linprog、MATLAB linprog、GLPK、CPLEX）。">linear program (LP)</span> solver eats.</p>
+    <p lang="zh">把 $w[n]$ 當成 $N$ 維未知向量。頻譜 $W(\omega)=\sum_n w[n]e^{-j\omega n}$ 是它的<em>線性函數</em>。任何對 $W(\omega)$ 的約束皆可化為線性不等式 — 正是<span class="term"
+      data-en="Linear program (LP)"
+      data-en-def="Optimisation problem with linear objective and linear inequality/equality constraints over a real vector. Solved in polynomial time by simplex or interior-point methods (scipy.optimize.linprog, MATLAB linprog, GLPK, CPLEX)."
+      data-zh-def="線性目標函數 + 線性不等式/等式約束的最佳化問題。由 simplex 或 內點法多項式時間求解（scipy.optimize.linprog、MATLAB linprog、GLPK、CPLEX）。">線性規劃（LP）</span>求解器的輸入格式。</p>
   </div>
+
+  <div class="formula" style="font-family:inherit;">
+    <span class="label">LP TEMPLATE</span>
+    <div style="font-size:13px; line-height:1.9; text-align:left;">
+      <span lang="en">
+        <b>minimize</b> $\;\;c^\top w$ (linear objective, e.g. side-lobe ceiling $\delta$)<br>
+        <b>subject to</b><br>
+        &nbsp;&nbsp;$A_{\text{mainlobe}}\,w \geq b_{\text{flat}}$ (main lobe flat at target)<br>
+        &nbsp;&nbsp;$|W(\omega_k)| \leq \delta$ for $\omega_k \in \text{stopband}$<br>
+        &nbsp;&nbsp;$w[n]=w[N-1-n]$ (symmetry)<br>
+        &nbsp;&nbsp;$w[n] \geq 0$ (positivity, optional)<br>
+        &nbsp;&nbsp;$\sum_n w[n]=1$ (DC normalisation)
+      </span>
+      <span lang="zh">
+        <b>最小化</b> $\;\;c^\top w$（線性目標，如旁瓣上界 $\delta$）<br>
+        <b>約束</b><br>
+        &nbsp;&nbsp;$A_{\text{mainlobe}}\,w \geq b_{\text{flat}}$（主瓣在目標值以上）<br>
+        &nbsp;&nbsp;$|W(\omega_k)| \leq \delta$，$\omega_k \in $ 阻帶<br>
+        &nbsp;&nbsp;$w[n]=w[N-1-n]$（對稱）<br>
+        &nbsp;&nbsp;$w[n] \geq 0$（正值，可選）<br>
+        &nbsp;&nbsp;$\sum_n w[n]=1$（DC 歸一）
+      </span>
+    </div>
+  </div>
+
+  <h2 lang="en">Why LP works so well for window design</h2>
+  <h2 lang="zh">為何 LP 特別適合視窗設計</h2>
+
+  <ul>
+    <li lang="en"><b>Linearity</b> — $W(\omega)=\sum_n w[n]\cos(\omega n)$ (real, symmetric case) is linear in $w$, so any modulus-bound constraint translates to two linear inequalities.</li>
+    <li lang="zh"><b>線性</b> — $W(\omega)=\sum_n w[n]\cos(\omega n)$（實對稱情形）對 $w$ 為線性，所以任何振幅上界都可轉為兩條線性不等式。</li>
+    <li lang="en"><b>Convexity</b> — LP is convex, so the global optimum is guaranteed. No local-minimum traps.</li>
+    <li lang="zh"><b>凸性</b> — LP 凸，可保證全域最優，不會陷入局部解。</li>
+    <li lang="en"><b>Standard tooling</b> — <code>scipy.optimize.linprog</code>, MATLAB <code>linprog</code>, GLPK, CPLEX all handle thousands of variables / tens of thousands of constraints in seconds.</li>
+    <li lang="zh"><b>通用工具</b> — <code>scipy.optimize.linprog</code>、MATLAB <code>linprog</code>、GLPK、CPLEX 皆可在數秒內處理數千變數、數萬約束。</li>
+    <li lang="en"><b>Composable constraints</b> — drop in symmetry, smoothness, OLA, positivity without reworking the formulation.</li>
+    <li lang="zh"><b>可組合約束</b> — 對稱、平滑、OLA、正值都能直接加入，不必重寫整個問題。</li>
+  </ul>
 
   <ul class="toc-list">
     <li><a href="4.13.1-lp.html"><span><span class="num">4.13.1</span><span lang="en">Linear programming</span><span lang="zh">線性規劃</span></span><span class="dim">▶</span></a></li>
