@@ -6,6 +6,8 @@
 <title>4.4.3 Blackman-Windowed Oboe · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,13 +30,61 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Blackman_Windowed_Oboe_Recording.html" target="_blank">SASP §4.4.3 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="CLEANEST">
-    <p lang="en">Noise floor now sits around $-70$ dB. We can see every harmonic the synthetic oboe has. The main lobes are visibly wider, but for a periodic signal with well-separated harmonics that is a worthwhile trade.</p>
-    <p lang="zh">雜訊地板下降到約 $-70$ dB，所有諧波都看得見。主瓣明顯變寬；對這種諧波分得開的週期訊號來說，這個代價很值得。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="CLEANEST">
+        <p lang="en">Noise floor now sits around $-70$ dB. We can see every harmonic the synthetic oboe has, with roughly $30$ dB of headroom below the weakest one. Main lobes are visibly wider — but for well-separated harmonics that is a worthwhile trade.</p>
+        <p lang="zh">雜訊地板降到約 $-70$ dB，所有諧波都看得見，最弱諧波以下還有約 $30$ dB 的餘裕。主瓣明顯變寬 — 但對諧波分得開的訊號很值得。</p>
+      </div>
 
-  <div class="viz-card">
-    <canvas id="fCanvas" style="height:260px;"></canvas>
+      <h2 lang="en">What made the final $15$ dB</h2>
+      <h2 lang="zh">最後 $15$ dB 從何而來</h2>
+
+      <p lang="en">
+        Blackman's third cosine term places two additional zeros on $W_R(\omega)$'s side-lobe envelope (§4.3.5), dropping the first side lobe from Hamming's $-43$ dB to Blackman's $-58$ dB. The main lobe widens from $8\pi/N$ (Hamming) to $12\pi/N$ (Blackman) — a $50\%$ penalty on frequency resolution.
+      </p>
+      <p lang="zh">
+        Blackman 多出的第三項餘弦在 $W_R(\omega)$ 旁瓣包絡再放兩個零（§4.3.5），把第一旁瓣從 Hamming 的 $-43$ dB 拉到 Blackman 的 $-58$ dB。主瓣由 $8\pi/N$（Hamming）變成 $12\pi/N$（Blackman），頻率解析度付出 $50\%$ 代價。
+      </p>
+
+      <div class="nes-box nes-box--yellow" data-label="WHEN NOT TO USE">
+        <p lang="en">If your signal has closely-spaced peaks (< $12\pi/N$ apart) Blackman will merge them. For that case Hamming (or Hann) keeps peaks separable.</p>
+        <p lang="zh">若訊號有相距 $< 12\pi/N$ 的峰，Blackman 會把它們糊在一起。此時 Hamming 或 Hann 才能分開。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Deeper side-lobes ≠ always better.</b> You're trading main-lobe width for side-lobe depth. Pick the window that matches your signal's peak-spacing vs. dynamic-range profile.</p>
+        <p lang="zh"><b>旁瓣越深不一定越好。</b>你是在用主瓣寬度換旁瓣深度。挑視窗要配合訊號的「峰間距 vs. 動態範圍」輪廓。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Blackman's main-lobe width is $12\pi/N$. At $N=512$ and $f_s=8$ kHz, that corresponds to a frequency resolution of roughly:</p>
+        <p lang="zh"><b>問：</b>Blackman 主瓣寬 $12\pi/N$。$N=512$、$f_s=8$ kHz，頻率解析度約為？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">~$47$ Hz (two peaks within 47 Hz will merge).</button>
+          <button data-correct="1" lang="zh">約 $47$ Hz（相距 < 47 Hz 的兩峰會糊在一起）。</button>
+          <button data-correct="0" lang="en">~$1$ Hz (Blackman is super-sharp).</button>
+          <button data-correct="0" lang="zh">約 $1$ Hz（Blackman 超銳利）。</button>
+          <button data-correct="0" lang="en">~$200$ Hz (same as the fundamental).</button>
+          <button data-correct="0" lang="zh">約 $200$ Hz（等於基頻）。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Blackman-windowed oboe spectrum</h3>
+        <h3 lang="zh">實驗 · Blackman 加窗雙簧管頻譜</h3>
+        <canvas id="fCanvas" style="height:260px;"></canvas>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Same eight harmonics as the Hamming version — but now on a $-58$ dB noise floor. The lobes are broader but every peak has $\ge 15$ dB of headroom above the surrounding floor.</p>
+          <p lang="zh">與 Hamming 版相同的 8 個諧波 — 但現在雜訊底是 $-58$ dB。波瓣較寬，但每個峰都有 $\ge 15$ dB 的餘裕高出底線。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -46,6 +96,7 @@
 
 <script src="../assets/js/dsp.js"></script>
 <script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
@@ -54,20 +105,35 @@
   const fs = 8000, N = 512, M = 4096;
   const x = new Float32Array(N);
   const harm = [1,0.6,0.35,0.2,0.1,0.05,0.02,0.01];
-  for (let n = 0; n < N; n++) {
-    let s = 0;
-    for (let k = 0; k < harm.length; k++) s += harm[k] * Math.sin(2*Math.PI*200*(k+1)*n/fs + k*0.7);
+  for (let n=0;n<N;n++){
+    let s=0;
+    for (let k=0;k<harm.length;k++) s += harm[k] * Math.sin(2*Math.PI*200*(k+1)*n/fs + k*0.7);
     x[n] = 0.5 * s;
   }
   const w = DSP.WINDOWS.blackman(N);
   const xw = new Float32Array(M);
-  for (let n = 0; n < N; n++) xw[n] = x[n] * w[n];
+  for (let n=0;n<N;n++) xw[n] = x[n] * w[n];
   const re = new Float32Array(M), im = new Float32Array(M);
   re.set(xw); DSP.fft(re, im);
-  const H = M/2 + 1, out = new Float32Array(H);
-  for (let k = 0; k < H; k++) out[k] = Math.hypot(re[k], im[k]);
+  const H = M/2+1, mag = new Float32Array(H);
+  for (let k=0;k<H;k++) mag[k] = Math.hypot(re[k], im[k]);
   const freqs = Array.from({length:H},(_,k)=>k*fs/M);
-  Viz.line($('fCanvas'), DSP.toDb(out,-80), { xValues: freqs, xMin:0, xMax:3000, yMin:-80, xLabel:'f (Hz)', yLabel:'dB', title:'BLACKMAN-WINDOWED OBOE', color:'#F83800', xTicks:[{v:0,label:'0'},{v:1000,label:'1k'},{v:2000,label:'2k'},{v:3000,label:'3k'}] });
+  Viz.line($('fCanvas'), DSP.toDb(mag,-80), { xValues: freqs, xMin:0, xMax:3000, yMin:-80, xLabel:'f (Hz)', yLabel:'dB', title:'BLACKMAN-WINDOWED OBOE', color:'#ff6aa0', xTicks:[{v:0,label:'0'},{v:1000,label:'1k'},{v:2000,label:'2k'},{v:3000,label:'3k'}] });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! 12π/512 × (8000/(2π)) ≈ 93 Hz main-lobe full width — half-width is ~47 Hz.</span><span lang="zh">🪙 金幣 +1！12π/512 × (8000/(2π)) ≈ 93 Hz 主瓣全寬；半寬約 47 Hz。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent=n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Compute main-lobe width in Hz: 12π/N in rad/sample × fs/(2π).</span><span lang="zh">✗ 算主瓣寬度的 Hz：12π/N（rad/sample）× fs/(2π)。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

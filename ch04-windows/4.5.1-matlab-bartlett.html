@@ -6,6 +6,8 @@
 <title>4.5.1 Matlab for Bartlett · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,23 +30,99 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Matlab_Bartlett_Window.html" target="_blank">SASP §4.5.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box nes-box--purple" data-label="CODE">
-    <pre style="font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.8;color:var(--nes-lime);">
-% Matlab: bartlett(N) gives endpoint zeros; triang(N) does not
-w = bartlett(N);
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="TWO BUILT-INS, ONE SHAPE">
+        <p lang="en">Matlab ships both <code>bartlett(N)</code> and <code>triang(N)</code>. Same shape, slightly different endpoints.</p>
+        <p lang="zh">Matlab 有 <code>bartlett(N)</code> 與 <code>triang(N)</code> 兩個內建。形狀相同、端點略有不同。</p>
+      </div>
 
-% Manual one-liner
+      <div class="nes-box nes-box--purple" data-label="CODE">
+        <pre style="color:var(--nes-lime); font-size:11px; line-height:1.8; margin:0; white-space:pre-wrap;">
+% Matlab / Octave
+w = bartlett(N);   % endpoints = 0
+w = triang(N);     % endpoints = 1/N
+
+% Manual
 n = (0:N-1)';
 M = (N-1)/2;
 w = 1 - abs((n - M) / M);
 
-% JS
-const w = DSP.WINDOWS.bartlett(N);
-    </pre>
-  </div>
+% Python / NumPy
+n = np.arange(N)
+M = (N-1)/2
+w = 1 - np.abs((n - M) / M)
 
-  <p lang="en"><b>bartlett</b> vs <b>triang</b>: Matlab's <code>bartlett</code> includes the two endpoint zeros; <code>triang</code> does not (endpoints at $1/N$). For most analyses it does not matter.</p>
-  <p lang="zh">Matlab 的 <code>bartlett</code> 含兩端零；<code>triang</code> 不含（端點為 $1/N$）。大多分析用哪個都沒差。</p>
+% JavaScript (this site)
+const w = DSP.WINDOWS.bartlett(N);
+</pre>
+      </div>
+
+      <h2 lang="en">bartlett vs. triang</h2>
+      <h2 lang="zh">bartlett vs. triang</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b><code>bartlett(N)</code>:</b> $w[0] = w[N-1] = 0$. The strict "triangle between zeros" interpretation.<br>
+            <b><code>triang(N)</code>:</b> $w[0] = w[N-1] = 1/N$. Treats the window as $N$ samples of a slightly wider continuous triangle, avoiding the lossy endpoint zeros.<br><br>
+            For general spectrum analysis the difference is negligible. For precise
+            <span class="term"
+              data-en="Coherent gain"
+              data-en-def="The DC response of a window, equal to the sum of all its samples. Determines the amplitude scaling when a pure DC signal passes through the window."
+              data-zh-def="視窗的直流響應，等於所有樣本之和；決定純直流訊號通過視窗後的振幅縮放。">coherent-gain</span>
+            or periodogram normalisation, pick one and stick with it.
+          </span>
+          <span lang="zh">
+            <b><code>bartlett(N)</code>：</b>$w[0] = w[N-1] = 0$。嚴格「兩端為零的三角形」定義。<br>
+            <b><code>triang(N)</code>：</b>$w[0] = w[N-1] = 1/N$。視為「稍寬連續三角」的 $N$ 點取樣，避免端點為零造成的能量損失。<br><br>
+            一般頻譜分析差異可忽略。要計算精確<span class="term"
+              data-en="Coherent gain"
+              data-en-def="The DC response of a window, equal to the sum of all its samples. Determines the amplitude scaling when a pure DC signal passes through the window."
+              data-zh-def="視窗的直流響應，等於所有樣本之和；決定純直流訊號通過視窗後的振幅縮放。">相干增益</span>或 periodogram 歸一化時，選一個用到底即可。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Two variants, one concept.</b> If two function names give almost-identical windows, pick the one your downstream code expects.</p>
+        <p lang="zh"><b>兩個名字、一個概念。</b>若兩個函式給出幾乎相同的視窗，選下游程式碼期望的那個。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> For $N=11$, what is the last sample $w[10]$ from <code>bartlett(11)</code>?</p>
+        <p lang="zh"><b>問：</b>$N=11$，<code>bartlett(11)</code> 的最後一個樣本 $w[10]$ 是？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">0.</button>
+          <button data-correct="1" lang="zh">0。</button>
+          <button data-correct="0" lang="en">1/11.</button>
+          <button data-correct="0" lang="zh">1/11。</button>
+          <button data-correct="0" lang="en">1.</button>
+          <button data-correct="0" lang="zh">1。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · bartlett vs. triang endpoints</h3>
+        <h3 lang="zh">實驗 · bartlett 與 triang 端點</h3>
+        <canvas id="cmpCanvas" style="height:200px;"></canvas>
+        <div class="controls">
+          <label>N</label>
+          <input type="range" id="nSlider" min="8" max="24" step="1" value="11"/>
+          <span class="val" id="nVal">11</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Blue dots: <code>bartlett</code> (endpoints zero). Yellow dots: <code>triang</code> (endpoints $1/N$). The difference is visible only at the two ends and vanishes for large $N$.</p>
+          <p lang="zh">藍點：<code>bartlett</code>（端點為零）。黃點：<code>triang</code>（端點 $1/N$）。差別只在兩端，$N$ 大時看不出。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.5-bartlett.html">◀ 4.5</a>
@@ -53,8 +131,80 @@ const w = DSP.WINDOWS.bartlett(N);
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { N: 11 };
+  function bartlett(N){
+    const w = new Float32Array(N);
+    const M = (N-1)/2;
+    for (let n=0;n<N;n++) w[n] = 1 - Math.abs((n - M)/M);
+    return w;
+  }
+  function triang(N){
+    const w = new Float32Array(N);
+    if (N % 2 === 1){
+      const M = (N-1)/2;
+      for (let n=0;n<N;n++) w[n] = 1 - Math.abs((n - M) / (M + 1));
+    } else {
+      const M = N/2 - 0.5;
+      for (let n=0;n<N;n++) w[n] = 1 - Math.abs((n - M) / (M + 0.5));
+    }
+    return w;
+  }
+  function redraw(){
+    const b = bartlett(state.N), t = triang(state.N);
+    const c = $('cmpCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:36,r:14,t:14,b:26}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(pad.l, H-pad.b); ctx.lineTo(W-pad.r, H-pad.b); ctx.stroke();
+    const yTo = v => pad.t + ih * (1 - v/1.1);
+    const xTo = i => pad.l + iw * i / (state.N-1);
+    // bartlett dots
+    ctx.fillStyle='#5aa0ff';
+    for (let i=0;i<state.N;i++){
+      ctx.beginPath(); ctx.arc(xTo(i), yTo(b[i]), 5, 0, 2*Math.PI); ctx.fill();
+    }
+    // triang dots
+    ctx.fillStyle='#ffd95a';
+    for (let i=0;i<state.N;i++){
+      ctx.beginPath(); ctx.arc(xTo(i), yTo(t[i]), 3, 0, 2*Math.PI); ctx.fill();
+    }
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText('bartlett (blue)', 8, 13);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('triang (yellow)', 140, 13);
+    ctx.fillStyle='#5aa0ff'; ctx.fillText('w[0]='+b[0].toFixed(3), 8, H-pad.b+14);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('w[0]='+t[0].toFixed(3), 110, H-pad.b+14);
+  }
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! bartlett puts zeros at both endpoints; triang keeps them positive.</span><span lang="zh">🪙 金幣 +1！bartlett 兩端為零；triang 兩端為正。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ bartlett by definition hits zero at both endpoints.</span><span lang="zh">✗ bartlett 定義上兩端為零。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

@@ -6,6 +6,8 @@
 <title>4.4.2 Hamming-Windowed Oboe · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,13 +30,61 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Hamming_Windowed_Oboe_Recording.html" target="_blank">SASP §4.4.2 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="IMPROVEMENT">
-    <p lang="en">The valley floor between harmonics drops to about $-42$ dB — we can now see a harmonic that is roughly 40 dB quieter than the fundamental.</p>
-    <p lang="zh">諧波之間的谷底下降到約 $-42$ dB — 比基頻弱 40 dB 左右的諧波現在看得到了。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="IMPROVEMENT">
+        <p lang="en">The valley floor between harmonics drops to about $-42$ dB — we can now see a harmonic roughly $40$ dB quieter than the fundamental.</p>
+        <p lang="zh">諧波之間的谷底下降到約 $-42$ dB — 比基頻弱 $40$ dB 左右的諧波現在看得到了。</p>
+      </div>
 
-  <div class="viz-card">
-    <canvas id="fCanvas" style="height:260px;"></canvas>
+      <h2 lang="en">What changed</h2>
+      <h2 lang="zh">發生了什麼</h2>
+
+      <p lang="en">
+        Same signal, same FFT size, only the window differs. Hamming's side-lobe floor at $-43$ dB is about $30$ dB lower than the rectangular's $-13$ dB. The first 8 harmonics at $200, 400, \ldots, 1600$ Hz with amplitudes $1, 0.6, \ldots, 0.01$ (span $40$ dB) now all emerge.
+      </p>
+      <p lang="zh">
+        相同訊號、相同 FFT 長度，只換視窗。Hamming 的 $-43$ dB 旁瓣底比矩形的 $-13$ dB 低約 $30$ dB。在 $200, 400, \ldots, 1600$ Hz、振幅 $1, 0.6, \ldots, 0.01$（跨 $40$ dB）的前 8 諧波現在全部浮現。
+      </p>
+
+      <div class="nes-box nes-box--yellow" data-label="NEAR-LIMIT">
+        <p lang="en">Still close to the limit: the 8th harmonic at $-40$ dB barely clears the $-43$ dB floor. Any noise or a slightly stronger neighbour would bury it. For more headroom: Blackman (§4.4.3).</p>
+        <p lang="zh">仍接近極限：第 8 諧波 $-40$ dB 勉強高於 $-43$ dB 底線。若有任何雜訊或鄰近強音稍變強就會淹沒它。要更多餘裕：用 Blackman（§4.4.3）。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Changing window shape = changing your measurement floor.</b> Hamming converts the "can't see below $-13$ dB" problem into "can't see below $-43$ dB". Same signal, different visible reality.</p>
+        <p lang="zh"><b>改視窗形狀 = 改量測底線。</b>Hamming 把「看不到 $-13$ dB 以下」變成「看不到 $-43$ dB 以下」。訊號相同、可見世界不同。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Compared to the rectangular-windowed version, the Hamming's main lobe is:</p>
+        <p lang="zh"><b>問：</b>相較矩形版，Hamming 的主瓣：</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Roughly twice as wide (8π/N vs 4π/N).</button>
+          <button data-correct="1" lang="zh">約兩倍寬（8π/N vs 4π/N）。</button>
+          <button data-correct="0" lang="en">Identical width — the window shape doesn't affect it.</button>
+          <button data-correct="0" lang="zh">寬度一樣 — 視窗形狀不影響。</button>
+          <button data-correct="0" lang="en">Half the width — Hamming tapers make main lobe narrower.</button>
+          <button data-correct="0" lang="zh">一半寬 — Hamming 收尾讓主瓣更窄。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Hamming-windowed oboe spectrum</h3>
+        <h3 lang="zh">實驗 · Hamming 加窗雙簧管頻譜</h3>
+        <canvas id="fCanvas" style="height:260px;"></canvas>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Eight harmonic peaks at $200, 400, \ldots, 1600$ Hz. The valley floor sits around $-42$ dB, so even the weakest harmonic (8th, at $-40$ dB) is just barely visible.</p>
+          <p lang="zh">八個諧波峰在 $200, 400, \ldots, 1600$ Hz。谷底約 $-42$ dB，最弱諧波（第 8，$-40$ dB）勉強可見。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -46,6 +96,7 @@
 
 <script src="../assets/js/dsp.js"></script>
 <script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
@@ -54,20 +105,35 @@
   const fs = 8000, N = 512, M = 4096;
   const x = new Float32Array(N);
   const harm = [1,0.6,0.35,0.2,0.1,0.05,0.02,0.01];
-  for (let n = 0; n < N; n++) {
-    let s = 0;
-    for (let k = 0; k < harm.length; k++) s += harm[k] * Math.sin(2*Math.PI*200*(k+1)*n/fs + k*0.7);
+  for (let n=0;n<N;n++){
+    let s=0;
+    for (let k=0;k<harm.length;k++) s += harm[k] * Math.sin(2*Math.PI*200*(k+1)*n/fs + k*0.7);
     x[n] = 0.5 * s;
   }
   const w = DSP.WINDOWS.hamming(N);
   const xw = new Float32Array(M);
-  for (let n = 0; n < N; n++) xw[n] = x[n] * w[n];
+  for (let n=0;n<N;n++) xw[n] = x[n] * w[n];
   const re = new Float32Array(M), im = new Float32Array(M);
   re.set(xw); DSP.fft(re, im);
-  const H = M/2 + 1, out = new Float32Array(H);
-  for (let k = 0; k < H; k++) out[k] = Math.hypot(re[k], im[k]);
+  const H = M/2+1, mag = new Float32Array(H);
+  for (let k=0;k<H;k++) mag[k] = Math.hypot(re[k], im[k]);
   const freqs = Array.from({length:H},(_,k)=>k*fs/M);
-  Viz.line($('fCanvas'), DSP.toDb(out,-80), { xValues: freqs, xMin:0, xMax:3000, yMin:-80, xLabel:'f (Hz)', yLabel:'dB', title:'HAMMING-WINDOWED OBOE', color:'#F8B800', xTicks:[{v:0,label:'0'},{v:1000,label:'1k'},{v:2000,label:'2k'},{v:3000,label:'3k'}] });
+  Viz.line($('fCanvas'), DSP.toDb(mag, -80), { xValues: freqs, xMin:0, xMax:3000, yMin:-80, xLabel:'f (Hz)', yLabel:'dB', title:'HAMMING-WINDOWED OBOE', color:'#ffd95a', xTicks:[{v:0,label:'0'},{v:1000,label:'1k'},{v:2000,label:'2k'},{v:3000,label:'3k'}] });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Hamming\'s main lobe is 8π/N, twice the rect\'s 4π/N. That is the cost for the 30 dB lower side-lobe floor.</span><span lang="zh">🪙 金幣 +1！Hamming 主瓣 8π/N，是矩形 4π/N 的兩倍。這是換 30 dB 更深旁瓣的代價。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent=n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Window shape affects main-lobe width — Hamming is wider than rect.</span><span lang="zh">✗ 視窗形狀會改變主瓣寬度 — Hamming 比矩形寬。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

@@ -33,32 +33,77 @@
   <div class="two-col">
     <section>
       <div class="nes-box" data-label="EXPONENTIAL DECAY FROM CENTRE">
-        <p lang="en">A two-sided exponential. Its spectrum is a Lorentzian (Cauchy) peak — extremely slow side-lobe roll-off, but no zeros: adequate when you want every frequency represented.</p>
-        <p lang="zh">雙邊指數衰減。頻譜是 Lorentzian 峰 — 旁瓣滾降極慢，但沒有零點；當你希望頻譜在所有頻率都有值時好用。</p>
+        <p lang="en">A two-sided exponential. Its spectrum is a
+          <span class="term"
+            data-en="Lorentzian (Cauchy) peak"
+            data-en-def="A 1/(1+ω²) shape — the Fourier transform of a two-sided exponential. Has no zeros; side-lobes roll off only as 1/|ω|."
+            data-zh-def="1/(1+ω²) 形狀 — 雙邊指數的傅立葉變換。沒有零點；旁瓣僅以 1/|ω| 衰減。">Lorentzian peak</span>
+          — extremely slow side-lobe roll-off, but no zeros: adequate when you want every frequency represented.</p>
+        <p lang="zh">雙邊指數衰減。頻譜是 <span class="term"
+            data-en="Lorentzian (Cauchy) peak"
+            data-en-def="A 1/(1+ω²) shape — the Fourier transform of a two-sided exponential. Has no zeros; side-lobes roll off only as 1/|ω|."
+            data-zh-def="1/(1+ω²) 形狀 — 雙邊指數的傅立葉變換。沒有零點；旁瓣僅以 1/|ω| 衰減。">Lorentzian 峰</span> — 旁瓣滾降極慢，但沒有零點；當你希望所有頻率都有值時好用。</p>
       </div>
 
       <div class="formula">
         <span class="label">POISSON</span>
-        <div>$$w[n]=e^{-\alpha|n-(N-1)/2|/((N-1)/2)}$$</div>
+        <div>$$w[n]=e^{-\alpha|n-M|/M},\quad M=\tfrac{N-1}{2}$$</div>
       </div>
 
+      <h2 lang="en">What α controls</h2>
+      <h2 lang="zh">α 控制什麼</h2>
+
       <p lang="en">
-        Large $\alpha$ means steeper decay → wider main lobe but quieter
-        side lobes. Small $\alpha$ approaches a rectangular window.
+        Large $\alpha$ means steeper time-domain decay → wider main lobe but quieter side lobes. Small $\alpha$ approaches a rectangular window. Typical practical range: $\alpha \in [1, 4]$.
       </p>
       <p lang="zh">
-        $\alpha$ 大 → 衰減快 → 主瓣寬、旁瓣低。$\alpha$ 小則接近矩形視窗。
+        $\alpha$ 大 → 時域衰減快 → 主瓣寬、旁瓣低。$\alpha$ 小則接近矩形視窗。實務範圍通常 $\alpha \in [1, 4]$。
       </p>
+
+      <div class="nes-box nes-box--yellow" data-label="LIMITATION">
+        <p lang="en">Alone, Poisson has poor side-lobe depth (first side-lobe stays above $-40$ dB even at $\alpha=4$). Its real use is in compound windows — e.g. the Hann-Poisson (§4.7) multiplies the two for compounded side-lobe suppression.</p>
+        <p lang="zh">單用時 Poisson 旁瓣深度不夠（$\alpha=4$ 時第一旁瓣仍 > $-40$ dB）。真正好用是在複合視窗中 — 如 Hann-Poisson（§4.7）把兩者相乘，旁瓣壓制疊加。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Exponentials are smooth but slow-decaying in frequency.</b> Poisson alone isn't competitive with cosine-family windows, but it's the building block for compound designs like Hann-Poisson.</p>
+        <p lang="zh"><b>指數在頻域平滑但衰減慢。</b>Poisson 單獨用不如餘弦家族，但是 Hann-Poisson 等複合設計的基石。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> The Fourier transform of a two-sided exponential $e^{-\alpha|t|}$ has spectrum:</p>
+        <p lang="zh"><b>問：</b>雙邊指數 $e^{-\alpha|t|}$ 的傅立葉變換頻譜是：</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">A Lorentzian $2\alpha/(\alpha^2+\omega^2)$ with $1/\omega^2$ tails.</button>
+          <button data-correct="1" lang="zh">Lorentzian $2\alpha/(\alpha^2+\omega^2)$，尾部為 $1/\omega^2$。</button>
+          <button data-correct="0" lang="en">Another exponential.</button>
+          <button data-correct="0" lang="zh">另一個指數。</button>
+          <button data-correct="0" lang="en">A Gaussian.</button>
+          <button data-correct="0" lang="zh">高斯。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
     </section>
 
     <section>
       <div class="viz-card">
+        <h3 lang="en">Lab · α controls decay rate</h3>
+        <h3 lang="zh">實驗 · α 控制衰減速率</h3>
         <canvas id="tCanvas" style="height:130px;"></canvas>
-        <canvas id="fCanvas" style="height:180px; margin-top:6px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
         <div class="controls">
           <label>α</label>
           <input type="range" id="aSlider" min="0.5" max="6" step="0.1" value="2"/>
           <span class="val" id="aVal">2.0</span>
+          <label>N</label>
+          <input type="range" id="nSlider" min="32" max="128" step="4" value="64"/>
+          <span class="val" id="nVal">64</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: exponential taper. Bottom: spectrum in dB — smooth Lorentzian with no zeros. Large α widens main lobe and lowers side-lobe floor, but the roll-off stays $6$ dB/oct asymptotically.</p>
+          <p lang="zh">上：指數收尾。下：dB 頻譜 — 平滑 Lorentzian 無零點。α 大主瓣變寬、旁瓣降低；但漸進滾降始終 $6$ dB/oct。</p>
         </div>
       </div>
     </section>
@@ -73,29 +118,47 @@
 
 <script src="../assets/js/dsp.js"></script>
 <script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  const N = 64, M = (N-1)/2;
-  const state = { a: 2.0 };
-  function make() {
+  const state = { a: 2.0, N: 64 };
+  function make(){
+    const { N, a } = state;
+    const M = (N-1)/2;
     const w = new Float32Array(N);
-    for (let n = 0; n < N; n++) w[n] = Math.exp(-state.a * Math.abs(n - M) / M);
+    for (let n=0;n<N;n++) w[n] = Math.exp(-a * Math.abs(n - M) / M);
     return w;
   }
-  function redraw() {
+  function redraw(){
     const w = make();
     Viz.stem($('tCanvas'), w, { yMin:-0.05, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`POISSON α=${state.a.toFixed(1)}` });
     const K = 600, om = DSP.linspace(-Math.PI, Math.PI, K);
     const { re, im } = DSP.dtft(w, om);
     const mag = new Float32Array(K);
-    for (let i = 0; i < K; i++) mag[i] = Math.hypot(re[i], im[i]);
-    Viz.line($('fCanvas'), DSP.toDb(mag,-80), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-80, xLabel:'ω', yLabel:'dB', title:'SPECTRUM', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+    for (let i=0;i<K;i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), DSP.toDb(mag,-80), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-80, xLabel:'ω', yLabel:'dB', title:'SPECTRUM', color:'#ffd95a', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
   }
   $('aSlider').addEventListener('input', () => { state.a = parseFloat($('aSlider').value); $('aVal').textContent = state.a.toFixed(1); redraw(); });
+  $('nSlider').addEventListener('input', () => { state.N = parseInt($('nSlider').value,10); $('nVal').textContent = state.N; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Exponential in time ↔ Lorentzian in frequency. Classic Fourier pair.</span><span lang="zh">🪙 金幣 +1！時域指數 ↔ 頻域 Lorentzian。經典 Fourier pair。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Only the Gaussian is Fourier self-dual; exponentials transform to Lorentzians.</span><span lang="zh">✗ 只有高斯自身對偶；指數的傅立葉變換是 Lorentzian。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
   redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>
