@@ -30,46 +30,109 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Repeat_Scaling_Operator.html" target="_blank">SASP §3.12 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="DEFINITION">
-    <p lang="en">Repeating means tiling copies of a function along its own axis. It is the dual of stretching.</p>
-    <p lang="zh">重複 = 沿軸把函數一份一份鋪開，是拉伸的對偶操作。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="DEFINITION">
+        <p lang="en">Repeating means tiling copies of a function along its own axis. It is the dual of stretching (§3.11) and the direct precursor to <em>sampling</em> on the other side.</p>
+        <p lang="zh">重複 = 沿軸把函數一份一份鋪開，是拉伸（§3.11）的對偶，也是另一邊<em>取樣</em>的直接前身。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">REPEAT BY L (TIME)</span>
-    <div>$$\operatorname{Repeat}_L\{x\}[n]\;=\;\sum_{m=-\infty}^{\infty} x[n-m L']$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">REPEAT BY L (TIME)</span>
+        <div>$$\operatorname{Repeat}_L\{x\}[n]\;=\;\sum_{m=-\infty}^{\infty} x[n-m L]$$</div>
+      </div>
 
-  <p lang="en">
-    In the frequency domain the same operator tiles $L$ copies of
-    $X(\omega)$ along the frequency axis every $2\pi/L$. Since $X(\omega)$
-    is already $2\pi$-periodic, this just collapses it down to a sampled
-    version on $\omega=\tfrac{2\pi}{L}k$ — giving us the DFT.
-  </p>
-  <p lang="zh">
-    在頻率域上，同一個算子把 $X(\omega)$ 每 $2\pi/L$ 就鋪一份，總共 $L$ 份。
-    由於 $X(\omega)$ 本來就是 $2\pi$-週期，重複之後就塌成在 $\omega=\tfrac{2\pi}{L}k$ 上取樣的版本 — 那正是 DFT。
-  </p>
+      <p lang="en">
+        A length-$N$ signal $x$ repeated by $L=N$ produces an infinite
+        periodic signal of period $N$. Its DTFT collapses onto the
+        $N$-point frequency grid:
+      </p>
+      <p lang="zh">
+        長度 $N$ 的 $x$ 以 $L=N$ 重複產生週期 $N$ 的無限序列。其 DTFT 塌到 $N$ 點頻率網格上：
+      </p>
 
-  <div class="nes-box nes-box--purple" data-label="DUALITY">
-    <p lang="en">Sampling in one domain is repeating in the other. A train of impulses in time has a train of impulses in frequency — this is the Poisson summation formula, which shows up in Chapter 9.</p>
-    <p lang="zh">一邊取樣 = 另一邊重複。時域的脈衝列對應頻域的脈衝列 — 這就是 Poisson 求和公式，第 9 世界會用到。</p>
-  </div>
+      <div class="formula">
+        <span class="label">REPEAT-L ↔ SAMPLE-L</span>
+        <div>$$\operatorname{Repeat}_L\{x\}\;\longleftrightarrow\;\frac{2\pi}{L}\sum_{k=-\infty}^{\infty} X\!\left(\tfrac{2\pi k}{L}\right)\,\delta\!\left(\omega - \tfrac{2\pi k}{L}\right)$$</div>
+      </div>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> Repeating a signal $L$ times in the time domain corresponds in frequency to:</p>
-    <p lang="zh"><b>問：</b>在時域上重複 $L$ 次，頻域上對應？</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">Sampling the spectrum at multiples of $2\pi/L$.</button>
-      <button data-correct="1" lang="zh">把頻譜在 $2\pi/L$ 的整數倍處取樣。</button>
-      <button data-correct="0" lang="en">Shifting the spectrum by $2\pi/L$.</button>
-      <button data-correct="0" lang="zh">把頻譜位移 $2\pi/L$。</button>
-      <button data-correct="0" lang="en">Scaling the spectrum magnitudes by $L$.</button>
-      <button data-correct="0" lang="zh">把頻譜振幅乘 $L$。</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+      <p lang="en">
+        On the unit circle this says: pick up the values of $X(\omega)$ only
+        at $\omega=2\pi k/L$ — the DFT bins — and zero elsewhere. This is
+        why the DFT of a length-$N$ signal equals $N$ samples of its DTFT.
+      </p>
+      <p lang="zh">
+        單位圓上只取 $X(\omega)$ 在 $\omega=2\pi k/L$（DFT bin）的值、其餘為零。
+        這就是為什麼長度 $N$ 訊號的 DFT 等於它 DTFT 的 $N$ 點取樣。
+      </p>
+
+      <h2 lang="en">Proof sketch</h2>
+      <h2 lang="zh">證明要點</h2>
+
+      <p lang="en">
+        Periodic extension $\tilde x[n] = \sum_m x[n-mL]$ is the convolution of
+        $x$ with a Dirac comb $\sum_m \delta[n-mL]$. Convolution in time =
+        multiplication in frequency (§3.7). The comb's DTFT is another comb
+        at spacing $2\pi/L$. Multiplying $X(\omega)$ by this comb samples
+        $X$ at those frequencies.
+      </p>
+      <p lang="zh">
+        週期延拓 $\tilde x[n] = \sum_m x[n-mL]$ 等於 $x$ 與 Dirac 梳 $\sum_m \delta[n-mL]$ 的卷積。
+        時域卷積 = 頻域相乘（§3.7）。梳的 DTFT 仍是梳、間距 $2\pi/L$。
+        把 $X(\omega)$ 乘上此梳，即得到 $X$ 在那些頻率的取樣。
+      </p>
+
+      <div class="nes-box nes-box--purple" data-label="DUALITY POSTER">
+        <p lang="en"><b>Sampling ↔ Repeating.</b> The two most important operations in multirate DSP are Fourier-dual. If you see "sampling" in one domain, write "repeating" in the other without thinking.</p>
+        <p lang="zh"><b>取樣 ↔ 重複。</b>多速率 DSP 裡最重要的兩個操作互為 Fourier 對偶。一邊看到「取樣」，另一邊直接寫「重複」— 不用多想。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Repeating a signal $L$ times in the time domain corresponds in frequency to:</p>
+        <p lang="zh"><b>問：</b>在時域重複 $L$ 次，頻域對應？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Sampling the spectrum at multiples of $2\pi/L$.</button>
+          <button data-correct="1" lang="zh">把頻譜在 $2\pi/L$ 的整數倍處取樣。</button>
+          <button data-correct="0" lang="en">Shifting the spectrum by $2\pi/L$.</button>
+          <button data-correct="0" lang="zh">把頻譜位移 $2\pi/L$。</button>
+          <button data-correct="0" lang="en">Scaling the spectrum magnitudes by $L$.</button>
+          <button data-correct="0" lang="zh">把頻譜振幅乘 $L$。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Repeat in time, watch spectrum sample</h3>
+        <h3 lang="zh">實驗 · 時域重複、頻譜被取樣</h3>
+
+        <canvas id="timeCanvas" style="height:140px;"></canvas>
+        <canvas id="freqCanvas" style="height:200px; margin-top:6px;"></canvas>
+
+        <div class="controls">
+          <label>Base signal</label>
+          <select id="sigSel">
+            <option value="pulse" selected>Rectangular pulse</option>
+            <option value="tri">Triangular pulse</option>
+            <option value="gauss">Gaussian bump</option>
+          </select>
+          <label>Base length N</label>
+          <input type="range" id="nSlider" min="8" max="32" step="2" value="16"/>
+          <span class="val" id="nVal">16</span>
+          <label>Repeats L</label>
+          <input type="range" id="lSlider" min="1" max="8" step="1" value="1"/>
+          <span class="val" id="lVal">1</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: the repeated signal (shows multiple copies of the base). Bottom: $|X(\omega)|$ of the result (blue curve = underlying continuous DTFT of one period; yellow dots = the <em>only values the repeated signal keeps</em>, at $\omega=2\pi k/N$). As you increase $L$, the signal becomes "more periodic" and the spectrum "locks onto" the dot lattice.</p>
+          <p lang="zh">上：重複後的訊號（多份重複拼接）。下：$|X(\omega)|$（藍線 = 單週期底層的連續 DTFT；黃點 = 重複訊號<em>實際保留</em>的值，位於 $\omega=2\pi k/N$）。把 $L$ 調大，訊號越「週期」，頻譜越「鎖定」到點陣上。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -79,26 +142,125 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { sig:'pulse', N: 16, L: 1 };
+
+  function baseSignal(N){
+    const x = new Float32Array(N);
+    if (state.sig === 'pulse'){
+      const w = Math.max(2, Math.floor(N/3));
+      const c = Math.floor(N/2);
+      for (let n=c-w/2; n<c+w/2; n++) if (n>=0 && n<N) x[n] = 1;
+    } else if (state.sig === 'tri'){
+      const c = Math.floor(N/2);
+      for (let n=0;n<N;n++) x[n] = Math.max(0, 1 - Math.abs(n-c)/(N/2));
+    } else {
+      const c = (N-1)/2;
+      for (let n=0;n<N;n++) x[n] = Math.exp(-((n-c)/(N/5))**2);
+    }
+    return x;
+  }
+
+  function redraw(){
+    const base = baseSignal(state.N);
+    const L = state.L;
+    const total = state.N * L;
+    // repeated signal
+    const xrep = new Float32Array(total);
+    for (let r=0; r<L; r++){
+      for (let n=0;n<state.N;n++) xrep[r*state.N + n] = base[n];
+    }
+
+    // time plot
+    const c1 = $('timeCanvas'), ctx1 = c1.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c1.width = c1.clientWidth*dpr; c1.height = c1.clientHeight*dpr; ctx1.scale(dpr,dpr);
+    const W1 = c1.clientWidth, H1 = c1.clientHeight;
+    ctx1.fillStyle='#0b0c1a'; ctx1.fillRect(0,0,W1,H1);
+    const pad1={l:32,r:10,t:10,b:22}, iw1=W1-pad1.l-pad1.r, ih1=H1-pad1.t-pad1.b;
+    ctx1.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad1.l+iw1*g/10; ctx1.beginPath(); ctx1.moveTo(x,pad1.t); ctx1.lineTo(x,H1-pad1.b); ctx1.stroke(); }
+    ctx1.strokeStyle='#e6e6ff'; const y0=pad1.t + ih1*0.75;
+    ctx1.beginPath(); ctx1.moveTo(pad1.l,y0); ctx1.lineTo(W1-pad1.r,y0); ctx1.stroke();
+    // base cycle boundaries
+    ctx1.strokeStyle='#ff6aa0'; ctx1.setLineDash([3,3]);
+    for (let r=1; r<L; r++){ const x = pad1.l + iw1 * (r*state.N)/(total-1); ctx1.beginPath(); ctx1.moveTo(x,pad1.t); ctx1.lineTo(x,H1-pad1.b); ctx1.stroke(); }
+    ctx1.setLineDash([]);
+    ctx1.strokeStyle='#5aa0ff'; ctx1.lineWidth=2;
+    ctx1.beginPath();
+    for (let n=0;n<total;n++){ const xp=pad1.l+iw1*n/(total-1), yp=y0 - ih1*0.7*xrep[n]; if(n===0) ctx1.moveTo(xp,yp); else ctx1.lineTo(xp,yp); }
+    ctx1.stroke();
+    ctx1.fillStyle='#8f8fa8'; ctx1.font='9px "Press Start 2P", monospace';
+    ctx1.fillText('repeated x[n], L='+L, 8, 16);
+
+    // freq plot: underlying DTFT of base (continuous curve) + dots at 2π k / N (from DFT of repeated)
+    const c2 = $('freqCanvas'), ctx2 = c2.getContext('2d');
+    c2.width = c2.clientWidth*dpr; c2.height = c2.clientHeight*dpr; ctx2.scale(dpr,dpr);
+    const W2 = c2.clientWidth, H2 = c2.clientHeight;
+    ctx2.fillStyle='#0b0c1a'; ctx2.fillRect(0,0,W2,H2);
+    const pad2={l:40,r:10,t:14,b:22}, iw2=W2-pad2.l-pad2.r, ih2=H2-pad2.t-pad2.b;
+    const K = 512;
+    const omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const {re,im} = DSP.dtft(base, omegas);
+    const mag = new Float32Array(K);
+    let mmax = 0;
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i] > mmax) mmax = mag[i]; }
+    const yTo = v => pad2.t + ih2 * (1 - v / mmax);
+    const xTo = i => pad2.l + iw2 * i/(K-1);
+    ctx2.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad2.l+iw2*g/12; ctx2.beginPath(); ctx2.moveTo(x,pad2.t); ctx2.lineTo(x,H2-pad2.b); ctx2.stroke(); }
+    ctx2.strokeStyle='#e6e6ff'; ctx2.beginPath(); ctx2.moveTo(pad2.l, H2-pad2.b); ctx2.lineTo(W2-pad2.r, H2-pad2.b); ctx2.stroke();
+    // DTFT underlying
+    ctx2.strokeStyle='#5aa0ff'; ctx2.lineWidth=1.5;
+    ctx2.beginPath();
+    for (let i=0;i<K;i++){ const xp=xTo(i), yp=yTo(mag[i]); if(i===0) ctx2.moveTo(xp,yp); else ctx2.lineTo(xp,yp); }
+    ctx2.stroke();
+    // dots at 2π k / N (bins of base)
+    ctx2.fillStyle='#ffd95a';
+    for (let k=-Math.floor(state.N/2); k<=Math.floor(state.N/2); k++){
+      const omega = 2*Math.PI * k / state.N;
+      if (omega < -Math.PI || omega > Math.PI) continue;
+      const i = (omega+Math.PI)/(2*Math.PI) * (K-1);
+      const i0 = Math.floor(i), frac=i-i0;
+      const m = (i0+1<K) ? mag[i0]*(1-frac)+mag[i0+1]*frac : mag[i0];
+      ctx2.beginPath(); ctx2.arc(xTo(i), yTo(m), 4, 0, 2*Math.PI); ctx2.fill();
+    }
+    ctx2.fillStyle='#8f8fa8'; ctx2.font='9px "Press Start 2P", monospace';
+    ctx2.fillText('|X(ω)| · dots at 2πk/N', 6, 12);
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){
+      const i=(v+Math.PI)/(2*Math.PI)*(K-1);
+      ctx2.fillText(lbl, xTo(i)-6, H2-pad2.b+14);
+    }
+  }
+
+  $('sigSel').addEventListener('change', e=>{ state.sig=e.target.value; redraw(); });
+  $('nSlider').addEventListener('input', e=>{ state.N=parseInt(e.target.value,10); $('nVal').textContent=state.N; redraw(); });
+  $('lSlider').addEventListener('input', e=>{ state.L=parseInt(e.target.value,10); $('lVal').textContent=state.L; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! Repeat ↔ sample — that is the basic time-frequency duality.</span><span lang="zh">🪙 金幣 +1！重複 ↔ 取樣，是時頻的基本對偶。</span>';
-      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Repeat ↔ sample — the basic time-frequency duality.</span><span lang="zh">🪙 金幣 +1！重複 ↔ 取樣，是時頻最基本的對偶。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent=n;
       AudioKit.coin();
     } else {
-      fb.innerHTML = '<span lang="en">✗ A repeated time signal has a period; its Fourier series lives on a discrete frequency grid.</span><span lang="zh">✗ 重複時訊號有週期，對應的 Fourier 級數會在一個離散頻率格點上。</span>';
+      fb.innerHTML = '<span lang="en">✗ A periodic time signal has a Fourier series on a discrete frequency grid.</span><span lang="zh">✗ 週期時訊號對應離散頻率格點上的 Fourier 級數。</span>';
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

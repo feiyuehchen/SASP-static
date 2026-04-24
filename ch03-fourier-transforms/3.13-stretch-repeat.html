@@ -30,47 +30,102 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Stretch_Repeat_Scaling_Theorem.html" target="_blank">SASP §3.13 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="ONE LINE">
-    <p lang="en">Stretching in time = repeating in frequency. And vice versa.</p>
-    <p lang="zh">時域拉伸 = 頻域重複。反之亦然。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="ONE-LINE SUMMARY">
+        <p lang="en">Stretching in time = repeating in frequency. And vice versa.</p>
+        <p lang="zh">時域拉伸 = 頻域重複。反之亦然。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">SCALING THEOREM (DTFT)</span>
-    <div>$$\operatorname{Stretch}_L\{x\}[n]\;\longleftrightarrow\;\operatorname{Repeat}_L\{X\}(\omega)$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">SCALING THEOREM</span>
+        <div>$$\operatorname{Stretch}_L\{x\}[n]\;\longleftrightarrow\;\operatorname{Repeat}_L\{X\}(\omega)$$</div>
+      </div>
 
-  <p lang="en">
-    Combine the two previous pages: stretching by $L$ compresses the
-    spectrum by $L$, but because the spectrum is already $2\pi$-periodic,
-    the compressed version repeats $L$ times across the original period.
-    Writing the same fact in the "repeat" language gives the theorem
-    above.
-  </p>
-  <p lang="zh">
-    把前兩頁合起來：時域拉伸 $L$ 倍 → 頻譜被壓縮 $L$ 倍，但頻譜本就有 $2\pi$ 週期，
-    壓縮後自然在原本的週期內重複 $L$ 次。把這事實用「重複」的語言寫出來，就是上面的定理。
-  </p>
+      <p lang="en">
+        Combining §3.11 (stretch) with §3.12 (repeat): stretching by $L$
+        compresses the spectrum by $L$, but because the spectrum is already
+        $2\pi$-periodic, the compressed version repeats $L$ times across the
+        original period. Rewritten in the "repeat" language, we get the
+        theorem above.
+      </p>
+      <p lang="zh">
+        把 §3.11（拉伸）與 §3.12（重複）合起來：時域拉伸 $L$ 倍 → 頻譜壓縮 $L$ 倍；
+        但頻譜原本就 $2\pi$-週期，壓縮後自然在原本的週期內重複 $L$ 次。
+        用「重複」的語言寫出來，就是上面的定理。
+      </p>
 
-  <div class="nes-box nes-box--yellow" data-label="PRACTICAL USE">
-    <p lang="en">This theorem is why digital upsampling by $L$ needs an anti-imaging low-pass filter after zero insertion — to kill the $L-1$ unwanted spectral copies.</p>
-    <p lang="zh">這條定理解釋了為什麼數位升取樣 $L$ 倍後要接一個抗鏡像低通濾波器 — 用來壓掉多出來的 $L-1$ 份頻譜。</p>
-  </div>
+      <h2 lang="en">What "stretch" means on a sequence</h2>
+      <h2 lang="zh">對序列而言「拉伸」是什麼意思</h2>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> You zero-insert between every sample of an audio file (stretch by 2). What is the cleanest way to finish upsampling to a 2× sample rate?</p>
-    <p lang="zh"><b>問：</b>你在某音訊的每個樣本間插入一個 0（拉伸 2 倍）。要真正升到 2× 取樣率、聲音最乾淨，該怎麼做？</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">Follow with a sharp low-pass at $\pi/2$ to kill the image.</button>
-      <button data-correct="1" lang="zh">接一個截止頻率在 $\pi/2$ 的銳利低通濾波器，把鏡像壓掉。</button>
-      <button data-correct="0" lang="en">Multiply the output by 2.</button>
-      <button data-correct="0" lang="zh">把輸出乘 2。</button>
-      <button data-correct="0" lang="en">Nothing — zero insertion already upsamples cleanly.</button>
-      <button data-correct="0" lang="zh">不用做任何事 — 插零就已經乾淨地升取樣了。</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+      <p lang="en">
+        $\operatorname{Stretch}_L\{x\}[n]$ is zero insertion: keep $x[k]$ at
+        index $n=kL$, fill zeros everywhere else. Time axis gets $L$ times
+        longer. This is the operation an audio upsampler does before
+        filtering.
+      </p>
+      <p lang="zh">
+        $\operatorname{Stretch}_L\{x\}[n]$ 即「插零」：把 $x[k]$ 放在 $n=kL$、其他位置填 $0$。
+        時間軸變 $L$ 倍長。這是音訊升取樣器在濾波前的動作。
+      </p>
+
+      <div class="nes-box nes-box--yellow" data-label="PRACTICAL USE">
+        <p lang="en"><b>Upsampling needs an anti-imaging filter.</b> Zero-inserting stretches the time signal but leaves $L-1$ spectral copies — <span class="term"
+          data-en="Spectral image"
+          data-en-def="An unwanted copy of a signal's spectrum introduced by upsampling / zero-insertion. Must be filtered out to obtain a clean upsampled signal."
+          data-zh-def="升取樣/插零造成的多餘頻譜副本；必須濾除才能得到乾淨的升取樣訊號。">spectral images</span>.
+          Follow the zero-inserter with a sharp low-pass at $\pi/L$ to keep only the baseband copy.</p>
+        <p lang="zh"><b>升取樣要接抗鏡像濾波器。</b>插零會在頻域留下 $L-1$ 份
+          <span class="term"
+          data-en="Spectral image"
+          data-en-def="An unwanted copy of a signal's spectrum introduced by upsampling / zero-insertion. Must be filtered out to obtain a clean upsampled signal."
+          data-zh-def="升取樣/插零造成的多餘頻譜副本；必須濾除才能得到乾淨的升取樣訊號。">頻譜鏡像</span>。
+          在插零後加一個截止 $\pi/L$ 的銳利低通，只保留基頻那一份。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> Zero-insert between every sample (stretch by 2). What finishes the clean 2× upsample?</p>
+        <p lang="zh"><b>問：</b>在每個樣本之間插一個 0（拉伸 2 倍）。要乾淨升到 2× 取樣率該接什麼？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Sharp low-pass at $\pi/2$ to kill the image.</button>
+          <button data-correct="1" lang="zh">截止 $\pi/2$ 的銳利低通，壓掉鏡像。</button>
+          <button data-correct="0" lang="en">Multiply the output by 2.</button>
+          <button data-correct="0" lang="zh">把輸出乘 2。</button>
+          <button data-correct="0" lang="en">Nothing — zero insertion already upsamples cleanly.</button>
+          <button data-correct="0" lang="zh">不用做任何事 — 插零就乾淨升取樣了。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Stretch by L, see L copies in frequency</h3>
+        <h3 lang="zh">實驗 · 時域拉伸 L 倍、頻譜出現 L 份</h3>
+
+        <canvas id="timeCanvas" style="height:140px;"></canvas>
+        <canvas id="freqCanvas" style="height:220px; margin-top:6px;"></canvas>
+
+        <div class="controls">
+          <label>Signal</label>
+          <select id="sigSel">
+            <option value="gauss" selected>Gaussian bump</option>
+            <option value="pulse">Rectangular pulse</option>
+            <option value="sin">Damped sinusoid</option>
+          </select>
+          <label>Stretch L</label>
+          <input type="range" id="lSlider" min="1" max="6" step="1" value="2"/>
+          <span class="val" id="lVal">2</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: the stretched signal (zero-inserted). Bottom: $|X(\omega)|$. At $L=1$ you see one copy; at $L=2$ two copies in $[-\pi,\pi]$; at $L=3$ three, and so on. The copies are the <em>images</em> you'd filter out in a real upsampler.</p>
+          <p lang="zh">上：拉伸後（插零）訊號。下：$|X(\omega)|$。$L=1$ 看到一份；$L=2$ 在 $[-\pi,\pi]$ 內兩份；$L=3$ 三份，以此類推。這些副本就是實際升取樣時要用濾波器消掉的<em>鏡像</em>。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -80,26 +135,125 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { sig: 'gauss', L: 2 };
+
+  function baseSignal(N){
+    const x = new Float32Array(N);
+    const c = (N-1)/2;
+    if (state.sig === 'gauss'){
+      for (let n=0;n<N;n++) x[n] = Math.exp(-((n-c)/(N/6))**2);
+    } else if (state.sig === 'pulse'){
+      const w = Math.floor(N/4);
+      for (let n=0;n<N;n++) if (Math.abs(n-c) < w/2) x[n] = 1;
+    } else {
+      for (let n=0;n<N;n++){
+        x[n] = Math.cos(2*Math.PI*0.18*(n-c)) * Math.exp(-Math.abs(n-c)/(N/3));
+      }
+    }
+    return x;
+  }
+
+  function stretch(x, L){
+    const N = x.length;
+    const y = new Float32Array(N * L);
+    for (let k=0;k<N;k++) y[k*L] = x[k];
+    return y;
+  }
+
+  function redraw(){
+    const base = baseSignal(32);
+    const y = stretch(base, state.L);
+
+    // time
+    const c1 = $('timeCanvas'), ctx1 = c1.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c1.width = c1.clientWidth*dpr; c1.height = c1.clientHeight*dpr; ctx1.scale(dpr,dpr);
+    const W1 = c1.clientWidth, H1 = c1.clientHeight;
+    ctx1.fillStyle='#0b0c1a'; ctx1.fillRect(0,0,W1,H1);
+    const pad1={l:28,r:10,t:10,b:22}, iw1=W1-pad1.l-pad1.r, ih1=H1-pad1.t-pad1.b;
+    const y0 = pad1.t + ih1*0.8;
+    ctx1.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad1.l+iw1*g/10; ctx1.beginPath(); ctx1.moveTo(x,pad1.t); ctx1.lineTo(x,H1-pad1.b); ctx1.stroke(); }
+    ctx1.strokeStyle='#e6e6ff'; ctx1.beginPath(); ctx1.moveTo(pad1.l,y0); ctx1.lineTo(W1-pad1.r,y0); ctx1.stroke();
+    let ymax = 1; for (const v of y) ymax = Math.max(ymax, Math.abs(v));
+    // stem plot with zero-insertion
+    ctx1.strokeStyle='#5aa0ff'; ctx1.lineWidth=1.2;
+    for (let n=0;n<y.length;n++){
+      const xp = pad1.l + iw1*n/(y.length-1);
+      const yp = y0 - ih1*0.75 * y[n]/ymax;
+      ctx1.beginPath(); ctx1.moveTo(xp, y0); ctx1.lineTo(xp, yp); ctx1.stroke();
+      if (y[n] !== 0){ ctx1.fillStyle='#5aa0ff'; ctx1.beginPath(); ctx1.arc(xp, yp, 2, 0, 2*Math.PI); ctx1.fill(); }
+    }
+    ctx1.fillStyle='#8f8fa8'; ctx1.font='9px "Press Start 2P", monospace';
+    ctx1.fillText('Stretch_L{x}[n], L='+state.L, 6, 16);
+
+    // freq
+    const c2 = $('freqCanvas'), ctx2 = c2.getContext('2d');
+    c2.width = c2.clientWidth*dpr; c2.height = c2.clientHeight*dpr; ctx2.scale(dpr,dpr);
+    const W2 = c2.clientWidth, H2 = c2.clientHeight;
+    ctx2.fillStyle='#0b0c1a'; ctx2.fillRect(0,0,W2,H2);
+    const pad2={l:36,r:10,t:14,b:22}, iw2=W2-pad2.l-pad2.r, ih2=H2-pad2.t-pad2.b;
+    const K = 512;
+    const omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const {re,im} = DSP.dtft(y, omegas);
+    const mag = new Float32Array(K);
+    let mmax=0;
+    for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i],im[i]); if (mag[i] > mmax) mmax = mag[i]; }
+    const yTo = v => pad2.t + ih2 * (1 - v / mmax);
+    const xTo = i => pad2.l + iw2 * i/(K-1);
+    ctx2.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=pad2.l+iw2*g/12; ctx2.beginPath(); ctx2.moveTo(x,pad2.t); ctx2.lineTo(x,H2-pad2.b); ctx2.stroke(); }
+    ctx2.strokeStyle='#e6e6ff'; ctx2.beginPath(); ctx2.moveTo(pad2.l, H2-pad2.b); ctx2.lineTo(W2-pad2.r, H2-pad2.b); ctx2.stroke();
+    ctx2.strokeStyle='#ffd95a'; ctx2.lineWidth=1.8;
+    ctx2.beginPath();
+    for (let i=0;i<K;i++){ const xp=xTo(i), yp=yTo(mag[i]); if(i===0) ctx2.moveTo(xp,yp); else ctx2.lineTo(xp,yp); }
+    ctx2.stroke();
+
+    // highlight image boundaries
+    ctx2.strokeStyle='#ff6aa0'; ctx2.setLineDash([3,4]);
+    for (let k=1;k<state.L;k++){
+      const omega = -Math.PI + (2*Math.PI*k/state.L);
+      const i = (omega+Math.PI)/(2*Math.PI) * (K-1);
+      const x = xTo(i);
+      ctx2.beginPath(); ctx2.moveTo(x,pad2.t); ctx2.lineTo(x,H2-pad2.b); ctx2.stroke();
+    }
+    ctx2.setLineDash([]);
+    ctx2.fillStyle='#8f8fa8'; ctx2.font='9px "Press Start 2P", monospace';
+    ctx2.fillText('|X(ω)| after stretch — '+state.L+' copies', 8, 12);
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){
+      const i=(v+Math.PI)/(2*Math.PI)*(K-1);
+      ctx2.fillText(lbl, xTo(i)-8, H2-pad2.b+14);
+    }
+  }
+
+  $('sigSel').addEventListener('change', e=>{ state.sig=e.target.value; redraw(); });
+  $('lSlider').addEventListener('input', e=>{ state.L=parseInt(e.target.value,10); $('lVal').textContent=state.L; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! Zero insertion = stretch → image. The anti-imaging LP keeps only the baseband copy.</span><span lang="zh">🪙 金幣 +1！插零 = 拉伸 → 產生鏡像。抗鏡像 LP 只保留基頻那一份。</span>';
-      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Zero insertion = stretch → images. The anti-imaging LP keeps only the baseband.</span><span lang="zh">🪙 金幣 +1！插零 = 拉伸 → 產生鏡像。抗鏡像 LP 只保留基頻。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent=n;
       AudioKit.coin();
     } else {
-      fb.innerHTML = '<span lang="en">✗ The stretch theorem creates unwanted images; you have to remove them.</span><span lang="zh">✗ 拉伸定理會製造多餘的鏡像，要把它們拿掉。</span>';
+      fb.innerHTML = '<span lang="en">✗ The stretch theorem creates unwanted images; you must remove them.</span><span lang="zh">✗ 拉伸定理會製造多餘鏡像，要把它們拿掉。</span>';
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

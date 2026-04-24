@@ -30,53 +30,99 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Differentiation_Theorem_Dual.html" target="_blank">SASP §3.15 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="THEOREM">
-    <p lang="en">Multiplying a signal by $n$ (weighting by time) corresponds in frequency to differentiating.</p>
-    <p lang="zh">訊號乘上 $n$（以時間加權）對應到頻域的微分。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="THEOREM">
+        <p lang="en">Multiplying a signal by $n$ (weighting by time) corresponds in frequency to differentiating the spectrum.</p>
+        <p lang="zh">訊號乘上 $n$（以時間加權）等於頻域對頻譜微分。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">MULTIPLY-BY-n ↔ d/dω</span>
-    <div>$$n\,x[n]\;\longleftrightarrow\;j\,\frac{d X(\omega)}{d\omega}$$</div>
-  </div>
+      <div class="formula">
+        <span class="label">MULTIPLY BY n ↔ d/dω</span>
+        <div>$$n\,x[n]\;\longleftrightarrow\;j\,\frac{d X(\omega)}{d\omega}$$</div>
+      </div>
 
-  <p lang="en">
-    Proof: differentiate $X(\omega)=\sum x[n]\,e^{-j\omega n}$ with respect
-    to $\omega$. Each term picks up a factor $-j n$. Rearranging gives the
-    stated pair. This is the <em>dual</em> of the continuous-time
-    differentiation theorem (differentiating $x(t)$ multiplies the
-    spectrum by $j\Omega$).
-  </p>
-  <p lang="zh">
-    證明：對 $X(\omega)=\sum x[n]\,e^{-j\omega n}$ 逐項對 $\omega$ 微分，每項多出 $-jn$。重排一下就得上式。
-    這是連續時間「時域微分 ↔ 頻域乘 $j\Omega$」的<em>對偶</em>版。
-  </p>
+      <p lang="en">
+        Proof: differentiate $X(\omega)=\sum x[n]\,e^{-j\omega n}$ with
+        respect to $\omega$; each term picks up $-j n$. Rearranging gives
+        the pair. This is the <em>dual</em> of the continuous-time
+        differentiation theorem (differentiating $x(t)$ multiplies the
+        spectrum by $j\Omega$).
+      </p>
+      <p lang="zh">
+        證明：對 $X(\omega)=\sum x[n]\,e^{-j\omega n}$ 逐項對 $\omega$ 微分，每項多出 $-jn$。
+        重排即上式。這是連續時間「時域微分 ↔ 頻域乘 $j\Omega$」的<em>對偶</em>版。
+      </p>
 
-  <h2 lang="en">Uses</h2>
-  <h2 lang="zh">應用</h2>
-  <ul>
-    <li lang="en">Computing moments of a distribution from derivatives of its characteristic function.</li>
-    <li lang="zh">用特徵函數的導數計算分布的動差（統計訊號處理常用）。</li>
-    <li lang="en">Cepstral analysis — taking log of $X(\omega)$ and differentiating lets you estimate group delay and formant locations.</li>
-    <li lang="zh">倒頻譜分析 — 對 log $X(\omega)$ 微分可估計群延遲與共振峰位置。</li>
-    <li lang="en">Phase-vocoder algorithms often use this dual to interpolate frame phases.</li>
-    <li lang="zh">相位 vocoder 常藉由此對偶來內插 frame 的相位。</li>
-  </ul>
+      <h2 lang="en">Three everyday uses</h2>
+      <h2 lang="zh">三個實用場合</h2>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> $X(\omega)$ is perfectly flat (constant). What does $n\cdot x[n]$ transform to?</p>
-    <p lang="zh"><b>問：</b>若 $X(\omega)$ 是常數（平直頻譜），$n\cdot x[n]$ 的 DTFT 是？</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">Zero everywhere (derivative of a constant is zero).</button>
-      <button data-correct="1" lang="zh">處處為零（常數的導數為零）。</button>
-      <button data-correct="0" lang="en">Another constant.</button>
-      <button data-correct="0" lang="zh">另一個常數。</button>
-      <button data-correct="0" lang="en">A pure impulse at $\omega=0$.</button>
-      <button data-correct="0" lang="zh">在 $\omega=0$ 的純脈衝。</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:14px; line-height:1.8; text-align:left;">
+          <span lang="en">
+            <b>1. Group-delay estimation.</b> $-d\angle X/d\omega$ gives group delay. To compute it without unwrapping phase, use $\operatorname{Re}\{j\,X'/X\}/$nothing... — see §11.5.<br>
+            <b>2. Moments from char functions.</b> Statistical moments are derivatives of the characteristic function at $\omega=0$.<br>
+            <b>3. Phase-vocoder interpolation.</b> Frame-to-frame phase prediction uses this dual to interpolate $\omega$-derivative of phase.
+          </span>
+          <span lang="zh">
+            <b>1. 群延遲估計。</b>$-d\angle X/d\omega$ 即群延遲。無須解包相位的算法要用 $j\,X'/X$ — 見 §11.5。<br>
+            <b>2. 由特徵函數求矩。</b>統計矩等於特徵函數在 $\omega=0$ 的各階導數。<br>
+            <b>3. 相位聲碼器內插。</b>frame 間相位預測靠此對偶內插相位的 $\omega$ 導數。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Multiply ↔ differentiate.</b> One of the two "multiplication in a domain = differentiation in the other" pairs (the other is the continuous differentiation theorem itself). Memorise the sign: $n\to j\,d/d\omega$ (not $-j$).</p>
+        <p lang="zh"><b>相乘 ↔ 微分。</b>「一邊相乘 = 另一邊微分」的兩對之一（另一對是連續時間微分定理）。記住符號：$n\to j\,d/d\omega$（不是 $-j$）。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> $X(\omega)$ is perfectly flat (constant). What does $n\cdot x[n]$ transform to?</p>
+        <p lang="zh"><b>問：</b>若 $X(\omega)$ 為常數（平直頻譜），$n\cdot x[n]$ 的 DTFT 是？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Zero everywhere (derivative of a constant is zero).</button>
+          <button data-correct="1" lang="zh">處處為零（常數的導數為零）。</button>
+          <button data-correct="0" lang="en">Another constant.</button>
+          <button data-correct="0" lang="zh">另一個常數。</button>
+          <button data-correct="0" lang="en">A pure impulse at $\omega=0$.</button>
+          <button data-correct="0" lang="zh">在 $\omega=0$ 的純脈衝。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Multiply by n, watch spectrum differentiate</h3>
+        <h3 lang="zh">實驗 · 乘上 n，看頻譜被微分</h3>
+
+        <canvas id="timeCanvas" style="height:140px;"></canvas>
+        <canvas id="freqCanvas" style="height:220px; margin-top:6px;"></canvas>
+
+        <div class="controls">
+          <label>Signal</label>
+          <select id="sigSel">
+            <option value="gauss" selected>Gaussian</option>
+            <option value="impulse">Single impulse (delta)</option>
+            <option value="cos">Cosine burst</option>
+          </select>
+          <label>Weight</label>
+          <select id="wSel">
+            <option value="none" selected>x[n]</option>
+            <option value="n">n · x[n]</option>
+            <option value="n2">n² · x[n]</option>
+          </select>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: the (possibly weighted) time signal. Bottom: its DTFT magnitude. The Gaussian's DTFT is another Gaussian; weighting by $n$ differentiates it (first derivative has a zero at DC); weighting by $n^2$ is the second derivative (dip at DC).</p>
+          <p lang="zh">上：（可能加權後的）時域訊號。下：其 DTFT 振幅。高斯的 DTFT 仍為高斯；乘 $n$ 即微分（直流處變為零）；乘 $n^2$ 為二次微分（直流處凹陷）。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -86,19 +132,88 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { sig: 'gauss', weight: 'none' };
+
+  function baseSignal(){
+    const N = 64, c = (N-1)/2;
+    const x = new Float32Array(N);
+    if (state.sig === 'gauss'){
+      for (let n=0;n<N;n++) x[n] = Math.exp(-((n-c)/(N/8))**2);
+    } else if (state.sig === 'impulse'){
+      x[Math.floor(c)] = 1;
+    } else {
+      for (let n=0;n<N;n++) x[n] = Math.cos(2*Math.PI*0.1*(n-c)) * Math.exp(-((n-c)/(N/4))**2);
+    }
+    return x;
+  }
+
+  function weighted(x){
+    const N = x.length, c = (N-1)/2;
+    const y = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      const t = n - c;  // centred index
+      if (state.weight === 'none') y[n] = x[n];
+      else if (state.weight === 'n') y[n] = t * x[n];
+      else y[n] = t*t * x[n];
+    }
+    return y;
+  }
+
+  function plot(canvasId, arr, opts){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad = {l:32,r:10,t:12,b:22}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    const y0 = opts.center ? pad.t + ih/2 : pad.t + ih*0.8;
+    ctx.strokeStyle='#e6e6ff';
+    ctx.beginPath(); ctx.moveTo(pad.l,y0); ctx.lineTo(W-pad.r,y0); ctx.stroke();
+    let ymax = 0; for (const v of arr) ymax = Math.max(ymax, Math.abs(v));
+    if (ymax === 0) ymax = 1;
+    const scale = opts.center ? ih*0.45/ymax : ih*0.7/ymax;
+    ctx.strokeStyle = opts.color || '#5aa0ff'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for (let i=0;i<arr.length;i++){
+      const xp = pad.l + iw*i/(arr.length-1), yp = y0 - scale*arr[i];
+      if (i===0) ctx.moveTo(xp, yp); else ctx.lineTo(xp, yp);
+    }
+    ctx.stroke();
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText(opts.label||'', 8, 16);
+  }
+
+  function redraw(){
+    const x = baseSignal();
+    const y = weighted(x);
+    plot('timeCanvas', y, { center:true, color:'#5aa0ff', label:'time: '+(state.weight==='none'?'x[n]':state.weight==='n'?'n·x[n]':'n²·x[n]') });
+    const K = 512;
+    const omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const {re, im} = DSP.dtft(y, omegas);
+    const mag = new Float32Array(K);
+    for (let i=0;i<K;i++) mag[i] = Math.hypot(re[i], im[i]);
+    plot('freqCanvas', mag, { center:false, color:'#ffd95a', label:'|X(ω)|' });
+  }
+
+  $('sigSel').addEventListener('change', e=>{ state.sig=e.target.value; redraw(); });
+  $('wSel').addEventListener('change', e=>{ state.weight=e.target.value; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! Flat spectrum ↔ unit impulse in time. Multiplying that impulse by n gives zero. d/dω of a constant = 0. Consistent.</span><span lang="zh">🪙 金幣 +1！平直頻譜 ↔ 時域脈衝。脈衝乘 n 是零；常數對 ω 微分也是零。一致。</span>';
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Flat ↔ impulse; multiply impulse by n ⇒ zero. d/dω of constant = 0. Consistent.</span><span lang="zh">🪙 金幣 +1！平直 ↔ 脈衝；脈衝乘 n 為零。d/dω 常數 = 0。一致。</span>';
       const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
       AudioKit.coin();
     } else {
@@ -106,6 +221,9 @@
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>

@@ -30,47 +30,106 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/DTFT_Real_Signals.html" target="_blank">SASP §3.5.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="DECOMPOSITION">
-    <p lang="en">A real signal's DTFT splits into an even real part plus an odd imaginary part. The split mirrors how the signal splits into an even and an odd component.</p>
-    <p lang="zh">實訊號的 DTFT 可以拆成「實部（偶）+ 虛部（奇）」。這個拆法剛好對應訊號本身的偶 + 奇分解。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="DECOMPOSITION">
+        <p lang="en">A real signal's DTFT splits into an <em>even real</em> part plus an <em>odd imaginary</em> part. The split mirrors how the signal itself decomposes into an even part and an odd part.</p>
+        <p lang="zh">實訊號的 DTFT 拆成「<em>實部（偶）</em> + <em>虛部（奇）</em>」。這個拆法剛好對應訊號本身的偶+奇分解。</p>
+      </div>
 
-  <div class="formula">
-    <span class="label">EVEN/ODD TIME ↔ EVEN/ODD FREQ</span>
-    <div>$$x_{\text{even}}[n]=\tfrac{1}{2}(x[n]+x[-n])\;\longleftrightarrow\;\operatorname{Re}\{X(\omega)\}$$</div>
-    <div>$$x_{\text{odd}}[n]=\tfrac{1}{2}(x[n]-x[-n])\;\longleftrightarrow\;j\,\operatorname{Im}\{X(\omega)\}$$</div>
-  </div>
+      <h2 lang="en">The even-odd map</h2>
+      <h2 lang="zh">偶奇對應</h2>
 
-  <p lang="en">
-    Because $X^*(\omega)=X(-\omega)$ for real $x[n]$, the real part of
-    $X(\omega)$ must be even in $\omega$ and the imaginary part must be
-    odd. Reading it backwards: the even part of the signal produces the
-    real part of the spectrum, the odd part produces the imaginary part.
-  </p>
-  <p lang="zh">
-    因為實 $x[n]$ 滿足 $X^*(\omega)=X(-\omega)$，$\operatorname{Re}X$ 必須是 $\omega$ 的偶函數、
-    $\operatorname{Im}X$ 必須是奇函數。反過來看：訊號的偶部分產生頻譜實部、奇部分產生頻譜虛部。
-  </p>
+      <div class="formula">
+        <span class="label">TIME EVEN/ODD ↔ FREQ REAL/IMAG</span>
+        <div>$$x_e[n]=\tfrac{1}{2}(x[n]+x[-n])\;\longleftrightarrow\;\operatorname{Re}\{X(\omega)\}$$</div>
+        <div>$$x_o[n]=\tfrac{1}{2}(x[n]-x[-n])\;\longleftrightarrow\;j\,\operatorname{Im}\{X(\omega)\}$$</div>
+      </div>
 
-  <div class="nes-box nes-box--blue" data-label="WHY IT MATTERS">
-    <p lang="en">If you only care about the magnitude spectrum of real audio, you can throw away the sign of the imaginary part with no loss — and you can store or transmit only half the DFT bins.</p>
-    <p lang="zh">如果你只在意實音訊的振幅頻譜，虛部的符號可以丟掉都沒差 — 而且 DFT bin 也只要存一半就夠了。</p>
-  </div>
+      <p lang="en">
+        Because a real $x[n]$ satisfies
+        <span class="term"
+          data-en="Hermitian symmetry"
+          data-en-def="X(-ω) = X*(ω): the spectrum at negative frequencies is the complex conjugate of the spectrum at positive frequencies."
+          data-zh-def="X(-ω) = X*(ω)：負頻頻譜是正頻頻譜的共軛。">Hermitian 對稱</span>
+        $X^*(\omega)=X(-\omega)$, the real part of $X(\omega)$ must be
+        <em>even</em> in $\omega$ and the imaginary part must be <em>odd</em>.
+        Reading backwards: $x_e$ makes $\operatorname{Re}X$; $x_o$ makes $\operatorname{Im}X$.
+      </p>
+      <p lang="zh">
+        由於實 $x[n]$ 滿足<span class="term"
+          data-en="Hermitian symmetry"
+          data-en-def="X(-ω) = X*(ω): the spectrum at negative frequencies is the complex conjugate of the spectrum at positive frequencies."
+          data-zh-def="X(-ω) = X*(ω)：負頻頻譜是正頻頻譜的共軛。">Hermitian 對稱</span>
+        $X^*(\omega)=X(-\omega)$，$\operatorname{Re}X$ 對 $\omega$ 為<em>偶</em>、$\operatorname{Im}X$ 為<em>奇</em>。
+        反看：$x_e$ 產生 $\operatorname{Re}X$；$x_o$ 產生 $\operatorname{Im}X$。
+      </p>
 
-  <div class="quiz" id="quiz">
-    <h3 lang="en">✦ Mini-Boss ✦</h3>
-    <h3 lang="zh">✦ 關底小魔王 ✦</h3>
-    <p lang="en"><b>Q.</b> A real signal has $\operatorname{Im}\{X(\omega_0)\}=+0.7$. What is $\operatorname{Im}\{X(-\omega_0)\}$?</p>
-    <p lang="zh"><b>問：</b>某實訊號滿足 $\operatorname{Im}\{X(\omega_0)\}=+0.7$，那 $\operatorname{Im}\{X(-\omega_0)\}$ 是多少？</p>
-    <div class="choices">
-      <button data-correct="1" lang="en">$-0.7$ (imaginary part is odd)</button>
-      <button data-correct="1" lang="zh">$-0.7$（虛部為奇）</button>
-      <button data-correct="0" lang="en">$+0.7$ (imaginary part is even)</button>
-      <button data-correct="0" lang="zh">$+0.7$（虛部為偶）</button>
-      <button data-correct="0" lang="en">$0$ always.</button>
-      <button data-correct="0" lang="zh">永遠是 $0$。</button>
-    </div>
-    <div class="feedback" id="qFeedback"></div>
+      <h2 lang="en">Magnitude / phase consequences</h2>
+      <h2 lang="zh">振幅 / 相位的推論</h2>
+
+      <div class="formula">
+        <div>$$|X(-\omega)|=|X(\omega)|,\qquad \angle X(-\omega)=-\angle X(\omega)$$</div>
+      </div>
+
+      <p lang="en">Magnitude is even, phase is odd. Audio spectrum plotters exploit this: for real audio we only display $\omega\in[0,\pi]$ because the negative half is the mirror image.</p>
+      <p lang="zh">振幅是偶、相位是奇。音訊頻譜圖就利用這點：實音訊只畫 $\omega\in[0,\pi]$，負半邊是鏡像。</p>
+
+      <div class="nes-box nes-box--blue" data-label="WHY IT MATTERS">
+        <p lang="en">Storing real audio in the frequency domain costs <em>half</em> the memory of a complex signal. $N$ time samples ↔ $N/2+1$ unique complex bins (the rest are conjugate mirrors).</p>
+        <p lang="zh">實音訊在頻域儲存只需複訊號的一半記憶體。$N$ 個時間樣本 ↔ $N/2+1$ 個獨立複 bin（其餘為共軛鏡像）。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> A real signal has $\operatorname{Im}\{X(\omega_0)\}=+0.7$. What is $\operatorname{Im}\{X(-\omega_0)\}$?</p>
+        <p lang="zh"><b>問：</b>某實訊號 $\operatorname{Im}\{X(\omega_0)\}=+0.7$，$\operatorname{Im}\{X(-\omega_0)\}$ 為何？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">$-0.7$ (imaginary part is odd)</button>
+          <button data-correct="1" lang="zh">$-0.7$（虛部為奇）</button>
+          <button data-correct="0" lang="en">$+0.7$ (imaginary part is even)</button>
+          <button data-correct="0" lang="zh">$+0.7$（虛部為偶）</button>
+          <button data-correct="0" lang="en">$0$ always.</button>
+          <button data-correct="0" lang="zh">永遠是 $0$。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Watch Re/Im symmetries appear</h3>
+        <h3 lang="zh">實驗 · 看實部/虛部的對稱如何出現</h3>
+
+        <canvas id="timeCanvas" style="height:140px;"></canvas>
+        <canvas id="reCanvas"   style="height:140px; margin-top:6px;"></canvas>
+        <canvas id="imCanvas"   style="height:140px; margin-top:6px;"></canvas>
+
+        <div class="controls">
+          <label>Signal</label>
+          <select id="sigSel">
+            <option value="even" selected>Even (cos)</option>
+            <option value="odd">Odd (sin)</option>
+            <option value="general">General (cos + shifted cos)</option>
+            <option value="impulse">Shifted impulse</option>
+          </select>
+
+          <label>f (Hz)</label>
+          <input type="range" id="fSlider" min="50" max="2000" step="10" value="400"/>
+          <span class="val" id="fVal">400</span>
+
+          <label>shift</label>
+          <input type="range" id="shSlider" min="0" max="32" step="1" value="4"/>
+          <span class="val" id="shVal">4</span>
+        </div>
+
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: $x[n]$. Middle: $\operatorname{Re}\{X(\omega)\}$. Bottom: $\operatorname{Im}\{X(\omega)\}$. Try the even / odd presets: pure cosine gives $\operatorname{Im}X\equiv 0$ (no odd part); pure sine gives $\operatorname{Re}X\equiv 0$. A shifted impulse gives both, with the even symmetry on Re and odd symmetry on Im.</p>
+          <p lang="zh">上：$x[n]$。中：$\operatorname{Re}X$。下：$\operatorname{Im}X$。試試偶 / 奇：純餘弦 $\operatorname{Im}X\equiv 0$；純正弦 $\operatorname{Re}X\equiv 0$。位移脈衝兩者皆非零，Re 偶、Im 奇。</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pager">
@@ -80,26 +139,91 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
 <script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
-  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+  const state = { sig: 'even', f: 400, sh: 4 };
+
+  function makeSignal(N, fs){
+    const x = new Float32Array(N);
+    const c = Math.floor(N/2);
+    if (state.sig === 'even'){
+      for (let n=0;n<N;n++) x[n] = Math.cos(2*Math.PI*state.f*(n-c)/fs) * Math.exp(-((n-c)/(N/3))**2);
+    } else if (state.sig === 'odd'){
+      for (let n=0;n<N;n++) x[n] = Math.sin(2*Math.PI*state.f*(n-c)/fs) * Math.exp(-((n-c)/(N/3))**2);
+    } else if (state.sig === 'general'){
+      for (let n=0;n<N;n++) {
+        x[n] = 0.7 * Math.cos(2*Math.PI*state.f*(n-c)/fs - 0.8) * Math.exp(-((n-c)/(N/3))**2);
+      }
+    } else {
+      x[c + state.sh] = 1;
+    }
+    return x;
+  }
+
+  function plotStem(canvasId, y, opts){
+    const c = $(canvasId), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad = {l:36,r:10,t:10,b:22}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+    const y0 = pad.t + ih/2;
+    let ymax = 1; for (const v of y) ymax = Math.max(ymax, Math.abs(v));
+    const xTo = i => pad.l + iw * i/(y.length-1);
+    const yTo = v => y0 - (ih/2) * v/ymax;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    ctx.strokeStyle='#e6e6ff';
+    ctx.beginPath(); ctx.moveTo(pad.l,y0); ctx.lineTo(W-pad.r,y0); ctx.stroke();
+    ctx.strokeStyle = opts.color || '#5aa0ff'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for (let i=0;i<y.length;i++){
+      const xp = xTo(i), yp = yTo(y[i]);
+      if (i===0) ctx.moveTo(xp, yp); else ctx.lineTo(xp, yp);
+    }
+    ctx.stroke();
+    ctx.fillStyle='#8f8fa8'; ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillText(opts.label || '', 8, 16);
+  }
+
+  function redraw(){
+    const N = 64, fs = 8000;
+    const x = makeSignal(N, fs);
+    plotStem('timeCanvas', x, {label: 'x[n]', color:'#5aa0ff'});
+    const K = 512;
+    const omegas = DSP.linspace(-Math.PI, Math.PI, K);
+    const {re, im} = DSP.dtft(x, omegas);
+    plotStem('reCanvas', re, {label: 'Re X(ω)', color:'#ffd95a'});
+    plotStem('imCanvas', im, {label: 'Im X(ω)', color:'#ff6aa0'});
+  }
+
+  $('sigSel').addEventListener('change', e=>{ state.sig=e.target.value; redraw(); });
+  $('fSlider').addEventListener('input', e=>{ state.f=parseInt(e.target.value,10); $('fVal').textContent=state.f; redraw(); });
+  $('shSlider').addEventListener('input', e=>{ state.sh=parseInt(e.target.value,10); $('shVal').textContent=state.sh; redraw(); });
+
   $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
     const ok = btn.getAttribute('data-correct') === '1';
     btn.classList.add(ok ? 'correct' : 'wrong');
     const fb = $('qFeedback');
     if (ok) {
-      fb.innerHTML = '<span lang="en">🪙 +1 coin! Odd means flipping the argument flips the sign.</span><span lang="zh">🪙 金幣 +1！奇函數，自變數變號 → 函數值變號。</span>';
-      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Odd: flip ω → flip the value.</span><span lang="zh">🪙 金幣 +1！奇函數：ω 變號、函數值變號。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1);
+      localStorage.setItem('dsp.coins',n); $('coins').textContent=n;
       AudioKit.coin();
     } else {
       fb.innerHTML = '<span lang="en">✗ Real signals have odd imaginary spectra.</span><span lang="zh">✗ 實訊號的頻譜虛部是奇函數。</span>';
     }
     I18N.apply(I18N.get());
   }));
+
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
 })();
 </script>
 </body>
