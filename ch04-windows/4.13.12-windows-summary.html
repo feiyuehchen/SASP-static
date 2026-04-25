@@ -31,30 +31,78 @@
   </h1>
 
   <div class="nes-box nes-box--green" data-label="WHAT YOU NOW HAVE">
-    <p lang="en">A complete mental catalogue of windows — from rectangular through Kaiser, Chebyshev, Gaussian, DPSS, MLT sine, up to LP-designed custom shapes. And a feel for the four universal trade-offs: main-lobe width, first side-lobe level, asymptotic roll-off, reconstruction friendliness.</p>
-    <p lang="zh">一份完整的視窗心智目錄 — 從矩形、Kaiser、Chebyshev、Gaussian、DPSS、MLT 正弦，到 LP 設計的自訂形狀。以及對四個普世取捨的直覺：主瓣寬、第一旁瓣、漸進滾降、重建友善度。</p>
+    <p lang="en">A complete mental catalogue of windows — from rectangular through Kaiser, Dolph-Chebyshev, Gaussian, DPSS, MLT sine, all the way to LP-designed custom shapes. And a feel for the four universal trade-offs: <em>main-lobe width</em>, <em>first sidelobe level</em>, <em>asymptotic roll-off</em>, <em>reconstruction friendliness</em>.</p>
+    <p lang="zh">一份完整的視窗心智目錄 — 從矩形、Kaiser、Dolph-Chebyshev、Gaussian、DPSS、MLT 正弦、到 LP 設計的自訂形狀。以及對四個普世取捨的直覺：<em>主瓣寬</em>、<em>第一旁瓣高</em>、<em>漸進滾降</em>、<em>重建友善度</em>。</p>
   </div>
 
   <div class="formula">
     <span class="label">WINDOWS CHEAT CARD</span>
     <div>
-      $$\begin{array}{lccc}
-      \text{Window} & \text{Main lobe} & \text{1st SL} & \text{Roll-off} \\
-      \text{Rect}     & 4\pi/N  & -13.3 & 6  \\
-      \text{Bartlett} & 8\pi/N  & -26.5 & 12 \\
-      \text{Hann}     & 8\pi/N  & -31.5 & 18 \\
-      \text{Hamming}  & 8\pi/N  & -42.7 & 6  \\
-      \text{Blackman} & 12\pi/N & -58.1 & 18 \\
-      \text{Blackman-Harris}_{3} & 12\pi/N & -71.5 & 6 \\
-      \text{Kaiser}_{\beta=14} & \sim 24\pi/N & -126 & \text{very slow} \\
-      \text{Chebyshev}_{A\text{ dB}} & \text{depends on } A & -A & 0
+      $$\begin{array}{lcccl}
+      \text{Window} & \text{Main lobe} & \text{1st SL (dB)} & \text{Roll-off (dB/oct)} & \text{Use case} \\
+      \hline
+      \text{Rect}                      & 4\pi/N            & -13.3   & 6  & \text{transient, max resolution} \\
+      \text{Bartlett}                  & 8\pi/N            & -26.5   & 12 & \text{positive spectrum (PSD)} \\
+      \text{Hann}                      & 8\pi/N            & -31.5   & 18 & \text{audio default, COLA} \\
+      \text{Hamming}                   & 8\pi/N            & -42.7   & 6  & \text{better 1st SL than Hann} \\
+      \text{Blackman}                  & 12\pi/N           & -58.1   & 18 & \text{deeper SL with roll-off} \\
+      \text{Blackman-Harris}_{3}       & 12\pi/N           & -71.5   & 6  & \text{spectrum analysis} \\
+      \text{Blackman-Harris}_{4}/\text{Nuttall} & 16\pi/N  & -93.3   & 6  & \text{forensic FFT} \\
+      \text{Kaiser}_{\beta=8}          & \sim 14\pi/N      & -78     & \text{custom} & \text{tunable closed-form} \\
+      \text{Kaiser}_{\beta=14}         & \sim 24\pi/N      & -126    & \text{very slow} & \text{deep SL, wide ML} \\
+      \text{Dolph-Chebyshev}_{A}       & \text{depends on } A & -A & 0 & \text{minimax SL, equiripple} \\
+      \text{DPSS}_{NW}                 & \approx 2\pi NW/N & -27\,NW & \text{fast} & \text{multitaper PSD} \\
+      \text{Gaussian}_{\alpha}         & \approx 4\alpha/N & \text{Gauss} & \text{fastest (ω²)} & \text{uncertainty optimal} \\
+      \text{MLT sine}/\text{Vorbis}    & 8\pi/N            & -23     & 6  & \text{codec PR + COLA} \\
+      \text{LP-designed}               & \text{custom}     & \text{custom} & \text{custom} & \text{when nothing else fits}
       \end{array}$$
     </div>
   </div>
 
-  <div class="nes-box nes-box--blue" data-label="NEXT WORLD">
-    <p lang="en">World 5: the same minimax ideas come back, but now we are designing <em>filters</em>. Same toolbox, different target.</p>
-    <p lang="zh">第 5 世界：同樣的 minimax 想法回來，但目標換成<em>濾波器</em>。工具箱相同，目標不同。</p>
+  <div class="two-col">
+    <section>
+      <h2 lang="en">Five questions to pick a window</h2>
+      <h2 lang="zh">五個問題決定視窗</h2>
+
+      <ol>
+        <li lang="en"><b>Need reconstruction?</b> COLA constraint → Hann, MLT sine, Vorbis, square-root-Hann.</li>
+        <li lang="zh"><b>需要重建？</b>COLA 約束 → Hann、MLT 正弦、Vorbis、根 Hann。</li>
+        <li lang="en"><b>Where are interferers?</b> Near → equiripple Chebyshev. Far → rolling-off Hann/Blackman/Kaiser. Targeted notch → LP with custom $g(\omega)$.</li>
+        <li lang="zh"><b>干擾在哪？</b>近 → 等漣波 Chebyshev；遠 → 滾降 Hann/Blackman/Kaiser；目標陷波 → LP 加自訂 $g(\omega)$。</li>
+        <li lang="en"><b>Sidelobe target?</b> Convert to dB. Kaiser β = 0.1102(A−8.7) for A>50; or chebwin(N, A) directly.</li>
+        <li lang="zh"><b>旁瓣目標？</b>轉 dB。$A>50$ 時 Kaiser β = 0.1102(A−8.7)；或直接 chebwin(N, A)。</li>
+        <li lang="en"><b>Main-lobe target?</b> Use the cheat card and pick the smallest $N$ that meets both axes.</li>
+        <li lang="zh"><b>主瓣目標？</b>用對照表挑同時滿足兩軸的最小 $N$。</li>
+        <li lang="en"><b>Anything weird?</b> (positivity, monotonicity, custom shape) → LP with the appropriate constraints.</li>
+        <li lang="zh"><b>有特殊需求？</b>（正值、單調、自訂形狀）→ LP 配對應約束。</li>
+      </ol>
+
+      <div class="nes-box nes-box--purple" data-label="THE TAKEAWAY">
+        <p lang="en"><b>Window choice ≠ catalog lookup.</b> Behind every classical window is a Pareto frontier — main-lobe width × sidelobe depth × roll-off rate. Closed-form windows are a coarse grid on that frontier; LP design fills in any specific point. The chapter taught you to read both.</p>
+        <p lang="zh"><b>選視窗 ≠ 查表。</b>每個經典視窗背後都是一條柏拉圖前緣 — 主瓣寬 × 旁瓣深 × 滾降率。閉式視窗是前緣上的粗格；LP 設計可填入任一點。本章教會你讀懂兩者。</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 lang="en">What's still possible</h2>
+      <h2 lang="zh">還能做什麼</h2>
+
+      <ul>
+        <li lang="en"><b>Multi-criteria optimisation</b> — minimise $\delta$ AND smoothness simultaneously (Pareto via weighted sum or ε-constraint).</li>
+        <li lang="zh"><b>多目標最佳化</b> — 同時最小化 $\delta$ 與平滑度（加權和或 ε 約束的柏拉圖法）。</li>
+        <li lang="en"><b>Asymmetric windows</b> for sidelobe shaping in single-sided spectra (radar, sonar).</li>
+        <li lang="zh"><b>不對稱視窗</b>用於單邊頻譜旁瓣塑形（雷達、聲納）。</li>
+        <li lang="en"><b>Time-varying windows</b> that morph through a piece (Opus does this).</li>
+        <li lang="zh"><b>時變視窗</b>隨樂段變形（Opus 即如此）。</li>
+        <li lang="en"><b>2-D windows</b> for image processing (separable products of any 1-D recipe in this chapter).</li>
+        <li lang="zh"><b>2-D 視窗</b>用於影像處理（本章任一 1-D 食譜的可分離乘積）。</li>
+      </ul>
+
+      <div class="nes-box nes-box--blue" data-label="NEXT WORLD">
+        <p lang="en"><b>World 5: FIR filter design.</b> Same minimax + LP toolkit, different target — instead of a window with main-lobe and sidelobes, you'll design a passband / stopband filter with prescribed ripple. Parks-McClellan / Remez generalises to filter coefficients exactly the same way it generalises to window samples.</p>
+        <p lang="zh"><b>第 5 世界：FIR 濾波器設計。</b>同樣的 minimax + LP 工具箱、不同目標 — 從主瓣＋旁瓣的視窗，變成有指定漣波的通帶／阻帶濾波器。Parks-McClellan/Remez 在濾波器係數上的廣義化方式與在視窗樣本上完全相同。</p>
+      </div>
+    </section>
   </div>
 
   <div class="pager">

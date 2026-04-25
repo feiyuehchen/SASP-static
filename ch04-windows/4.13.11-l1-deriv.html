@@ -30,13 +30,90 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/L_One_Norm_Derivative_Objective.html" target="_blank">SASP §4.13.11 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="MINIMISE TOTAL VARIATION">
-    <p lang="en">$\min \sum_n |w[n+1]-w[n]|$. Encourages piecewise-constant shapes; most of the ripple is concentrated on a few large steps while the rest is flat.</p>
-    <p lang="zh">$\min\sum_n|w[n+1]-w[n]|$。偏好分段常數形狀；大部分振盪集中在少數幾個大台階，其餘平坦。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="MINIMISE TOTAL VARIATION">
+        <p lang="en">$\min\sum_n|w[n+1]-w[n]|$ — the <span class="term"
+          data-en="Total variation (TV)"
+          data-en-def="Sum of absolute first differences of a sequence. L1 norm of the derivative. Encourages piecewise-constant solutions where most differences are zero and a few are large."
+          data-zh-def="序列一階絕對差分之和；導數的 L1 範數。鼓勵分段常數解：多數差為零、少數差很大。">total variation</span> of $w$. Unlike L∞ which penalises the worst slope, L1 penalises the sum — so it prefers <em>piecewise-constant</em> shapes where most differences are zero and the variation is concentrated in a few large jumps.</p>
+        <p lang="zh">$\min\sum_n|w[n+1]-w[n]|$ — $w$ 的<span class="term"
+          data-en="Total variation (TV)"
+          data-en-def="Sum of absolute first differences of a sequence. L1 norm of the derivative. Encourages piecewise-constant solutions where most differences are zero and a few are large."
+          data-zh-def="序列一階絕對差分之和；導數的 L1 範數。鼓勵分段常數解：多數差為零、少數差很大。">總變差</span>。L∞ 懲罰最差斜率，L1 懲罰總和 — 因此偏好<em>分段常數</em>：多數差為零、變化集中在少數大跳變。</p>
+      </div>
 
-  <p lang="en">Less common than L∞ for audio windows; useful when your downstream processing is insensitive to sparse discontinuities but cares about total variation.</p>
-  <p lang="zh">音訊視窗上比 L∞ 少見；適合下游處理對稀疏不連續不敏感、但在意總變差時。</p>
+      <div class="formula">
+        <span class="label">L1 DERIVATIVE LP</span>
+        <div>
+          $$\begin{aligned}
+          &\min_{w,t}\;\sum_n t[n]\\
+          &\text{s.t.}\;-t[n]\le w[n+1]-w[n]\le t[n]\\
+          &\phantom{\text{s.t.}\;}|W(\omega_i)|\le\delta\;\text{(side-lobe ceiling)}\\
+          &\phantom{\text{s.t.}\;}\sum_n w[n]=1
+          \end{aligned}$$
+        </div>
+      </div>
+
+      <p lang="en">
+        Auxiliary variables $t[n] \ge |w[n+1]-w[n]|$ linearise the absolute value. Sum of $t$ becomes the linear cost. At optimum, $t[n] = |w[n+1]-w[n]|$ exactly.
+      </p>
+      <p lang="zh">
+        輔助變數 $t[n] \ge |w[n+1]-w[n]|$ 線性化絕對值。$t$ 之和成線性成本。最優處 $t[n] = |w[n+1]-w[n]|$ 嚴格成立。
+      </p>
+
+      <h2 lang="en">When L1 wins</h2>
+      <h2 lang="zh">L1 何時較佳</h2>
+
+      <ul>
+        <li lang="en"><b>Sparse-approximation pedagogy</b>: shows the L1-promotes-sparsity pattern that recurs in compressive sensing, LASSO, basis pursuit.</li>
+        <li lang="zh"><b>稀疏逼近教學</b>：呈現 L1 推稀疏的模式，在壓縮感測、LASSO、基追蹤中反覆出現。</li>
+        <li lang="en"><b>Block-edge detection</b>: a piecewise-constant window overlap-adds into discrete blocks naturally.</li>
+        <li lang="zh"><b>區塊邊緣偵測</b>：分段常數視窗自然地以離散區塊重疊相加。</li>
+        <li lang="en"><b>Quantised-window memory savings</b>: piecewise-constant ↔ run-length encoded → smaller storage.</li>
+        <li lang="zh"><b>量化視窗節省記憶</b>：分段常數 ↔ 連長編碼 → 更小儲存。</li>
+      </ul>
+
+      <div class="nes-box nes-box--yellow" data-label="LESS COMMON FOR AUDIO">
+        <p lang="en">L1 windows have step-discontinuities — looking at the time-domain you'll see flat plateaus connected by sudden jumps. Bad for audio: those jumps generate slow $1/\omega$ spectral decay, exactly opposite of what we usually want. Stick with L∞ or sidelobe-depth objectives for spectrum analysis.</p>
+        <p lang="zh">L1 視窗有階梯不連續 — 時域為平台與突變連接。音訊不利：突變產生 $1/\omega$ 慢衰減，與一般需求相反。頻譜分析仍用 L∞ 或旁瓣深度目標。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>L1 ⇒ sparsity, L∞ ⇒ uniformity.</b> The same principle that makes LASSO favour few non-zero coefficients makes L1-derivative windows piecewise-constant. Different norm, different solution geometry.</p>
+        <p lang="zh"><b>L1 ⇒ 稀疏、L∞ ⇒ 均勻。</b>使 LASSO 偏好少量非零係數的同一原則，使 L1 導數視窗成分段常數。不同範數、不同解幾何。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> An L1-derivative-optimal window's spectrum decays at what rate at high $\omega$ (assuming side-lobe ceiling allows it)?</p>
+        <p lang="zh"><b>問：</b>L1 導數最優視窗在高 $\omega$（旁瓣上限允許下）的衰減率？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">$1/\omega$ (=6 dB/octave) — the window has step discontinuities.</button>
+          <button data-correct="1" lang="zh">$1/\omega$（=6 dB/oct）— 視窗有階梯不連續。</button>
+          <button data-correct="0" lang="en">$1/\omega^2$ (=12 dB/oct).</button>
+          <button data-correct="0" lang="zh">$1/\omega^2$（=12 dB/oct）。</button>
+          <button data-correct="0" lang="en">Exponential (very fast).</button>
+          <button data-correct="0" lang="zh">指數（極快）。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · L1 vs L∞ vs default</h3>
+        <h3 lang="zh">實驗 · L1 vs L∞ vs 預設</h3>
+        <canvas id="tCanvas" style="height:160px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Three windows at $N=64$, all normalised. <b>Yellow</b>: Hann (~smooth, L∞-like). <b>Pink dashed</b>: piecewise-constant approximation (~L1-like, plateaus + jumps). <b>Cyan</b>: rectangular (extreme L1: one giant jump at each edge). Spectrum: piecewise-constant decays as 1/ω, smooth decays as 1/ω³.</p>
+          <p lang="zh">$N=64$ 下三個視窗，均歸一。<b>黃</b>：Hann（平滑，類 L∞）。<b>粉虛線</b>：分段常數逼近（類 L1，平台 + 跳變）。<b>青</b>：矩形（極端 L1：邊緣一巨大跳變）。頻譜：分段常數以 1/ω 衰減、平滑以 1/ω³。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13.10-linf-deriv.html">◀ 4.13.10</a>
@@ -45,8 +122,147 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+
+  function hann(N){
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++) w[n] = 0.5 - 0.5*Math.cos(2*Math.PI*n/(N-1));
+    return w;
+  }
+  function rect(N){
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++) w[n] = 1.0;
+    return w;
+  }
+  function staircase(N){
+    // approximate L1-derivative-optimal: a few flat plateaus
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++){
+      const t = n/(N-1);
+      if (t < 0.1) w[n] = 0.0;
+      else if (t < 0.25) w[n] = 0.4;
+      else if (t < 0.45) w[n] = 0.8;
+      else if (t < 0.55) w[n] = 1.0;
+      else if (t < 0.75) w[n] = 0.8;
+      else if (t < 0.9) w[n] = 0.4;
+      else w[n] = 0.0;
+    }
+    return w;
+  }
+
+  function redraw(){
+    const N = 64;
+    const wH = hann(N);
+    const wL1 = staircase(N);
+    const wR = rect(N);
+
+    const c = $('tCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const p={l:32,r:10,t:14,b:22}, iw=W-p.l-p.r, ih=H-p.t-p.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=p.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,p.t); ctx.lineTo(x,H-p.b); ctx.stroke(); }
+    const y0 = p.t + ih*0.85;
+    ctx.strokeStyle='#e6e6ff'; ctx.beginPath(); ctx.moveTo(p.l,y0); ctx.lineTo(W-p.r,y0); ctx.stroke();
+
+    function plot(w, color, dashed){
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      if (dashed) ctx.setLineDash([4,3]);
+      ctx.beginPath();
+      for (let n=0;n<N;n++){
+        const x = p.l + iw*n/(N-1);
+        const y = y0 - ih*0.78 * w[n];
+        if (n===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    plot(wR, '#5dffd0');
+    plot(wH, '#ffd95a');
+    plot(wL1, '#ff6aa0', true);
+
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#5dffd0'; ctx.fillText('rect', 8, 14);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('Hann (L∞)', 60, 14);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('L1 stair', 168, 14);
+
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    function spec(w){
+      const { re, im } = DSP.dtft(w, om);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      return { mag, mmax };
+    }
+    const sR = spec(wR), sH = spec(wH), sL1 = spec(wL1);
+
+    const c2 = $('fCanvas'), ctx2 = c2.getContext('2d');
+    c2.width = c2.clientWidth*dpr; c2.height = c2.clientHeight*dpr;
+    ctx2.setTransform(1,0,0,1,0,0); ctx2.scale(dpr,dpr);
+    const W2 = c2.clientWidth, H2 = c2.clientHeight;
+    ctx2.fillStyle='#0b0c1a'; ctx2.fillRect(0,0,W2,H2);
+    const p2={l:44,r:10,t:14,b:24}, iw2=W2-p2.l-p2.r, ih2=H2-p2.t-p2.b;
+    const dBfloor = -100;
+    ctx2.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=p2.l+iw2*g/12; ctx2.beginPath(); ctx2.moveTo(x,p2.t); ctx2.lineTo(x,H2-p2.b); ctx2.stroke(); }
+    for (let g=0;g<=5;g++){ const y=p2.t+ih2*g/5; ctx2.beginPath(); ctx2.moveTo(p2.l,y); ctx2.lineTo(W2-p2.r,y); ctx2.stroke(); }
+
+    function drawSpec(s, color, dashed){
+      ctx2.strokeStyle = color; ctx2.lineWidth = 1.4;
+      if (dashed) ctx2.setLineDash([4,3]);
+      ctx2.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(s.mag[i]/s.mmax, 1e-8)));
+        const y = p2.t + ih2*(1-(db-dBfloor)/(0-dBfloor));
+        const x = p2.l + iw2*i/(K-1);
+        if (i===0) ctx2.moveTo(x,y); else ctx2.lineTo(x,y);
+      }
+      ctx2.stroke();
+      ctx2.setLineDash([]);
+    }
+    drawSpec(sR, '#5dffd0');
+    drawSpec(sH, '#ffd95a');
+    drawSpec(sL1, '#ff6aa0', true);
+
+    ctx2.font='9px "Press Start 2P", monospace';
+    ctx2.fillStyle='#5dffd0'; ctx2.fillText('rect', 8, 14);
+    ctx2.fillStyle='#ffd95a'; ctx2.fillText('Hann', 60, 14);
+    ctx2.fillStyle='#ff6aa0'; ctx2.fillText('L1', 130, 14);
+    ctx2.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = p2.l + iw2*(v+Math.PI)/(2*Math.PI); ctx2.fillText(lbl, x-6, H2-p2.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = p2.t + ih2*(1-(db-dBfloor)/(0-dBfloor));
+      ctx2.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Step discontinuity → 1/ω decay (Fourier of step is sinc-like). Same as the rectangular window.</span><span lang="zh">🪙 金幣 +1！階梯不連續 → 1/ω 衰減（階梯的傅立葉為類 sinc）。同矩形視窗。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Steps in time domain → slow 1/ω decay in frequency. L1 generates steps.</span><span lang="zh">✗ 時域階梯 → 頻域慢 1/ω 衰減。L1 產生階梯。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

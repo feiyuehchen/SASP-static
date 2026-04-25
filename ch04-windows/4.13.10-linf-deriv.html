@@ -30,13 +30,103 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/L_Infinity_Norm_Derivative_Objective.html" target="_blank">SASP §4.13.10 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="MINIMISE THE MAX JUMP">
-    <p lang="en">Swap the side-lobe-depth objective for the largest first-difference of the window: $\min \max_n|w[n+1]-w[n]|$. Produces the smoothest possible shape for a given main-lobe target.</p>
-    <p lang="zh">把旁瓣深度目標換成「最大相鄰差」的最小化：$\min\max_n|w[n+1]-w[n]|$。在給定主瓣目標下產生最平滑的形狀。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="MINIMISE THE MAX JUMP">
+        <p lang="en">Replace the side-lobe-depth objective with the largest first-difference of the window: $\min \max_n|w[n+1]-w[n]|$. This is an <span class="term"
+          data-en="L∞ norm of derivative"
+          data-en-def="The maximum (∞-norm) of the discrete first-difference of a sequence — equivalent to the smallest possible max slope."
+          data-zh-def="序列離散一階差分的最大值（∞-norm）— 等同最小可能最大斜率。">L∞ derivative objective</span>: produces the smoothest possible shape (minimum max slope) given a main-lobe target.</p>
+        <p lang="zh">把旁瓣深度目標換成「最大相鄰差」最小化：$\min \max_n|w[n+1]-w[n]|$。這是<span class="term"
+          data-en="L∞ norm of derivative"
+          data-en-def="The maximum (∞-norm) of the discrete first-difference of a sequence — equivalent to the smallest possible max slope."
+          data-zh-def="序列離散一階差分的最大值（∞-norm）— 等同最小可能最大斜率。">L∞ 導數目標</span>：在給定主瓣目標下產生最平滑形狀（最小最大斜率）。</p>
+      </div>
 
-  <p lang="en">The resulting window has roll-off that beats Hann/Hamming/Blackman at the smoothness axis, at the cost of a somewhat higher first side lobe.</p>
-  <p lang="zh">所得視窗在平滑度軸上勝過 Hann/Hamming/Blackman，代價是第一旁瓣稍高。</p>
+      <div class="formula">
+        <span class="label">L∞ DERIVATIVE LP</span>
+        <div>
+          $$\begin{aligned}
+          &\min_{w,\eta}\;\eta\\
+          &\text{s.t.}\; w[n+1]-w[n]\le\eta,\quad-(w[n+1]-w[n])\le\eta\\
+          &\phantom{\text{s.t.}\;}|W(\omega_i)|\le\delta\;\text{(side-lobe ceiling, fixed)}\\
+          &\phantom{\text{s.t.}\;}\sum_n w[n]=1\;\text{(DC anchor)}
+          \end{aligned}$$
+        </div>
+      </div>
+
+      <p lang="en">
+        The new variable $\eta$ bounds every first-difference. Side-lobe depth becomes a <em>fixed</em> ceiling rather than the objective; smoothness becomes the thing you minimise. Two objectives swap roles.
+      </p>
+      <p lang="zh">
+        新變數 $\eta$ 限制所有相鄰差。旁瓣深度變為<em>固定</em>上限而非目標；平滑度成為被最小化的量。兩目標角色互換。
+      </p>
+
+      <h2 lang="en">Where it shines</h2>
+      <h2 lang="zh">適用場景</h2>
+
+      <div class="formula" style="font-family:inherit;">
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>Time-domain plotting / pedagogy</b>: smooth shape avoids visual artefacts.<br>
+            <b>Differentiation-based feature extraction</b>: low max slope = low ringing in derivative.<br>
+            <b>Asymptotic side-lobe roll-off</b>: smoothness controls $1/\omega^k$ decay rate. L∞-smooth ≈ Hann-like 18 dB/oct.<br>
+            <b>Time-stretch overlap-add</b>: smooth windows reduce phase artefacts.
+          </span>
+          <span lang="zh">
+            <b>時域繪圖/教學</b>：平滑形狀避免視覺偽影。<br>
+            <b>基於微分的特徵抽取</b>：最大斜率小 → 導數振鈴小。<br>
+            <b>漸進旁瓣滾降</b>：平滑度控制 $1/\omega^k$ 衰減率。L∞ 平滑 ≈ Hann 類 18 dB/oct。<br>
+            <b>時間伸縮 OLA</b>：平滑視窗減少相位偽影。</span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--yellow" data-label="COST">
+        <p lang="en">Trading sidelobe depth for smoothness. A smoothness-optimised window typically has a higher first sidelobe (~5-8 dB) than the equivalent Chebyshev, but its asymptotic roll-off is much steeper. Choose based on whether your interferer is near or far.</p>
+        <p lang="zh">用旁瓣深度換平滑。平滑最佳化視窗的第一旁瓣比 Chebyshev 高 5-8 dB，但漸進滾降陡得多。視干擾遠近選擇。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Same LP framework, different objective.</b> Smoothness, sidelobe depth, total variation — any can be the thing you minimise; the others become inequality constraints. LP is the universal optimisation glue.</p>
+        <p lang="zh"><b>同 LP 框架、不同目標。</b>平滑、旁瓣深度、總變差 — 任一可作目標，其餘成不等式約束。LP 是通用最佳化膠水。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> If you minimise max-slope (L∞-derivative) instead of side-lobe depth, what is the typical effect on far-field roll-off?</p>
+        <p lang="zh"><b>問：</b>用 L∞ 導數最小化取代旁瓣深度最小化，遠場滾降通常如何？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Steeper roll-off (smoother window → faster spectral decay).</button>
+          <button data-correct="1" lang="zh">滾降更陡（視窗更平滑 → 頻譜衰減更快）。</button>
+          <button data-correct="0" lang="en">Roll-off becomes flat (zero slope).</button>
+          <button data-correct="0" lang="zh">滾降變平（零斜率）。</button>
+          <button data-correct="0" lang="zh">主瓣變窄。</button>
+          <button data-correct="0" lang="en">Main lobe narrows.</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Smooth vs sidelobe-depth</h3>
+        <h3 lang="zh">實驗 · 平滑 vs 旁瓣深</h3>
+        <canvas id="tCanvas" style="height:130px;"></canvas>
+        <canvas id="dCanvas" style="height:100px; margin-top:6px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>blend (0=Cheby, 1=Hann)</label>
+          <input type="range" id="bSlider" min="0" max="1" step="0.05" value="0"/>
+          <span class="val" id="bVal">0.00</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Top: window shape interpolating between Dolph-Chebyshev (jagged near edges) and Hann (smooth). Middle: max-slope readout — drops as you slide right. Bottom: spectrum — first side-lobe rises but far-field roll-off becomes much steeper.</p>
+          <p lang="zh">上：視窗形狀在 Dolph-Chebyshev（邊緣鋸齒）與 Hann（平滑）間插值。中：最大斜率讀數 — 右滑下降。下：頻譜 — 第一旁瓣抬高但遠場滾降變陡。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13.9-monotonic.html">◀ 4.13.9</a>
@@ -45,8 +135,87 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { blend: 0 };
+
+  function chebwin(N, A){
+    const beta = Math.cosh(Math.acosh(Math.pow(10, A/20)) / (N-1));
+    const w = new Float32Array(N);
+    const Wk = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      const wk = 2*Math.PI*k/N;
+      const x = beta * Math.cos(wk/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else if (x > 1) num = Math.cosh((N-1)*Math.acosh(x));
+      else num = ((N-1)%2 === 0 ? 1 : -1) * Math.cosh((N-1)*Math.acosh(-x));
+      Wk[k] = num;
+    }
+    for (let n=0;n<N;n++){
+      let s = 0;
+      for (let k=0;k<N;k++) s += Wk[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/N);
+      w[n] = s;
+    }
+    let mx = 0; for (let n=0;n<N;n++) if (Math.abs(w[n]) > mx) mx = Math.abs(w[n]);
+    for (let n=0;n<N;n++) w[n] /= mx;
+    return w;
+  }
+
+  function hann(N){
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++) w[n] = 0.5 - 0.5*Math.cos(2*Math.PI*n/(N-1));
+    return w;
+  }
+
+  function redraw(){
+    const N = 64;
+    const wA = chebwin(N, 60);
+    const wB = hann(N);
+    const w = new Float32Array(N);
+    for (let n=0;n<N;n++) w[n] = (1-state.blend)*wA[n] + state.blend*wB[n];
+    let mx = 0; for (let n=0;n<N;n++) if (Math.abs(w[n]) > mx) mx = Math.abs(w[n]);
+    for (let n=0;n<N;n++) w[n] /= mx;
+
+    Viz.stem($('tCanvas'), w, { yMin:-0.2, yMax:1.1, xLabel:'n', yLabel:'w[n]', title:`BLEND ${(state.blend*100).toFixed(0)}% Hann + ${((1-state.blend)*100).toFixed(0)}% Cheby` });
+
+    // first differences
+    const d = new Float32Array(N-1);
+    let dmax = 0;
+    for (let n=0;n<N-1;n++){ d[n] = w[n+1] - w[n]; if (Math.abs(d[n]) > dmax) dmax = Math.abs(d[n]); }
+    Viz.stem($('dCanvas'), Array.from(d), { yMin:-0.15, yMax:0.15, xLabel:'n', yLabel:'Δw', title:`FIRST DIFFERENCE — max |Δw| = ${dmax.toFixed(4)}` });
+
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    const { re, im } = DSP.dtft(w, om);
+    const mag = new Float32Array(K);
+    for (let i=0;i<K;i++) mag[i] = Math.hypot(re[i], im[i]);
+    Viz.line($('fCanvas'), DSP.toDb(mag, -100), { xValues: Array.from(om), xMin:-Math.PI, xMax:Math.PI, yMin:-100, xLabel:'ω', yLabel:'dB', title:'SPECTRUM', color:'#ffd95a', xTicks:[{v:-Math.PI,label:'-π'},{v:0,label:'0'},{v:Math.PI,label:'π'}] });
+  }
+
+  $('bSlider').addEventListener('input', () => { state.blend = parseFloat($('bSlider').value); $('bVal').textContent = state.blend.toFixed(2); redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Continuous-derivative window has spectrum decaying as 1/ω² (vs 1/ω for discontinuous-derivative). Smoother → steeper.</span><span lang="zh">🪙 金幣 +1！導數連續視窗頻譜以 1/ω² 衰減（不連續導數為 1/ω）。更平滑 → 更陡。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Smoothness in time = faster spectral decay (Fourier).</span><span lang="zh">✗ 時域更平滑 = 頻譜衰減更快（傅立葉）。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>
