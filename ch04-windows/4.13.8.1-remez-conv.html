@@ -6,6 +6,8 @@
 <title>4.13.8.1 Remez Convergence · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,20 +30,100 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Convergence_Remez_Exchange.html" target="_blank">SASP §4.13.8.1 ↗</a></small>
   </h1>
 
-  <div class="nes-box nes-box--green" data-label="GUARANTEES">
-    <p lang="en">Remez converges in finitely many iterations and always reaches the global optimum of the minimax side-lobe problem, thanks to the Chebyshev alternation theorem.</p>
-    <p lang="zh">Remez 有限步必收斂，且總能達到 minimax 旁瓣問題的全局最優 — 由 Chebyshev 交替定理保證。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box nes-box--green" data-label="GUARANTEES">
+        <p lang="en">Remez exchange terminates in finitely many iterations and always reaches the global optimum of the minimax sidelobe problem. Both facts follow from the Chebyshev <span class="term"
+          data-en="Alternation theorem"
+          data-en-def="The minimax error of a length-N polynomial approximation reaches its peak |error| at exactly N+1 points with strictly alternating sign. Any iterate that produces fewer alternation points is sub-optimal and can be improved."
+          data-zh-def="長度 N 多項式逼近的 minimax 誤差在恰 N+1 個點達峰絕對值且嚴格交替正負。少於此交替點數的迭代必非最優，可改進。">alternation theorem</span>.</p>
+        <p lang="zh">Remez 交換有限步必停止，並必達 minimax 旁瓣問題的全域最優。兩點皆由 Chebyshev <span class="term"
+          data-en="Alternation theorem"
+          data-en-def="The minimax error of a length-N polynomial approximation reaches its peak |error| at exactly N+1 points with strictly alternating sign. Any iterate that produces fewer alternation points is sub-optimal and can be improved."
+          data-zh-def="長度 N 多項式逼近的 minimax 誤差在恰 N+1 個點達峰絕對值且嚴格交替正負。少於此交替點數的迭代必非最優，可改進。">交替定理</span>得證。</p>
+      </div>
 
-  <p lang="en">
-    Each iteration does one grid search (for the next extremal frequency)
-    and one small linear solve. Iteration counts of 5–15 are typical for
-    windows of length up to a few thousand.
-  </p>
-  <p lang="zh">
-    每次迭代：一次網格搜尋（找下一個極值頻率）加一次小型線性求解。
-    長度至數千的視窗，通常 5–15 次迭代即可。
-  </p>
+      <h2 lang="en">Why convergence is finite</h2>
+      <h2 lang="zh">為何有限步必收斂</h2>
+
+      <p lang="en">
+        Each iteration's $\delta_k$ is non-decreasing — the new extrema by construction yield a $\delta_{k+1}\ge\delta_k$ — and bounded above by the true optimum. Bounded monotone sequence → it converges. Because we're updating an integer-indexed extremal set drawn from a finite grid, exact convergence is reached in finitely many swaps.
+      </p>
+      <p lang="zh">
+        每次迭代 $\delta_k$ 非遞減 — 新極值依結構必滿足 $\delta_{k+1}\ge\delta_k$ — 且有真最優上界。有界單調 → 收斂。因為更新的是有限格上的整數索引極值集合，有限次交換即達精確收斂。
+      </p>
+
+      <div class="formula">
+        <span class="label">CONVERGENCE BOUND</span>
+        <div>$$\delta_k\;\nearrow\;\delta^*\quad\text{with}\quad\bigl|\delta^* - \delta_k\bigr|\;\le\; C\rho^k,\quad\rho<1$$</div>
+      </div>
+
+      <p lang="en">
+        Geometric (linear) convergence: error halves every fixed number of steps. Typical $\rho \approx 0.3$ - $0.5$, so 5-15 iterations suffice for double-precision accuracy.
+      </p>
+      <p lang="zh">
+        幾何（線性）收斂：誤差每固定步數減半。典型 $\rho \approx 0.3$ - $0.5$，5-15 次迭代達雙精度。
+      </p>
+
+      <h2 lang="en">Per-iteration cost</h2>
+      <h2 lang="zh">每次迭代成本</h2>
+
+      <ul>
+        <li lang="en">One <b>linear solve</b> on $\lceil N/2\rceil+1$ extremal points → $O(N^3)$ if dense, faster if structured.</li>
+        <li lang="zh">一次<b>線性求解</b>於 $\lceil N/2\rceil+1$ 個極值點 → 一般 $O(N^3)$，有結構時更快。</li>
+        <li lang="en">One <b>grid sweep</b> for new extrema → $O(N\cdot M)$ where $M$ = grid size.</li>
+        <li lang="zh">一次<b>格點掃描</b>找新極值 → $O(N\cdot M)$，$M$ 為格點數。</li>
+        <li lang="en">No factorisations carry over; each iteration is independent.</li>
+        <li lang="zh">不繼承前一步分解；每次迭代獨立。</li>
+      </ul>
+
+      <div class="nes-box nes-box--yellow" data-label="WHEN IT STALLS">
+        <p lang="en">Numerical issues at very high $A$ ($\gg 120$ dB): coefficient matrix $\cosh(N\cosh^{-1}\beta)$ overflows. Use double-precision long-double or specialised stable forms (cf. PMS or McClellan-Parks 1972). For audio $A\le 120$ dB this never bites.</p>
+        <p lang="zh">極高 $A$（$\gg 120$ dB）時數值問題：係數矩陣 $\cosh(N\cosh^{-1}\beta)$ 溢位。需 long-double 或穩定變形（見 PMS 或 McClellan-Parks 1972）。音訊 $A\le 120$ dB 不會遇到。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Geometric convergence + alternation theorem.</b> Together they make Remez the production-grade algorithm — provably optimal, polynomially fast, and trivial to detect convergence (just watch $\delta_k$ stop changing).</p>
+        <p lang="zh"><b>幾何收斂 + 交替定理。</b>兩者使 Remez 成為實用級演算法 — 可證最優、多項式時間、收斂偵測簡單（看 $\delta_k$ 停止變化即可）。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> If $\rho=0.3$ for some Remez problem and you start with error $1$, how many iterations to reach error $\le 10^{-6}$?</p>
+        <p lang="zh"><b>問：</b>某 Remez 問題 $\rho=0.3$、初始誤差為 1，需幾次迭代誤差降至 $\le 10^{-6}$？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">~12 iterations (log(1e-6)/log(0.3) ≈ 11.5).</button>
+          <button data-correct="1" lang="zh">約 12 次（log(1e-6)/log(0.3) ≈ 11.5）。</button>
+          <button data-correct="0" lang="en">~100 iterations.</button>
+          <button data-correct="0" lang="zh">約 100 次。</button>
+          <button data-correct="0" lang="en">~10⁶ iterations.</button>
+          <button data-correct="0" lang="zh">約 10⁶ 次。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Convergence trace</h3>
+        <h3 lang="zh">實驗 · 收斂軌跡</h3>
+        <canvas id="cCanvas" style="height:280px;"></canvas>
+        <div class="controls">
+          <label>ρ</label>
+          <input type="range" id="rSlider" min="0.1" max="0.8" step="0.05" value="0.4"/>
+          <span class="val" id="rVal">0.40</span>
+          <label>iterations</label>
+          <input type="range" id="kSlider" min="3" max="30" step="1" value="15"/>
+          <span class="val" id="kVal">15</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Pink curve: $\delta^* - \delta_k$ on a log scale — straight line of slope $\log\rho$ (geometric convergence). Yellow horizontal: double-precision floor $\sim 10^{-16}$. Adjust $\rho$ to see how steeper rates reach the floor faster.</p>
+          <p lang="zh">粉曲線：$\delta^* - \delta_k$ 對數座標 — 斜率 $\log\rho$ 的直線（幾何收斂）。黃水平線：雙精度地板 $\sim 10^{-16}$。調 $\rho$ 看陡的斜率多快達底。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13.8-remez.html">◀ 4.13.8</a>
@@ -50,8 +132,97 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { rho: 0.4, K: 15 };
+
+  function redraw(){
+    const c = $('cCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const pad={l:48,r:10,t:18,b:30}, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+
+    const xMin=0, xMax=Math.max(state.K, 5);
+    const yMin=-18, yMax=0;  // log10 scale
+
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=pad.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke(); }
+    for (let g=0;g<=9;g++){ const y=pad.t+ih*g/9; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke(); }
+
+    // double precision floor at 1e-16
+    const yFloor = pad.t + ih*(1-(-16-yMin)/(yMax-yMin));
+    ctx.strokeStyle='#ffd95a'; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(pad.l,yFloor); ctx.lineTo(W-pad.r,yFloor); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // convergence trace
+    ctx.strokeStyle='#ff6aa0'; ctx.lineWidth=2;
+    ctx.beginPath();
+    for (let k=0;k<=state.K;k++){
+      const err = Math.pow(state.rho, k);
+      const log10err = Math.log10(Math.max(err, 1e-18));
+      const x = pad.l + iw*(k-xMin)/(xMax-xMin);
+      const y = pad.t + ih*(1-(log10err-yMin)/(yMax-yMin));
+      if (k===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // dots at each iteration
+    ctx.fillStyle='#ff6aa0';
+    for (let k=0;k<=state.K;k++){
+      const err = Math.pow(state.rho, k);
+      const log10err = Math.log10(Math.max(err, 1e-18));
+      const x = pad.l + iw*(k-xMin)/(xMax-xMin);
+      const y = pad.t + ih*(1-(log10err-yMin)/(yMax-yMin));
+      ctx.beginPath(); ctx.arc(x,y,2.5,0,2*Math.PI); ctx.fill();
+    }
+
+    // labels
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('ρ='+state.rho.toFixed(2), 8, 14);
+    ctx.fillStyle='#ffd95a'; ctx.fillText('eps_dbl=1e-16', 100, 14);
+    ctx.fillStyle='#8f8fa8';
+    ctx.fillText('iteration k →', W-110, H-8);
+    for (let x=0;x<=xMax;x+=Math.max(1, Math.floor(xMax/8))){
+      const px = pad.l + iw*(x-xMin)/(xMax-xMin);
+      ctx.fillText(String(x), px-3, H-pad.b+14);
+    }
+    for (let y=0;y>=-16;y-=4){
+      const py = pad.t + ih*(1-(y-yMin)/(yMax-yMin));
+      ctx.fillText('1e'+y, 4, py+3);
+    }
+    ctx.save(); ctx.translate(14, pad.t+ih*0.7); ctx.rotate(-Math.PI/2);
+    ctx.fillText('|δ*-δk|', 0, 0); ctx.restore();
+  }
+
+  $('rSlider').addEventListener('input', () => { state.rho = parseFloat($('rSlider').value); $('rVal').textContent = state.rho.toFixed(2); redraw(); });
+  $('kSlider').addEventListener('input', () => { state.K = parseInt($('kSlider').value,10); $('kVal').textContent = state.K; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Geometric convergence: k = log(ε)/log(ρ). For ρ=0.3 and ε=1e-6, k ≈ -6/-0.523 ≈ 11.5 → 12 iterations.</span><span lang="zh">🪙 金幣 +1！幾何收斂：k = log(ε)/log(ρ)。ρ=0.3、ε=1e-6 時 k ≈ -6/-0.523 ≈ 11.5 → 12 次。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Geometric, not arithmetic. k = log(ε)/log(ρ).</span><span lang="zh">✗ 幾何而非算術。k = log(ε)/log(ρ)。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>

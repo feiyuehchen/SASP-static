@@ -6,6 +6,8 @@
 <title>4.13.9 Monotonicity Constraint · DSP Quest</title>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 <link rel="stylesheet" href="../assets/css/8bit.css" />
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 </head>
 <body class="lang-en">
 
@@ -28,13 +30,96 @@
     <small><a href="https://ccrma.stanford.edu/~jos/sasp/Monotonicity_Constraint.html" target="_blank">SASP §4.13.9 ↗</a></small>
   </h1>
 
-  <div class="nes-box" data-label="SHAPE CONTROL">
-    <p lang="en">A well-behaved window rises from zero to its peak and falls back down — no internal dips. Add $w[n]\le w[n+1]$ on the left half and its mirror on the right as linear constraints.</p>
-    <p lang="zh">「行為良好」的視窗應從零升到峰再落回 — 中間不凹陷。把 $w[n]\le w[n+1]$（左半）與對應右半約束寫成線性式。</p>
-  </div>
+  <div class="two-col">
+    <section>
+      <div class="nes-box" data-label="SHAPE CONTROL">
+        <p lang="en">A "well-behaved" window rises from zero to its peak and falls back — no internal dips. Add $w[n]\le w[n+1]$ on the rising half and $w[n]\ge w[n+1]$ on the falling half as linear inequalities to the LP.</p>
+        <p lang="zh">「行為良好」的視窗從零升到峰再落回 — 中間不凹陷。在上升半邊加 $w[n]\le w[n+1]$、下降半邊加 $w[n]\ge w[n+1]$ 作為 LP 線性不等式。</p>
+      </div>
 
-  <p lang="en">Helpful when the side-lobe-only LP produces jagged shapes that would alias badly in time-varying applications.</p>
-  <p lang="zh">若只最佳化旁瓣的 LP 解出鋸齒形狀、時變應用下會混疊時，加這約束比較穩。</p>
+      <div class="formula">
+        <span class="label">MONOTONIC HALF-WINDOW</span>
+        <div>$$w[n+1]-w[n]\ge 0,\quad n=0,\dots,\lfloor (N-1)/2\rfloor-1$$</div>
+      </div>
+
+      <p lang="en">
+        Combined with symmetry, just $\lfloor N/2\rfloor-1$ inequalities cover the whole window. The mirrored decreasing half is automatic.
+      </p>
+      <p lang="zh">
+        配合對稱，僅 $\lfloor N/2\rfloor-1$ 條不等式即覆蓋整個視窗。鏡像的下降半邊自動成立。
+      </p>
+
+      <h2 lang="en">When you need it</h2>
+      <h2 lang="zh">何時需要</h2>
+
+      <ul>
+        <li lang="en"><b>Time-varying STFT</b>: a non-monotonic taper produces internal energy bumps that look like aliasing artefacts when frames slide.</li>
+        <li lang="zh"><b>時變 STFT</b>：非單調收尾在框架滑動時會產生像混疊偽影的內部能量凸起。</li>
+        <li lang="en"><b>Pedagogical / display</b>: bell-shaped is what people expect when they see "window".</li>
+        <li lang="zh"><b>教學／顯示</b>：人們看到「視窗」時預期的就是鐘形。</li>
+        <li lang="en"><b>Energy-envelope analysis</b>: a window that wiggles inside makes envelope estimates noisy.</li>
+        <li lang="zh"><b>能量包絡分析</b>：內部擺動使包絡估計變雜訊。</li>
+      </ul>
+
+      <div class="formula" style="font-family:inherit;">
+        <span class="label">COST</span>
+        <div style="font-size:13px; line-height:1.9; text-align:left;">
+          <span lang="en">
+            <b>Without monotonicity</b> (Dolph-Chebyshev at $A=80$): negative tails, equiripple sidelobes, narrowest main lobe.<br>
+            <b>With monotonicity</b> at $A=80$: smooth bell, no negative tails, ~1-3 dB of attenuation lost OR ~5-10% main-lobe widening to keep $A$.
+          </span>
+          <span lang="zh">
+            <b>不加單調</b>（Dolph-Chebyshev $A=80$）：負尾、等漣波旁瓣、主瓣最窄。<br>
+            <b>加單調</b>（$A=80$）：平滑鐘形、無負尾、損失 1-3 dB 衰減 或 主瓣寬約 5-10%。
+          </span>
+        </div>
+      </div>
+
+      <div class="nes-box nes-box--yellow" data-label="ALREADY SATISFIED">
+        <p lang="en">Hann, Hamming, Blackman, Kaiser ($\beta>0$), Gaussian, Poisson, MLT sine — all naturally monotonic on each half. You only add the constraint when LP-designing custom shapes that might wiggle.</p>
+        <p lang="zh">Hann、Hamming、Blackman、Kaiser（$\beta>0$）、Gaussian、Poisson、MLT 正弦 — 各半邊天然單調。只有 LP 設計可能擺動的客製形狀時才加。</p>
+      </div>
+
+      <div class="nes-box nes-box--purple" data-label="KEY IDEA">
+        <p lang="en"><b>Monotonicity is shape insurance.</b> Cheap to add ($\sim N/2$ inequalities), and it costs only a few dB. Worth it whenever a misbehaving taper would create downstream artefacts.</p>
+        <p lang="zh"><b>單調是形狀保險。</b>加起來便宜（約 $N/2$ 條不等式）、只損失幾 dB。下游可能因不規則形狀產生偽影時，值得加。</p>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3 lang="en">✦ Mini-Boss ✦</h3>
+        <h3 lang="zh">✦ 關底小魔王 ✦</h3>
+        <p lang="en"><b>Q.</b> You design an LP window with very high $A$ (≥100 dB) and find it has an internal dip. Add monotonicity — what happens?</p>
+        <p lang="zh"><b>問：</b>LP 設計高 $A$（≥100 dB）視窗發現有內部凹陷。加上單調 — 會怎樣？</p>
+        <div class="choices">
+          <button data-correct="1" lang="en">Dip vanishes; sidelobe floor rises by a few dB or main lobe widens slightly.</button>
+          <button data-correct="1" lang="zh">凹陷消失；旁瓣地板抬高幾 dB 或主瓣略寬。</button>
+          <button data-correct="0" lang="en">Solver becomes infeasible.</button>
+          <button data-correct="0" lang="zh">求解器無可行解。</button>
+          <button data-correct="0" lang="en">Window becomes longer in $N$.</button>
+          <button data-correct="0" lang="zh">視窗 $N$ 變長。</button>
+        </div>
+        <div class="feedback" id="qFeedback"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="viz-card">
+        <h3 lang="en">Lab · Default vs monotonic</h3>
+        <h3 lang="zh">實驗 · 預設 vs 單調</h3>
+        <canvas id="tCanvas" style="height:140px;"></canvas>
+        <canvas id="fCanvas" style="height:200px; margin-top:6px;"></canvas>
+        <div class="controls">
+          <label>A (dB)</label>
+          <input type="range" id="aSlider" min="60" max="120" step="5" value="100"/>
+          <span class="val" id="aVal">100</span>
+        </div>
+        <div class="nes-box nes-box--blue" data-label="READ-OUT">
+          <p lang="en">Yellow: Dolph-Chebyshev (allows wiggles). Pink: monotonised version (cumulative max from edges, then renormalised). Time domain: pink loses negative tails. Spectrum: pink has a few dB higher floor — the cost of shape constraint.</p>
+          <p lang="zh">黃：Dolph-Chebyshev（允許擺動）。粉：單調化版（從邊緣累積最大值再歸一）。時域：粉去除負尾。頻譜：粉地板抬高幾 dB — 形狀約束的代價。</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="pager">
     <a class="nes-btn" href="4.13.8.1-remez-conv.html">◀ 4.13.8.1</a>
@@ -43,8 +128,158 @@
   </div>
 </div>
 
+<script src="../assets/js/dsp.js"></script>
+<script src="../assets/js/viz.js"></script>
+<script src="../assets/js/audio.js"></script>
 <script src="../assets/js/i18n.js"></script>
 <script src="../assets/js/terms.js"></script>
-<script>document.getElementById('coins').textContent = localStorage.getItem('dsp.coins')||'0';</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { A: 100 };
+
+  function chebwin(N, A){
+    const beta = Math.cosh(Math.acosh(Math.pow(10, A/20)) / (N-1));
+    const w = new Float32Array(N);
+    const Wk = new Float32Array(N);
+    for (let k=0;k<N;k++){
+      const wk = 2*Math.PI*k/N;
+      const x = beta * Math.cos(wk/2);
+      let num;
+      if (Math.abs(x) <= 1) num = Math.cos((N-1)*Math.acos(x));
+      else if (x > 1) num = Math.cosh((N-1)*Math.acosh(x));
+      else num = ((N-1)%2 === 0 ? 1 : -1) * Math.cosh((N-1)*Math.acosh(-x));
+      Wk[k] = num;
+    }
+    for (let n=0;n<N;n++){
+      let s = 0;
+      for (let k=0;k<N;k++) s += Wk[k] * Math.cos(2*Math.PI*k*(n - (N-1)/2)/N);
+      w[n] = s;
+    }
+    let mx = 0; for (let n=0;n<N;n++) if (Math.abs(w[n]) > mx) mx = Math.abs(w[n]);
+    for (let n=0;n<N;n++) w[n] /= mx;
+    return w;
+  }
+
+  function monotonise(w){
+    const N = w.length;
+    const out = new Float32Array(N);
+    const mid = Math.floor((N-1)/2);
+    // left half: cumulative max from 0..mid
+    let m = 0;
+    for (let n=0;n<=mid;n++){ m = Math.max(m, w[n]); out[n] = m; }
+    // right half: cumulative max from N-1..mid
+    m = 0;
+    for (let n=N-1;n>=mid;n--){ m = Math.max(m, w[n]); out[n] = m; }
+    // normalise
+    let mx = 0; for (let n=0;n<N;n++) if (out[n] > mx) mx = out[n];
+    for (let n=0;n<N;n++) out[n] /= mx;
+    return out;
+  }
+
+  function redraw(){
+    const N = 64;
+    const wA = chebwin(N, state.A);
+    const wB = monotonise(wA);
+
+    const c = $('tCanvas'), ctx = c.getContext('2d');
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr;
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    const W = c.clientWidth, H = c.clientHeight;
+    ctx.fillStyle='#0b0c1a'; ctx.fillRect(0,0,W,H);
+    const p={l:32,r:10,t:14,b:22}, iw=W-p.l-p.r, ih=H-p.t-p.b;
+    ctx.strokeStyle='#262644';
+    for (let g=0;g<=10;g++){ const x=p.l+iw*g/10; ctx.beginPath(); ctx.moveTo(x,p.t); ctx.lineTo(x,H-p.b); ctx.stroke(); }
+    const y0 = p.t + ih*0.6;
+    ctx.strokeStyle='#e6e6ff'; ctx.beginPath(); ctx.moveTo(p.l,y0); ctx.lineTo(W-p.r,y0); ctx.stroke();
+
+    function plot(w, color, dashed){
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      if (dashed) ctx.setLineDash([4,3]);
+      ctx.beginPath();
+      for (let n=0;n<N;n++){
+        const x = p.l + iw*n/(N-1);
+        const y = y0 - ih*0.45 * w[n];
+        if (n===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    plot(wA, '#ffd95a');
+    plot(wB, '#ff6aa0', true);
+
+    ctx.font='9px "Press Start 2P", monospace';
+    ctx.fillStyle='#ffd95a'; ctx.fillText('default', 8, 14);
+    ctx.fillStyle='#ff6aa0'; ctx.fillText('monotonic', 80, 14);
+
+    const K = 720, om = DSP.linspace(-Math.PI, Math.PI, K);
+    function spec(w){
+      const { re, im } = DSP.dtft(w, om);
+      const mag = new Float32Array(K);
+      let mmax = 0;
+      for (let i=0;i<K;i++){ mag[i] = Math.hypot(re[i], im[i]); if (mag[i]>mmax) mmax = mag[i]; }
+      return { mag, mmax };
+    }
+    const s1 = spec(wA), s2 = spec(wB);
+
+    const c2 = $('fCanvas'), ctx2 = c2.getContext('2d');
+    c2.width = c2.clientWidth*dpr; c2.height = c2.clientHeight*dpr;
+    ctx2.setTransform(1,0,0,1,0,0); ctx2.scale(dpr,dpr);
+    const W2 = c2.clientWidth, H2 = c2.clientHeight;
+    ctx2.fillStyle='#0b0c1a'; ctx2.fillRect(0,0,W2,H2);
+    const p2={l:44,r:10,t:14,b:24}, iw2=W2-p2.l-p2.r, ih2=H2-p2.t-p2.b;
+    const dBfloor = -140;
+    ctx2.strokeStyle='#262644';
+    for (let g=0;g<=12;g++){ const x=p2.l+iw2*g/12; ctx2.beginPath(); ctx2.moveTo(x,p2.t); ctx2.lineTo(x,H2-p2.b); ctx2.stroke(); }
+    for (let g=0;g<=7;g++){ const y=p2.t+ih2*g/7; ctx2.beginPath(); ctx2.moveTo(p2.l,y); ctx2.lineTo(W2-p2.r,y); ctx2.stroke(); }
+
+    function drawSpec(s, color, dashed){
+      ctx2.strokeStyle = color; ctx2.lineWidth = 1.4;
+      if (dashed) ctx2.setLineDash([4,3]);
+      ctx2.beginPath();
+      for (let i=0;i<K;i++){
+        const db = Math.max(dBfloor, 20*Math.log10(Math.max(s.mag[i]/s.mmax, 1e-8)));
+        const y = p2.t + ih2*(1-(db-dBfloor)/(0-dBfloor));
+        const x = p2.l + iw2*i/(K-1);
+        if (i===0) ctx2.moveTo(x,y); else ctx2.lineTo(x,y);
+      }
+      ctx2.stroke();
+      ctx2.setLineDash([]);
+    }
+    drawSpec(s1, '#ffd95a');
+    drawSpec(s2, '#ff6aa0', true);
+
+    ctx2.font='9px "Press Start 2P", monospace';
+    ctx2.fillStyle='#ffd95a'; ctx2.fillText('default', 8, 14);
+    ctx2.fillStyle='#ff6aa0'; ctx2.fillText('monotonic', 80, 14);
+    ctx2.fillStyle='#8f8fa8';
+    const xt=[['-π',-Math.PI],['0',0],['π',Math.PI]];
+    for (const [lbl,v] of xt){ const x = p2.l + iw2*(v+Math.PI)/(2*Math.PI); ctx2.fillText(lbl, x-6, H2-p2.b+14); }
+    for (let db=0; db>=dBfloor; db-=20){
+      const y = p2.t + ih2*(1-(db-dBfloor)/(0-dBfloor));
+      ctx2.fillText(db+'dB', 4, y+3);
+    }
+  }
+
+  $('aSlider').addEventListener('input', () => { state.A = parseInt($('aSlider').value,10); $('aVal').textContent = state.A; redraw(); });
+
+  $('quiz').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.getAttribute('data-correct') === '1';
+    btn.classList.add(ok ? 'correct' : 'wrong');
+    const fb = $('qFeedback');
+    if (ok) {
+      fb.innerHTML = '<span lang="en">🪙 +1 coin! Adding constraints can only restrict the feasible set — never make it infeasible (the trivial w with shape Hann is always monotonic and feasible). Cost: a few dB.</span><span lang="zh">🪙 金幣 +1！加約束只會縮小可行集 — 不會無解（Hann 形狀的平凡 w 永遠單調且可行）。代價：幾 dB。</span>';
+      const n = (parseInt(localStorage.getItem('dsp.coins')||'0',10)+1); localStorage.setItem('dsp.coins',n); $('coins').textContent = n;
+      AudioKit.coin();
+    } else {
+      fb.innerHTML = '<span lang="en">✗ Hann is monotonic and feasible, so the LP is always feasible. Adding constraints just costs some optimum.</span><span lang="zh">✗ Hann 單調且可行，故 LP 永遠有解。加約束只損失最優值。</span>';
+    }
+    I18N.apply(I18N.get());
+  }));
+  redraw();
+  $('coins').textContent = localStorage.getItem('dsp.coins')||'0';
+})();
+</script>
 </body>
 </html>
