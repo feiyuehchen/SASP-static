@@ -163,7 +163,7 @@
       for (let n=0;n<N;n++) x[n] = Math.max(0, 1 - Math.abs(n-c)/(N/2));
     } else {
       const c = (N-1)/2;
-      for (let n=0;n<N;n++) x[n] = Math.exp(-((n-c)/(N/5))**2);
+      for (let n=0;n<N;n++) x[n] = Math.exp(-(((n-c)/(N/5))**2));
     }
     return x;
   }

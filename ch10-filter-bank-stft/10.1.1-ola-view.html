@@ -261,7 +261,7 @@
       btn.classList.add(correct ? 'correct' : 'wrong');
       const fb = $('qFeedback');
       if (correct) {
-        fb.innerHTML = '<span lang="en">🪙 +1 coin! A Hann window at $R=N/2$ overlaps by 50%, and adjacent frames' squared-cosine tapers add to a constant — the classic COLA hop.</span><span lang="zh">🪙 金幣 +1！Hann 視窗在 $R=N/2$ 有 50% 重疊，相鄰 frame 的 $\\cos^2$ 形狀相加正好為定值 — 這就是經典的 COLA 跳距。</span>';
+        fb.innerHTML = '<span lang="en">🪙 +1 coin! A Hann window at $R=N/2$ overlaps by 50%, and adjacent frames&rsquo; squared-cosine tapers add to a constant — the classic COLA hop.</span><span lang="zh">🪙 金幣 +1！Hann 視窗在 $R=N/2$ 有 50% 重疊，相鄰 frame 的 $\\cos^2$ 形狀相加正好為定值 — 這就是經典的 COLA 跳距。</span>';
         const coins = (parseInt(localStorage.getItem('dsp.coins') || '0', 10) + 1);
         localStorage.setItem('dsp.coins', coins); $('coins').textContent = coins;
       } else {

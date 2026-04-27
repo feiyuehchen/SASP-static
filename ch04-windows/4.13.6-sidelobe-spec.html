@@ -137,7 +137,8 @@
 
   function gOfOmega(w, notch, depth){
     const sigma = 0.15;
-    const g = 1.0 - (1 - depth) * Math.exp(-((w-notch)/sigma)**2);
+    const z = (w - notch) / sigma;
+    const g = 1.0 - (1 - depth) * Math.exp(-(z * z));
     return Math.max(depth, g);
   }
 

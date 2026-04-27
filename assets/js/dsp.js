@@ -210,6 +210,8 @@ const DSP = (() => {
   return {
     fft, ifft, nextPow2, zeroPad, magSpectrum, phaseSpectrum, toDb,
     WINDOWS, applyWindow,
+    rectWindow, hannWindow, hammingWindow, blackmanWindow, bartlettWindow,
+    gaussianWindow, kaiserWindow, besselI0,
     sinusoid, realSine, whiteNoise, impulse, unitStep,
     convolveDirect, convolveFft, dtft, linspace,
   };

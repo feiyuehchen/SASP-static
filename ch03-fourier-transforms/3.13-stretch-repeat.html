@@ -149,7 +149,7 @@
     const x = new Float32Array(N);
     const c = (N-1)/2;
     if (state.sig === 'gauss'){
-      for (let n=0;n<N;n++) x[n] = Math.exp(-((n-c)/(N/6))**2);
+      for (let n=0;n<N;n++) x[n] = Math.exp(-(((n-c)/(N/6))**2));
     } else if (state.sig === 'pulse'){
       const w = Math.floor(N/4);
       for (let n=0;n<N;n++) if (Math.abs(n-c) < w/2) x[n] = 1;
